@@ -61,7 +61,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         backgroundColor: '#09090B',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
         paddingTop: '6px',
-        paddingBottom: 'max(calc(env(safe-area-inset-bottom, 0px) * 0.4), 6px)',
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 6px)',
         paddingLeft: '8px',
         paddingRight: '8px',
         display: 'flex',

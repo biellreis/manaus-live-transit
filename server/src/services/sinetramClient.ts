@@ -572,7 +572,7 @@ class SinetramClient {
       const validVehicles = rawVehicles.filter((v: any) => {
         const lat = Number(v.lat);
         const lon = Number(v.lon);
-        return lat >= -3.16 && lat <= -2.95 && lon >= -60.15 && lon <= -59.85;
+        return Number.isFinite(lat) && Number.isFinite(lon) && lat >= -3.3 && lat <= -2.7 && lon >= -60.3 && lon <= -59.7;
       });
 
       const vehicles: LiveBus[] = validVehicles.map((v: any) => {
@@ -601,34 +601,18 @@ class SinetramClient {
         }
         this.vehicleHistory.set(id, { lat, lng, timestamp: pt, speedKmh: calculatedSpeedKmh });
 
-        // Precise Direction Detection:
-        const lb = String(v.lb || '').toUpperCase().trim();
+        // Trip IDs describe the actual itinerary. Destination names alone do
+        // not establish ida/volta consistently across different lines.
+        const trips = getOfflineTrips(routeId);
+        const sourceTrip = trips.find(trip => trip.tripId === Number(v.tid));
+        const label = String(v.lb || '').toUpperCase();
         let direction: 'ida' | 'volta' | 'desconhecido' = 'desconhecido';
-        const isIdaKeyword = (
-          lb.includes('→ CENTRO') || lb.endsWith('CENTRO') || 
-          lb.includes('→ MATRIZ') || lb.endsWith('MATRIZ') || 
-          (lb.includes('CENTRO') && !lb.startsWith('CENTRO')) ||
-          lb.includes('SENTIDO CENTRO') || lb.includes('SENTIDO T1') ||
-          lb.includes('→ T1') || lb.endsWith('T1') ||
-          lb.includes('PONTA NEGRA') || lb.includes('P. NEGRA') ||
-          lb.includes('DISTRITO') || lb.includes('UFAM') ||
-          lb.includes('IDA') || lb.includes('(IDA)')
-        );
-        const isVoltaKeyword = (
-          lb.startsWith('CENTRO') || lb.startsWith('MATRIZ') || 
-          lb.includes('→ T2') || lb.includes('→ T3') || lb.includes('→ T4') || lb.includes('→ T5') || lb.includes('→ T6') ||
-          lb.endsWith('T2') || lb.endsWith('T3') || lb.endsWith('T4') || lb.endsWith('T5') || lb.endsWith('T6') ||
-          lb.includes('SENTIDO BAIRRO') || lb.includes('BAIRRO') || lb.includes('→ BAIRRO') ||
-          lb.includes('VOLTA') || lb.includes('(VOLTA)') ||
-          lb.includes('CIRCULAR')
-        );
-
-        if (isIdaKeyword && !isVoltaKeyword) {
+        if (sourceTrip?.directionType === 'ida' || sourceTrip?.directionType === 'volta') {
+          direction = sourceTrip.directionType;
+        } else if (/\bIDA\b/.test(label)) {
           direction = 'ida';
-        } else if (isVoltaKeyword && !isIdaKeyword) {
+        } else if (/\bVOLTA\b/.test(label)) {
           direction = 'volta';
-        } else if (isIdaKeyword) {
-          direction = 'ida';
         }
 
         return {

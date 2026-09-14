@@ -121,15 +121,22 @@ export function App() {
     if (plannedTrip) { setAllTrips(plannedTrip.legs.map(l=>l.trip)); setActiveTrip(plannedTrip.trip); return; }
     setActiveTrip(null); setAllTrips([]);
     if (!selectedLine) return;
-    Promise.all(['itinerary', 'schedule'].map(async endpoint => {
-      const response = await fetch(`/api/lines/${encodeURIComponent(selectedLine.id)}/${endpoint}`, {signal:controller.signal});
-      return response.ok ? response.json() : {};
-    })).then(([itinerary, timetable]) => {
-      if (controller.signal.aborted || request !== lineRequest.current) return;
-      setAllTrips(itinerary.trips || []);
-      setActiveTrip(itinerary.trips?.[0] || null);
-      setSchedule(timetable.services || []);
-    }).catch(() => {});
+    for (const endpoint of ['itinerary', 'schedule']) {
+      void fetch(`/api/lines/${encodeURIComponent(selectedLine.id)}/${endpoint}`, { signal: controller.signal })
+        .then(response => {
+          if (!response.ok) throw new Error('Indisponível');
+          return response.json() as Promise<{ trips?: TripDetail[]; services?: TimetableService[] }>;
+        })
+        .then(data => {
+          if (controller.signal.aborted || request !== lineRequest.current) return;
+          if (endpoint === 'itinerary') {
+            setAllTrips(data.trips || []);
+            setActiveTrip(data.trips?.[0] || null);
+          } else {
+            setSchedule(data.services || []);
+          }
+        }).catch(() => {});
+    }
     return () => controller.abort();
   }, [selectedLine, plannedTrip]);
 

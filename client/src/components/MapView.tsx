@@ -22,40 +22,6 @@ interface MapViewProps {
   onBack?: () => void;
 }
 
-// Geodesic distance in meters
-function getHaversineDistMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371e3;
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-// Project point [pLng, pLat] on segment [a, b]
-function projectPointOnSegment(pLng: number, pLat: number, a: [number, number], b: [number, number]): [number, number] {
-  const dx = b[0] - a[0];
-  const dy = b[1] - a[1];
-  if (dx === 0 && dy === 0) return a;
-  const t = Math.max(0, Math.min(1, ((pLng - a[0]) * dx + (pLat - a[1]) * dy) / (dx * dx + dy * dy)));
-  return [a[0] + t * dx, a[1] + t * dy];
-}
-
-// Minimum distance from point to polyline in meters
-function getDistanceToPolylineMeters(pLng: number, pLat: number, coords: [number, number][]): number {
-  if (!coords || coords.length < 2) return Infinity;
-  let minDist = Infinity;
-  for (let i = 0; i < coords.length - 1; i++) {
-    const proj = projectPointOnSegment(pLng, pLat, coords[i], coords[i + 1]);
-    const d = getHaversineDistMeters(pLat, pLng, proj[1], proj[0]);
-    if (d < minDist) minDist = d;
-  }
-  return minDist;
-}
-
 const MANAUS_CENTER: [number, number] = [-60.0245, -3.1098];
 
 export const MapView: React.FC<MapViewProps> = ({
@@ -638,23 +604,10 @@ export const MapView: React.FC<MapViewProps> = ({
     const isVolta = activeTrip?.directionType === 'volta';
     const activeDirection = isVolta ? 'volta' : 'ida';
 
-    // STRICT SPATIAL & DIRECTION FILTERING:
-    // When tracking a specific route:
-    // 1. Only display vehicles traveling in the active direction (IDA vs VOLTA).
-    // 2. Only display vehicles physically within 450m of the activeTrip polyline.
-    // This strictly eliminates stray/ghost vehicles appearing miles away in other neighborhoods.
-    const activeCoords = (activeTrip && activeTrip.coordinates && activeTrip.coordinates.length >= 2)
-      ? activeTrip.coordinates
-      : (activeTrip && activeTrip.stops && activeTrip.stops.length >= 2)
-        ? activeTrip.stops.map(s => [s.lng, s.lat] as [number, number])
-        : [];
-
-    const filteredVehicles = activeTrip && activeCoords.length > 1
-      ? vehicles.filter(v => {
-          if (v.direction && v.direction !== 'desconhecido' && v.direction !== activeDirection) return false;
-          const dist = getDistanceToPolylineMeters(v.lng, v.lat, activeCoords);
-          return dist <= 1200;
-        })
+    // The feed is already scoped to the selected line. Do not discard
+    // valid buses on detours or outside the displayed journey segment.
+    const filteredVehicles = activeTrip
+      ? vehicles.filter(v => !v.direction || v.direction === 'desconhecido' || v.direction === activeDirection)
       : vehicles;
 
     filteredVehicles.forEach(bus => {

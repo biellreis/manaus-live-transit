@@ -209,7 +209,29 @@ export function isSameTerminalOrStation(stopName: string, pointName: string): bo
 }
 
 export function findCandidates(network: CachedLineEntry[], origin: Point, destination: Point): PlannedLeg[][] {
-  const direct: PlannedLeg[][] = [];
+  const originScores = new WeakMap<StopInfo, number>();
+  const destinationScores = new WeakMap<StopInfo, number>();
+  const stopScore = (stop: StopInfo, point: Point, cache: WeakMap<StopInfo, number>, threshold: number, weight: number) => {
+    const cached = cache.get(stop);
+    if (cached !== undefined) return cached;
+    const distance = isSameTerminalOrStation(stop.stopName, point.name) ? 0 : distanceMeters(point, stop);
+    const score = distance + Math.max(0, distance - threshold) * weight;
+    cache.set(stop, score);
+    return score;
+  };
+  const scoreCandidate = (legs: PlannedLeg[]) =>
+    stopScore(legs[0].originStop, origin, originScores, 350, 4) +
+    stopScore(legs[legs.length - 1].destStop, destination, destinationScores, 400, 3) +
+    (legs.length > 1 ? 300 : 0);
+
+  // Keep only the best candidate per line combination, instead of sorting
+  // every possible pair of boarding, transfer and alighting stops.
+  const best = new Map<string, { legs: PlannedLeg[]; score: number }>();
+  const consider = (legs: PlannedLeg[]) => {
+    const key = legs.map(l => l.line.code).join('+');
+    const score = scoreCandidate(legs);
+    if (!best.has(key) || score < best.get(key)!.score) best.set(key, { legs, score });
+  };
   const reaching: PlannedLeg[] = [];
   const leavingMap = new Map<number, PlannedLeg[]>();
   const MAX_WALK_RADIUS = 1500; // Raio a pé até a parada: 1.5 km
@@ -250,7 +272,7 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
           const leg = { line, trip, originStop: board, destStop: alight };
 
           if (isOriginMatch && isDestMatch) {
-            direct.push([leg]);
+            consider([leg]);
           } else if (isOriginMatch) {
             reaching.push(leg);
           } else if (isDestMatch) {
@@ -266,9 +288,24 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
   // ORDENAÇÃO CRUCIAL: Ordena as pernas de partida pelo quão perto a parada de embarque está do ponto de origem!
   reaching.sort((a, b) => distanceMeters(origin, a.originStop) - distanceMeters(origin, b.originStop));
 
-  const transfers: PlannedLeg[][] = [];
+  let transferCount = 0;
   const MAX_TRANSFER_DISTANCE = 350;
   const seenPairs = new Set<string>();
+
+  const nearbyDepartures = new Map<number, PlannedLeg[][]>();
+  const departuresFor = (stop: StopInfo) => {
+    let groups = nearbyDepartures.get(stop.stopId);
+    if (groups) return groups;
+    groups = [];
+    for (const [id, departures] of leavingMap) {
+      if (id === stop.stopId || !departures.length) continue;
+      const other = departures[0].originStop;
+      if (distanceMeters(stop, other) <= MAX_TRANSFER_DISTANCE || isSameTerminalOrStation(stop.stopName, other.stopName)) groups.push(departures);
+    }
+    nearbyDepartures.set(stop.stopId, groups);
+    return groups;
+  };
+  for (const departures of leavingMap.values()) departures.sort((a, b) => distanceMeters(destination, a.destStop) - distanceMeters(destination, b.destStop));
 
   // Busca de baldeações inteligentes priorizando paradas de embarque mais próximas ao ponto inicial
   for (const first of reaching) {
@@ -276,78 +313,40 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
     const origDist = distanceMeters(origin, first.originStop);
 
     // Se já encontramos opções excelentes a pé (< 350m), evita varrer paradas distantes (> 800m)
-    if (transfers.length >= 25 && origDist > 800) break;
+    if (transferCount >= 25 && origDist > 800) break;
 
     // 1. Baldeação na mesma parada
     const exactDepartures = leavingMap.get(destStopId);
     if (exactDepartures) {
-      const sortedDepartures = [...exactDepartures].sort(
-        (a, b) => distanceMeters(destination, a.destStop) - distanceMeters(destination, b.destStop)
-      );
+      const sortedDepartures = exactDepartures;
       for (const second of sortedDepartures) {
         if (first.line.id !== second.line.id) {
           const pairKey = `${first.line.code}:${first.originStop.stopId}->${first.destStop.stopId}/${second.line.code}:${second.originStop.stopId}->${second.destStop.stopId}`;
           if (!seenPairs.has(pairKey)) {
             seenPairs.add(pairKey);
-            transfers.push([first, second]);
+            consider([first, second]);
+            transferCount++;
           }
         }
       }
     }
 
     // 2. Baldeação em terminal ou parada vizinha (< 350m)
-    for (const [stopId, depList] of leavingMap.entries()) {
-      if (stopId === destStopId || depList.length === 0) continue;
-      const firstDep = depList[0];
-      const transferDist = distanceMeters(first.destStop, firstDep.originStop);
-      const sameHub = isSameTerminalOrStation(first.destStop.stopName, firstDep.originStop.stopName);
-      if (transferDist <= MAX_TRANSFER_DISTANCE || sameHub) {
-        const sortedDepartures = [...depList].sort(
-          (a, b) => distanceMeters(destination, a.destStop) - distanceMeters(destination, b.destStop)
-        );
-        for (const second of sortedDepartures) {
-          if (first.line.id !== second.line.id) {
-            const pairKey = `${first.line.code}:${first.originStop.stopId}->${first.destStop.stopId}/${second.line.code}:${second.originStop.stopId}->${second.destStop.stopId}`;
-            if (!seenPairs.has(pairKey)) {
-              seenPairs.add(pairKey);
-              transfers.push([first, second]);
-            }
+    for (const depList of departuresFor(first.destStop)) {
+      for (const second of depList) {
+        if (first.line.id !== second.line.id) {
+          const pairKey = `${first.line.code}:${first.originStop.stopId}->${first.destStop.stopId}/${second.line.code}:${second.originStop.stopId}->${second.destStop.stopId}`;
+          if (!seenPairs.has(pairKey)) {
+            seenPairs.add(pairKey);
+            consider([first, second]);
+            transferCount++;
           }
         }
       }
     }
   }
 
-  const scoreCandidate = (legs: PlannedLeg[]) => {
-    const origStop = legs[0].originStop;
-    const destStop = legs[legs.length - 1].destStop;
-
-    const origDist = isSameTerminalOrStation(origStop.stopName, origin.name) ? 0 : distanceMeters(origin, origStop);
-    const destDist = isSameTerminalOrStation(destStop.stopName, destination.name) ? 0 : distanceMeters(destination, destStop);
-
-    let walkPenalty = origDist + destDist;
-    // Penalidade forte se a caminhada inicial for superior a 350m
-    if (origDist > 350) walkPenalty += (origDist - 350) * 4;
-    if (destDist > 400) walkPenalty += (destDist - 400) * 3;
-    if (legs.length > 1) walkPenalty += 300;
-
-    return walkPenalty;
-  };
-
-  const unique = (candidates: PlannedLeg[][], limit: number) => {
-    const seen = new Set<string>();
-    return candidates
-      .sort((a, b) => scoreCandidate(a) - scoreCandidate(b))
-      .filter((legs) => {
-        const key = legs.map((l) => l.line.code).join('+');
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      })
-      .slice(0, limit);
-  };
-
-  return unique([...direct, ...transfers], 5);
+  return [...best.values()].sort((a, b) => a.score - b.score).slice(0, 5).map(item => item.legs);
 }
 
 function walkingLeg(type: 'walk_origin' | 'walk_dest', route: WalkingRoute | null, stop: StopInfo, point: Point): PlannedLegDetail {
