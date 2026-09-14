@@ -574,22 +574,34 @@ export const MapView: React.FC<MapViewProps> = ({
   // Auto zoom and fit bounds to full route whenever route mode is activated
   useEffect(() => {
     if (isRouteView && map.current) {
+      map.current.resize();
+      map.current.triggerRepaint();
       setTimeout(() => {
-        map.current?.resize();
-        if (activeTrip && activeTrip.coordinates.length > 0) {
-          const bounds = new maplibregl.LngLatBounds();
-          (plannedTrip ? plannedTrip.legs.flatMap(l=>l.trip.coordinates) : activeTrip.coordinates).forEach(c => bounds.extend(c));
-          map.current?.fitBounds(bounds, {
-            padding: { top: 90, bottom: 290, left: 35, right: 35 },
-            maxZoom: 15,
-            duration: 800
-          });
+        if (!map.current) return;
+        map.current.resize();
+        map.current.triggerRepaint();
+        if (activeTrip) {
+          const activeCoords = (activeTrip.coordinates && activeTrip.coordinates.length >= 2)
+            ? activeTrip.coordinates
+            : (activeTrip.stops && activeTrip.stops.length >= 2)
+              ? activeTrip.stops.map(s => [s.lng, s.lat] as [number, number])
+              : [];
+          if (activeCoords.length >= 2) {
+            const bounds = new maplibregl.LngLatBounds();
+            const coordsToFit = (plannedTrip ? plannedTrip.legs.flatMap(l=>l.trip.coordinates.length>=2?l.trip.coordinates:l.trip.stops.map(s=>[s.lng,s.lat] as [number,number])) : activeCoords);
+            coordsToFit.forEach(c => bounds.extend(c));
+            map.current.fitBounds(bounds, {
+              padding: { top: 90, bottom: 290, left: 35, right: 35 },
+              maxZoom: 15,
+              duration: 800
+            });
+          }
         } else if (!selectedLine) {
           // Citywide explore mode: fit bounds to encompass Manaus (North, South, East, West, Center)
           const bounds = new maplibregl.LngLatBounds();
           bounds.extend([-60.08, -3.15]); // Ponta Negra / Centro / Educandos
           bounds.extend([-59.92, -3.00]); // Cidade Nova / Jorge Teixeira / T4 / T3
-          map.current?.fitBounds(bounds, {
+          map.current.fitBounds(bounds, {
             padding: { top: 80, bottom: 120, left: 30, right: 30 },
             maxZoom: 14,
             duration: 800

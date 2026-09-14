@@ -506,7 +506,11 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
         fromStopName: leg.originStop.stopName,
         toStopName: leg.destStop.stopName,
         stopsCount: leg.trip.stops.length - 1,
-        coordinates: leg.trip.coordinates
+        coordinates: (leg.trip.coordinates && leg.trip.coordinates.length >= 2)
+          ? leg.trip.coordinates
+          : (leg.trip.stops && leg.trip.stops.length >= 2)
+            ? leg.trip.stops.map(s => [s.lng, s.lat] as [number, number])
+            : []
       });
     }
     details.push(walkingLeg('walk_dest', walkDestRoute, last.destStop, destination));

@@ -219,11 +219,13 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
     const isOrigTerminal = isTerminalOrStation(currentOrigin.name);
     const isDestTerminal = isTerminalOrStation(currentDest.name);
 
+    // Force map canvas resize and repaint
+    map.resize();
+    map.triggerRepaint();
+
     if (currentOption && currentOption.legs) {
       // Render bus legs and street walking legs (suppressing walking lines for terminals/stations)
       currentOption.legs.forEach((leg, idx) => {
-        if (!leg.coordinates || leg.coordinates.length < 1) return;
-
         const isWalkOrigin = leg.type === 'walk_origin';
         const isWalkDest = leg.type === 'walk_dest';
         const isBus = leg.type === 'bus';
@@ -234,9 +236,16 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
         // Se for caminhada de chegada e o destino for Terminal/Estação, NÃO desenha a linha branca
         if (isWalkDest && isDestTerminal) return;
 
-        const validCoords: [number, number][] = leg.coordinates.length === 1
-          ? [leg.coordinates[0], leg.coordinates[0]]
-          : leg.coordinates;
+        let coords: [number, number][] = Array.isArray(leg.coordinates) ? leg.coordinates : [];
+        if (isBus && coords.length < 2 && currentOption.originStop && currentOption.destStop) {
+          coords = [[currentOption.originStop.lng, currentOption.originStop.lat], [currentOption.destStop.lng, currentOption.destStop.lat]];
+        }
+
+        if (!coords || coords.length < 1) return;
+
+        const validCoords: [number, number][] = coords.length === 1
+          ? [coords[0], coords[0]]
+          : coords;
 
         validCoords.forEach(c => allCoords.push(c));
         const sourceId = `route-leg-${idx}`;
@@ -263,8 +272,8 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
           layout: { 'line-cap': 'round', 'line-join': 'round' },
           paint: {
             'line-color': '#000000',
-            'line-width': isBus ? 8 : 7.5,
-            'line-opacity': 0.9
+            'line-width': isBus ? 10 : 8,
+            'line-opacity': 0.95
           }
         });
 
@@ -276,7 +285,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
           layout: { 'line-cap': 'round', 'line-join': 'round' },
           paint: {
             'line-color': isBus ? '#2563EB' : '#FFFFFF',
-            'line-width': isBus ? 5.5 : 4.5,
+            'line-width': isBus ? 6.5 : 4.5,
             'line-opacity': 1.0,
             ...(isWalk ? { 'line-dasharray': [1.8, 1.6] } : {})
           }
