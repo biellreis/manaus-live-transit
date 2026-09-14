@@ -58,7 +58,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         left: 0,
         right: 0,
         zIndex: 90,
-        backgroundColor: '#000000',
+        backgroundColor: '#121214',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
         paddingTop: '8px',
         paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)',

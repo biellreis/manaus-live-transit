@@ -185,13 +185,19 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
     markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
 
-    // Remove existing leg sources/layers
+    // Remove existing leg layers first, then remove sources
     const currentStyle = map.getStyle();
     if (currentStyle?.layers) {
       currentStyle.layers.forEach(layer => {
-        if (layer.id.startsWith('route-leg-')) {
-          if (map.getLayer(layer.id)) map.removeLayer(layer.id);
-          if (map.getSource(layer.id)) map.removeSource(layer.id);
+        if (layer.id.startsWith('route-leg-') && map.getLayer(layer.id)) {
+          map.removeLayer(layer.id);
+        }
+      });
+    }
+    if (currentStyle?.sources) {
+      Object.keys(currentStyle.sources).forEach(sourceId => {
+        if (sourceId.startsWith('route-leg-') && map.getSource(sourceId)) {
+          map.removeSource(sourceId);
         }
       });
     }

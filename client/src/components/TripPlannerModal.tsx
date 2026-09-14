@@ -636,7 +636,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
             {/* Bottom Confirm Action Button */}
             {activeOption && (
-              <div style={{ padding: '12px 16px max(env(safe-area-inset-bottom, 0px), 16px) 16px', display: 'flex', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+              <div style={{ padding: '12px 16px max(env(safe-area-inset-bottom, 0px), 16px) 16px', display: 'flex', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#121214' }}>
                 <button
                   id="uber-confirm-trip-btn"
                   onClick={handleConfirmRoute}
