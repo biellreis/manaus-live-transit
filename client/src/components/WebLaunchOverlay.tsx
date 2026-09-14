@@ -94,44 +94,48 @@ export function WebLaunchOverlay() {
         }
       `}</style>
 
-      {/* Center Container matching original iOS logo layout */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        {/* Original 140x140 Logo Box */}
-        <div style={{ position: 'relative', width: 140, height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {/* Layer 1: Dark Plate Container */}
-          <img
-            src="/logo-assets/plate.png"
-            alt="Fundo Logo Manô"
-            className="mano-layer-plate"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
-          />
+      {/* Center Container matching 1:1 original iOS 1093x1416 artwork canvas */}
+      <div
+        style={{
+          position: 'relative',
+          width: 220,
+          height: 285,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        {/* Layer 1: Dark Plate Container */}
+        <img
+          src="/logo-assets/plate.png"
+          alt="Fundo Logo Manô"
+          className="mano-layer-plate"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
+        />
 
-          {/* Layer 2: M Route Line */}
-          <img
-            src="/logo-assets/m.png"
-            alt="M Rota Manô"
-            className="mano-layer-m"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
-          />
+        {/* Layer 2: M Route Line */}
+        <img
+          src="/logo-assets/m.png"
+          alt="M Rota Manô"
+          className="mano-layer-m"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
+        />
 
-          {/* Layer 3: Yellow GPS Arrow Accent */}
-          <img
-            src="/logo-assets/arrow.png"
-            alt="Seta GPS Amarela Manô"
-            className="mano-layer-arrow"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        </div>
+        {/* Layer 3: Yellow GPS Arrow Accent */}
+        <img
+          src="/logo-assets/arrow.png"
+          alt="Seta GPS Amarela Manô"
+          className="mano-layer-arrow"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
+        />
 
         {/* Layer 4: Original Name Artwork (MANÔ) */}
-        <div style={{ marginTop: 28, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img
-            src="/logo-assets/name.png"
-            alt="MANÔ"
-            className="mano-layer-name"
-            style={{ height: 36, objectFit: 'contain' }}
-          />
-        </div>
+        <img
+          src="/logo-assets/name.png"
+          alt="MANÔ"
+          className="mano-layer-name"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
+        />
       </div>
     </div>
   );

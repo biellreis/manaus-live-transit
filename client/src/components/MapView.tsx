@@ -341,7 +341,7 @@ export const MapView: React.FC<MapViewProps> = ({
 
   // Update Trajectory, Stops, and Origin/Destination Pins when Active Trip Changes
   useEffect(() => {
-    if (!map.current || !map.current.isStyleLoaded()) return;
+    if (!map.current || !isMapLoaded || !map.current.getSource('route-core')) return;
 
     // Clear previous stop, endpoint & planned markers
     stopMarkers.current.forEach(m => m.remove());

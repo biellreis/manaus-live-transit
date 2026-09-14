@@ -2,11 +2,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { decodePolyline } from './polyline.js';
 import { MANAUS_OFFICIAL_CATALOG } from './manausNetworkCatalog.js';
+import manausAllRoutesStatic from './manausAllRoutesCache.json';
 
 let networkCacheMemory: Record<string, { line: RouteSummary; trips: TripDetail[] }> | null = null;
 
 function loadAllRoutesCache(): Record<string, { line: RouteSummary; trips: TripDetail[] }> {
   if (networkCacheMemory) return networkCacheMemory;
+  if (manausAllRoutesStatic && Object.keys(manausAllRoutesStatic).length > 0) {
+    networkCacheMemory = manausAllRoutesStatic as unknown as Record<string, { line: RouteSummary; trips: TripDetail[] }>;
+    return networkCacheMemory;
+  }
   const locations = [
     path.join(__dirname, 'manausAllRoutesCache.json'),
     path.resolve(__dirname, '../../src/services/manausAllRoutesCache.json'),

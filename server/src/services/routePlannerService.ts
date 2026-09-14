@@ -3,6 +3,7 @@ import path from 'node:path';
 import { sinetram, type RouteSummary, type TripDetail, type StopInfo } from './sinetramClient.js';
 import { distanceMeters, sliceTripCoordinates } from './routeGeometry.js';
 import { getStreetWalkingPolyline, type WalkingRoute } from './walkingRouter.js';
+import manausAllRoutesStatic from './manausAllRoutesCache.json';
 
 type Point = { name: string; lat: number; lng: number };
 export interface PlannedLeg {
@@ -93,6 +94,10 @@ let networkCacheMemory: CachedLineEntry[] | null = null;
 
 function loadNetwork(): CachedLineEntry[] {
   if (networkCacheMemory) return networkCacheMemory;
+  if (manausAllRoutesStatic && Object.keys(manausAllRoutesStatic).length > 0) {
+    networkCacheMemory = Object.values(manausAllRoutesStatic) as unknown as CachedLineEntry[];
+    return networkCacheMemory;
+  }
   const locations = [
     path.join(__dirname, 'manausAllRoutesCache.json'),
     path.resolve(__dirname, '../../src/services/manausAllRoutesCache.json')

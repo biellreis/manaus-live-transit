@@ -202,7 +202,7 @@ export function App() {
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-        backgroundColor: '#09090B'
+        backgroundColor: '#121214'
       }}
     >
       <WebLaunchOverlay />

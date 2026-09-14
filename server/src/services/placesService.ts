@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import manausAllRoutesStatic from './manausAllRoutesCache.json';
 
 export interface PlaceResult {
   id: string;
@@ -46,15 +47,40 @@ function getBusStopsPlaces(): PlaceResult[] {
   if (busStopsCache) return busStopsCache;
   busStopsCache = [];
   try {
+    const raw = (manausAllRoutesStatic && Object.keys(manausAllRoutesStatic).length > 0)
+      ? manausAllRoutesStatic
+      : null;
+    if (raw) {
+      const seen = new Set<number>();
+      for (const entry of Object.values(raw) as any[]) {
+        for (const trip of entry.trips || []) {
+          for (const s of trip.stops || []) {
+            if (!seen.has(s.stopId) && s.stopName) {
+              seen.add(s.stopId);
+              busStopsCache.push({
+                id: `stop-${s.stopId}`,
+                name: s.stopName,
+                displayName: `Parada ${s.stopName} (#${s.stopId}) - Manaus`,
+                category: 'terminal',
+                categoryLabel: 'Parada de Ônibus',
+                lat: s.lat,
+                lng: s.lng
+              });
+            }
+          }
+        }
+      }
+      return busStopsCache;
+    }
     const locations = [
       path.join(__dirname, 'manausAllRoutesCache.json'),
       path.resolve(__dirname, '../../src/services/manausAllRoutesCache.json')
     ];
     for (const loc of locations) {
       if (fs.existsSync(loc)) {
-        const raw = JSON.parse(fs.readFileSync(loc, 'utf8'));
+        const fileData = JSON.parse(fs.readFileSync(loc, 'utf8'));
         const seen = new Set<number>();
-        for (const entry of Object.values(raw) as any[]) {
+        for (const entry of Object.values(fileData) as any[]) {
           for (const trip of entry.trips || []) {
             for (const s of trip.stops || []) {
               if (!seen.has(s.stopId) && s.stopName) {
