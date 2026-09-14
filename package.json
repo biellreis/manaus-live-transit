@@ -7,7 +7,9 @@
     "dev:client": "npm --prefix client run dev",
     "dev": "npm run dev:server & npm run dev:client",
     "build": "npm --prefix client install && npm --prefix client run build",
-    "start": "npm --prefix server start"
+    "start": "npm --prefix server start",
+    "test": "./server/node_modules/.bin/tsx --test tests/routing.test.ts tests/web-regressions.test.ts tests/theme-alerts.test.ts",
+    "sim": "python3 scripts/sim.py"
   },
   "dependencies": {
     "cors": "^2.8.5",
