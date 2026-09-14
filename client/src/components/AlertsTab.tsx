@@ -145,7 +145,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         inset: 0,
         zIndex: 5,
         backgroundColor: '#09090B',
-        paddingBottom: '80px',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)',
         overflowY: 'auto',
         color: '#FFFFFF'
       }}

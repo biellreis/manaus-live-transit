@@ -54,20 +54,23 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       aria-label="Navegação Principal"
       style={{
         position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)',
+        left: '16px',
+        right: '16px',
+        maxWidth: '420px',
+        margin: '0 auto',
         zIndex: 90,
-        backgroundColor: '#09090B',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-        paddingTop: '6px',
-        paddingBottom: 'clamp(8px, calc(env(safe-area-inset-bottom, 0px) * 0.45), 18px)',
-        paddingLeft: '8px',
-        paddingRight: '8px',
+        backgroundColor: 'rgba(18, 18, 22, 0.85)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        borderRadius: '32px',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        height: '60px',
+        padding: '0 8px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
-        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)',
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4)',
         userSelect: 'none',
         WebkitUserSelect: 'none'
       }}
@@ -83,20 +86,21 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             onClick={() => handleSelect(item.id)}
             style={{
               flex: 1,
+              height: '46px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '2px',
-              paddingTop: '3px',
-              paddingBottom: '2px',
-              background: 'transparent',
+              background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+              borderRadius: '20px',
               border: 'none',
               cursor: 'pointer',
-              color: isActive ? '#FFFFFF' : '#71717A',
-              transition: 'all 0.15s ease',
+              color: isActive ? '#FFFFFF' : '#A1A1AA',
+              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               position: 'relative',
-              outline: 'none'
+              outline: 'none',
+              padding: '2px 0'
             }}
           >
             <div
@@ -106,13 +110,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '32px',
-                height: '26px'
+                height: '24px'
               }}
             >
               <IconComponent
-                size={22}
+                size={21}
                 strokeWidth={isActive ? 2.5 : 1.8}
-                color={isActive ? '#FFFFFF' : '#71717A'}
+                color={isActive ? '#FFFFFF' : '#A1A1AA'}
               />
               {item.badge && (
                 <span
@@ -139,9 +143,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             </div>
             <span
               style={{
-                fontSize: '11px',
+                fontSize: '10.5px',
                 fontWeight: isActive ? 700 : 500,
-                letterSpacing: '-0.01em'
+                letterSpacing: '-0.01em',
+                lineHeight: 1
               }}
             >
               {item.label}
