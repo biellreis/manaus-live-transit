@@ -43,11 +43,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body, #root {
-  position: fixed;
+html, body {
   width: 100%;
   height: 100%;
-  height: 100dvh;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -56,11 +54,21 @@ html, body, #root {
   overscroll-behavior: none;
   user-select: none;
   -webkit-user-select: none;
-  background-color: var(--bg-canvas);
+  background-color: #121214;
   color: var(--text-primary);
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #121214;
 }
 
 /* Tabular Numbers */
@@ -356,8 +364,8 @@ html, body, #root {
   pointer-events: none !important;
 }
 
-/* Google Maps Dark Mode Tile Filter (Escuro como Padrão) */
-.maplibre-dark-mode .maplibregl-canvas {
-  filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(105%);
+/* MapLibre Dark Mode Container */
+.maplibre-dark-mode {
+  background-color: #121214;
 }
 

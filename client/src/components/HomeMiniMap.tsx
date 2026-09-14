@@ -36,13 +36,13 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
       style: {
         version: 8,
         sources: {
-          'google-roadmap': {
+          'carto-dark': {
             type: 'raster',
             tiles: [
-              'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-              'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-              'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-              'https://mt3.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
             ],
             tileSize: 256,
             maxzoom: 20
@@ -50,9 +50,9 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
         },
         layers: [
           {
-            id: 'google-roadmap-layer',
+            id: 'carto-dark-layer',
             type: 'raster',
-            source: 'google-roadmap',
+            source: 'carto-dark',
             minzoom: 0,
             maxzoom: 22
           }

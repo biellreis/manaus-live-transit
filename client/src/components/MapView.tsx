@@ -97,13 +97,13 @@ export const MapView: React.FC<MapViewProps> = ({
       style: {
         version: 8,
         sources: {
-          'google-roadmap': {
+          'carto-dark': {
             type: 'raster',
             tiles: [
-              'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-              'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-              'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-              'https://mt3.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
             ],
             tileSize: 256,
             maxzoom: 20
@@ -111,9 +111,9 @@ export const MapView: React.FC<MapViewProps> = ({
         },
         layers: [
           {
-            id: 'google-roadmap-layer',
+            id: 'carto-dark-layer',
             type: 'raster',
-            source: 'google-roadmap',
+            source: 'carto-dark',
             minzoom: 0,
             maxzoom: 22
           }
@@ -128,7 +128,7 @@ export const MapView: React.FC<MapViewProps> = ({
     });
 
     instance.on('load', () => {
-      // 1. Route Casing (Dark outline for high road contrast)
+      // 1. Route Casing (Black outline for high road contrast)
       instance.addSource('route-casing', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] }
@@ -140,13 +140,13 @@ export const MapView: React.FC<MapViewProps> = ({
         source: 'route-casing',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: {
-          'line-color': '#05070E',
-          'line-width': 8,
+          'line-color': '#000000',
+          'line-width': 10,
           'line-opacity': 0.95
         }
       });
 
-      // 2. Route Core (Vibrant Blue for Ida / Amber for Volta)
+      // 2. Route Core (Vibrant Blue for Ida / Orange for Volta)
       instance.addSource('route-core', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] }
@@ -158,8 +158,8 @@ export const MapView: React.FC<MapViewProps> = ({
         source: 'route-core',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: {
-          'line-color': '#2563EB',
-          'line-width': 4.5,
+          'line-color': '#3B82F6',
+          'line-width': 6,
           'line-opacity': 1.0
         }
       });
@@ -176,10 +176,10 @@ export const MapView: React.FC<MapViewProps> = ({
         source: 'route-dash',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: {
-          'line-color': '#93C5FD',
-          'line-width': 3.5,
-          'line-dasharray': [2, 3],
-          'line-opacity': 0.75
+          'line-color': '#FFFFFF',
+          'line-width': 3,
+          'line-dasharray': [2, 4],
+          'line-opacity': 0.9
         }
       });
 

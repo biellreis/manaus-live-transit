@@ -98,8 +98,8 @@ export function WebLaunchOverlay() {
       <div
         style={{
           position: 'relative',
-          width: 220,
-          height: 285,
+          width: 140,
+          height: 181,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
