@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v2.3 (Floating Dock)
+// Manaus Live Transit - Service Worker v2.4 (Native Edge-to-Edge Bar)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });
