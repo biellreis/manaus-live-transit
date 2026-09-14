@@ -30,3 +30,4 @@ yarn-error.log*
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
 .vercel
+.env*
