@@ -84,7 +84,12 @@ def main():
 
     if cmd == "open":
         sub = sys.argv[2].lower() if len(sys.argv) > 2 else "home"
-        if sub == "line":
+        if sub == "pwa":
+            print("[sim] Abrindo o aplicativo standalone 'Manô Web' (PWA instalado)...")
+            subprocess.run(["xcrun", "simctl", "launch", "booted", "com.apple.webapp", "-webclip", "1863933F99B74B61B77474C8A3747C62"], check=True)
+            time.sleep(2)
+            take_screenshot("pwa_standalone")
+        elif sub == "line":
             num = sys.argv[3] if len(sys.argv) > 3 else "640"
             direction = f"&dir={sys.argv[4]}" if len(sys.argv) > 4 else ""
             url = f"{BASE_URL}/?line={num}{direction}"
