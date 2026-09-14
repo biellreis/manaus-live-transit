@@ -1,0 +1,19 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.js';
+
+// Register Service Worker for PWA offline capabilities
+if ('serviceWorker' in navigator && import.meta.env.PROD && location.protocol !== 'file:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.log('[PWA] ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);

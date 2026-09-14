@@ -1,0 +1,31 @@
+{
+  "name": "Manô",
+  "short_name": "Manô",
+  "description": "Transporte público em tempo real da cidade de Manaus/AM",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait",
+  "background_color": "#080C14",
+  "theme_color": "#080C14",
+  "icons": [
+    {
+      "src": "/ICONE-APLICATIVO.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Terminais T1-T6",
+      "url": "/?view=terminals",
+      "icons": [{ "src": "/bus-icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Linha 640",
+      "url": "/?line=640",
+      "icons": [{ "src": "/bus-icon.svg", "sizes": "192x192" }]
+    }
+  ]
+}

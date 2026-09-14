@@ -1,0 +1,7 @@
+Integre a abertura MANÔ deste pacote ao projeto atual. Leia primeiro LEIA-ME.md e inspecione o ContentView, o wrapper/coordenador da WKWebView e a montagem do React.
+
+Use os arquivos Swift e os quatro imagesets fornecidos. Preserve a WKWebView existente, os handlers de GPS e haptics, a navegação, o MapLibre e o backend. Mantenha a WebView montada enquanto o motion SwiftUI aparece por cima. A aparência aprovada está em Referencia-aprovada.mp4: fundo branco, marca original com retângulo, M, seta e MANÔ; largura de 40,28% da tela; movimento de 2,2 s.
+
+Conecte o estado de prontidão ao React pelo handler manoLaunch, registrado antes de carregar a página, usando as origens reais já confiáveis do projeto. Sinalize quando a primeira tela utilizável estiver montada, sem esperar GPS, todos os tiles ou dados da Sinetram. Encaminhe erros de navegação inicial e a ação de tentar novamente para os fluxos existentes. Se o projeto usar arquivos locais ou esquema próprio, adapte explicitamente a validação de origem. Não crie outra WebView nem outro aplicativo SwiftUI.App.
+
+Mantenha a Launch Screen do sistema estática e branca, evite duas aberturas e não repita o motion a cada retorno do background. Preserve suporte a Reduzir Movimento. Faça build com Swift 6, execute em simulador e confira a animação, a transição, o carregamento lento e a recuperação de erro. Relate os arquivos alterados e os resultados da validação.

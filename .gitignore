@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds
+dist/
+build/
+*.app
+DerivedData/
+ios/build/
+ios/ManausLiveTransit/WebDist/*
+!ios/ManausLiveTransit/WebDist/.gitkeep
+
+# Environment & Logs
+.env
+.env.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Xcode
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/

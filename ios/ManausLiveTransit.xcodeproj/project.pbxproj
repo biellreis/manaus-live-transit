@@ -1,0 +1,369 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		19D6CB74D3198D2B8F6F6B4B /* WebDist in Resources */ = {isa = PBXBuildFile; fileRef = 6290B67B9C689ABF9ED6AE42 /* WebDist */; };
+		99A0B1C22D5E01F800112233 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99A0B1C12D5E01F800112233 /* Assets.xcassets */; };
+		515D735D00A202EE5A897C2A /* HapticBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3E0DF4F409204F0BBBFD56 /* HapticBridge.swift */; };
+		5427471523A40EC008E99D4E /* ManausLiveTransitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE271617DE7E3E1F9EE5345 /* ManausLiveTransitApp.swift */; };
+		6DCABB724CC0A701E456080D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D876F4FBFB78E88273EAB124 /* ContentView.swift */; };
+		E841FC49E38C046620F2677B /* TransitWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A45019FB8C1A0099F7C3C1D /* TransitWebView.swift */; };
+		8A10B2C22D5E01F800112201 /* ManoLaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10B2C12D5E01F800112201 /* ManoLaunchView.swift */; };
+		8A10B2C22D5E01F800112202 /* ManoLaunchHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10B2C12D5E01F800112202 /* ManoLaunchHost.swift */; };
+		8A10B2C22D5E01F800112203 /* ManoReadyMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10B2C12D5E01F800112203 /* ManoReadyMessageHandler.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		08C56DD25F2606EC277BA159 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0E3E0DF4F409204F0BBBFD56 /* HapticBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticBridge.swift; sourceTree = "<group>"; };
+		6290B67B9C689ABF9ED6AE42 /* WebDist */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WebDist; path = ManausLiveTransit/WebDist; sourceTree = SOURCE_ROOT; };
+		99A0B1C12D5E01F800112233 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ManausLiveTransit/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		9A45019FB8C1A0099F7C3C1D /* TransitWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitWebView.swift; sourceTree = "<group>"; };
+		CCBE927A96DEC69B181F3C1C /* ManausLiveTransit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ManausLiveTransit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D876F4FBFB78E88273EAB124 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8A10B2C12D5E01F800112201 /* ManoLaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManoLaunchView.swift; sourceTree = "<group>"; };
+		8A10B2C12D5E01F800112202 /* ManoLaunchHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManoLaunchHost.swift; sourceTree = "<group>"; };
+		8A10B2C12D5E01F800112203 /* ManoReadyMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManoReadyMessageHandler.swift; sourceTree = "<group>"; };
+		EDE271617DE7E3E1F9EE5345 /* ManausLiveTransitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManausLiveTransitApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1646752A54B9D859A363E31B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CCBE927A96DEC69B181F3C1C /* ManausLiveTransit.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7280C29CDF9189800F69133D /* Bridges */ = {
+			isa = PBXGroup;
+			children = (
+				0E3E0DF4F409204F0BBBFD56 /* HapticBridge.swift */,
+			);
+			path = Bridges;
+			sourceTree = "<group>";
+		};
+		901DE173A9E86D43A8F1CEEE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D876F4FBFB78E88273EAB124 /* ContentView.swift */,
+				9A45019FB8C1A0099F7C3C1D /* TransitWebView.swift */,
+				8A10B2C12D5E01F800112201 /* ManoLaunchView.swift */,
+				8A10B2C12D5E01F800112202 /* ManoLaunchHost.swift */,
+				8A10B2C12D5E01F800112203 /* ManoReadyMessageHandler.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D356982CB2118BEB2AD47D31 = {
+			isa = PBXGroup;
+			children = (
+				E5E471DF2EA02C6AFA08E26F /* ManausLiveTransit */,
+				1646752A54B9D859A363E31B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E5E471DF2EA02C6AFA08E26F /* ManausLiveTransit */ = {
+			isa = PBXGroup;
+			children = (
+				08C56DD25F2606EC277BA159 /* Info.plist */,
+				6290B67B9C689ABF9ED6AE42 /* WebDist */,
+				99A0B1C12D5E01F800112233 /* Assets.xcassets */,
+				EC817650F88487767FD9718E /* App */,
+				7280C29CDF9189800F69133D /* Bridges */,
+				901DE173A9E86D43A8F1CEEE /* Views */,
+			);
+			path = ManausLiveTransit;
+			sourceTree = "<group>";
+		};
+		EC817650F88487767FD9718E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				EDE271617DE7E3E1F9EE5345 /* ManausLiveTransitApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		234B0393FD008A22202F8A55 /* ManausLiveTransit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C31E4B22AF1F95E56E9AC93 /* Build configuration list for PBXNativeTarget "ManausLiveTransit" */;
+			buildPhases = (
+				5FC87D7611884A0B8BD8DB48 /* Sources */,
+				C6407806F0BC907F11ED1F0F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ManausLiveTransit;
+			packageProductDependencies = (
+			);
+			productName = ManausLiveTransit;
+			productReference = CCBE927A96DEC69B181F3C1C /* ManausLiveTransit.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		51630F4C2E5D58DAAB3AFFA3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = CE4F95B68AE1EDB41F662ADE /* Build configuration list for PBXProject "ManausLiveTransit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D356982CB2118BEB2AD47D31;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1646752A54B9D859A363E31B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				234B0393FD008A22202F8A55 /* ManausLiveTransit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C6407806F0BC907F11ED1F0F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19D6CB74D3198D2B8F6F6B4B /* WebDist in Resources */,
+				99A0B1C22D5E01F800112233 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5FC87D7611884A0B8BD8DB48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DCABB724CC0A701E456080D /* ContentView.swift in Sources */,
+				515D735D00A202EE5A897C2A /* HapticBridge.swift in Sources */,
+				5427471523A40EC008E99D4E /* ManausLiveTransitApp.swift in Sources */,
+				E841FC49E38C046620F2677B /* TransitWebView.swift in Sources */,
+				8A10B2C22D5E01F800112201 /* ManoLaunchView.swift in Sources */,
+				8A10B2C22D5E01F800112202 /* ManoLaunchHost.swift in Sources */,
+				8A10B2C22D5E01F800112203 /* ManoReadyMessageHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6A7D5469D589475984E85A3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				ENABLE_BITCODE = NO;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
+				GENERATE_INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_FILE = ManausLiveTransit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manô";
+				INFOPLIST_KEY_CFBundleName = "Manô";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.manaus.livetransit;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		726AB657D7687927052391A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		888AC9B3CEC3777C316E1643 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				ENABLE_BITCODE = NO;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
+				GENERATE_INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_FILE = ManausLiveTransit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manô";
+				INFOPLIST_KEY_CFBundleName = "Manô";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.manaus.livetransit;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EC8A4E402D8FFA4DEF129474 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5C31E4B22AF1F95E56E9AC93 /* Build configuration list for PBXNativeTarget "ManausLiveTransit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				888AC9B3CEC3777C316E1643 /* Debug */,
+				6A7D5469D589475984E85A3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CE4F95B68AE1EDB41F662ADE /* Build configuration list for PBXProject "ManausLiveTransit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				726AB657D7687927052391A2 /* Debug */,
+				EC8A4E402D8FFA4DEF129474 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 51630F4C2E5D58DAAB3AFFA3 /* Project object */;
+}

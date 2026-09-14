@@ -1,0 +1,31 @@
+name: ManausLiveTransit
+options:
+  bundleIdPrefix: com.manaus
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+targets:
+  ManausLiveTransit:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: ManausLiveTransit/App
+      - path: ManausLiveTransit/Views
+      - path: ManausLiveTransit/Bridges
+      - path: ManausLiveTransit/Info.plist
+      - path: ManausLiveTransit/WebDist
+        type: folder
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.manaus.livetransit
+        INFOPLIST_FILE: ManausLiveTransit/Info.plist
+        SWIFT_VERSION: "6.0"
+        ENABLE_BITCODE: NO
+        ENABLE_ON_DEMAND_RESOURCES: NO
+        GENERATE_INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: NO
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTED_PLATFORMS: "iphonesimulator iphoneos"
