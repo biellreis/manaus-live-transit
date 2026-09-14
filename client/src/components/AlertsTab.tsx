@@ -6,6 +6,7 @@ import type { RouteSummary } from '../types/transit.js';
 interface TrafficAlertItem {
   id: string;
   severity: 'info' | 'warning' | 'critical';
+  category?: 'accidents' | 'jams' | 'police' | 'hazards';
   corridorName: string;
   neighborhood?: string;
   title: string;
@@ -14,6 +15,7 @@ interface TrafficAlertItem {
 }
 
 interface TrafficApiResponse {
+  source?: {status: 'connected' | 'updating' | 'unavailable' | 'not_configured'; name: string; updatedAt: string | null; message: string};
   timestamp: string;
   summary: {
     overallStatus: 'normal' | 'lento' | 'atencao' | 'fora_horario';
@@ -32,6 +34,8 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
   lines: _lines,
   onSelectLine: _onSelectLine
 }) => {
+  const [loadError, setLoadError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [trafficData, setTrafficData] = useState<TrafficApiResponse | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'accidents' | 'jams' | 'police'>('all');
@@ -39,13 +43,18 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
 
   const fetchTrafficData = async () => {
     try {
-      const resp = await fetch('/api/traffic/alerts');
+      const resp = await fetch('/api/traffic/alerts', { signal: AbortSignal.timeout(25000) });
+      if (!resp.ok) throw new Error('Serviço indisponível');
       if (resp.ok) {
         const data: TrafficApiResponse = await resp.json();
         setTrafficData(data);
+        setLoadError('');
       }
     } catch (err) {
       console.warn('[AlertsTab] Erro ao carregar alertas de trânsito:', err);
+      setLoadError('Não foi possível atualizar os alertas. Tente novamente.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,13 +79,13 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
   const filteredAlerts = useMemo(() => {
     return rawAlerts.filter(a => {
       if (selectedFilter === 'accidents') {
-        return a.severity === 'critical' || a.title.toLowerCase().includes('acidente') || a.title.toLowerCase().includes('interditada');
+        return a.category === 'accidents';
       }
       if (selectedFilter === 'jams') {
-        return a.title.toLowerCase().includes('lentidão') || a.title.toLowerCase().includes('retenção') || a.title.toLowerCase().includes('perigo');
+        return a.category === 'jams';
       }
       if (selectedFilter === 'police') {
-        return a.title.toLowerCase().includes('blitz') || a.title.toLowerCase().includes('fiscalização') || a.severity === 'info';
+        return a.category === 'police';
       }
       return true; // 'all'
     });
@@ -189,6 +198,8 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
             outline: 'none',
             flexShrink: 0
           }}
+          aria-label="Atualizar alertas de trânsito"
+          disabled={isRefreshing}
           title="Atualizar alertas de trânsito"
         >
           <RotateCw
@@ -201,13 +212,17 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         </button>
       </div>
 
+      <div role="status" style={{ margin: '0 20px 14px', padding: '12px', background: '#18181B', borderRadius: 12, fontSize: 13, color: '#A1A1AA' }}>
+        {loadError || (isLoading ? 'Consultando ocorrências de trânsito…' : trafficData?.source?.message || 'Fonte de ocorrências indisponível.')}
+        {trafficData?.source?.updatedAt && <div style={{marginTop: 4}}>Última coleta: {new Date(trafficData.source.updatedAt).toLocaleString('pt-BR', {timeZone:'America/Manaus', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})}</div>}
+      </div>
       {/* Category Filter Chips */}
       <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px', overflowX: 'auto', scrollbarWidth: 'none' }}>
         {[
           { id: 'all', label: 'Todos os Alertas' },
           { id: 'accidents', label: 'Acidentes e Bloqueios' },
           { id: 'jams', label: 'Lentidão no Trânsito' },
-          { id: 'police', label: 'Fiscalização / IMMU' },
+          { id: 'police', label: 'Fiscalização' },
         ].map((tab) => {
           const isActive = selectedFilter === tab.id;
           return (
@@ -337,7 +352,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         })}
 
         {/* Empty State when no alerts match */}
-        {filteredAlerts.length === 0 && (
+        {!isLoading && !loadError && trafficData?.source?.status === 'connected' && filteredAlerts.length === 0 && (
           <div
             style={{
               backgroundColor: '#141417',
@@ -353,14 +368,14 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               <CheckCircle2 size={24} />
             </div>
             <div style={{ fontSize: '17px', fontWeight: 800, color: '#FFFFFF', marginBottom: '6px' }}>
-              Trânsito Sem Ocorrências Graves
+              Nenhuma ocorrência nesta categoria
             </div>
             <div style={{ fontSize: '13px', color: '#94A3B8', maxWidth: '320px', margin: '0 auto 16px auto', lineHeight: '1.45' }}>
-              Nenhum acidente, bloqueio ou interdição relevante reportado nas principais vias de Manaus neste momento.
+              A última coleta do Waze não trouxe ocorrências para este filtro.
             </div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '5px 14px', borderRadius: '999px', color: '#10B981', fontSize: '12px', fontWeight: 800 }}>
               <Navigation size={13} />
-              <span>Sistema de Trânsito em Tempo Real</span>
+              <span>Waze via Apify</span>
             </div>
           </div>
         )}

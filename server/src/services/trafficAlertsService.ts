@@ -1,3 +1,4 @@
+import { fetchWazeLiveItems, type TrafficSource } from './apifyTrafficSource.js';
 import { sinetram } from './sinetramClient.js';
 
 export interface CorridorTrafficInfo {
@@ -14,6 +15,7 @@ export interface CorridorTrafficInfo {
 export interface LiveTrafficAlert {
   id: string;
   severity: 'info' | 'warning' | 'critical';
+  category: 'accidents' | 'jams' | 'police' | 'hazards';
   corridorName: string;
   neighborhood?: string;
   title: string;
@@ -22,6 +24,7 @@ export interface LiveTrafficAlert {
 }
 
 export interface TrafficAlertsResponse {
+  source: TrafficSource;
   timestamp: string;
   summary: {
     overallStatus: 'normal' | 'lento' | 'atencao' | 'fora_horario';
@@ -144,190 +147,14 @@ async function probeCorridorSpeed(def: MonitoredCorridorDef): Promise<number | n
   return null;
 }
 
-interface WazeScraperItem {
-  recordType?: string;
-  type?: string;
-  alertType?: string;
-  alertSubtype?: string;
-  subtype?: string;
-  street?: string;
-  city?: string;
-  latitude?: number;
-  longitude?: number;
-  publish_datetime_utc?: string;
-  publishDatetimeUtc?: string;
-  jamLevel?: number;
-  level?: number;
-  speedKmh?: number;
-  speed?: number;
-}
-
-let cachedWazeItems: WazeScraperItem[] = [];
-let lastWazeFetchTime = 0;
-
-async function fetchWazeLiveItems(): Promise<WazeScraperItem[]> {
-  const token = process.env.APIFY_API_TOKEN || '';
-  if (!token) return [];
-
-  const now = Date.now();
-  // 3-minute cache (180,000 ms) to keep API calls low and cost negligible
-  if (cachedWazeItems.length > 0 && now - lastWazeFetchTime < 180000) {
-    return cachedWazeItems;
-  }
-
-  try {
-    const url = `https://api.apify.com/v2/acts/sian.agency~waze-traffic-scraper/run-sync-get-dataset-items?token=${token}`;
-    const resp = await fetch(url, {
-      method: 'POST',
-      signal: AbortSignal.timeout(10000),
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        operation: 'alertsAndJams',
-        bottomLeft: '-3.1500,-60.0800',
-        topRight: '-2.9800,-59.9000',
-        maxAlerts: 30,
-        maxJams: 30
-      })
-    });
-
-    if (resp.ok) {
-      const items = await resp.json() as WazeScraperItem[];
-      if (Array.isArray(items)) {
-        cachedWazeItems = items;
-        lastWazeFetchTime = now;
-        return cachedWazeItems;
-      }
-    }
-  } catch (err) {
-    console.warn('[trafficAlertsService] Erro ao buscar Waze via Apify:', err);
-  }
-  return cachedWazeItems;
-}
-
-function resolveManausLocation(street?: string, lat?: number, lng?: number): { street: string; neighborhood: string } {
-  let cleanedStreet = (street || '').trim();
-
-  if (
-    !cleanedStreet ||
-    cleanedStreet.toLowerCase() === 'manaus' ||
-    cleanedStreet.toLowerCase().includes('vias de manaus') ||
-    cleanedStreet.length < 3
-  ) {
-    cleanedStreet = '';
-  }
-
-  if (typeof lat === 'number' && typeof lng === 'number' && lat < 0) {
-    // Constantino Nery
-    if (lat >= -3.13 && lat <= -3.07 && lng >= -60.03 && lng <= -60.015) {
-      return {
-        street: cleanedStreet || 'Av. Constantino Nery',
-        neighborhood: 'São Jorge / Chapada - Manaus'
-      };
-    }
-    // Djalma Batista
-    if (lat >= -3.125 && lat <= -3.08 && lng >= -60.022 && lng <= -60.012) {
-      return {
-        street: cleanedStreet || 'Av. Djalma Batista',
-        neighborhood: 'Nossa Senhora das Graças - Manaus'
-      };
-    }
-    // Torquato Tapajós
-    if (lat >= -3.08 && lat <= -3.036 && lng >= -60.035 && lng <= -60.005) {
-      return {
-        street: cleanedStreet || 'Av. Torquato Tapajós',
-        neighborhood: 'Flores / Santos Dumont - Manaus'
-      };
-    }
-    // Autaz Mirim (Grande Circular)
-    if (lat >= -3.085 && lat <= -3.03 && lng >= -59.97 && lng <= -59.94) {
-      return {
-        street: cleanedStreet || 'Av. Autaz Mirim (Grande Circular)',
-        neighborhood: 'Jorge Teixeira / São José - Manaus'
-      };
-    }
-    // Alameda Cosme Ferreira
-    if (lat >= -3.10 && lat <= -3.07 && lng >= -59.99 && lng <= -59.96) {
-      return {
-        street: cleanedStreet || 'Alameda Cosme Ferreira',
-        neighborhood: 'Coroado / Aleixo - Manaus'
-      };
-    }
-    // Av. Mário Ypiranga (Recife)
-    if (lat >= -3.12 && lat <= -3.075 && lng >= -60.018 && lng <= -60.005) {
-      return {
-        street: cleanedStreet || 'Av. Mário Ypiranga',
-        neighborhood: 'Adrianópolis / Parque 10 - Manaus'
-      };
-    }
-    // Av. Rodrigo Otávio
-    if (lat >= -3.13 && lat <= -3.08 && lng >= -60.00 && lng <= -59.96) {
-      return {
-        street: cleanedStreet || 'Av. Rodrigo Otávio',
-        neighborhood: 'Japiim / Coroado - Manaus'
-      };
-    }
-    // Av. Coronel Teixeira (Ponta Negra)
-    if (lat >= -3.12 && lat <= -3.05 && lng >= -60.11 && lng <= -60.04) {
-      return {
-        street: cleanedStreet || 'Av. Coronel Teixeira',
-        neighborhood: 'Ponta Negra / Nova Esperança - Manaus'
-      };
-    }
-    // Av. das Torres / Gov. José Lindoso
-    if (lat >= -3.09 && lat <= -3.03 && lng >= -60.01 && lng <= -59.97) {
-      return {
-        street: cleanedStreet || 'Av. Gov. José Lindoso (Av. das Torres)',
-        neighborhood: 'Parque 10 / Cidade Nova - Manaus'
-      };
-    }
-    // Centro
-    if (lat >= -3.14 && lat <= -3.12 && lng >= -60.035 && lng <= -60.015) {
-      return {
-        street: cleanedStreet || 'Av. Eduardo Ribeiro / Centro',
-        neighborhood: 'Centro Histórico - Manaus'
-      };
-    }
-
-    // Quadrants
-    if (lat > -3.04) {
-      return {
-        street: cleanedStreet || 'Av. Max Teixeira',
-        neighborhood: 'Zona Norte - Manaus'
-      };
-    }
-    if (lng > -59.97) {
-      return {
-        street: cleanedStreet || 'Av. Camapuã',
-        neighborhood: 'Zona Leste - Manaus'
-      };
-    }
-    if (lng < -60.05) {
-      return {
-        street: cleanedStreet || 'Av. Brasil',
-        neighborhood: 'Zona Oeste - Manaus'
-      };
-    }
-    if (lat < -3.11) {
-      return {
-        street: cleanedStreet || 'Av. Sete de Setembro',
-        neighborhood: 'Zona Sul - Manaus'
-      };
-    }
-  }
-
-  return {
-    street: cleanedStreet || 'Av. Djalma Batista',
-    neighborhood: 'Zona Centro-Sul - Manaus'
-  };
-}
-
 export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
-  const [vehicles, wazeItems] = await Promise.all([
+  const [vehicles, wazeSnapshot] = await Promise.all([
     sinetram.getCitywideVehicles(),
     fetchWazeLiveItems()
   ]);
 
   const now = new Date();
+  const wazeItems = wazeSnapshot.items;
 
   // Probe all corridors in parallel
   const probedSpeeds = await Promise.all(
@@ -400,7 +227,7 @@ export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
   // 1. Process Live Waze Alerts & Incidents (ignoring potholes and generic labels)
   if (wazeItems && wazeItems.length > 0) {
     wazeItems.forEach((w, idx) => {
-      const type = (w.alertType || w.type || '').toUpperCase();
+      const type = (w.recordType === 'jam' ? 'JAM' : w.alertType || w.type || '').toUpperCase();
       const subtype = (w.alertSubtype || w.subtype || '').toUpperCase();
 
       // Explicitly IGNORE potholes as requested by user
@@ -408,15 +235,18 @@ export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
         return;
       }
 
-      const location = resolveManausLocation(w.street, w.latitude, w.longitude);
+      if (w.city && !w.city.toLowerCase().includes('manaus')) return;
+      if (!['ACCIDENT','ROAD_CLOSED','HAZARD','JAM','POLICE','CONSTRUCTION'].includes(type)) return;
+      const location = { street: w.street?.trim() || 'Via não informada', neighborhood: w.city || 'Manaus' };
+      const category = type === 'ACCIDENT' || type === 'ROAD_CLOSED' || type === 'CONSTRUCTION' || subtype.includes('CONSTRUCTION') ? 'accidents' : type === 'JAM' ? 'jams' : type === 'POLICE' ? 'police' : 'hazards';
 
       let title = 'Alerta de Trânsito';
       let severity: 'info' | 'warning' | 'critical' = 'info';
 
       if (type === 'ACCIDENT') {
-        title = 'Acidente de Trânsito com Retenção';
+        title = 'Acidente reportado';
         severity = 'critical';
-      } else if (type === 'ROAD_CLOSED') {
+      } else if (type === 'ROAD_CLOSED' || type === 'CONSTRUCTION') {
         title = 'Via Interditada / Obras na Pista';
         severity = 'critical';
       } else if (type === 'HAZARD') {
@@ -431,61 +261,31 @@ export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
         title = 'Lentidão e Engarrafamento';
         severity = 'warning';
       } else if (type === 'POLICE') {
-        title = 'Fiscalização de Trânsito IMMU';
+        title = 'Fiscalização reportada';
         severity = 'info';
       }
 
-      let timeText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-      const dt = w.publishDatetimeUtc || w.publish_datetime_utc;
-      if (dt) {
-        try {
-          const parsed = new Date(dt);
-          timeText = `${parsed.getHours().toString().padStart(2, '0')}:${parsed.getMinutes().toString().padStart(2, '0')}`;
-        } catch {
-          // fallback
-        }
-      }
+      const dt = w.publishDatetimeUtc || w.publish_datetime_utc || w._fetchedAt || wazeSnapshot.source.updatedAt;
+      const parsed = dt ? new Date(dt) : now;
+      const timeText = Number.isFinite(parsed.getTime()) ? parsed.toLocaleString('pt-BR', { timeZone:'America/Manaus', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : 'Horário não informado';
 
       alerts.push({
         id: `waze-${idx}-${w.latitude || 0}`,
         severity,
+        category,
         corridorName: location.street,
         neighborhood: location.neighborhood,
         title,
-        description: `Ocorrência confirmada com retenção de fluxo na via ${location.street}. Equipes de monitoramento acompanhando o trecho em ${location.neighborhood}.`,
-        timestamp: `${timeText} • Atualizado`
+        description: w.alertDescription || `${title} em ${location.street}, ${location.neighborhood}. Informação reportada no Waze.`,
+        timestamp: timeText
       });
     });
   }
 
-  // Always include verified IMMU operational alerts
-  if (totalCitywideVehicles === 0) {
-    alerts.push({
-      id: 'alert-fora-horario',
-      severity: 'info',
-      corridorName: 'Sistema de Transporte Urbano',
-      neighborhood: 'Rede Urbana de Manaus',
-      title: 'Operação Noturna / Horário Especial',
-      description: 'Nenhum coletivo em circulação no momento. A operação regular retorna nas primeiras horas da manhã.',
-      timestamp: 'Operação Noturna'
-    });
-  }
-
-  alerts.push(
-    {
-      id: 'alert-t1-integra',
-      severity: 'info',
-      corridorName: 'Terminais de Integração de Manaus',
-      neighborhood: 'Sistema IMMU • PassaFácil',
-      title: 'Integração Temporal de 2 Horas Ativa',
-      description: 'Troca de ônibus gratuita garantida com Cartão PassaFácil em toda a rede urbana de Manaus.',
-      timestamp: 'Sistema Transurbano'
-    }
-  );
-
   const slowCorridors = corridors.filter(c => c.status === 'intenso').length;
 
   return {
+    source: wazeSnapshot.source,
     timestamp: now.toISOString(),
     summary: {
       overallStatus: totalCitywideVehicles === 0 ? 'fora_horario' : slowCorridors > 2 ? 'lento' : slowCorridors > 0 ? 'atencao' : 'normal',

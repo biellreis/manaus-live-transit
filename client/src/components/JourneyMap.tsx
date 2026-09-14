@@ -1,3 +1,4 @@
+import { useMapTheme, rasterThemePaint } from '../hooks/useMapTheme.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
 import type { TransitOption } from '../types/transit.js';
@@ -53,6 +54,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
           {
             id: 'google-roadmap-layer',
             type: 'raster',
+            paint: rasterThemePaint(true),
             source: 'google-roadmap',
             minzoom: 0,
             maxzoom: 22
@@ -81,6 +83,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
           {
             id: 'google-satellite-layer',
             type: 'raster',
+            paint: rasterThemePaint(true),
             source: 'google-satellite',
             minzoom: 0,
             maxzoom: 22
@@ -152,6 +155,8 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
       mapInstance.current = null;
     };
   }, []);
+
+  useMapTheme(mapInstance);
 
   // Handle layer style change
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { useMapTheme, rasterThemePaint } from '../hooks/useMapTheme.js';
 import React, { useEffect, useRef } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import type { UserLocation } from '../hooks/useUserLocation.js';
@@ -52,6 +53,7 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
           {
             id: 'google-roadmap-layer',
             type: 'raster',
+            paint: rasterThemePaint(true),
             source: 'google-roadmap',
             minzoom: 0,
             maxzoom: 22
@@ -89,6 +91,8 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
       map.current = null;
     };
   }, []);
+
+  useMapTheme(map);
 
   // Update user marker position and center map
   useEffect(() => {

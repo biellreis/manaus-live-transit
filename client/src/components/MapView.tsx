@@ -1,3 +1,4 @@
+import { useMapTheme, rasterThemePaint, toggleMapTheme } from '../hooks/useMapTheme.js';
 import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import type { RouteSummary, TripDetail, LiveBus, TransitHub, StopInfo, PlannedTrip } from '../types/transit.js';
@@ -48,7 +49,6 @@ export const MapView: React.FC<MapViewProps> = ({
   const endpointMarkers = useRef<maplibregl.Marker[]>([]);
   const plannedMarkers = useRef<maplibregl.Marker[]>([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const haptic = useHaptic();
 
   const latest = useRef({onSelectBus,onSelectStop,vehicles,haptic});
@@ -181,6 +181,7 @@ export const MapView: React.FC<MapViewProps> = ({
           {
             id: 'google-roadmap-layer',
             type: 'raster',
+            paint: rasterThemePaint(true),
             source: 'google-roadmap',
             minzoom: 0,
             maxzoom: 22
@@ -216,6 +217,8 @@ export const MapView: React.FC<MapViewProps> = ({
       map.current = null;
     };
   }, []);
+
+  const isDarkMode = useMapTheme(map);
 
   const hasCenteredOnUser = useRef(false);
 
@@ -819,7 +822,7 @@ export const MapView: React.FC<MapViewProps> = ({
             id="toggle-map-theme-button"
             onClick={() => {
               haptic.lightTap();
-              setIsDarkMode(prev => !prev);
+              toggleMapTheme();
             }}
             style={{
               width: '42px',
@@ -837,9 +840,11 @@ export const MapView: React.FC<MapViewProps> = ({
               fontSize: '10px',
               fontWeight: 800
             }}
+            aria-pressed={isDarkMode}
+            aria-label="Alternar tema do mapa"
             title={isDarkMode ? "Alternar para Modo Claro (Branco)" : "Alternar para Modo Escuro"}
           >
-            {isDarkMode ? 'DARK' : 'LIGHT'}
+            {isDarkMode ? 'CLARO' : 'DARK'}
           </button>
         </div>
       )}
