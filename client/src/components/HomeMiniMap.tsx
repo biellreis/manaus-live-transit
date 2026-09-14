@@ -30,29 +30,29 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Clean CartoDB Dark Matter Map - Zero watermarks e suporte a zoom profundo em Manaus
+    // Clean Google Maps Roadmap - Zero watermarks e suporte a zoom profundo em Manaus
     const instance = new maplibregl.Map({
       container: mapContainer.current,
       style: {
         version: 8,
         sources: {
-          'carto-dark': {
+          'google-roadmap': {
             type: 'raster',
             tiles: [
-              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+              'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              'https://mt3.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
             ],
             tileSize: 256,
-            maxzoom: 20
+            maxzoom: 22
           }
         },
         layers: [
           {
-            id: 'carto-dark-layer',
+            id: 'google-roadmap-layer',
             type: 'raster',
-            source: 'carto-dark',
+            source: 'google-roadmap',
             minzoom: 0,
             maxzoom: 22
           }

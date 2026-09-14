@@ -497,7 +497,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               left: 0,
               right: 0,
               zIndex: 35,
-              backgroundColor: '#121214',
+              backgroundColor: '#09090B',
               borderTopLeftRadius: '24px',
               borderTopRightRadius: '24px',
               borderTop: '1px solid rgba(255, 255, 255, 0.12)',

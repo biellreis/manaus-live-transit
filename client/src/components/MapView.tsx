@@ -88,7 +88,107 @@ export const MapView: React.FC<MapViewProps> = ({
   const latest = useRef({onSelectBus,onSelectStop,vehicles,haptic});
   latest.current = {onSelectBus,onSelectStop,vehicles,haptic};
 
-  // Initialize MapLibre with Clean Uber Dark Map Style (CartoDB Dark Matter with deep zoom support)
+  // Helper function to dynamically verify & create vector route layers
+  const ensureRouteLayers = (instance: maplibregl.Map) => {
+    if (!instance.getSource('route-casing')) {
+      instance.addSource('route-casing', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+      instance.addLayer({
+        id: 'route-casing-layer',
+        type: 'line',
+        source: 'route-casing',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#000000',
+          'line-width': 11,
+          'line-opacity': 0.95
+        }
+      });
+    }
+
+    if (!instance.getSource('route-core')) {
+      instance.addSource('route-core', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+      instance.addLayer({
+        id: 'route-core-layer',
+        type: 'line',
+        source: 'route-core',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#2563EB',
+          'line-width': 6.5,
+          'line-opacity': 1.0
+        }
+      });
+    }
+
+    if (!instance.getSource('route-dash')) {
+      instance.addSource('route-dash', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+      instance.addLayer({
+        id: 'route-dash-layer',
+        type: 'line',
+        source: 'route-dash',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#FFFFFF',
+          'line-width': 3,
+          'line-dasharray': [2, 4],
+          'line-opacity': 0.9
+        }
+      });
+    }
+
+    if (!instance.getSource('walk-origin')) {
+      instance.addSource('walk-origin', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+      instance.addLayer({
+        id: 'walk-origin-casing-layer',
+        type: 'line',
+        source: 'walk-origin',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#000000', 'line-width': 7, 'line-opacity': 0.9 }
+      });
+      instance.addLayer({
+        id: 'walk-origin-layer',
+        type: 'line',
+        source: 'walk-origin',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#2563EB', 'line-width': 4, 'line-dasharray': [1.5, 2], 'line-opacity': 1.0 }
+      });
+    }
+
+    if (!instance.getSource('walk-dest')) {
+      instance.addSource('walk-dest', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+      instance.addLayer({
+        id: 'walk-dest-casing-layer',
+        type: 'line',
+        source: 'walk-dest',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#000000', 'line-width': 7, 'line-opacity': 0.9 }
+      });
+      instance.addLayer({
+        id: 'walk-dest-layer',
+        type: 'line',
+        source: 'walk-dest',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#EA580C', 'line-width': 4, 'line-dasharray': [1.5, 2], 'line-opacity': 1.0 }
+      });
+    }
+  };
+
+  // Initialize MapLibre with Clean Google Maps Roadmap Basemap (0 Watermarks)
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
@@ -97,23 +197,23 @@ export const MapView: React.FC<MapViewProps> = ({
       style: {
         version: 8,
         sources: {
-          'carto-dark': {
+          'google-roadmap': {
             type: 'raster',
             tiles: [
-              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+              'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              'https://mt3.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
             ],
             tileSize: 256,
-            maxzoom: 20
+            maxzoom: 22
           }
         },
         layers: [
           {
-            id: 'carto-dark-layer',
+            id: 'google-roadmap-layer',
             type: 'raster',
-            source: 'carto-dark',
+            source: 'google-roadmap',
             minzoom: 0,
             maxzoom: 22
           }
@@ -128,123 +228,7 @@ export const MapView: React.FC<MapViewProps> = ({
     });
 
     instance.on('load', () => {
-      // 1. Route Casing (Black outline for high road contrast)
-      instance.addSource('route-casing', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
-      });
-
-      instance.addLayer({
-        id: 'route-casing-layer',
-        type: 'line',
-        source: 'route-casing',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#000000',
-          'line-width': 10,
-          'line-opacity': 0.95
-        }
-      });
-
-      // 2. Route Core (Vibrant Blue for Ida / Orange for Volta)
-      instance.addSource('route-core', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
-      });
-
-      instance.addLayer({
-        id: 'route-core-layer',
-        type: 'line',
-        source: 'route-core',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#3B82F6',
-          'line-width': 6,
-          'line-opacity': 1.0
-        }
-      });
-
-      // 3. Route Dashed Pulse (Uber navigation dash)
-      instance.addSource('route-dash', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
-      });
-
-      instance.addLayer({
-        id: 'route-dash-layer',
-        type: 'line',
-        source: 'route-dash',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#FFFFFF',
-          'line-width': 3,
-          'line-dasharray': [2, 4],
-          'line-opacity': 0.9
-        }
-      });
-
-      // 4. Walking Origin Casing & Layer (Caminhada até a parada mais próxima)
-      instance.addSource('walk-origin', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
-      });
-
-      instance.addLayer({
-        id: 'walk-origin-casing-layer',
-        type: 'line',
-        source: 'walk-origin',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#000000',
-          'line-width': 7,
-          'line-opacity': 0.9
-        }
-      });
-
-      instance.addLayer({
-        id: 'walk-origin-layer',
-        type: 'line',
-        source: 'walk-origin',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#3B82F6',
-          'line-width': 4,
-          'line-dasharray': [1.5, 2],
-          'line-opacity': 1.0
-        }
-      });
-
-      // 5. Walking Destination Casing & Layer (Caminhada da parada até o destino)
-      instance.addSource('walk-dest', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
-      });
-
-      instance.addLayer({
-        id: 'walk-dest-casing-layer',
-        type: 'line',
-        source: 'walk-dest',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#000000',
-          'line-width': 7,
-          'line-opacity': 0.9
-        }
-      });
-
-      instance.addLayer({
-        id: 'walk-dest-layer',
-        type: 'line',
-        source: 'walk-dest',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': '#F97316',
-          'line-width': 4,
-          'line-dasharray': [1.5, 2],
-          'line-opacity': 1.0
-        }
-      });
-
+      ensureRouteLayers(instance);
       setIsMapLoaded(true);
     });
 
@@ -341,7 +325,8 @@ export const MapView: React.FC<MapViewProps> = ({
 
   // Update Trajectory, Stops, and Origin/Destination Pins when Active Trip Changes
   useEffect(() => {
-    if (!map.current || !isMapLoaded || !map.current.getSource('route-core')) return;
+    if (!map.current || !isMapLoaded) return;
+    ensureRouteLayers(map.current);
 
     // Clear previous stop, endpoint & planned markers
     stopMarkers.current.forEach(m => m.remove());
@@ -398,7 +383,13 @@ export const MapView: React.FC<MapViewProps> = ({
       stopMarkers.current.push(marker);
     };
 
-    if (!activeTrip || activeTrip.coordinates.length === 0) {
+    const activeCoords = (activeTrip && activeTrip.coordinates && activeTrip.coordinates.length >= 2)
+      ? activeTrip.coordinates
+      : (activeTrip && activeTrip.stops && activeTrip.stops.length >= 2)
+        ? activeTrip.stops.map(s => [s.lng, s.lat] as [number, number])
+        : [];
+
+    if (!activeTrip || activeCoords.length === 0) {
       (map.current.getSource('route-casing') as maplibregl.GeoJSONSource)?.setData({
         type: 'FeatureCollection',
         features: []
@@ -422,29 +413,33 @@ export const MapView: React.FC<MapViewProps> = ({
     }
 
     // Color by direction: Blue for IDA, Orange for VOLTA (Strict 3-color palette)
-    const coreColor = isVolta ? '#F97316' : '#3B82F6';
+    const coreColor = isVolta ? '#F97316' : '#2563EB';
     const dashColor = isVolta ? '#FDBA74' : '#BFDBFE';
 
-    map.current.setPaintProperty('route-core-layer', 'line-color', coreColor);
-    map.current.setPaintProperty('route-dash-layer', 'line-color', dashColor);
+    if (map.current.getLayer('route-core-layer')) {
+      map.current.setPaintProperty('route-core-layer', 'line-color', coreColor);
+    }
+    if (map.current.getLayer('route-dash-layer')) {
+      map.current.setPaintProperty('route-dash-layer', 'line-color', dashColor);
+    }
 
     const feature = {
       type: 'Feature' as const,
       properties: { tripId: activeTrip.tripId, name: activeTrip.tripName },
       geometry: {
         type: 'LineString' as const,
-        coordinates: activeTrip.coordinates
+        coordinates: activeCoords
       }
     };
 
-    const collection = { type: 'FeatureCollection' as const, features: plannedTrip ? plannedTrip.legs.map(leg => ({...feature, properties:{tripId:leg.trip.tripId,name:leg.trip.tripName}, geometry:{type:'LineString' as const,coordinates:leg.trip.coordinates}})).filter(f=>f.geometry.coordinates.length>=2) : [feature] };
+    const collection = { type: 'FeatureCollection' as const, features: plannedTrip ? plannedTrip.legs.map(leg => ({...feature, properties:{tripId:leg.trip.tripId,name:leg.trip.tripName}, geometry:{type:'LineString' as const,coordinates:leg.trip.coordinates.length >= 2 ? leg.trip.coordinates : leg.trip.stops.map(s => [s.lng, s.lat] as [number, number])}})).filter(f=>f.geometry.coordinates.length>=2) : [feature] };
     (map.current.getSource('route-casing') as maplibregl.GeoJSONSource)?.setData(collection);
     (map.current.getSource('route-core') as maplibregl.GeoJSONSource)?.setData(collection);
     (map.current.getSource('route-dash') as maplibregl.GeoJSONSource)?.setData(collection);
 
     // Zoom & Fit Route bounds smoothly
     const bounds = new maplibregl.LngLatBounds();
-    (plannedTrip ? plannedTrip.legs.flatMap(l=>l.trip.coordinates) : activeTrip.coordinates).forEach(c => bounds.extend(c));
+    (plannedTrip ? plannedTrip.legs.flatMap(l=>l.trip.coordinates.length >= 2 ? l.trip.coordinates : l.trip.stops.map(s=>[s.lng,s.lat] as [number,number])) : activeCoords).forEach(c => bounds.extend(c));
 
     // Handle Planned Trip (Multimodal: Walk to Stop -> Bus Route -> Walk to Destination)
     if (plannedTrip) {
