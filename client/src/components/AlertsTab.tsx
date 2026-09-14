@@ -102,7 +102,13 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         color: '#FFFFFF'
       };
     }
-    if (t.includes('interditada') || t.includes('obras') || t.includes('bloqueio')) {
+    if (t.includes('obras') && !t.includes('interditada')) {
+      return { label: 'OBRAS NA VIA', bg: '#EA580C', color: '#FFFFFF' };
+    }
+    if (alert.category === 'hazards') {
+      return { label: 'PERIGO NA VIA', bg: '#D97706', color: '#FFFFFF' };
+    }
+    if (t.includes('interditada') || t.includes('bloqueio')) {
       return {
         label: 'VIA INTERDITADA',
         bg: '#EA580C', // Orange
