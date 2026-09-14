@@ -36,9 +36,9 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   const activeDirection = isVolta ? 'volta' : 'ida';
   const themeColor = isVolta ? '#F97316' : '#3B82F6';
 
-  // Strict Direction Filter: Only show vehicles heading in the selected direction
+  // Strict Direction Filter: Show vehicles matching active direction, preserving unknown direction so buses are never lost
   const activeVehicles = useMemo(() => {
-    return vehicles.filter(v => (v.direction ? v.direction === activeDirection : true));
+    return vehicles.filter(v => (!v.direction || v.direction === 'desconhecido' ? true : v.direction === activeDirection));
   }, [vehicles, activeDirection]);
 
 

@@ -74,7 +74,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
         inset: 0,
         zIndex: 5,
         backgroundColor: '#09090B',
-        paddingBottom: '100px',
+        paddingBottom: '80px',
         overflowY: 'auto',
         color: '#FFFFFF'
       }}

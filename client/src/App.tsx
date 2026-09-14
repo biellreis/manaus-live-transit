@@ -56,10 +56,18 @@ export function App() {
 
         if (linesRes.ok) {
           const linesData = await linesRes.json();
-          setLines(linesData.lines || []);
-          const line640 = linesData.lines.find((l: RouteSummary) => l.code === '640');
-          if (line640) {
-            setSelectedLine(line640);
+          const allLoadedLines = linesData.lines || [];
+          setLines(allLoadedLines);
+          const params = new URLSearchParams(window.location.search);
+          const routeParam = params.get('line') || params.get('route') || window.location.hash.replace('#', '').trim();
+          const targetLine = routeParam
+            ? (allLoadedLines.find((l: RouteSummary) => l.code.toLowerCase() === routeParam.toLowerCase() || l.id.toLowerCase() === routeParam.toLowerCase()) || allLoadedLines.find((l: RouteSummary) => l.code === '640'))
+            : allLoadedLines.find((l: RouteSummary) => l.code === '640');
+          if (targetLine) {
+            setSelectedLine(targetLine);
+            if (routeParam) {
+              setIsRouteMode(true);
+            }
           }
         }
 

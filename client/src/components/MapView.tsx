@@ -90,6 +90,8 @@ export const MapView: React.FC<MapViewProps> = ({
 
   // Helper function to dynamically verify & create vector route layers
   const ensureRouteLayers = (instance: maplibregl.Map) => {
+    if (!instance || !instance.isStyleLoaded()) return;
+
     if (!instance.getSource('route-casing')) {
       instance.addSource('route-casing', {
         type: 'geojson',
@@ -99,7 +101,7 @@ export const MapView: React.FC<MapViewProps> = ({
         id: 'route-casing-layer',
         type: 'line',
         source: 'route-casing',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        layout: { 'line-cap': 'round', 'line-join': 'round', 'visibility': 'visible' },
         paint: {
           'line-color': '#000000',
           'line-width': 11,
@@ -117,7 +119,7 @@ export const MapView: React.FC<MapViewProps> = ({
         id: 'route-core-layer',
         type: 'line',
         source: 'route-core',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        layout: { 'line-cap': 'round', 'line-join': 'round', 'visibility': 'visible' },
         paint: {
           'line-color': '#2563EB',
           'line-width': 6.5,
@@ -135,7 +137,7 @@ export const MapView: React.FC<MapViewProps> = ({
         id: 'route-dash-layer',
         type: 'line',
         source: 'route-dash',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        layout: { 'line-cap': 'round', 'line-join': 'round', 'visibility': 'visible' },
         paint: {
           'line-color': '#FFFFFF',
           'line-width': 3,
@@ -416,10 +418,15 @@ export const MapView: React.FC<MapViewProps> = ({
     const coreColor = isVolta ? '#F97316' : '#2563EB';
     const dashColor = isVolta ? '#FDBA74' : '#BFDBFE';
 
+    if (map.current.getLayer('route-casing-layer')) {
+      map.current.setLayoutProperty('route-casing-layer', 'visibility', 'visible');
+    }
     if (map.current.getLayer('route-core-layer')) {
+      map.current.setLayoutProperty('route-core-layer', 'visibility', 'visible');
       map.current.setPaintProperty('route-core-layer', 'line-color', coreColor);
     }
     if (map.current.getLayer('route-dash-layer')) {
+      map.current.setLayoutProperty('route-dash-layer', 'visibility', 'visible');
       map.current.setPaintProperty('route-dash-layer', 'line-color', dashColor);
     }
 
@@ -436,6 +443,9 @@ export const MapView: React.FC<MapViewProps> = ({
     (map.current.getSource('route-casing') as maplibregl.GeoJSONSource)?.setData(collection);
     (map.current.getSource('route-core') as maplibregl.GeoJSONSource)?.setData(collection);
     (map.current.getSource('route-dash') as maplibregl.GeoJSONSource)?.setData(collection);
+
+    map.current.resize();
+    map.current.triggerRepaint();
 
     // Zoom & Fit Route bounds smoothly
     const bounds = new maplibregl.LngLatBounds();
@@ -529,7 +539,7 @@ export const MapView: React.FC<MapViewProps> = ({
       walkDestSource?.setData({ type: 'FeatureCollection', features: [] });
 
       // 1. Origin Marker (Start of bus route)
-      const startCoord = activeTrip.coordinates[0];
+      const startCoord = activeCoords[0];
       if (startCoord) {
         const originEl = document.createElement('div');
         originEl.className = 'route-endpoint-origin';
@@ -545,7 +555,7 @@ export const MapView: React.FC<MapViewProps> = ({
       }
 
       // 2. Destination Marker (End of bus route - Clean, NO emojis)
-      const endCoord = activeTrip.coordinates[activeTrip.coordinates.length - 1];
+      const endCoord = activeCoords[activeCoords.length - 1];
       if (endCoord) {
         const destEl = document.createElement('div');
         destEl.className = 'route-endpoint-dest';
@@ -569,7 +579,7 @@ export const MapView: React.FC<MapViewProps> = ({
 
     // 3. Intermediary Stops with Bus Stop Totem Icon (Snapping to line, strictly on Manaus roads)
     activeTrip.stops.forEach(stop => createStopMarker(stop, isVolta));
-  }, [activeTrip, plannedTrip, citywideStops, isMapLoaded]);
+  }, [activeTrip, plannedTrip, citywideStops, isMapLoaded, isRouteView]);
 
   // Auto zoom and fit bounds to full route whenever route mode is activated
   useEffect(() => {
@@ -633,11 +643,17 @@ export const MapView: React.FC<MapViewProps> = ({
     // 1. Only display vehicles traveling in the active direction (IDA vs VOLTA).
     // 2. Only display vehicles physically within 450m of the activeTrip polyline.
     // This strictly eliminates stray/ghost vehicles appearing miles away in other neighborhoods.
-    const filteredVehicles = activeTrip && activeTrip.coordinates.length > 1
+    const activeCoords = (activeTrip && activeTrip.coordinates && activeTrip.coordinates.length >= 2)
+      ? activeTrip.coordinates
+      : (activeTrip && activeTrip.stops && activeTrip.stops.length >= 2)
+        ? activeTrip.stops.map(s => [s.lng, s.lat] as [number, number])
+        : [];
+
+    const filteredVehicles = activeTrip && activeCoords.length > 1
       ? vehicles.filter(v => {
-          if (v.direction && v.direction !== activeDirection) return false;
-          const dist = getDistanceToPolylineMeters(v.lng, v.lat, activeTrip.coordinates);
-          return dist <= 450;
+          if (v.direction && v.direction !== 'desconhecido' && v.direction !== activeDirection) return false;
+          const dist = getDistanceToPolylineMeters(v.lng, v.lat, activeCoords);
+          return dist <= 1200;
         })
       : vehicles;
 

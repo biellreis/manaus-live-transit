@@ -81,7 +81,7 @@ export const LinesTab: React.FC<LinesTabProps> = ({
         inset: 0,
         zIndex: 5,
         backgroundColor: '#09090B',
-        paddingBottom: '110px',
+        paddingBottom: '80px',
         overflowY: 'auto',
         color: '#FFFFFF'
       }}

@@ -604,10 +604,31 @@ class SinetramClient {
         // Precise Direction Detection:
         const lb = String(v.lb || '').toUpperCase().trim();
         let direction: 'ida' | 'volta' | 'desconhecido' = 'desconhecido';
-        if (lb.includes('→ CENTRO') || lb.endsWith('CENTRO') || lb.includes('→ MATRIZ') || lb.endsWith('MATRIZ') || (lb.includes('CENTRO') && !lb.startsWith('CENTRO'))) {
+        const isIdaKeyword = (
+          lb.includes('→ CENTRO') || lb.endsWith('CENTRO') || 
+          lb.includes('→ MATRIZ') || lb.endsWith('MATRIZ') || 
+          (lb.includes('CENTRO') && !lb.startsWith('CENTRO')) ||
+          lb.includes('SENTIDO CENTRO') || lb.includes('SENTIDO T1') ||
+          lb.includes('→ T1') || lb.endsWith('T1') ||
+          lb.includes('PONTA NEGRA') || lb.includes('P. NEGRA') ||
+          lb.includes('DISTRITO') || lb.includes('UFAM') ||
+          lb.includes('IDA') || lb.includes('(IDA)')
+        );
+        const isVoltaKeyword = (
+          lb.startsWith('CENTRO') || lb.startsWith('MATRIZ') || 
+          lb.includes('→ T2') || lb.includes('→ T3') || lb.includes('→ T4') || lb.includes('→ T5') || lb.includes('→ T6') ||
+          lb.endsWith('T2') || lb.endsWith('T3') || lb.endsWith('T4') || lb.endsWith('T5') || lb.endsWith('T6') ||
+          lb.includes('SENTIDO BAIRRO') || lb.includes('BAIRRO') || lb.includes('→ BAIRRO') ||
+          lb.includes('VOLTA') || lb.includes('(VOLTA)') ||
+          lb.includes('CIRCULAR')
+        );
+
+        if (isIdaKeyword && !isVoltaKeyword) {
           direction = 'ida';
-        } else if (lb.startsWith('CENTRO') || lb.startsWith('MATRIZ') || lb.includes('→ T4') || lb.includes('→ T5') || lb.endsWith('T4') || lb.endsWith('T5') || lb.includes('BAIRRO')) {
+        } else if (isVoltaKeyword && !isIdaKeyword) {
           direction = 'volta';
+        } else if (isIdaKeyword) {
+          direction = 'ida';
         }
 
         return {
