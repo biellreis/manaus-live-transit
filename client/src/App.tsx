@@ -59,6 +59,16 @@ export function App() {
           const allLoadedLines = linesData.lines || [];
           setLines(allLoadedLines);
           const params = new URLSearchParams(window.location.search);
+          const tabParam = (params.get('tab') || '').toLowerCase().trim();
+          if (tabParam === 'alerts' || tabParam === 'alertas') setActiveTab('alerts');
+          else if (tabParam === 'lines' || tabParam === 'linhas') setActiveTab('lines');
+          else if (tabParam === 'stops' || tabParam === 'terminais') setActiveTab('stops');
+          else if (tabParam === 'home' || tabParam === 'inicio') setActiveTab('home');
+
+          if (params.get('planner') === 'true' || params.get('planejador') === 'true') {
+            setIsSearchOpen(true);
+          }
+
           const routeParam = params.get('line') || params.get('route') || window.location.hash.replace('#', '').trim();
           const targetLine = routeParam
             ? (allLoadedLines.find((l: RouteSummary) => l.code.toLowerCase() === routeParam.toLowerCase() || l.id.toLowerCase() === routeParam.toLowerCase()) || allLoadedLines.find((l: RouteSummary) => l.code === '640'))
@@ -130,8 +140,11 @@ export function App() {
         .then(data => {
           if (controller.signal.aborted || request !== lineRequest.current) return;
           if (endpoint === 'itinerary') {
-            setAllTrips(data.trips || []);
-            setActiveTrip(data.trips?.[0] || null);
+            const trips = data.trips || [];
+            setAllTrips(trips);
+            const dirParam = new URLSearchParams(window.location.search).get('dir')?.toLowerCase();
+            const preferred = dirParam ? (trips.find(t => t.directionType === dirParam) || trips[0]) : trips[0];
+            setActiveTrip(preferred || null);
           } else {
             setSchedule(data.services || []);
           }
