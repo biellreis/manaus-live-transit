@@ -583,7 +583,7 @@ class SinetramClient {
         const heading = Number(v.dir || 0);
 
         // Calculate REAL GPS speed (km/h) via Haversine delta tracking
-        let calculatedSpeedKmh = typeof v.sp === 'number' ? v.sp : typeof v.speed === 'number' ? v.speed : 0;
+        let calculatedSpeedKmh: number | undefined = typeof v.sp === 'number' ? v.sp : typeof v.speed === 'number' ? v.speed : undefined;
         const prev = this.vehicleHistory.get(id);
         if (prev) {
           const deltaSec = (pt - prev.timestamp) / 1000;
@@ -592,14 +592,16 @@ class SinetramClient {
             const rawSpeed = Math.round((distM / deltaSec) * 3.6);
             if (rawSpeed >= 0 && rawSpeed <= 90) {
               calculatedSpeedKmh = rawSpeed;
-            } else {
+            } else if (typeof prev.speedKmh === 'number') {
               calculatedSpeedKmh = prev.speedKmh;
             }
-          } else if (prev.speedKmh > 0) {
+          } else if (typeof prev.speedKmh === 'number' && prev.speedKmh > 0) {
             calculatedSpeedKmh = prev.speedKmh;
           }
         }
-        this.vehicleHistory.set(id, { lat, lng, timestamp: pt, speedKmh: calculatedSpeedKmh });
+        if (typeof calculatedSpeedKmh === 'number') {
+          this.vehicleHistory.set(id, { lat, lng, timestamp: pt, speedKmh: calculatedSpeedKmh });
+        }
 
         // Trip IDs describe the actual itinerary. Destination names alone do
         // not establish ida/volta consistently across different lines.

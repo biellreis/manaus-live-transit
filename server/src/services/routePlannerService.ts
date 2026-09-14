@@ -300,7 +300,7 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
     for (const [id, departures] of leavingMap) {
       if (id === stop.stopId || !departures.length) continue;
       const other = departures[0].originStop;
-      if (distanceMeters(stop, other) <= MAX_TRANSFER_DISTANCE || isSameTerminalOrStation(stop.stopName, other.stopName)) groups.push(departures);
+      if (isSameTerminalOrStation(stop.stopName, other.stopName) && distanceMeters(stop, other) <= MAX_TRANSFER_DISTANCE) groups.push(departures);
     }
     nearbyDepartures.set(stop.stopId, groups);
     return groups;

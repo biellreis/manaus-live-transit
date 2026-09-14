@@ -11,46 +11,49 @@ export function distanceMeters(a: { lat: number; lng: number }, b: { lat: number
  * Fallback to stop coordinates if shape polyline slicing fails or is unavailable.
  */
 export function sliceTripCoordinates(trip: TripDetail, board: StopInfo, alight: StopInfo): [number, number][] {
+  if (!trip.coordinates || trip.coordinates.length < 2) {
+    return [];
+  }
+
   const fromIdx = trip.stops.findIndex(s => s.stopId === board.stopId && s.sequence === board.sequence);
   const toIdx = trip.stops.findIndex(s => s.stopId === alight.stopId && s.sequence === alight.sequence);
-  const slicedStops = fromIdx !== -1 && toIdx !== -1 && toIdx >= fromIdx 
-    ? trip.stops.slice(fromIdx, toIdx + 1) 
-    : trip.stops;
 
-  const stopCoords: [number, number][] = slicedStops.map(s => [s.lng, s.lat]);
-
-  if (!trip.coordinates || trip.coordinates.length < 2) {
-    return stopCoords.length >= 2 ? stopCoords : [];
+  if (fromIdx === -1 || toIdx === -1 || toIdx < fromIdx) {
+    return [];
   }
 
-  // Find closest point in shape polyline for board stop
-  let bestBoardIdx = 0;
-  let bestBoardDist = Infinity;
-  for (let i = 0; i < trip.coordinates.length; i++) {
-    const [lng, lat] = trip.coordinates[i];
-    const dist = distanceMeters(board, { lat, lng });
-    if (dist < bestBoardDist) {
-      bestBoardDist = dist;
-      bestBoardIdx = i;
+  // Monotonically match stops to shape coordinates to handle loops and repeated stop IDs
+  let currShapeIdx = 0;
+  let boardShapeIdx = 0;
+
+  for (let k = 0; k <= toIdx; k++) {
+    const s = trip.stops[k];
+    let bestIdx = currShapeIdx;
+    let bestDist = Infinity;
+
+    for (let i = currShapeIdx; i < trip.coordinates.length; i++) {
+      const [lng, lat] = trip.coordinates[i];
+      const dist = distanceMeters(s, { lat, lng });
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestIdx = i;
+      }
+    }
+
+    currShapeIdx = bestIdx;
+    if (k === fromIdx) {
+      boardShapeIdx = bestIdx;
     }
   }
 
-  // Find closest point in shape polyline for alight stop occurring at or after bestBoardIdx
-  let bestAlightIdx = bestBoardIdx;
-  let bestAlightDist = Infinity;
-  for (let i = bestBoardIdx; i < trip.coordinates.length; i++) {
-    const [lng, lat] = trip.coordinates[i];
-    const dist = distanceMeters(alight, { lat, lng });
-    if (dist < bestAlightDist) {
-      bestAlightDist = dist;
-      bestAlightIdx = i;
+  const alightShapeIdx = currShapeIdx;
+
+  if (alightShapeIdx >= boardShapeIdx) {
+    const sliced = trip.coordinates.slice(boardShapeIdx, alightShapeIdx + 1);
+    if (sliced.length >= 2) {
+      return sliced;
     }
   }
 
-  if (bestAlightIdx > bestBoardIdx) {
-    const slicedShape = trip.coordinates.slice(bestBoardIdx, bestAlightIdx + 1);
-    if (slicedShape.length >= 2) return slicedShape;
-  }
-
-  return stopCoords.length >= 2 ? stopCoords : trip.coordinates;
+  return [];
 }
