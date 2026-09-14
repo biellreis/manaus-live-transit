@@ -54,122 +54,106 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       aria-label="Navegação Principal"
       style={{
         position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        bottom: 'max(env(safe-area-inset-bottom, 0px), 16px)',
+        left: '16px',
+        right: '16px',
+        maxWidth: '420px',
+        margin: '0 auto',
         zIndex: 90,
-        backgroundColor: 'rgba(12, 12, 15, 0.85)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: 'rgba(18, 18, 22, 0.85)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        borderRadius: '32px',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        height: '60px',
+        padding: '0 8px',
         display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4)',
         userSelect: 'none',
         WebkitUserSelect: 'none'
       }}
     >
-      {/* 52px Active Control Bar (Centered, identical height on all devices) */}
-      <div
-        style={{
-          height: '52px',
-          width: '100%',
-          maxWidth: '540px',
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          padding: '0 8px'
-        }}
-      >
-        {navItems.map((item) => {
-          const isActive = activeTab === item.id;
-          const IconComponent = item.icon;
+      {navItems.map((item) => {
+        const isActive = activeTab === item.id;
+        const IconComponent = item.icon;
 
-          return (
-            <button
-              key={item.id}
-              id={`tab-button-${item.id}`}
-              onClick={() => handleSelect(item.id)}
+        return (
+          <button
+            key={item.id}
+            id={`tab-button-${item.id}`}
+            onClick={() => handleSelect(item.id)}
+            style={{
+              flex: 1,
+              height: '46px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '2px',
+              background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+              borderRadius: '20px',
+              border: 'none',
+              cursor: 'pointer',
+              color: isActive ? '#FFFFFF' : '#A1A1AA',
+              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              position: 'relative',
+              outline: 'none',
+              padding: '2px 0'
+            }}
+          >
+            <div
               style={{
-                flex: 1,
-                height: '46px',
+                position: 'relative',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '2px',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: isActive ? '#FFFFFF' : '#71717A',
-                transition: 'color 0.15s ease',
-                position: 'relative',
-                outline: 'none',
-                padding: 0
+                width: '32px',
+                height: '24px'
               }}
             >
-              <div
-                style={{
-                  position: 'relative',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '32px',
-                  height: '24px'
-                }}
-              >
-                <IconComponent
-                  size={21}
-                  strokeWidth={isActive ? 2.5 : 1.8}
-                  color={isActive ? '#FFFFFF' : '#71717A'}
-                />
-                {item.badge && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      top: '-3px',
-                      right: '-2px',
-                      width: '15px',
-                      height: '15px',
-                      borderRadius: '50%',
-                      backgroundColor: '#F97316',
-                      color: '#FFFFFF',
-                      fontSize: '9px',
-                      fontWeight: 800,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '2px solid #000000'
-                    }}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-              </div>
-              <span
-                style={{
-                  fontSize: '10.5px',
-                  fontWeight: isActive ? 700 : 500,
-                  letterSpacing: '-0.01em',
-                  lineHeight: 1
-                }}
-              >
-                {item.label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Native Gesture Safe Area Extension (Fills the frosted glass down to the physical screen edge) */}
-      <div
-        style={{
-          height: 'env(safe-area-inset-bottom, 0px)',
-          width: '100%',
-          flexShrink: 0
-        }}
-      />
+              <IconComponent
+                size={21}
+                strokeWidth={isActive ? 2.5 : 1.8}
+                color={isActive ? '#FFFFFF' : '#A1A1AA'}
+              />
+              {item.badge && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-3px',
+                    right: '-2px',
+                    width: '15px',
+                    height: '15px',
+                    borderRadius: '50%',
+                    backgroundColor: '#F97316',
+                    color: '#FFFFFF',
+                    fontSize: '9px',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px solid #000000'
+                  }}
+                >
+                  {item.badge}
+                </span>
+              )}
+            </div>
+            <span
+              style={{
+                fontSize: '10.5px',
+                fontWeight: isActive ? 700 : 500,
+                letterSpacing: '-0.01em',
+                lineHeight: 1
+              }}
+            >
+              {item.label}
+            </span>
+          </button>
+        );
+      })}
     </nav>
   );
 };

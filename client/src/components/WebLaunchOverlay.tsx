@@ -43,7 +43,7 @@ export function WebLaunchOverlay() {
         position: 'fixed',
         inset: 0,
         width: '100%',
-        height: '100dvh',
+        height: '100%',
         zIndex: 999999,
         backgroundColor: '#FFFFFF',
         display: 'flex',

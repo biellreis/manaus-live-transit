@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v2.4 (Native Edge-to-Edge Bar)
+// Manaus Live Transit - Service Worker v2.5 (Fix 100dvh Viewport & Floating Dock)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });
