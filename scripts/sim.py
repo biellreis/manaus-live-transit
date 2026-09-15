@@ -111,7 +111,7 @@ def main():
             idx = int(sys.argv[3]) if len(sys.argv) > 3 else 1
             # 1: Inicio (12.5%), 2: Linhas (37.5%), 3: Terminais (62.5%), 4: Alertas (87.5%)
             rx = 0.125 + (idx - 1) * 0.25
-            ry = 0.93  # Native Edge-to-Edge navigation bar (Apple HIG)
+            ry = 0.89  # Floating Pill Dock center
             click_window_normalized(rx, ry)
             time.sleep(1)
             take_screenshot(f"tap_tab_{idx}")
