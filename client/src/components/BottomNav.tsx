@@ -53,7 +53,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       id="native-bottom-nav"
       aria-label="Navegação Principal"
       style={{
-        position: 'fixed',
+        position: 'absolute',
         bottom: 'max(env(safe-area-inset-bottom, 0px), 16px)',
         left: '16px',
         right: '16px',

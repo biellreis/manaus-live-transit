@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v2.5 (Fix 100dvh Viewport & Floating Dock)
+// Manaus Live Transit - Service Worker v2.6 (Full viewport behind floating dock)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });
