@@ -416,6 +416,8 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       totalMinutes: activeOption.totalMinutes,
       isTransfer: legs.length > 1,
       transferHubName: activeOption.transferHubName,
+      originPlatformOrPoint: activeOption.originPlatformOrPoint,
+      destPlatformOrPoint: activeOption.destPlatformOrPoint,
       etaMinutes: activeOption.etaMinutes,
       etaTime: activeOption.etaTime,
       liveBusCount: activeOption.liveBusCount,
@@ -650,26 +652,6 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                                 {opt.badge}
                               </span>
 
-                              {opt.isLiveGps && (
-                                <span
-                                  style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '4px',
-                                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                                    color: '#34D399',
-                                    border: '1px solid rgba(16, 185, 129, 0.3)',
-                                    fontSize: '10px',
-                                    fontWeight: 800,
-                                    padding: '2px 8px',
-                                    borderRadius: '999px'
-                                  }}
-                                >
-                                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#10B981' }} />
-                                  GPS AO VIVO
-                                </span>
-                              )}
-
                               {opt.upcomingBuses && opt.upcomingBuses.length > 0 && (
                                 <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
                                   • Próximos: {opt.upcomingBuses.map((b) => b.time).join(', ')}
@@ -682,18 +664,17 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
                           {opt.etaTime && typeof opt.etaMinutes === 'number' ? (
                             <div>
-                              <div style={{ fontSize: '16px', fontWeight: 900, color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                              <div style={{ fontSize: '16px', fontWeight: 900, color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
                                 {opt.etaTime}
                               </div>
                               <div
                                 style={{
-                                  fontSize: '10.5px',
+                                  fontSize: '11px',
                                   fontWeight: 800,
-                                  color: '#34D399',
-                                  backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                                  padding: '2px 6px',
+                                  color: '#FFFFFF',
+                                  backgroundColor: '#2563EB',
+                                  padding: '3px 8px',
                                   borderRadius: '6px',
-                                  border: '1px solid rgba(16, 185, 129, 0.25)',
                                   marginTop: '3px',
                                   display: 'inline-block'
                                 }}
@@ -705,7 +686,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                             <div>
                               <div style={{ fontSize: '15px', fontWeight: 800, color: '#FFFFFF' }}>{opt.fare}</div>
                               <div style={{ fontSize: '10px', color: '#71717A', marginTop: '2px' }}>
-                                {opt.liveBusCount ? `${opt.liveBusCount} na rota` : 'Aguardando GPS'}
+                                {opt.liveBusCount ? `${opt.liveBusCount} na rota` : 'Em operação'}
                               </div>
                             </div>
                           )}
@@ -988,15 +969,15 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      Usar localização GPS atual
+                      Usar minha localização atual
                     </div>
                     <div style={{ fontSize: '11.5px', color: '#93C5FD', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {gpsStreetName || 'Detectando sua rua em Manaus via satélite...'}
+                      {gpsStreetName || 'Detectando sua rua em Manaus...'}
                     </div>
                   </div>
                 </div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#60A5FA', backgroundColor: 'rgba(37, 99, 235, 0.25)', padding: '4px 8px', borderRadius: '6px' }}>
-                  GPS
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#FFFFFF', backgroundColor: '#2563EB', padding: '4px 8px', borderRadius: '6px' }}>
+                  Atual
                 </span>
               </div>
             )}

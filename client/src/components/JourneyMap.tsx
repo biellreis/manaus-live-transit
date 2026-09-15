@@ -298,7 +298,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
         });
 
         // Resolução dinâmica de caminhada pelas ruas reais (OSRM) caso venha em linha reta
-        if (isWalk && validCoords.length <= 2) {
+        if (isWalk && validCoords.length <= 2 && !(isWalkOrigin && isOrigTerminal) && !(isWalkDest && isDestTerminal)) {
           const fromPt = isWalkOrigin
             ? [currentOrigin.lng, currentOrigin.lat]
             : [currentOption.destStop?.lng, currentOption.destStop?.lat];

@@ -423,8 +423,21 @@ export const MapView: React.FC<MapViewProps> = ({
 
     // Handle Planned Trip (Multimodal: Walk to Stop -> Bus Route -> Walk to Destination)
     if (plannedTrip) {
-      const walkOriginCoords = plannedTrip.journeyDetails?.find(l=>l.type==='walk_origin')?.coordinates || [];
-      const walkDestCoords = plannedTrip.journeyDetails?.find(l=>l.type==='walk_dest')?.coordinates || [];
+      const isOriginTerminal = plannedTrip.origin.name?.toUpperCase().includes('TERMINAL') ||
+        plannedTrip.origin.name?.toUpperCase().includes('ESTAÇÃO') ||
+        plannedTrip.origin.name?.toUpperCase().includes('ESTACAO') ||
+        plannedTrip.originStop.stopName?.toUpperCase().includes('TERMINAL') ||
+        /\b[TE][1-6]\b/i.test(plannedTrip.origin.name || '') ||
+        /\b[TE][1-6]\b/i.test(plannedTrip.originStop.stopName || '');
+
+      const isDestTerminal = plannedTrip.destination.name?.toUpperCase().includes('TERMINAL') ||
+        plannedTrip.destination.name?.toUpperCase().includes('ESTAÇÃO') ||
+        plannedTrip.destStop.stopName?.toUpperCase().includes('TERMINAL') ||
+        /\b[TE][1-6]\b/i.test(plannedTrip.destination.name || '') ||
+        /\b[TE][1-6]\b/i.test(plannedTrip.destStop.stopName || '');
+
+      const walkOriginCoords = isOriginTerminal ? [] : (plannedTrip.journeyDetails?.find(l=>l.type==='walk_origin')?.coordinates || []);
+      const walkDestCoords = isDestTerminal ? [] : (plannedTrip.journeyDetails?.find(l=>l.type==='walk_dest')?.coordinates || []);
 
       walkOriginSource?.setData({
         type: 'FeatureCollection',
@@ -435,8 +448,7 @@ export const MapView: React.FC<MapViewProps> = ({
         }] : []
       });
 
-      // Resolução assíncrona garantida de pedestres nas ruas caso venha em linha reta
-      if (walkOriginCoords.length <= 2 && Math.hypot(plannedTrip.origin.lng - plannedTrip.originStop.lng, plannedTrip.origin.lat - plannedTrip.originStop.lat) > 0.0002) {
+      if (!isOriginTerminal && walkOriginCoords.length <= 2 && Math.hypot(plannedTrip.origin.lng - plannedTrip.originStop.lng, plannedTrip.origin.lat - plannedTrip.originStop.lat) > 0.0003) {
         resolveStreetWalkingPath(plannedTrip.origin.lng, plannedTrip.origin.lat, plannedTrip.originStop.lng, plannedTrip.originStop.lat)
           .then((res) => {
             if (res?.coordinates && res.coordinates.length >= 2) {
@@ -462,7 +474,7 @@ export const MapView: React.FC<MapViewProps> = ({
         }] : []
       });
 
-      if (walkDestCoords.length <= 2 && Math.hypot(plannedTrip.destStop.lng - plannedTrip.destination.lng, plannedTrip.destStop.lat - plannedTrip.destination.lat) > 0.0002) {
+      if (!isDestTerminal && walkDestCoords.length <= 2 && Math.hypot(plannedTrip.destStop.lng - plannedTrip.destination.lng, plannedTrip.destStop.lat - plannedTrip.destination.lat) > 0.0003) {
         resolveStreetWalkingPath(plannedTrip.destStop.lng, plannedTrip.destStop.lat, plannedTrip.destination.lng, plannedTrip.destination.lat)
           .then((res) => {
             if (res?.coordinates && res.coordinates.length >= 2) {
@@ -484,61 +496,91 @@ export const MapView: React.FC<MapViewProps> = ({
       bounds.extend([plannedTrip.destStop.lng, plannedTrip.destStop.lat]);
       bounds.extend([plannedTrip.destination.lng, plannedTrip.destination.lat]);
 
-      // 1. Origin Marker (Clean Lucide styling, NO emojis)
-      const originEl = document.createElement('div');
-      originEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
-      originEl.innerHTML = `
-        <div style="background:#2563EB;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
-          Partida: ${plannedTrip.origin.name}
-        </div>
-        <div style="width:12px;height:12px;border-radius:50%;background:#2563EB;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
-      `;
-      const originMarker = new maplibregl.Marker({ element: originEl, anchor: 'bottom' })
-        .setLngLat([plannedTrip.origin.lng, plannedTrip.origin.lat])
-        .addTo(map.current);
-      plannedMarkers.current.push(originMarker);
+      // 1. Origin Marker
+      if (isOriginTerminal) {
+        const originEl = document.createElement('div');
+        originEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
+        const pointLabel = plannedTrip.originPlatformOrPoint || 'Embarque';
+        originEl.innerHTML = `
+          <div style="background:#2563EB;color:#FFFFFF;padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
+            ${plannedTrip.origin.name} • ${pointLabel}
+          </div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#2563EB;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const originMarker = new maplibregl.Marker({ element: originEl, anchor: 'bottom' })
+          .setLngLat([plannedTrip.originStop.lng, plannedTrip.originStop.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(originMarker);
+      } else {
+        const originEl = document.createElement('div');
+        originEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
+        originEl.innerHTML = `
+          <div style="background:#2563EB;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
+            Partida: ${plannedTrip.origin.name}
+          </div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#2563EB;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const originMarker = new maplibregl.Marker({ element: originEl, anchor: 'bottom' })
+          .setLngLat([plannedTrip.origin.lng, plannedTrip.origin.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(originMarker);
 
-      // 2. Departure Stop Marker (Clean Lucide styling, NO emojis)
-      const depEl = document.createElement('div');
-      depEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
-      depEl.innerHTML = `
-        <div style="background:#2563EB;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
-          Embarque • distância em linha reta
-        </div>
-        <div style="width:12px;height:12px;border-radius:3px;background:#2563EB;border:2px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
-      `;
-      const depMarker = new maplibregl.Marker({ element: depEl, anchor: 'bottom' })
-        .setLngLat([plannedTrip.originStop.lng, plannedTrip.originStop.lat])
-        .addTo(map.current);
-      plannedMarkers.current.push(depMarker);
+        const depEl = document.createElement('div');
+        depEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
+        depEl.innerHTML = `
+          <div style="background:#1D4ED8;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
+            Embarque: ${plannedTrip.originStop.stopName}
+          </div>
+          <div style="width:12px;height:12px;border-radius:3px;background:#1D4ED8;border:2px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const depMarker = new maplibregl.Marker({ element: depEl, anchor: 'bottom' })
+          .setLngLat([plannedTrip.originStop.lng, plannedTrip.originStop.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(depMarker);
+      }
 
-      // 3. Arrival Stop Marker (Clean Lucide styling, NO emojis)
-      const arrEl = document.createElement('div');
-      arrEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
-      arrEl.innerHTML = `
-        <div style="background:#F97316;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
-          Desembarque
-        </div>
-        <div style="width:12px;height:12px;border-radius:3px;background:#F97316;border:2px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
-      `;
-      const arrMarker = new maplibregl.Marker({ element: arrEl, anchor: 'bottom' })
-        .setLngLat([plannedTrip.destStop.lng, plannedTrip.destStop.lat])
-        .addTo(map.current);
-      plannedMarkers.current.push(arrMarker);
+      // 2. Destination Markers
+      if (isDestTerminal) {
+        const destEl = document.createElement('div');
+        destEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
+        const pointLabel = plannedTrip.destPlatformOrPoint || 'Desembarque';
+        destEl.innerHTML = `
+          <div style="background:#EA580C;color:#FFFFFF;padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
+            ${plannedTrip.destination.name} • ${pointLabel}
+          </div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#EA580C;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const destMarker = new maplibregl.Marker({ element: destEl, anchor: 'bottom' })
+          .setLngLat([plannedTrip.destStop.lng, plannedTrip.destStop.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(destMarker);
+      } else {
+        const arrEl = document.createElement('div');
+        arrEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
+        arrEl.innerHTML = `
+          <div style="background:#F97316;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
+            Desembarque
+          </div>
+          <div style="width:12px;height:12px;border-radius:3px;background:#F97316;border:2px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const arrMarker = new maplibregl.Marker({ element: arrEl, anchor: 'bottom' })
+          .setLngLat([plannedTrip.destStop.lng, plannedTrip.destStop.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(arrMarker);
 
-      // 4. Final Destination Marker (Clean Lucide styling, NO emojis)
-      const destEl = document.createElement('div');
-      destEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
-      destEl.innerHTML = `
-        <div style="background:#EA580C;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
-          Destino: ${plannedTrip.destination.name}
-        </div>
-        <div style="width:12px;height:12px;border-radius:50%;background:#EA580C;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
-      `;
-      const destMarker = new maplibregl.Marker({ element: destEl, anchor: 'bottom' })
-        .setLngLat([plannedTrip.destination.lng, plannedTrip.destination.lat])
-        .addTo(map.current);
-      plannedMarkers.current.push(destMarker);
+        const destEl = document.createElement('div');
+        destEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;';
+        destEl.innerHTML = `
+          <div style="background:#EA580C;color:#FFFFFF;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,0.7);border:1.5px solid #FFFFFF;">
+            Destino: ${plannedTrip.destination.name}
+          </div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#EA580C;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const destMarker = new maplibregl.Marker({ element: destEl, anchor: 'bottom' })
+          .setLngLat([plannedTrip.destination.lng, plannedTrip.destination.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(destMarker);
+      }
     } else {
       walkOriginSource?.setData({ type: 'FeatureCollection', features: [] });
       walkDestSource?.setData({ type: 'FeatureCollection', features: [] });

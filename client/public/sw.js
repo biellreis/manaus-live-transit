@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v2.9 (All lines unthrottled + Live GPS countdown & Street routing)
+// Manaus Live Transit - Service Worker v3.0 (Uber/99 Clean UI, Terminal Point Routing & Zero GPS/Emoji Clutter)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });

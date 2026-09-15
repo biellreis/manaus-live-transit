@@ -108,6 +108,8 @@ export interface PlannedTrip {
   isTransfer?: boolean;
   transferHubName?: string;
   secondLine?: RouteSummary;
+  originPlatformOrPoint?: string;
+  destPlatformOrPoint?: string;
   etaMinutes?: number | null;
   etaTime?: string | null;
   liveBusCount?: number;
@@ -138,6 +140,8 @@ export interface TransitOption {
   primaryLineCode: string;
   secondaryLineCode?: string;
   transferHubName?: string;
+  originPlatformOrPoint?: string;
+  destPlatformOrPoint?: string;
   totalMinutes: number | null;
   transitMinutes: number | null;
   walkingMinutes: number | null;

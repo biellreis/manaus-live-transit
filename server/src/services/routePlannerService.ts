@@ -50,6 +50,8 @@ export interface TransitOption {
   walkOriginCoords: [number, number][];
   walkDestCoords: [number, number][];
   walkingAvailable: boolean;
+  originPlatformOrPoint?: string;
+  destPlatformOrPoint?: string;
   etaMinutes?: number | null;
   etaTime?: string | null;
   liveBusCount?: number;
@@ -212,6 +214,17 @@ export function isSameTerminalOrStation(stopName: string, pointName: string): bo
   if (pUpper.includes('COMPENSA') && sUpper.includes('COMPENSA')) return true;
 
   return false;
+}
+
+export function extractPlatformOrPoint(stopName: string): string | undefined {
+  if (!stopName) return undefined;
+  const match = stopName.match(/\b(PONTO|PLATAFORMA)\s*([A-Z0-9]+)\b/i);
+  if (match) {
+    const type = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+    const val = match[2].toUpperCase();
+    return `${type} ${val}`;
+  }
+  return undefined;
 }
 
 export function findCandidates(network: CachedLineEntry[], origin: Point, destination: Point): PlannedLeg[][] {
@@ -474,13 +487,28 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
       return { coords, dist: totalDist, mins: totalMins };
     };
 
-    const walkOriginPath = buildStreetWalkingPathSync(origin, first.originStop);
-    const walkDestPath = buildStreetWalkingPathSync(destination, last.destStop);
+    const isOriginTerminal = isSameTerminalOrStation(first.originStop.stopName, origin.name);
+    const isDestTerminal = isSameTerminalOrStation(last.destStop.stopName, destination.name);
+
+    const originPlatform = isOriginTerminal ? extractPlatformOrPoint(first.originStop.stopName) : undefined;
+    const destPlatform = isDestTerminal ? extractPlatformOrPoint(last.destStop.stopName) : undefined;
+
+    const walkOriginPath = isOriginTerminal
+      ? { coords: [] as [number, number][], dist: 0, mins: 0 }
+      : buildStreetWalkingPathSync(origin, first.originStop);
+
+    const walkDestPath = isDestTerminal
+      ? { coords: [] as [number, number][], dist: 0, mins: 0 }
+      : buildStreetWalkingPathSync(destination, last.destStop);
 
     const walkOriginRoute: WalkingRoute = { durationMinutes: walkOriginPath.mins, distanceMeters: walkOriginPath.dist, coordinates: walkOriginPath.coords };
     const walkDestRoute: WalkingRoute = { durationMinutes: walkDestPath.mins, distanceMeters: walkDestPath.dist, coordinates: walkDestPath.coords };
 
-    const details: PlannedLegDetail[] = [walkingLeg('walk_origin', walkOriginRoute, first.originStop, origin)];
+    const details: PlannedLegDetail[] = [];
+    if (!isOriginTerminal && walkOriginRoute.distanceMeters > 20) {
+      details.push(walkingLeg('walk_origin', walkOriginRoute, first.originStop, origin));
+    }
+
     for (let index = 0; index < legs.length; index++) {
       const leg = legs[index];
       if (index > 0) {
@@ -519,12 +547,18 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
             : []
       });
     }
-    details.push(walkingLeg('walk_dest', walkDestRoute, last.destStop, destination));
+
+    if (!isDestTerminal && walkDestRoute.distanceMeters > 20) {
+      details.push(walkingLeg('walk_dest', walkDestRoute, last.destStop, destination));
+    }
+
+    const cleanOriginLabel = originPlatform || first.originStop.stopName;
+    const cleanDestLabel = destPlatform || last.destStop.stopName;
 
     result.options.push({
       id: legs.map((l) => `${l.line.id}-${l.trip.tripId}-${l.originStop.sequence}-${l.destStop.sequence}`).join('/'),
       title: legs.map((l) => l.line.code).join(' + '),
-      subtitle: `${first.originStop.stopName} → ${last.destStop.stopName}`,
+      subtitle: `${cleanOriginLabel} → ${cleanDestLabel}`,
       type: legs.length === 1 ? 'direct' : 'transfer',
       badge: legs.length === 1 ? 'Direto' : '1 Troca de ônibus',
       primaryLineCode: first.line.code,
@@ -537,11 +571,13 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
       fareNote: 'Tarifa padrão de Manaus (PassaFácil / Cartão ou Dinheiro)',
       originStop: first.originStop,
       destStop: last.destStop,
+      originPlatformOrPoint: originPlatform,
+      destPlatformOrPoint: destPlatform,
       legs: details,
       verifiedLegs: legs,
       fullPolyline: [],
-      walkOriginCoords: walkOriginRoute.coordinates || [],
-      walkDestCoords: walkDestRoute.coordinates || [],
+      walkOriginCoords: isOriginTerminal ? [] : (walkOriginRoute.coordinates || []),
+      walkDestCoords: isDestTerminal ? [] : (walkDestRoute.coordinates || []),
       walkingAvailable: true
     });
   }
@@ -714,8 +750,14 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
   // Enriquece as opções finais com a geometria real do OpenStreetMap de forma paralela (apenas para caminhadas > 30m)
   const enrichmentPromises: Promise<void>[] = [];
   for (const opt of result.options) {
+    const isOptOriginTerminal = isSameTerminalOrStation(opt.originStop.stopName, origin.name);
+    const isOptDestTerminal = isSameTerminalOrStation(opt.destStop.stopName, destination.name);
+
+    if (isOptOriginTerminal) opt.walkOriginCoords = [];
+    if (isOptDestTerminal) opt.walkDestCoords = [];
+
     for (const leg of opt.legs) {
-      if (leg.type === 'walk_origin' && distanceMeters(origin, opt.originStop) > 30) {
+      if (leg.type === 'walk_origin' && !isOptOriginTerminal && distanceMeters(origin, opt.originStop) > 30) {
         enrichmentPromises.push(
           getStreetWalkingPolyline(origin.lng, origin.lat, opt.originStop.lng, opt.originStop.lat).then((r) => {
             if (r?.coordinates && r.coordinates.length >= 2) {
@@ -726,7 +768,7 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
             }
           })
         );
-      } else if (leg.type === 'walk_dest' && distanceMeters(destination, opt.destStop) > 30) {
+      } else if (leg.type === 'walk_dest' && !isOptDestTerminal && distanceMeters(destination, opt.destStop) > 30) {
         enrichmentPromises.push(
           getStreetWalkingPolyline(opt.destStop.lng, opt.destStop.lat, destination.lng, destination.lat).then((r) => {
             if (r?.coordinates && r.coordinates.length >= 2) {
