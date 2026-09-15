@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { sinetram } from './services/sinetramClient.js';
 import { MANAUS_TRANSIT_HUBS } from './services/terminalsData.js';
-import { searchPlacesInManaus } from './services/placesService.js';
+import { searchPlacesInManaus, reverseGeocodeLocation } from './services/placesService.js';
 import { planTransitJourney, validPoint } from './services/routePlannerService.js';
 import { getLiveTrafficAlerts } from './services/trafficAlertsService.js';
 
@@ -135,6 +135,23 @@ app.get('/api/places/search', async (req: Request, res: Response) => {
     res.json({ total: places.length, places });
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to search places in Manaus', details: err.message });
+  }
+});
+
+/**
+ * GET /api/places/reverse
+ */
+app.get('/api/places/reverse', async (req: Request, res: Response) => {
+  try {
+    const lat = parseFloat(req.query.lat as string);
+    const lng = parseFloat(req.query.lng as string);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return res.status(400).json({ error: 'Parâmetros lat e lng válidos são obrigatórios.' });
+    }
+    const result = await reverseGeocodeLocation(lat, lng);
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Falha na geocodificação reversa', details: err.message });
   }
 });
 

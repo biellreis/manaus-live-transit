@@ -6,6 +6,7 @@ import type { UserLocation } from '../hooks/useUserLocation.js';
 import { ArrowLeft, Navigation, Compass } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { getBusLineColor } from '../utils/transitColors.js';
+import { resolveStreetWalkingPath } from '../utils/walkingRoute.js';
 
 interface MapViewProps {
   selectedLine?: RouteSummary | null;
@@ -434,6 +435,24 @@ export const MapView: React.FC<MapViewProps> = ({
         }] : []
       });
 
+      // Resolução assíncrona garantida de pedestres nas ruas caso venha em linha reta
+      if (walkOriginCoords.length <= 2 && Math.hypot(plannedTrip.origin.lng - plannedTrip.originStop.lng, plannedTrip.origin.lat - plannedTrip.originStop.lat) > 0.0002) {
+        resolveStreetWalkingPath(plannedTrip.origin.lng, plannedTrip.origin.lat, plannedTrip.originStop.lng, plannedTrip.originStop.lat)
+          .then((res) => {
+            if (res?.coordinates && res.coordinates.length >= 2) {
+              walkOriginSource?.setData({
+                type: 'FeatureCollection',
+                features: [{
+                  type: 'Feature',
+                  properties: { name: 'Caminhada até a parada (OpenStreetMap)' },
+                  geometry: { type: 'LineString', coordinates: res.coordinates }
+                }]
+              });
+            }
+          })
+          .catch(() => {});
+      }
+
       walkDestSource?.setData({
         type: 'FeatureCollection',
         features: walkDestCoords.length >= 2 ? [{
@@ -442,6 +461,23 @@ export const MapView: React.FC<MapViewProps> = ({
           geometry: { type: 'LineString', coordinates: walkDestCoords }
         }] : []
       });
+
+      if (walkDestCoords.length <= 2 && Math.hypot(plannedTrip.destStop.lng - plannedTrip.destination.lng, plannedTrip.destStop.lat - plannedTrip.destination.lat) > 0.0002) {
+        resolveStreetWalkingPath(plannedTrip.destStop.lng, plannedTrip.destStop.lat, plannedTrip.destination.lng, plannedTrip.destination.lat)
+          .then((res) => {
+            if (res?.coordinates && res.coordinates.length >= 2) {
+              walkDestSource?.setData({
+                type: 'FeatureCollection',
+                features: [{
+                  type: 'Feature',
+                  properties: { name: 'Caminhada até o destino (OpenStreetMap)' },
+                  geometry: { type: 'LineString', coordinates: res.coordinates }
+                }]
+              });
+            }
+          })
+          .catch(() => {});
+      }
 
       bounds.extend([plannedTrip.origin.lng, plannedTrip.origin.lat]);
       bounds.extend([plannedTrip.originStop.lng, plannedTrip.originStop.lat]);

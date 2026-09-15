@@ -16,36 +16,43 @@ export async function getStreetWalkingPolyline(fromLng: number, fromLat: number,
 
   const fetchPromise = (async () => {
     let route: WalkingRoute | null = null;
-    try {
-      const base = process.env.WALKING_ROUTER_URL || 'https://routing.openstreetmap.de/routed-foot/route/v1/foot';
-      const response = await fetch(`${base}/${points}?overview=full&geometries=geojson&steps=false`, {
-        signal: AbortSignal.timeout(600),
-        headers: { 'User-Agent': 'ManoTransit/1.0 (local development)', Accept: 'application/json' }
-      });
-      const data = response.ok ? ((await response.json()) as any) : null;
-      const candidate = data?.routes?.[0];
-      const coordinates = candidate?.geometry?.coordinates;
-      if (
-        data?.code === 'Ok' &&
-        Array.isArray(coordinates) &&
-        coordinates.length >= 2 &&
-        coordinates.every((c: unknown) => Array.isArray(c) && c.length === 2 && c.every(Number.isFinite)) &&
-        Number.isFinite(candidate.distance) &&
-        Number.isFinite(candidate.duration) &&
-        data.waypoints?.length === 2 &&
-        data.waypoints.every((w: any) => Number.isFinite(w.distance) && w.distance <= 300)
-      ) {
-        route = {
-          coordinates,
-          distanceMeters: Math.round(candidate.distance),
-          durationMinutes: Math.max(1, Math.ceil(candidate.duration / 60))
-        };
+    const endpoints = [
+      process.env.WALKING_ROUTER_URL,
+      `https://router.project-osrm.org/route/v1/walking/${points}?overview=full&geometries=geojson&steps=false`,
+      `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${points}?overview=full&geometries=geojson&steps=false`
+    ].filter(Boolean) as string[];
+
+    for (const url of endpoints) {
+      if (route) break;
+      try {
+        const fullUrl = url.includes('{points}') ? url.replace('{points}', points) : (url.includes(points) ? url : `${url}/${points}?overview=full&geometries=geojson&steps=false`);
+        const response = await fetch(fullUrl, {
+          signal: AbortSignal.timeout(2500),
+          headers: { 'User-Agent': 'ManausLiveTransit/2.0 (OpenStreetMap Pedestrian)', Accept: 'application/json' }
+        });
+        const data = response.ok ? ((await response.json()) as any) : null;
+        const candidate = data?.routes?.[0];
+        const coordinates = candidate?.geometry?.coordinates;
+        if (
+          data?.code === 'Ok' &&
+          Array.isArray(coordinates) &&
+          coordinates.length >= 2 &&
+          coordinates.every((c: unknown) => Array.isArray(c) && c.length === 2 && c.every(Number.isFinite)) &&
+          Number.isFinite(candidate.distance) &&
+          Number.isFinite(candidate.duration)
+        ) {
+          route = {
+            coordinates,
+            distanceMeters: Math.round(candidate.distance),
+            durationMinutes: Math.max(1, Math.ceil(candidate.duration / 60))
+          };
+          break;
+        }
+      } catch {
+        // Tenta o próximo endpoint
       }
-    } catch {
-      /* Fallback handled by caller */
-    } finally {
-      inFlight.delete(points);
     }
+    inFlight.delete(points);
 
     if (cache.size > 500) cache.clear();
     cache.set(points, { route, expires: Date.now() + (route ? 600000 : 30000) });

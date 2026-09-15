@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import type { RouteSummary, TripDetail, LiveBus, TimetableService, StopInfo, PlannedTrip } from '../types/transit.js';
-import { Bus, ChevronUp, ChevronDown, Check, X, Footprints, MapPin, ArrowRightLeft } from 'lucide-react';
+import { Bus, ChevronUp, ChevronDown, Check, X, Footprints, MapPin, ArrowRightLeft, Clock } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 
 interface BottomSheetProps {
@@ -342,6 +342,110 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           </div>
         </div>
       </div>
+      {/* Real-time Bus Arrival & Upcoming Schedule Panel */}
+      {plannedTrip && (
+        <div style={{ padding: '0 20px 10px 20px' }}>
+          <div
+            style={{
+              backgroundColor: '#121214',
+              borderRadius: '20px',
+              padding: '16px 18px',
+              border: '1.5px solid rgba(16, 185, 129, 0.4)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            {/* Top Header with live indicator */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ position: 'relative', display: 'flex', width: '9px', height: '9px' }}>
+                  <span style={{ position: 'absolute', display: 'inline-flex', height: '100%', width: '100%', borderRadius: '50%', backgroundColor: '#10B981', opacity: 0.75 }} />
+                  <span style={{ position: 'relative', display: 'inline-flex', borderRadius: '50%', height: '9px', width: '9px', backgroundColor: '#10B981' }} />
+                </span>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {plannedTrip.isLiveGps ? 'Previsão de Chegada GPS' : 'Horário da Linha'}
+                </span>
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', backgroundColor: 'rgba(255, 255, 255, 0.06)', padding: '3px 8px', borderRadius: '8px' }}>
+                {plannedTrip.originStop.stopName}
+              </span>
+            </div>
+
+            {/* Main Countdown & Arrival Time Row */}
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '12px' }}>
+              <div>
+                <div style={{ fontSize: '12px', color: '#A1A1AA', fontWeight: 600 }}>Passa na sua parada às</div>
+                <div style={{ fontSize: '32px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em', lineHeight: 1.1, marginTop: '2px' }}>
+                  {plannedTrip.etaTime || 'Em breve'}
+                </div>
+              </div>
+
+              <div style={{ textAlign: 'right' }}>
+                {typeof plannedTrip.etaMinutes === 'number' ? (
+                  <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                    <span
+                      style={{
+                        fontSize: '17px',
+                        fontWeight: 900,
+                        color: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                        padding: '4px 12px',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(16, 185, 129, 0.3)'
+                      }}
+                    >
+                      {plannedTrip.etaMinutes <= 1 ? 'Chegando agora' : `Faltam ${plannedTrip.etaMinutes} min`}
+                    </span>
+                    {plannedTrip.walkToStopMinutes !== null && (
+                      <span style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px', fontWeight: 600 }}>
+                        {plannedTrip.etaMinutes <= (plannedTrip.walkToStopMinutes || 1)
+                          ? '⚡ Saia agora para não perder!'
+                          : `🚶 ${plannedTrip.walkToStopMinutes} min a pé até a parada`}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <span style={{ fontSize: '12px', color: '#A1A1AA', fontWeight: 700 }}>
+                    {plannedTrip.liveBusCount ? `${plannedTrip.liveBusCount} ônibus na rota` : 'Intervalo de 15 a 20 min'}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Subsequent Upcoming Buses (Se houver mais de 1 ônibus na linha) */}
+            {plannedTrip.upcomingBuses && plannedTrip.upcomingBuses.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'rgba(255, 255, 255, 0.04)', padding: '8px 12px', borderRadius: '12px' }}>
+                <div style={{ fontSize: '11.5px', color: '#CBD5E1', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Clock size={14} style={{ color: '#3B82F6' }} />
+                  <span>Próximos ônibus:</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {plannedTrip.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
+                    <span
+                      key={bIdx}
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        color: '#FFFFFF',
+                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                        padding: '3px 8px',
+                        borderRadius: '6px'
+                      }}
+                    >
+                      {nextBus.time} <span style={{ color: '#94A3B8', fontWeight: 600 }}>({nextBus.minutes} min)</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Visual Diagrammed Stepper Guide */}
       {plannedTrip && (
         <div style={{ padding: '0 20px 10px 20px' }}>

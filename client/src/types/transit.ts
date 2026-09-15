@@ -108,6 +108,11 @@ export interface PlannedTrip {
   isTransfer?: boolean;
   transferHubName?: string;
   secondLine?: RouteSummary;
+  etaMinutes?: number | null;
+  etaTime?: string | null;
+  liveBusCount?: number;
+  upcomingBuses?: { time: string; minutes: number }[];
+  isLiveGps?: boolean;
 }
 
 export interface PlannedLegDetail {
@@ -146,6 +151,11 @@ export interface TransitOption {
   fullPolyline: [number, number][];
   walkOriginCoords: [number, number][];
   walkDestCoords: [number, number][];
+  etaMinutes?: number | null;
+  etaTime?: string | null;
+  liveBusCount?: number;
+  upcomingBuses?: { time: string; minutes: number }[];
+  isLiveGps?: boolean;
 }
 
 export interface NearestStopItem extends StopInfo {

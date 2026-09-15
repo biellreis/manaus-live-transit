@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v2.8 (Instant alerts cache and clean status)
+// Manaus Live Transit - Service Worker v2.9 (All lines unthrottled + Live GPS countdown & Street routing)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });

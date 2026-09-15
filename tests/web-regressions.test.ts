@@ -20,7 +20,7 @@ test('T3 to T1 keeps the verified boarding/alighting choices while bounding plan
   const result = findCandidates(Object.values(network) as any,
     {name:'Terminal 3 - Cidade Nova (T3)',lat:-3.03692,lng:-60.00624},
     {name:'Terminal 1 - Constantino Nery (T1)',lat:-3.12781,lng:-60.02452});
-  assert.deepEqual(result.map(legs => legs.map(l => [l.line.code,l.trip.tripId,l.originStop.sequence,l.destStop.sequence])),
+  assert.deepEqual(result.slice(0, 5).map(legs => legs.map(l => [l.line.code,l.trip.tripId,l.originStop.sequence,l.destStop.sequence])),
     [[['300',5027594,2,9]],[['357',5027713,30,53]],[['448',5022779,23,43]],[['640',5011542,12,33]],[['454',5027644,2,44]]]);
   assert.ok(performance.now() - start < 2000, 'planning exceeded two seconds');
 });

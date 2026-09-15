@@ -634,8 +634,8 @@ class SinetramClient {
 
       this.setCache(cacheKey, vehicles, 5000);
       return vehicles;
-    } catch (err) {
-      console.warn(`[SinetramClient] Telemetry unavailable for ${routeId}`, err);
+    } catch (err: any) {
+      console.warn(`[SinetramClient] Telemetry unavailable for ${routeId}: ${err?.message || err}`);
       return [];
     }
   }

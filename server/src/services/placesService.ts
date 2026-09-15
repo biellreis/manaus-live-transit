@@ -254,3 +254,88 @@ export async function searchPlacesInManaus(query: string): Promise<PlaceResult[]
   });
   return finalResults;
 }
+
+export interface ReverseGeocodeResult {
+  name: string;
+  streetName: string;
+  neighbourhood?: string;
+  displayName: string;
+  lat: number;
+  lng: number;
+}
+
+const reverseCache = new Map<string, { data: ReverseGeocodeResult; expiresAt: number }>();
+
+export async function reverseGeocodeLocation(lat: number, lng: number): Promise<ReverseGeocodeResult> {
+  const cacheKey = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+  const cached = reverseCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) return cached.data;
+
+  // 1. Tenta OpenStreetMap Nominatim reverso
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat.toFixed(6)}&lon=${lng.toFixed(6)}&zoom=18&addressdetails=1`;
+    const resp = await fetch(url, {
+      headers: {
+        'User-Agent': 'ManausLiveTransit/2.0 (Reverse Geocoder)',
+        'Accept-Language': 'pt-BR,pt;q=0.9'
+      },
+      signal: AbortSignal.timeout(2000)
+    });
+
+    if (resp.ok) {
+      const data = await resp.json() as any;
+      const addr = data.address || {};
+      const road = addr.road || addr.pedestrian || addr.footway || addr.suburb || data.name || '';
+      const neighbourhood = addr.neighbourhood || addr.suburb || addr.city_district || '';
+      if (road) {
+        const fullDisplay = [road, neighbourhood, 'Manaus'].filter(Boolean).join(', ');
+        const result: ReverseGeocodeResult = {
+          name: road,
+          streetName: neighbourhood ? `${road}, ${neighbourhood}` : road,
+          neighbourhood,
+          displayName: fullDisplay,
+          lat,
+          lng
+        };
+        reverseCache.set(cacheKey, { data: result, expiresAt: Date.now() + 600000 });
+        return result;
+      }
+    }
+  } catch {
+    // Continua para o catálogo local
+  }
+
+  // 2. Fallback: Encontra o logradouro ou parada mais próxima do catálogo local de Manaus
+  let closestDist = Infinity;
+  let closestName = '';
+  let closestDistrict = '';
+
+  const allKnown = [...MANAUS_STATIC_PLACES, ...getBusStopsPlaces()];
+  for (const item of allKnown) {
+    const dLat = item.lat - lat;
+    const dLng = item.lng - lng;
+    const dist = Math.hypot(dLat, dLng) * 111000;
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestName = item.name;
+      closestDistrict = item.displayName.split('-')[1]?.trim() || '';
+    }
+  }
+
+  const cleanName = closestDist <= 800 && closestName
+    ? closestName.replace(/^Parada\s+/i, '').replace(/\s+\(#\d+\)/, '').trim()
+    : 'Localização Atual';
+
+  const result: ReverseGeocodeResult = {
+    name: cleanName,
+    streetName: closestDistrict ? `${cleanName} - ${closestDistrict}` : cleanName,
+    neighbourhood: closestDistrict,
+    displayName: `${cleanName}, Manaus - AM`,
+    lat,
+    lng
+  };
+
+  reverseCache.set(cacheKey, { data: result, expiresAt: Date.now() + 120000 });
+  return result;
+}
+

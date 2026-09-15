@@ -168,11 +168,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
   // Input states
   const [activeField, setActiveField] = useState<'origin' | 'destination'>('destination');
-  const [originText, setOriginText] = useState(userLocation.isRealGPS ? 'Sua localização atual' : '');
+  const [gpsStreetName, setGpsStreetName] = useState<string>('');
+  const [originIsGPS, setOriginIsGPS] = useState(true);
+  const [originText, setOriginText] = useState('Sua localização atual');
   const [originCoord, setOriginCoord] = useState<{ name: string; lat: number; lng: number }>(() => ({
-    name: userLocation.isRealGPS ? 'Sua localização atual' : 'Manaus Centro',
-    lat: userLocation.isRealGPS ? userLocation.lat : MANAUS_DEFAULT_LOCATION.lat,
-    lng: userLocation.isRealGPS ? userLocation.lng : MANAUS_DEFAULT_LOCATION.lng
+    name: 'Sua localização atual',
+    lat: userLocation.lat || MANAUS_DEFAULT_LOCATION.lat,
+    lng: userLocation.lng || MANAUS_DEFAULT_LOCATION.lng
   }));
 
   const [destText, setDestText] = useState('');
@@ -191,7 +193,6 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   const routeRequest = useRef<AbortController | null>(null);
   const [routeError, setRouteError] = useState('');
   const [sourceLine, setSourceLine] = useState<string | null>(null);
-  const [originIsGPS, setOriginIsGPS] = useState(userLocation.isRealGPS);
 
   const originInputRef = useRef<HTMLInputElement>(null);
   const destInputRef = useRef<HTMLInputElement>(null);
@@ -203,6 +204,33 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       routeRequest.current?.abort();
     };
   }, [isOpen]);
+
+  // Geocodificação reversa para identificar a rua real do GPS atual do dispositivo
+  useEffect(() => {
+    const lat = userLocation.lat || MANAUS_DEFAULT_LOCATION.lat;
+    const lng = userLocation.lng || MANAUS_DEFAULT_LOCATION.lng;
+    if (!lat || !lng) return;
+
+    const controller = new AbortController();
+    fetch(`/api/places/reverse?lat=${lat}&lng=${lng}`, { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data || controller.signal.aborted) return;
+        const street = data.streetName || data.name || 'Sua localização atual';
+        setGpsStreetName(street);
+        if (originIsGPS) {
+          setOriginText(street);
+          setOriginCoord({
+            name: street,
+            lat,
+            lng
+          });
+        }
+      })
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, [userLocation.lat, userLocation.lng, originIsGPS]);
 
   useEffect(() => {
     if (isOpen) {
@@ -218,15 +246,14 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   // Sync user GPS with originCoord when available
   useEffect(() => {
     if (!originIsGPS) return;
-    if (userLocation.isRealGPS) {
-      setOriginText('Sua localização atual');
-      setOriginCoord({
-        name: 'Sua localização atual',
-        lat: userLocation.lat,
-        lng: userLocation.lng
-      });
-    }
-  }, [userLocation, originIsGPS]);
+    const currentName = gpsStreetName || 'Sua localização atual';
+    setOriginText(currentName);
+    setOriginCoord({
+      name: currentName,
+      lat: userLocation.lat || MANAUS_DEFAULT_LOCATION.lat,
+      lng: userLocation.lng || MANAUS_DEFAULT_LOCATION.lng
+    });
+  }, [userLocation.lat, userLocation.lng, originIsGPS, gpsStreetName]);
 
   // Live place search auto-complete as user types
   const currentTypedText = activeField === 'origin' ? originText : destText;
@@ -388,7 +415,12 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       transitMinutes: activeOption.transitMinutes,
       totalMinutes: activeOption.totalMinutes,
       isTransfer: legs.length > 1,
-      transferHubName: activeOption.transferHubName
+      transferHubName: activeOption.transferHubName,
+      etaMinutes: activeOption.etaMinutes,
+      etaTime: activeOption.etaTime,
+      liveBusCount: activeOption.liveBusCount,
+      upcomingBuses: activeOption.upcomingBuses,
+      isLiveGps: activeOption.isLiveGps
     };
 
     onSelectPlannedTrip(planned);
@@ -602,7 +634,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
                             <div style={{ fontSize: '12px', color: '#A1A1AA' }}>{opt.subtitle}</div>
 
-                            <div style={{ marginTop: '4px' }}>
+                            <div style={{ marginTop: '5px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                               <span
                                 style={{
                                   display: 'inline-flex',
@@ -617,13 +649,66 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               >
                                 {opt.badge}
                               </span>
+
+                              {opt.isLiveGps && (
+                                <span
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                                    color: '#34D399',
+                                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                                    fontSize: '10px',
+                                    fontWeight: 800,
+                                    padding: '2px 8px',
+                                    borderRadius: '999px'
+                                  }}
+                                >
+                                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#10B981' }} />
+                                  GPS AO VIVO
+                                </span>
+                              )}
+
+                              {opt.upcomingBuses && opt.upcomingBuses.length > 0 && (
+                                <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
+                                  • Próximos: {opt.upcomingBuses.map((b) => b.time).join(', ')}
+                                </span>
+                              )}
                             </div>
                           </div>
                         </div>
 
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF' }}>{opt.fare}</div>
-                          <div style={{ fontSize: '10px', color: '#71717A', marginTop: '2px' }}>Tarifa Manaus</div>
+                          {opt.etaTime && typeof opt.etaMinutes === 'number' ? (
+                            <div>
+                              <div style={{ fontSize: '16px', fontWeight: 900, color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                                {opt.etaTime}
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: '10.5px',
+                                  fontWeight: 800,
+                                  color: '#34D399',
+                                  backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                                  padding: '2px 6px',
+                                  borderRadius: '6px',
+                                  border: '1px solid rgba(16, 185, 129, 0.25)',
+                                  marginTop: '3px',
+                                  display: 'inline-block'
+                                }}
+                              >
+                                {opt.etaMinutes <= 1 ? 'Chegando' : `em ${opt.etaMinutes} min`}
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <div style={{ fontSize: '15px', fontWeight: 800, color: '#FFFFFF' }}>{opt.fare}</div>
+                              <div style={{ fontSize: '10px', color: '#71717A', marginTop: '2px' }}>
+                                {opt.liveBusCount ? `${opt.liveBusCount} na rota` : 'Aguardando GPS'}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
@@ -863,6 +948,58 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               </div>
             )}
 
+            {/* Quick GPS Reset Option for Origin */}
+            {activeField === 'origin' && (
+              <div
+                onClick={() => {
+                  haptic.lightTap();
+                  setOriginIsGPS(true);
+                  const label = gpsStreetName || 'Sua localização atual';
+                  setOriginText(label);
+                  const newOrig = {
+                    name: label,
+                    lat: userLocation.lat || MANAUS_DEFAULT_LOCATION.lat,
+                    lng: userLocation.lng || MANAUS_DEFAULT_LOCATION.lng
+                  };
+                  setOriginCoord(newOrig);
+                  if (destCoord) {
+                    setViewState('uber_overview');
+                    calculateRoute(newOrig, destCoord);
+                  } else {
+                    setActiveField('destination');
+                    destInputRef.current?.focus();
+                  }
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 14px',
+                  borderRadius: '14px',
+                  backgroundColor: 'rgba(37, 99, 235, 0.12)',
+                  border: '1.5px solid #2563EB',
+                  cursor: 'pointer',
+                  marginBottom: '4px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', flexShrink: 0 }}>
+                    <MapPin size={16} />
+                  </div>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      Usar localização GPS atual
+                    </div>
+                    <div style={{ fontSize: '11.5px', color: '#93C5FD', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {gpsStreetName || 'Detectando sua rua em Manaus via satélite...'}
+                    </div>
+                  </div>
+                </div>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#60A5FA', backgroundColor: 'rgba(37, 99, 235, 0.25)', padding: '4px 8px', borderRadius: '6px' }}>
+                  GPS
+                </span>
+              </div>
+            )}
 
             {/* Render Remote Search Places */}
             {remotePlaces.map((item) => (

@@ -9,6 +9,7 @@ type Point = { name: string; lat: number; lng: number };
 export interface PlannedLeg {
   line: RouteSummary;
   trip: TripDetail;
+  fullTrip?: TripDetail;
   originStop: StopInfo;
   destStop: StopInfo;
 }
@@ -49,6 +50,11 @@ export interface TransitOption {
   walkOriginCoords: [number, number][];
   walkDestCoords: [number, number][];
   walkingAvailable: boolean;
+  etaMinutes?: number | null;
+  etaTime?: string | null;
+  liveBusCount?: number;
+  upcomingBuses?: { time: string; minutes: number }[];
+  isLiveGps?: boolean;
 }
 
 export interface NearestStopItem extends StopInfo {
@@ -346,7 +352,7 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
     }
   }
 
-  return [...best.values()].sort((a, b) => a.score - b.score).slice(0, 5).map(item => item.legs);
+  return [...best.values()].sort((a, b) => a.score - b.score).map(item => item.legs);
 }
 
 function walkingLeg(type: 'walk_origin' | 'walk_dest', route: WalkingRoute | null, stop: StopInfo, point: Point): PlannedLegDetail {
@@ -426,7 +432,8 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
         ...leg,
         originStop: board,
         destStop: alight,
-        trip: { ...trip, coordinates: effectiveCoords, stops: slicedStops }
+        trip: { ...trip, coordinates: effectiveCoords, stops: slicedStops },
+        fullTrip: trip
       });
     }
 
@@ -537,12 +544,154 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
       walkDestCoords: walkDestRoute.coordinates || [],
       walkingAvailable: true
     });
-
-    if (result.options.length >= 6) break;
   }
 
-  // Ordenação inteligente das rotas por proximidade da parada de embarque
+  // Mantém todas as opções de linhas diretas sem limite, limitando baldeações redundantes quando já existem opções diretas
+  const directOptions = result.options.filter((o) => o.type === 'direct');
+  const transferOptions = result.options.filter((o) => o.type === 'transfer');
+  const maxTransfers = directOptions.length > 0 ? 3 : 15;
+  result.options = [...directOptions, ...transferOptions.slice(0, maxTransfers)];
+
+  // Telemetria em tempo real: busca posição GPS dos ônibus para todas as linhas encontradas
+  const uniqueLinesToFetch = new Map<string, { id: string; code: string }>();
+  for (const opt of result.options) {
+    const l = opt.verifiedLegs[0]?.line;
+    if (l && l.id && l.code && !uniqueLinesToFetch.has(l.code)) {
+      uniqueLinesToFetch.set(l.code, { id: l.id, code: l.code });
+    }
+  }
+
+  const vehiclesByLine = new Map<string, any[]>();
+  const telemetryPromises = Array.from(uniqueLinesToFetch.values()).map(async ({ id, code }) => {
+    try {
+      const v = await sinetram.getRealtimeVehicles(id, code);
+      vehiclesByLine.set(code, v || []);
+    } catch {
+      vehiclesByLine.set(code, []);
+    }
+  });
+
+  await Promise.allSettled(telemetryPromises);
+
+  const now = Date.now();
+  const formatManausTime = (date: Date): string => {
+    return new Intl.DateTimeFormat('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'America/Manaus',
+      hour12: false
+    }).format(date);
+  };
+
+  for (const opt of result.options) {
+    const line = opt.verifiedLegs[0]?.line;
+    const leg0 = opt.verifiedLegs[0];
+    const fullTrip = leg0?.fullTrip || leg0?.trip;
+    const boardStop = opt.originStop;
+    const vehicles = (line ? vehiclesByLine.get(line.code) : null) || [];
+
+    opt.liveBusCount = vehicles.length;
+    opt.upcomingBuses = [];
+
+    if (!fullTrip || !boardStop || vehicles.length === 0) {
+      opt.etaMinutes = null;
+      opt.etaTime = null;
+      opt.isLiveGps = false;
+      continue;
+    }
+
+    const stopsToSearch = fullTrip.stops && fullTrip.stops.length > 0 ? fullTrip.stops : (leg0?.trip?.stops || []);
+    const boardIdx = stopsToSearch.findIndex((s) => s.stopId === boardStop.stopId);
+    if (boardIdx === -1) {
+      opt.etaMinutes = null;
+      opt.etaTime = null;
+      opt.isLiveGps = false;
+      continue;
+    }
+
+    // Identifica ônibus da linha se aproximando da parada de embarque
+    const approaching: { busId: string; minutes: number; timeStr: string; distanceMeters: number }[] = [];
+
+    for (const bus of vehicles) {
+      let closestIdx = -1;
+      let minD = Infinity;
+      for (let i = 0; i < stopsToSearch.length; i++) {
+        const s = stopsToSearch[i];
+        const d = Math.hypot(s.lat - bus.lat, s.lng - bus.lng);
+        if (d < minD) {
+          minD = d;
+          closestIdx = i;
+        }
+      }
+
+      const distDirectToBoard = Math.hypot(boardStop.lat - bus.lat, boardStop.lng - bus.lng) * 111000;
+
+      // Ônibus antes do embarque na linha OU já na parada de embarque (<= 350m)
+      if (distDirectToBoard <= 350) {
+        const arrivalDate = new Date(now + 60000);
+        approaching.push({
+          busId: bus.id,
+          minutes: 1,
+          timeStr: formatManausTime(arrivalDate),
+          distanceMeters: Math.round(distDirectToBoard)
+        });
+      } else if (closestIdx !== -1 && closestIdx <= boardIdx) {
+        let distM = distanceMeters({ lat: bus.lat, lng: bus.lng }, stopsToSearch[closestIdx]);
+        for (let i = closestIdx; i < boardIdx; i++) {
+          distM += distanceMeters(stopsToSearch[i], stopsToSearch[i + 1]);
+        }
+
+        // Velocidade comercial média urbana de Manaus (~19.5 km/h = 325 m/min)
+        const speedMpm = (bus.speedKmh && bus.speedKmh >= 10 && bus.speedKmh <= 60)
+          ? (bus.speedKmh * 1000) / 60
+          : 325;
+
+        const minutes = Math.max(1, Math.round(distM / speedMpm));
+        if (minutes <= 120) {
+          const arrivalDate = new Date(now + minutes * 60000);
+          approaching.push({
+            busId: bus.id,
+            minutes,
+            timeStr: formatManausTime(arrivalDate),
+            distanceMeters: Math.round(distM)
+          });
+        }
+      }
+    }
+
+    approaching.sort((a, b) => a.minutes - b.minutes);
+
+    if (approaching.length > 0) {
+      const nearest = approaching[0];
+      opt.etaMinutes = nearest.minutes;
+      opt.etaTime = nearest.timeStr;
+      opt.isLiveGps = true;
+      opt.upcomingBuses = approaching.slice(1).map((b) => ({ time: b.timeStr, minutes: b.minutes }));
+    } else {
+      opt.etaMinutes = null;
+      opt.etaTime = null;
+      opt.isLiveGps = false;
+    }
+  }
+
+  // Ordenação inteligente das rotas:
+  // 1. Linhas diretas primeiro
+  // 2. Ordenadas rigorosamente pelo horário de chegada do ônibus mais próximo via GPS
+  // 3. Linhas sem GPS ao vivo vêm logo em seguida por facilidade de acesso a pé
   result.options.sort((a, b) => {
+    if (a.type !== b.type) {
+      return a.type === 'direct' ? -1 : 1;
+    }
+
+    const aHasEta = typeof a.etaMinutes === 'number';
+    const bHasEta = typeof b.etaMinutes === 'number';
+
+    if (aHasEta && bHasEta) {
+      return (a.etaMinutes as number) - (b.etaMinutes as number);
+    }
+    if (aHasEta) return -1;
+    if (bHasEta) return 1;
+
     const origDistA = isSameTerminalOrStation(a.originStop.stopName, origin.name) ? 0 : distanceMeters(origin, a.originStop);
     const origDistB = isSameTerminalOrStation(b.originStop.stopName, origin.name) ? 0 : distanceMeters(origin, b.originStop);
 
@@ -562,7 +711,7 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
     return penaltyA - penaltyB;
   });
 
-  // Enriquece as opções finais com a geometria real do OpenStreetMap de forma 100% PARALELA (apenas para caminhadas > 30m)
+  // Enriquece as opções finais com a geometria real do OpenStreetMap de forma paralela (apenas para caminhadas > 30m)
   const enrichmentPromises: Promise<void>[] = [];
   for (const opt of result.options) {
     for (const leg of opt.legs) {
@@ -606,12 +755,16 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
     }
   }
 
-  // Dispara o enriquecimento de pedestres do OpenStreetMap em segundo plano sem bloquear a resposta da rota
-  Promise.all(enrichmentPromises).catch(() => {});
+  // Aguarda enriquecimento de pedestres do OpenStreetMap para que as coordenadas reais já retornem na rota
+  try {
+    await Promise.all(enrichmentPromises);
+  } catch {
+    // Mantém as geometrias calculadas
+  }
 
   result.hasDirectBus = result.options.some((o) => o.type === 'direct');
   result.message = result.options.length
-    ? 'Rotas verificadas ordenadas por proximidade e facilidade de acesso.'
+    ? `${result.options.length} linhas de ônibus encontradas ordenadas por chegada do próximo ônibus.`
     : 'Não foi possível encontrar uma rota de ônibus direta. Veja as paradas mais próximas e o mapa no Google Maps abaixo.';
 
   return result;

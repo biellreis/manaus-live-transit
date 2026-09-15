@@ -2,6 +2,7 @@ import { useMapTheme, rasterThemePaint } from '../hooks/useMapTheme.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { Map as MapLibreMap, Marker, NavigationControl } from 'maplibre-gl';
 import type { TransitOption } from '../types/transit.js';
+import { resolveStreetWalkingPath } from '../utils/walkingRoute.js';
 
 type Point = { name: string; lat: number; lng: number };
 
@@ -295,11 +296,39 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
             ...(isWalk ? { 'line-dasharray': [1.8, 1.6] } : {})
           }
         });
+
+        // Resolução dinâmica de caminhada pelas ruas reais (OSRM) caso venha em linha reta
+        if (isWalk && validCoords.length <= 2) {
+          const fromPt = isWalkOrigin
+            ? [currentOrigin.lng, currentOrigin.lat]
+            : [currentOption.destStop?.lng, currentOption.destStop?.lat];
+          const toPt = isWalkOrigin
+            ? [currentOption.originStop?.lng, currentOption.originStop?.lat]
+            : [currentDest.lng, currentDest.lat];
+
+          if (fromPt[0] && fromPt[1] && toPt[0] && toPt[1]) {
+            resolveStreetWalkingPath(fromPt[0], fromPt[1], toPt[0], toPt[1]).then((res) => {
+              if (res?.coordinates && res.coordinates.length >= 2) {
+                const src = map.getSource(sourceId) as any;
+                if (src) {
+                  src.setData({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                      type: 'LineString',
+                      coordinates: res.coordinates
+                    }
+                  });
+                }
+              }
+            }).catch(() => {});
+          }
+        }
       });
     }
 
     // 1. Origin Marker (rendered only if origin is NOT a Terminal/Station)
-    if (!isOrigTerminal && currentOrigin.name && !currentOrigin.name.includes('Manaus Centro')) {
+    if (!isOrigTerminal && currentOrigin.name) {
       const origEl = document.createElement('div');
       origEl.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: center;">
