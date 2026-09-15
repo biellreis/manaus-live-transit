@@ -427,7 +427,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         })}
 
         {/* Empty State when no alerts match */}
-        {!isLoading && !loadError && trafficData?.source?.status === 'connected' && filteredAlerts.length === 0 && (
+        {!isLoading && !loadError && filteredAlerts.length === 0 && (
           <div
             style={{
               backgroundColor: '#141417',
