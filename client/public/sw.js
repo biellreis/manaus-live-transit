@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v3.0 (Uber/99 Clean UI, Terminal Point Routing & Zero GPS/Emoji Clutter)
+// Manaus Live Transit - Service Worker v3.1 (Prioritize closest stop for street origins & ETA for terminals)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });

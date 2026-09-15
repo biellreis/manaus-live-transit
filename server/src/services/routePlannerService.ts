@@ -711,40 +711,57 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
   }
 
   // Ordenação inteligente das rotas:
-  // 1. Linhas diretas primeiro
-  // 2. Ordenadas rigorosamente pelo horário de chegada do ônibus mais próximo via GPS
-  // 3. Linhas sem GPS ao vivo vêm logo em seguida por facilidade de acesso a pé
+  // 1. Linhas diretas têm prioridade sobre baldeações
+  // 2. Em ruas e avenidas: prioriza sempre as paradas mais próximas do ponto inicial para o usuário não caminhar longe.
+  // 3. Em terminais e estações: como as plataformas estão no mesmo local, prioriza pelo horário do próximo ônibus (ETA).
+  const origIsTerminal = isTerminalOrStation(origin.name);
+
   result.options.sort((a, b) => {
     if (a.type !== b.type) {
       return a.type === 'direct' ? -1 : 1;
     }
 
-    const aHasEta = typeof a.etaMinutes === 'number';
-    const bHasEta = typeof b.etaMinutes === 'number';
-
-    if (aHasEta && bHasEta) {
-      return (a.etaMinutes as number) - (b.etaMinutes as number);
-    }
-    if (aHasEta) return -1;
-    if (bHasEta) return 1;
-
     const origDistA = isSameTerminalOrStation(a.originStop.stopName, origin.name) ? 0 : distanceMeters(origin, a.originStop);
     const origDistB = isSameTerminalOrStation(b.originStop.stopName, origin.name) ? 0 : distanceMeters(origin, b.originStop);
 
+    // CASO 1: Origem em rua / avenida (NÃO é terminal nem estação)
+    // Mostra sempre a parada mais próxima como primeira opção
+    if (!origIsTerminal) {
+      const distDiff = origDistA - origDistB;
+      if (Math.abs(distDiff) > 80) {
+        return distDiff;
+      }
+
+      // Para paradas no mesmo ponto ou esquina muito próxima (diferença <= 80m),
+      // desempata pelo horário de chegada do ônibus
+      const aHasEta = typeof a.etaMinutes === 'number';
+      const bHasEta = typeof b.etaMinutes === 'number';
+
+      if (aHasEta && bHasEta && a.etaMinutes !== b.etaMinutes) {
+        return (a.etaMinutes as number) - (b.etaMinutes as number);
+      }
+      if (aHasEta && !bHasEta) return -1;
+      if (!aHasEta && bHasEta) return 1;
+
+      const destDistA = isSameTerminalOrStation(a.destStop.stopName, destination.name) ? 0 : distanceMeters(destination, a.destStop);
+      const destDistB = isSameTerminalOrStation(b.destStop.stopName, destination.name) ? 0 : distanceMeters(destination, b.destStop);
+      return (origDistA + destDistA) - (origDistB + destDistB);
+    }
+
+    // CASO 2: Origem é Terminal ou Estação
+    // Todas as plataformas estão no local. Ordena pelo horário de chegada do ônibus mais próximo
+    const aHasEta = typeof a.etaMinutes === 'number';
+    const bHasEta = typeof b.etaMinutes === 'number';
+
+    if (aHasEta && bHasEta && a.etaMinutes !== b.etaMinutes) {
+      return (a.etaMinutes as number) - (b.etaMinutes as number);
+    }
+    if (aHasEta && !bHasEta) return -1;
+    if (!aHasEta && bHasEta) return 1;
+
     const destDistA = isSameTerminalOrStation(a.destStop.stopName, destination.name) ? 0 : distanceMeters(destination, a.destStop);
     const destDistB = isSameTerminalOrStation(b.destStop.stopName, destination.name) ? 0 : distanceMeters(destination, b.destStop);
-
-    let penaltyA = origDistA + destDistA;
-    if (origDistA > 350) penaltyA += (origDistA - 350) * 4;
-    if (destDistA > 400) penaltyA += (destDistA - 400) * 3;
-    if (a.type === 'transfer') penaltyA += 300;
-
-    let penaltyB = origDistB + destDistB;
-    if (origDistB > 350) penaltyB += (origDistB - 350) * 4;
-    if (destDistB > 400) penaltyB += (destDistB - 400) * 3;
-    if (b.type === 'transfer') penaltyB += 300;
-
-    return penaltyA - penaltyB;
+    return destDistA - destDistB;
   });
 
   // Enriquece as opções finais com a geometria real do OpenStreetMap de forma paralela (apenas para caminhadas > 30m)
