@@ -88,7 +88,13 @@ export function App() {
 
         if (stopsRes.ok) {
           const stopsData = await stopsRes.json();
-          setCitywideStops(stopsData.stops || []);
+          const allStops = stopsData.stops || [];
+          setCitywideStops(allStops);
+          const stopParam = new URLSearchParams(window.location.search).get('stop');
+          if (stopParam && allStops.length > 0) {
+            const found = allStops.find((s: StopInfo) => String(s.stopId) === stopParam || s.stopName.toLowerCase().includes(stopParam.toLowerCase()));
+            if (found) setSelectedStopForDetails(found);
+          }
         }
       } catch (err) {
         console.error('Failed to load initial transit data', err);

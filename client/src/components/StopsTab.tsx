@@ -24,7 +24,10 @@ export const StopsTab: React.FC<StopsTabProps> = ({
   onRequestGPS: _onRequestGPS,
   stops = []
 }) => {
-  const [activeSection, setActiveSection] = useState<'proximas' | 'terminais' | 'estacoes'>('proximas');
+  const [activeSection, setActiveSection] = useState<'proximas' | 'terminais' | 'estacoes'>(() => {
+    const s = new URLSearchParams(window.location.search).get('section');
+    return (s === 'terminais' || s === 'estacoes') ? s : 'proximas';
+  });
   const haptic = useHaptic();
 
   // Haversine formula for exact distance calculation in meters / km

@@ -15,8 +15,11 @@ export const LinesTab: React.FC<LinesTabProps> = ({
   selectedLine,
   onSelectLine
 }) => {
-  const [query, setQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'troncal' | 'alimentadora' | 'circular'>('all');
+  const [query, setQuery] = useState(() => new URLSearchParams(window.location.search).get('q') || '');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'troncal' | 'alimentadora' | 'circular'>(() => {
+    const f = new URLSearchParams(window.location.search).get('filter');
+    return (f === 'troncal' || f === 'alimentadora' || f === 'circular') ? f : 'all';
+  });
   const haptic = useHaptic();
 
   const filterOptions = [

@@ -59,7 +59,10 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
   const [trafficData, setTrafficData] = useState<TrafficApiResponse | null>(initialData);
   const [isLoading, setIsLoading] = useState(() => !initialData);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'accidents' | 'jams' | 'police'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'accidents' | 'jams' | 'police'>(() => {
+    const f = new URLSearchParams(window.location.search).get('filter');
+    return (f === 'accidents' || f === 'jams' || f === 'police') ? f : 'all';
+  });
   const haptic = useHaptic();
 
   const fetchTrafficData = async () => {
