@@ -235,13 +235,50 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setRecentSearches(getRecentSearches());
+      const params = new URLSearchParams(window.location.search);
+      const origQ = params.get('orig') || params.get('origem');
+      const destQ = params.get('dest') || params.get('destino');
+
+      if (origQ && destQ && !destCoord) {
+        const resolvePlace = (q: string) => {
+          const lower = q.toLowerCase();
+          if (lower.includes('t2') || lower.includes('terminal 2')) {
+            return { name: 'Terminal 2 - Cachoeirinha', lat: -3.12554, lng: -60.00783 };
+          }
+          if (lower.includes('t1') || lower.includes('terminal 1')) {
+            return { name: 'Terminal 1 - Constantino Nery', lat: -3.12781, lng: -60.02452 };
+          }
+          if (lower.includes('kobe') || lower.includes('rua kobe')) {
+            return { name: 'Rua Kobe', lat: -3.07352, lng: -59.99370 };
+          }
+          if (lower.includes('imprensa')) {
+            return { name: 'Imprensa Oficial do Estado', lat: -3.12453, lng: -60.01872 };
+          }
+          return null;
+        };
+
+        const oCoord = resolvePlace(origQ);
+        const dCoord = resolvePlace(destQ);
+
+        if (oCoord && dCoord) {
+          setOriginText(oCoord.name);
+          setOriginCoord(oCoord);
+          setOriginIsGPS(false);
+          setDestText(dCoord.name);
+          setDestCoord(dCoord);
+          setViewState('uber_overview');
+          calculateRoute(oCoord, dCoord);
+          return;
+        }
+      }
+
       if (!destCoord) {
         setViewState('search');
         setActiveField('destination');
         setTimeout(() => destInputRef.current?.focus(), 150);
       }
     }
-  }, [isOpen, destCoord]);
+  }, [isOpen]);
 
   // Sync user GPS with originCoord when available
   useEffect(() => {
@@ -327,6 +364,40 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
         if (controller.signal.aborted) return;
         setPlanResult(data);
         setSelectedOptionIndex(0);
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('confirm') === 'true' || params.get('confirm') === '0') {
+          const opt = data.options[0];
+          if (opt && opt.verifiedLegs?.length) {
+            const walkOrigin = opt.legs.find((l) => l.type === 'walk_origin');
+            const walkDest = opt.legs.find((l) => l.type === 'walk_dest');
+            onSelectPlannedTrip({
+              legs: opt.verifiedLegs,
+              journeyDetails: opt.legs,
+              origin: orig,
+              destination: dest,
+              originStop: opt.originStop,
+              destStop: opt.destStop,
+              line: opt.verifiedLegs[0].line,
+              trip: opt.verifiedLegs[0].trip,
+              walkToStopMeters: walkOrigin?.distanceMeters ?? null,
+              walkToStopMinutes: walkOrigin?.durationMinutes ?? null,
+              walkFromStopMeters: walkDest?.distanceMeters ?? null,
+              walkFromStopMinutes: walkDest?.durationMinutes ?? null,
+              transitMinutes: opt.transitMinutes,
+              totalMinutes: opt.totalMinutes,
+              isTransfer: opt.verifiedLegs.length > 1,
+              transferHubName: opt.transferHubName,
+              originPlatformOrPoint: opt.originPlatformOrPoint,
+              destPlatformOrPoint: opt.destPlatformOrPoint,
+              etaMinutes: opt.etaMinutes,
+              etaTime: opt.etaTime,
+              liveBusCount: opt.liveBusCount,
+              upcomingBuses: opt.upcomingBuses,
+              isLiveGps: opt.isLiveGps
+            });
+          }
+        }
       } else {
         throw new Error('Falha no cálculo da rota');
       }

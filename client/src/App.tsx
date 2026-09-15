@@ -65,7 +65,7 @@ export function App() {
           else if (tabParam === 'stops' || tabParam === 'terminais') setActiveTab('stops');
           else if (tabParam === 'home' || tabParam === 'inicio') setActiveTab('home');
 
-          if (params.get('planner') === 'true' || params.get('planejador') === 'true') {
+          if (params.get('planner') === 'true' || params.get('planejador') === 'true' || params.get('orig') || params.get('dest')) {
             setIsSearchOpen(true);
           }
 
