@@ -77,6 +77,17 @@ html, body {
   background-color: #09090B;
 }
 
+/* Installed apps have no browser toolbar. Use the full viewport there so
+   WebKit's reduced dynamic viewport cannot leave a strip below the content. */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  html, body, #root {
+    height: 100lvh;
+  }
+  #root {
+    position: absolute;
+  }
+}
+
 /* Tabular Numbers */
 .font-mono-num {
   font-family: 'JetBrains Mono', monospace;
