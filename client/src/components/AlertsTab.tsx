@@ -30,29 +30,58 @@ interface AlertsTabProps {
   onSelectLine?: (line: RouteSummary) => void;
 }
 
+const LOCAL_STORAGE_KEY = 'mano_alerts_cache';
+let memoryAlertsCache: TrafficApiResponse | null = null;
+
+function getInitialTrafficData(): TrafficApiResponse | null {
+  if (memoryAlertsCache) return memoryAlertsCache;
+  try {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && Array.isArray(parsed.alerts)) {
+        memoryAlertsCache = parsed;
+        return parsed;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
 export const AlertsTab: React.FC<AlertsTabProps> = ({
   lines: _lines,
   onSelectLine: _onSelectLine
 }) => {
   const [loadError, setLoadError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const initialData = useMemo(() => getInitialTrafficData(), []);
+  const [trafficData, setTrafficData] = useState<TrafficApiResponse | null>(initialData);
+  const [isLoading, setIsLoading] = useState(() => !initialData);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [trafficData, setTrafficData] = useState<TrafficApiResponse | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'accidents' | 'jams' | 'police'>('all');
   const haptic = useHaptic();
 
   const fetchTrafficData = async () => {
     try {
-      const resp = await fetch('/api/traffic/alerts', { signal: AbortSignal.timeout(25000) });
+      const resp = await fetch('/api/traffic/alerts', { signal: AbortSignal.timeout(15000) });
       if (!resp.ok) throw new Error('Serviço indisponível');
       if (resp.ok) {
         const data: TrafficApiResponse = await resp.json();
         setTrafficData(data);
+        memoryAlertsCache = data;
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+        } catch {
+          // ignore storage quota
+        }
         setLoadError('');
       }
     } catch (err) {
       console.warn('[AlertsTab] Erro ao carregar alertas de trânsito:', err);
-      setLoadError('Não foi possível atualizar os alertas. Tente novamente.');
+      if (!trafficData && !memoryAlertsCache) {
+        setLoadError('Não foi possível atualizar os alertas. Tente novamente.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -218,9 +247,46 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         </button>
       </div>
 
-      <div role="status" style={{ margin: '0 20px 14px', padding: '12px', background: '#18181B', borderRadius: 12, fontSize: 13, color: '#A1A1AA' }}>
-        {loadError || (isLoading ? 'Consultando ocorrências de trânsito…' : trafficData?.source?.message || 'Fonte de ocorrências indisponível.')}
-        {trafficData?.source?.updatedAt && <div style={{marginTop: 4}}>Última coleta: {new Date(trafficData.source.updatedAt).toLocaleString('pt-BR', {timeZone:'America/Manaus', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})}</div>}
+      <div
+        role="status"
+        style={{
+          margin: '0 20px 14px',
+          padding: '10px 14px',
+          background: '#18181B',
+          borderRadius: 12,
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          fontSize: '13px',
+          color: '#A1A1AA',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span
+            style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: isRefreshing ? '#F59E0B' : (trafficData ? '#10B981' : '#71717A'),
+              display: 'inline-block'
+            }}
+          />
+          <span style={{ fontWeight: 600, color: '#E4E4E7' }}>
+            {isLoading && !trafficData
+              ? 'Consultando dados de trânsito…'
+              : loadError && !trafficData
+              ? loadError
+              : trafficData?.source?.updatedAt
+              ? `Atualização: ${new Date(trafficData.source.updatedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Manaus' })} às ${new Date(trafficData.source.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Manaus' })}`
+              : 'Atualização: Em tempo real'}
+          </span>
+        </div>
+        {isRefreshing && (
+          <span style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 600 }}>
+            Atualizando...
+          </span>
+        )}
       </div>
       {/* Category Filter Chips */}
       <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px', overflowX: 'auto', scrollbarWidth: 'none' }}>
@@ -377,11 +443,11 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               Nenhuma ocorrência nesta categoria
             </div>
             <div style={{ fontSize: '13px', color: '#94A3B8', maxWidth: '320px', margin: '0 auto 16px auto', lineHeight: '1.45' }}>
-              A última coleta do Waze não trouxe ocorrências para este filtro.
+              Nenhuma ocorrência recente registrada para este filtro.
             </div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '5px 14px', borderRadius: '999px', color: '#10B981', fontSize: '12px', fontWeight: 800 }}>
               <Navigation size={13} />
-              <span>Waze via Apify</span>
+              <span>Monitoramento em Tempo Real</span>
             </div>
           </div>
         )}

@@ -117,6 +117,7 @@ app.get('/api/stops/citywide', async (_req: Request, res: Response) => {
  */
 app.get('/api/traffic/alerts', async (_req: Request, res: Response) => {
   try {
+    res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=30, stale-while-revalidate=120');
     const alertsData = await getLiveTrafficAlerts();
     res.json(alertsData);
   } catch (err: any) {

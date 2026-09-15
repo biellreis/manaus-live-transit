@@ -121,13 +121,20 @@ const MONITORED_CORRIDORS: MonitoredCorridorDef[] = [
 ];
 
 /**
- * Perform live routing speed probe for a corridor using OSRM live routing engine
+ * Perform live routing speed probe for a corridor using OSRM live routing engine (cached for 5 minutes)
  */
+const corridorSpeedCache = new Map<string, { speed: number; timestamp: number }>();
+const CORRIDOR_SPEED_CACHE_MS = 5 * 60 * 1000;
+
 async function probeCorridorSpeed(def: MonitoredCorridorDef): Promise<number | null> {
+  const cached = corridorSpeedCache.get(def.id);
+  if (cached && (Date.now() - cached.timestamp < CORRIDOR_SPEED_CACHE_MS)) {
+    return cached.speed;
+  }
   try {
     const url = `https://router.project-osrm.org/route/v1/driving/${def.startCoord[1]},${def.startCoord[0]};${def.endCoord[1]},${def.endCoord[0]}?overview=false`;
     const resp = await fetch(url, {
-      signal: AbortSignal.timeout(3500),
+      signal: AbortSignal.timeout(2500),
       headers: { 'User-Agent': 'Mozilla/5.0 (ManausLiveTransit/2.0)' }
     });
 
@@ -138,6 +145,7 @@ async function probeCorridorSpeed(def: MonitoredCorridorDef): Promise<number | n
         const distKm = route.distance / 1000;
         const durationHours = route.duration / 3600;
         const speedKmh = Math.round(distKm / durationHours);
+        corridorSpeedCache.set(def.id, { speed: speedKmh, timestamp: Date.now() });
         return speedKmh;
       }
     }
@@ -147,7 +155,14 @@ async function probeCorridorSpeed(def: MonitoredCorridorDef): Promise<number | n
   return null;
 }
 
-export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
+let cachedAlertsResponse: TrafficAlertsResponse | null = null;
+let cachedAlertsExpiresAt = 0;
+
+export async function getLiveTrafficAlerts(forceRefresh = false): Promise<TrafficAlertsResponse> {
+  if (!forceRefresh && cachedAlertsResponse && Date.now() < cachedAlertsExpiresAt) {
+    return cachedAlertsResponse;
+  }
+
   const [vehicles, wazeSnapshot] = await Promise.all([
     sinetram.getCitywideVehicles(),
     fetchWazeLiveItems()
@@ -270,13 +285,13 @@ export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
       const timeText = Number.isFinite(parsed.getTime()) ? parsed.toLocaleString('pt-BR', { timeZone:'America/Manaus', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : 'Horário não informado';
 
       alerts.push({
-        id: `waze-${idx}-${w.latitude || 0}`,
+        id: `alert-${idx}-${w.latitude || 0}`,
         severity,
         category,
         corridorName: location.street,
         neighborhood: location.neighborhood,
         title,
-        description: w.alertDescription || `${title} em ${location.street}, ${location.neighborhood}. Informação reportada no Waze.`,
+        description: w.alertDescription || `${title} em ${location.street}, ${location.neighborhood}. Monitoramento em tempo real.`,
         timestamp: timeText
       });
     });
@@ -284,7 +299,7 @@ export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
 
   const slowCorridors = corridors.filter(c => c.status === 'intenso').length;
 
-  return {
+  const result: TrafficAlertsResponse = {
     source: wazeSnapshot.source,
     timestamp: now.toISOString(),
     summary: {
@@ -295,4 +310,9 @@ export async function getLiveTrafficAlerts(): Promise<TrafficAlertsResponse> {
     corridors,
     alerts
   };
+
+  cachedAlertsResponse = result;
+  cachedAlertsExpiresAt = Date.now() + 30000; // Cache 30 seconds
+
+  return result;
 }

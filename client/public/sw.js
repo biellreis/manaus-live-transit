@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v2.7 (Full viewport behind floating dock)
+// Manaus Live Transit - Service Worker v2.8 (Instant alerts cache and clean status)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });
