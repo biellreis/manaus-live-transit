@@ -1,5 +1,4 @@
 ---
-import '@fontsource-variable/outfit';
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import Phone from '../components/Phone.astro';
@@ -28,16 +27,18 @@ import InstallModal from '../components/InstallModal.astro';
     <HeroTransitMap/>
 
     <div class="hero-center-content">
-      <h1 id="hero-title" class="hero-mega-title">
-        Manô, <span class="blue">bora?</span>
-      </h1>
+      <div class="hero-apple-glass">
+        <h1 id="hero-title" class="hero-mega-title">
+          Manô, <span class="blue">bora?</span>
+        </h1>
 
-      <p class="hero-mega-description">
-        O transporte público de Manaus em tempo real no seu celular.
-      </p>
+        <p class="hero-mega-description">
+          O transporte público de Manaus em tempo real no seu celular.
+        </p>
 
-      <div class="hero-actions-container">
-        <InstallButtons/>
+        <div class="hero-actions-container">
+          <InstallButtons/>
+        </div>
       </div>
     </div>
 

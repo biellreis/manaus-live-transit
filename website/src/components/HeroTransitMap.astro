@@ -1,249 +1,99 @@
 ---
 ---
 <div class="hero-transit-stage" aria-hidden="true">
-  <!-- Atmospheric Vignette Scrim (Center Soft Fade for Mega-Typography) -->
+  <!-- Clean Atmospheric Vignette -->
   <div class="transit-vignette-overlay"></div>
 
-  <!-- Real Full-Bleed 1600x1000 Dense Vector Map of Centro de Manaus -->
-  <svg class="transit-svg-canvas" viewBox="0 0 1600 1000" fill="none" preserveAspectRatio="xMidYMid slice">
+  <!-- Organized Geometric Transit Map of Manaus (1600x900) -->
+  <svg class="transit-svg-canvas" viewBox="0 0 1600 900" fill="none" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <!-- Official Transit Route Gradients -->
-      <linearGradient id="route640Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#1e40af" stop-opacity="0.4"/>
+      <!-- Official Corridors: Blue & Orange -->
+      <linearGradient id="corridorBlue640" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.3"/>
         <stop offset="50%" stop-color="#2563eb" stop-opacity="1"/>
         <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.9"/>
       </linearGradient>
 
-      <linearGradient id="route300Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.3"/>
-        <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.8"/>
-      </linearGradient>
-
-      <linearGradient id="route448Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#0284c7" stop-opacity="0.3"/>
-        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.85"/>
-      </linearGradient>
-
-      <linearGradient id="route120Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#2563eb" stop-opacity="0.3"/>
-        <stop offset="100%" stop-color="#93c5fd" stop-opacity="0.85"/>
-      </linearGradient>
-
-      <linearGradient id="route560Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.3"/>
+      <linearGradient id="corridorBlue300" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1e40af" stop-opacity="0.3"/>
         <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.8"/>
       </linearGradient>
 
-      <!-- Contact Shadows for Real-Time Buses (Zero Neon) -->
-      <filter id="busPhysicalShadow" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.9"/>
+      <linearGradient id="corridorOrangeVolta" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ea580c" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#f97316" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#fb923c" stop-opacity="0.4"/>
+      </linearGradient>
+
+      <!-- Physical Contact Shadow (No Neon) -->
+      <filter id="busDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.85"/>
       </filter>
     </defs>
 
-    <!-- 1. WATER BODIES: Rio Negro & Igarapés -->
-    <!-- Rio Negro Basin -->
+    <!-- 1. WATER BODY: Rio Negro (Southern Shoreline) -->
     <path
-      d="M -50 860 Q 350 880 750 850 T 1300 870 T 1650 840 L 1650 1050 L -50 1050 Z"
-      fill="#080f1d"
-      fill-opacity="0.75"
+      d="M -50 780 Q 400 810 850 790 T 1650 800 L 1650 950 L -50 950 Z"
+      fill="#080c14"
     />
     <path
-      d="M -50 860 Q 350 880 750 850 T 1300 870 T 1650 840"
-      stroke="#1e293b"
-      stroke-width="2.5"
-      stroke-opacity="0.4"
+      d="M -50 780 Q 400 810 850 790 T 1650 800"
+      stroke="#ffffff"
+      stroke-width="1.5"
+      stroke-opacity="0.12"
       fill="none"
     />
-    <!-- Igarapé de São Raimundo (West) -->
-    <path
-      d="M 160 -50 Q 140 250 100 520 Q 60 720 40 865"
-      stroke="#0f172a"
-      stroke-width="28"
-      stroke-linecap="round"
-      fill="none"
-      opacity="0.7"
-    />
-    <!-- Igarapé de Educandos (East) -->
-    <path
-      d="M 1480 180 Q 1520 480 1500 700 Q 1480 810 1460 865"
-      stroke="#0f172a"
-      stroke-width="26"
-      stroke-linecap="round"
-      fill="none"
-      opacity="0.7"
-    />
+    <text x="1420" y="840" fill="#ffffff" fill-opacity="0.25" font-size="13" font-weight="700" letter-spacing="1">RIO NEGRO • PORTO</text>
 
-    <!-- 2. DENSE URBAN BLOCKS OF CENTRO DE MANAUS (Quadras Reais) -->
-    <g class="manaus-city-blocks" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1.2" fill="#ffffff" fill-opacity="0.012">
-      <!-- Zone 1: Downtown Historic Grid (Between Av. 7 de Setembro & Rio Negro) -->
-      <rect x="580" y="800" width="70" height="40" rx="4"/>
-      <rect x="670" y="800" width="80" height="40" rx="4"/>
-      <rect x="770" y="800" width="75" height="40" rx="4"/>
-      <rect x="865" y="800" width="75" height="40" rx="4"/>
-      <rect x="960" y="800" width="80" height="40" rx="4"/>
-      <rect x="1060" y="800" width="90" height="40" rx="4"/>
+    <!-- 2. ORGANIZED AVENUE GRID OF MANAUS (Clean Geometric Corridors) -->
+    <g stroke="#ffffff" stroke-linecap="round">
+      <!-- Main Avenues North-South (Constantino Nery, Djalma Batista, Getúlio Vargas, Mário Ypiranga) -->
+      <path d="M 280 -40 L 330 220 L 420 440 L 520 620 L 680 770" stroke-width="2.5" stroke-opacity="0.12"/>
+      <path d="M 680 -40 L 710 240 L 760 460 L 820 640 L 910 780" stroke-width="2.5" stroke-opacity="0.1"/>
+      <path d="M 1040 -40 L 1070 260 L 1120 500 L 1170 700 L 1220 780" stroke-width="2" stroke-opacity="0.08"/>
+      <path d="M 1360 -40 L 1380 300 L 1410 580 L 1440 780" stroke-width="1.8" stroke-opacity="0.06"/>
 
-      <!-- Zone 2: Between Rua 10 de Julho & Av. 7 de Setembro -->
-      <rect x="420" y="730" width="85" height="45" rx="4"/>
-      <rect x="525" y="730" width="85" height="45" rx="4"/>
-      <rect x="630" y="730" width="80" height="45" rx="4"/>
-      <rect x="730" y="730" width="85" height="45" rx="4"/>
-      <rect x="835" y="730" width="85" height="45" rx="4"/>
-      <rect x="940" y="730" width="90" height="45" rx="4"/>
-      <rect x="1050" y="730" width="85" height="45" rx="4"/>
-      <rect x="1155" y="730" width="90" height="45" rx="4"/>
-
-      <!-- Zone 3: Teatro Amazonas & Largo de São Sebastião Area -->
-      <rect x="440" y="660" width="90" height="50" rx="4"/>
-      <rect x="550" y="660" width="85" height="50" rx="4"/>
-      <rect x="655" y="660" width="70" height="50" rx="4"/> <!-- Largo West -->
-      <rect x="780" y="660" width="85" height="50" rx="4"/> <!-- Largo East -->
-      <rect x="885" y="660" width="90" height="50" rx="4"/>
-      <rect x="995" y="660" width="90" height="50" rx="4"/>
-      <rect x="1105" y="660" width="95" height="50" rx="4"/>
-
-      <!-- Zone 4: Praça da Saudade & Leonardo Malcher -->
-      <rect x="360" y="590" width="80" height="50" rx="4"/>
-      <rect x="460" y="590" width="80" height="50" rx="4"/>
-      <rect x="640" y="590" width="95" height="50" rx="4"/>
-      <rect x="755" y="590" width="95" height="50" rx="4"/>
-      <rect x="870" y="590" width="95" height="50" rx="4"/>
-      <rect x="985" y="590" width="90" height="50" rx="4"/>
-      <rect x="1095" y="590" width="95" height="50" rx="4"/>
-      <rect x="1210" y="590" width="85" height="50" rx="4"/>
-
-      <!-- Zone 5: Boulevard Álvaro Maia & Presidente Vargas Grid -->
-      <rect x="280" y="510" width="85" height="55" rx="4"/>
-      <rect x="385" y="510" width="90" height="55" rx="4"/>
-      <rect x="495" y="510" width="95" height="55" rx="4"/>
-      <rect x="610" y="510" width="100" height="55" rx="4"/>
-      <rect x="730" y="510" width="100" height="55" rx="4"/>
-      <rect x="850" y="510" width="100" height="55" rx="4"/>
-      <rect x="970" y="510" width="95" height="55" rx="4"/>
-      <rect x="1085" y="510" width="95" height="55" rx="4"/>
-      <rect x="1200" y="510" width="95" height="55" rx="4"/>
-
-      <!-- Zone 6: Constantino Nery & Djalma Batista Upper Corridors -->
-      <rect x="300" y="420" width="105" height="65" rx="4"/>
-      <rect x="480" y="420" width="110" height="65" rx="4"/>
-      <rect x="610" y="420" width="115" height="65" rx="4"/>
-      <rect x="745" y="420" width="115" height="65" rx="4"/>
-      <rect x="880" y="420" width="110" height="65" rx="4"/>
-      <rect x="1010" y="420" width="115" height="65" rx="4"/>
-      <rect x="1145" y="420" width="110" height="65" rx="4"/>
-
-      <!-- Zone 7: Northern Corridors (Near Terminal 1 & São Jorge) -->
-      <rect x="240" y="320" width="110" height="70" rx="4"/>
-      <rect x="480" y="320" width="115" height="70" rx="4"/>
-      <rect x="620" y="320" width="120" height="70" rx="4"/>
-      <rect x="760" y="320" width="120" height="70" rx="4"/>
-      <rect x="900" y="320" width="120" height="70" rx="4"/>
-      <rect x="1040" y="320" width="120" height="70" rx="4"/>
-
-      <rect x="220" y="210" width="120" height="75" rx="4"/>
-      <rect x="480" y="210" width="125" height="75" rx="4"/>
-      <rect x="630" y="210" width="125" height="75" rx="4"/>
-      <rect x="780" y="210" width="125" height="75" rx="4"/>
-      <rect x="930" y="210" width="125" height="75" rx="4"/>
-
-      <rect x="200" y="90" width="130" height="85" rx="4"/>
-      <rect x="480" y="90" width="135" height="85" rx="4"/>
-      <rect x="640" y="90" width="135" height="85" rx="4"/>
-      <rect x="800" y="90" width="135" height="85" rx="4"/>
-      <rect x="960" y="90" width="135" height="85" rx="4"/>
+      <!-- Main Transversals (Darcy Vargas, Álvaro Maia, Leonardo Malcher, Sete de Setembro) -->
+      <path d="M 100 240 L 1520 240" stroke-width="2" stroke-opacity="0.08"/>
+      <path d="M 120 460 L 1540 460" stroke-width="2.5" stroke-opacity="0.1"/>
+      <path d="M 200 620 L 1480 620" stroke-width="2" stroke-opacity="0.08"/>
+      <path d="M 300 740 L 1400 740" stroke-width="2.5" stroke-opacity="0.12"/>
     </g>
 
-    <!-- 3. REAL STREET NETWORK OF CENTRO DE MANAUS -->
-    <g class="manaus-real-avenues" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Major Primary Artery: Av. Constantino Nery (Main BRT/Busway) -->
-      <path d="M 320 -30 L 360 180 L 450 380 L 550 560 L 610 680 L 760 810 L 840 860" stroke-width="4.5" stroke-opacity="0.22"/>
-      
-      <!-- Major Primary Artery: Av. Djalma Batista -->
-      <path d="M 720 -30 L 760 240 L 810 480 L 850 630 L 920 760 L 970 850" stroke-width="3.5" stroke-opacity="0.18"/>
-
-      <!-- Major Primary Artery: Av. Mário Ypiranga (Recife) -->
-      <path d="M 1080 -30 L 1120 250 L 1170 480 L 1220 660 L 1280 810" stroke-width="3" stroke-opacity="0.14"/>
-
-      <!-- Iconic Central Spine: Av. Eduardo Ribeiro (Teatro Amazonas -> Porto) -->
-      <path d="M 550 560 L 720 680 L 840 810 L 870 870" stroke-width="4" stroke="#60a5fa" stroke-opacity="0.35"/>
-
-      <!-- East-West Arteries -->
-      <!-- Av. Sete de Setembro (Downtown Main Commercial Street) -->
-      <path d="M 240 780 L 1440 780" stroke-width="3" stroke-opacity="0.18"/>
-      <!-- Rua Leonardo Malcher -->
-      <path d="M 280 610 L 1420 610" stroke-width="2.5" stroke-opacity="0.15"/>
-      <!-- Rua 10 de Julho -->
-      <path d="M 340 680 L 1380 680" stroke-width="2.5" stroke-opacity="0.15"/>
-      <!-- Av. Álvaro Maia (Boulevard Amazonas) -->
-      <path d="M 200 480 L 1480 480" stroke-width="3.5" stroke-opacity="0.2"/>
-      <!-- Av. Darcy Vargas -->
-      <path d="M 220 280 L 1460 280" stroke-width="3" stroke-opacity="0.16"/>
-      <!-- Rua dos Andradas & Floriano Peixoto -->
-      <path d="M 640 830 L 1200 830" stroke-width="2" stroke-opacity="0.12"/>
-      <!-- Av. Getúlio Vargas -->
-      <path d="M 940 480 L 950 760 L 960 860" stroke-width="3" stroke-opacity="0.16"/>
-      <!-- Av. Epaminondas -->
-      <path d="M 520 540 L 590 690 L 720 810" stroke-width="3" stroke-opacity="0.16"/>
-      <!-- Av. Joaquim Nabuco -->
-      <path d="M 1100 480 L 1110 760 L 1120 850" stroke-width="2.5" stroke-opacity="0.14"/>
-    </g>
-
-    <!-- 4. FAMOUS HISTORIC LANDMARKS OF CENTRO -->
-    <!-- Teatro Amazonas & Largo de São Sebastião -->
-    <g class="landmark-teatro" transform="translate(720, 680)">
-      <circle r="18" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.8" stroke-opacity="0.6"/>
-      <circle r="7" fill="#f59e0b" fill-opacity="0.6"/>
-      <text x="24" y="5" fill="#fde68a" font-size="12" font-weight="800" letter-spacing="0.5">Teatro Amazonas</text>
-      <text x="24" y="19" fill="#94a3b8" font-size="10">Largo de São Sebastião</text>
-    </g>
-
-    <!-- Praça da Matriz & Catedral Metropolitana -->
-    <g class="landmark-matriz" transform="translate(820, 810)">
-      <rect x="-10" y="-10" width="20" height="20" rx="4" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="2"/>
-      <circle r="4" fill="#ffffff"/>
-      <text x="-16" y="5" fill="#ffffff" font-size="12" font-weight="700" text-anchor="end">Matriz / Catedral</text>
-      <text x="-16" y="18" fill="#94a3b8" font-size="10" text-anchor="end">Centro Histórico</text>
-    </g>
-
-    <!-- Porto de Manaus & Roadway Flutuante -->
-    <g class="landmark-porto" transform="translate(870, 875)">
-      <circle r="6" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
-      <text x="14" y="4" fill="#bae6fd" font-size="11" font-weight="700">Porto de Manaus • Roadway</text>
-    </g>
-
-    <!-- Mercado Municipal Adolpho Lisboa -->
-    <g class="landmark-mercado" transform="translate(1060, 855)">
-      <circle r="5" fill="#fbbf24" stroke="#ffffff" stroke-width="1.8"/>
-      <text x="12" y="4" fill="#fef08a" font-size="11" font-weight="600">Mercado Adolpho Lisboa</text>
-    </g>
-
-    <!-- Praça da Saudade -->
-    <g class="landmark-saudade" transform="translate(550, 560)">
-      <circle r="12" fill="#22c55e" fill-opacity="0.15" stroke="#22c55e" stroke-width="1.8" stroke-opacity="0.5"/>
-      <circle r="5" fill="#22c55e"/>
-      <text x="-16" y="4" fill="#bbf7d0" font-size="11" font-weight="700" text-anchor="end">Praça da Saudade</text>
-    </g>
-
+    <!-- 3. OFFICIAL STATIONS & LANDMARKS (Only White, Blue and Orange) -->
     <!-- Terminal 1 (T1) Constantino Nery -->
-    <g class="landmark-t1" transform="translate(450, 380)">
-      <circle r="16" fill="#2563eb" fill-opacity="0.2" stroke="#2563eb" stroke-width="2.5"/>
-      <circle r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
-      <text x="22" y="4" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="0.4">Terminal 1 (T1)</text>
-      <text x="22" y="19" fill="#94a3b8" font-size="11">Av. Constantino Nery</text>
+    <g transform="translate(420, 440)">
+      <circle r="14" fill="#2563eb" fill-opacity="0.15" stroke="#2563eb" stroke-width="2"/>
+      <circle r="6" fill="#ffffff"/>
+      <text x="-16" y="5" fill="#ffffff" font-size="13" font-weight="800" text-anchor="end">Terminal 1 (T1)</text>
+      <text x="-16" y="20" fill="#ffffff" fill-opacity="0.6" font-size="11" text-anchor="end">Av. Constantino Nery</text>
     </g>
 
     <!-- Estação E1 São Jorge -->
-    <g class="landmark-e1" transform="translate(360, 180)">
-      <circle r="6" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
-      <text x="14" y="4" fill="#94a3b8" font-size="11" font-weight="600">Estação E1 São Jorge</text>
+    <g transform="translate(330, 220)">
+      <circle r="5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="-14" y="4" fill="#ffffff" fill-opacity="0.7" font-size="11" font-weight="600" text-anchor="end">Estação E1</text>
     </g>
 
-    <!-- 5. ACTIVE OFFICIAL TRANSIT CORRIDORS (5 Real Bus Routes) -->
-    <!-- Route 1: Linha 640 (Main Arterial: T4/T3/T1 -> Centro) -->
+    <!-- Praça da Saudade -->
+    <g transform="translate(520, 620)">
+      <circle r="6" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+      <text x="-16" y="4" fill="#ffffff" font-size="12" font-weight="700" text-anchor="end">Praça da Saudade</text>
+    </g>
+
+    <!-- Matriz • Centro Histórico -->
+    <g transform="translate(680, 770)">
+      <circle r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+      <text x="18" y="5" fill="#ffffff" font-size="13" font-weight="800">Matriz • Centro</text>
+      <text x="18" y="20" fill="#ffffff" fill-opacity="0.6" font-size="11">Terminal Central</text>
+    </g>
+
+    <!-- 4. OFFICIAL TRANSIT CORRIDORS (Clean & Harmonious) -->
+    <!-- Route 1: Linha 640 (Ida: Constantino Nery -> T1 -> Centro) -->
     <path
-      id="livePath640"
-      d="M 320 -30 L 360 180 L 450 380 L 550 560 L 610 680 L 760 810 L 840 860 L 870 870"
-      stroke="url(#route640Grad)"
+      id="cleanRoute640"
+      d="M 280 -40 L 330 220 L 420 440 L 520 620 L 680 770"
+      stroke="url(#corridorBlue640)"
       stroke-width="5"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -252,105 +102,86 @@
 
     <!-- Route 2: Linha 300 (Expresso Norte: Djalma Batista -> Centro) -->
     <path
-      id="livePath300"
-      d="M 720 -30 L 760 240 L 810 480 L 850 630 L 920 760 L 970 850"
-      stroke="url(#route300Grad)"
-      stroke-width="3.5"
+      id="cleanRoute300"
+      d="M 680 -40 L 710 240 L 760 460 L 820 640 L 910 780"
+      stroke="url(#corridorBlue300)"
+      stroke-width="4"
       stroke-dasharray="10 8"
       stroke-linecap="round"
       stroke-linejoin="round"
       fill="none"
     />
 
-    <!-- Route 3: Linha 448 (Cidade de Deus -> Boulevard -> Epaminondas -> Centro) -->
+    <!-- Route 3: Linha de Retorno (Volta: Centro -> Bairros em Laranja Oficial) -->
     <path
-      id="livePath448"
-      d="M 1240 180 L 1050 480 L 720 540 L 590 690 L 760 810 L 840 850"
-      stroke="url(#route448Grad)"
-      stroke-width="3.5"
+      id="cleanRouteVolta"
+      d="M 720 780 L 860 620 L 1020 460 L 1070 260 L 1100 -40"
+      stroke="url(#corridorOrangeVolta)"
+      stroke-width="4.5"
       stroke-linecap="round"
       stroke-linejoin="round"
       fill="none"
     />
 
-    <!-- Route 4: Linha 120 (Ponta Negra -> São Raimundo -> Eduardo Ribeiro -> Porto) -->
-    <path
-      id="livePath120"
-      d="M 60 440 L 260 520 L 550 560 L 720 680 L 840 810 L 870 870 L 1060 855"
-      stroke="url(#route120Grad)"
-      stroke-width="3.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      fill="none"
-    />
-
-    <!-- Route 5: Linha 560 (Jorge Teixeira -> T4 -> T1 -> Getúlio Vargas) -->
-    <path
-      id="livePath560"
-      d="M 450 380 L 730 490 L 940 520 L 950 760 L 960 860"
-      stroke="url(#route560Grad)"
-      stroke-width="3"
-      stroke-dasharray="8 6"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      fill="none"
-    />
-
-    <!-- 6. FIVE REAL-TIME MOVING BUSES (60 FPS Motion) -->
-    <!-- BUS 1: Linha 640 -->
-    <g class="city-bus-640">
-      <circle r="26" fill="#2563eb" fill-opacity="0.18" class="pulse-ring"/>
-      <circle r="16" fill="#2563eb" stroke="#ffffff" stroke-width="2.5" filter="url(#busPhysicalShadow)"/>
-      <path d="M -7 5 L 7 5 L 7 -6 C 7 -7.5 -7 -7.5 -7 -6 Z M -7 -1 L 7 -1 M -5 5 L -5 7.5 M 5 5 L 5 7.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-      <circle cx="-3.5" cy="2.5" r="1" fill="#ffffff"/>
-      <circle cx="3.5" cy="2.5" r="1" fill="#ffffff"/>
-      <g transform="translate(20, -18)">
-        <rect width="52" height="26" rx="8" fill="#2563eb" filter="url(#busPhysicalShadow)"/>
-        <text x="26" y="18" fill="#ffffff" font-size="14" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif" letter-spacing="-0.4">640</text>
-      </g>
-    </g>
-
-    <!-- BUS 2: Linha 300 -->
-    <g class="city-bus-300">
-      <circle r="22" fill="#1d4ed8" fill-opacity="0.18" class="pulse-ring"/>
-      <circle r="14" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.2" filter="url(#busPhysicalShadow)"/>
-      <path d="M -6 4 L 6 4 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z" stroke="#ffffff" stroke-width="1.3" fill="none"/>
+    <!-- 5. THREE UPRIGHT REAL-TIME BUSES (Never Tilt / Never Invert) -->
+    <!-- BUS 1: Linha 640 (Azul Oficial) -->
+    <g class="bus-unit-640">
+      <circle r="24" fill="#2563eb" fill-opacity="0.2" class="bus-pulse"/>
+      <circle r="15" fill="#2563eb" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+      <!-- Crisp White Bus Icon -->
+      <path
+        d="M -6 4.5 L 6 4.5 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z M -6 -1 L 6 -1 M -4 4.5 L -4 7 M 4 4.5 L 4 7"
+        stroke="#ffffff"
+        stroke-width="1.3"
+        stroke-linecap="round"
+        fill="none"
+      />
+      <circle cx="-3" cy="2" r="1" fill="#ffffff"/>
+      <circle cx="3" cy="2" r="1" fill="#ffffff"/>
+      <!-- Upright Badge 640 -->
       <g transform="translate(18, -16)">
-        <rect width="48" height="24" rx="7" fill="#1d4ed8" filter="url(#busPhysicalShadow)"/>
-        <text x="24" y="16" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">300</text>
+        <rect width="48" height="24" rx="7" fill="#2563eb" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+        <text x="24" y="16" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif" letter-spacing="-0.3">640</text>
       </g>
     </g>
 
-    <!-- BUS 3: Linha 448 -->
-    <g class="city-bus-448">
-      <circle r="22" fill="#0284c7" fill-opacity="0.18" class="pulse-ring"/>
-      <circle r="14" fill="#0284c7" stroke="#ffffff" stroke-width="2.2" filter="url(#busPhysicalShadow)"/>
-      <path d="M -6 4 L 6 4 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z" stroke="#ffffff" stroke-width="1.3" fill="none"/>
+    <!-- BUS 2: Linha 300 (Azul Oficial) -->
+    <g class="bus-unit-300">
+      <circle r="22" fill="#3b82f6" fill-opacity="0.2" class="bus-pulse"/>
+      <circle r="14" fill="#3b82f6" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+      <path
+        d="M -5.5 4 L 5.5 4 L 5.5 -4.5 C 5.5 -6 -5.5 -6 -5.5 -4.5 Z M -5.5 -1 L 5.5 -1 M -3.5 4 L -3.5 6.5 M 3.5 4 L 3.5 6.5"
+        stroke="#ffffff"
+        stroke-width="1.2"
+        stroke-linecap="round"
+        fill="none"
+      />
+      <circle cx="-2.5" cy="1.8" r="0.9" fill="#ffffff"/>
+      <circle cx="2.5" cy="1.8" r="0.9" fill="#ffffff"/>
+      <!-- Upright Badge 300 -->
+      <g transform="translate(18, -15)">
+        <rect width="46" height="23" rx="7" fill="#3b82f6" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+        <text x="23" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif">300</text>
+      </g>
+    </g>
+
+    <!-- BUS 3: Linha 640 Volta (Laranja Oficial) -->
+    <g class="bus-unit-volta">
+      <circle r="24" fill="#f97316" fill-opacity="0.2" class="bus-pulse"/>
+      <circle r="15" fill="#f97316" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+      <path
+        d="M -6 4.5 L 6 4.5 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z M -6 -1 L 6 -1 M -4 4.5 L -4 7 M 4 4.5 L 4 7"
+        stroke="#ffffff"
+        stroke-width="1.3"
+        stroke-linecap="round"
+        fill="none"
+      />
+      <circle cx="-3" cy="2" r="1" fill="#ffffff"/>
+      <circle cx="3" cy="2" r="1" fill="#ffffff"/>
+      <!-- Upright Badge Volta -->
       <g transform="translate(18, -16)">
-        <rect width="48" height="24" rx="7" fill="#0284c7" filter="url(#busPhysicalShadow)"/>
-        <text x="24" y="16" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">448</text>
-      </g>
-    </g>
-
-    <!-- BUS 4: Linha 120 -->
-    <g class="city-bus-120">
-      <circle r="22" fill="#2563eb" fill-opacity="0.18" class="pulse-ring"/>
-      <circle r="14" fill="#2563eb" stroke="#ffffff" stroke-width="2.2" filter="url(#busPhysicalShadow)"/>
-      <path d="M -6 4 L 6 4 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z" stroke="#ffffff" stroke-width="1.3" fill="none"/>
-      <g transform="translate(18, -16)">
-        <rect width="48" height="24" rx="7" fill="#2563eb" filter="url(#busPhysicalShadow)"/>
-        <text x="24" y="16" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">120</text>
-      </g>
-    </g>
-
-    <!-- BUS 5: Linha 560 -->
-    <g class="city-bus-560">
-      <circle r="20" fill="#1e3a8a" fill-opacity="0.18" class="pulse-ring"/>
-      <circle r="13" fill="#1e3a8a" stroke="#ffffff" stroke-width="2" filter="url(#busPhysicalShadow)"/>
-      <path d="M -5 3.5 L 5 3.5 L 5 -4 C 5 -5 -5 -5 -5 -4 Z" stroke="#ffffff" stroke-width="1.2" fill="none"/>
-      <g transform="translate(16, -14)">
-        <rect width="46" height="22" rx="6" fill="#1e3a8a" filter="url(#busPhysicalShadow)"/>
-        <text x="23" y="15" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">560</text>
+        <rect width="52" height="24" rx="7" fill="#f97316" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+        <text x="26" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif" letter-spacing="-0.3">VOLTA</text>
       </g>
     </g>
   </svg>
