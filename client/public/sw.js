@@ -1,4 +1,4 @@
-// Manaus Live Transit - Service Worker v3.1 (Prioritize closest stop for street origins & ETA for terminals)
+// Manaus Live Transit - Service Worker v3.2 (Dedicated web installation entry)
 self.addEventListener('install', () => {
   self.skipWaiting();
 });

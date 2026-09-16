@@ -1,0 +1,9 @@
+---
+const { screen='home', class:className='', android=false, eager=false, id }=Astro.props;
+---
+<div class:list={['phone',className,{'android':android}]} aria-hidden="true">
+  <div class="phone-edge"></div><div class="phone-display">
+    {android && <div class="android-bar"><span>09:41</span><i></i><span>◔ ▰</span></div>}
+    <img id={id} src={`/screens/${screen}.webp`} width="768" height={android?1552:1670} alt="" loading={eager?'eager':'lazy'} decoding="async"/>
+  </div><div class="phone-button"></div>
+</div>

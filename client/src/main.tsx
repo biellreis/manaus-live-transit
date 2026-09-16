@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.js';
+import { InstallLanding } from './components/InstallLanding.js';
 import { setWorkerUrl } from 'maplibre-gl';
 import mapWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
@@ -27,8 +28,10 @@ if ('serviceWorker' in navigator && import.meta.env.PROD && location.protocol !=
   });
 }
 
+const installPlatform = new URLSearchParams(location.search).get('install');
+const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone;
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    {!standalone && (installPlatform === 'ios' || installPlatform === 'android') ? <InstallLanding platform={installPlatform} /> : <App />}
   </StrictMode>,
 );
