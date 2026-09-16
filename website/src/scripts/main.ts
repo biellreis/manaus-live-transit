@@ -26,13 +26,20 @@ function showDownloadToast() {
   }, 4500);
 }
 
-// Manipulador dedicado para todos os botões Android
+// Manipulador dedicado para todos os botões Android (Download único sem duplicidade)
+let isDownloading = false;
 document
   .querySelectorAll<HTMLAnchorElement>(".install-android, #android-direct-btn")
   .forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (isDownloading) return;
+      isDownloading = true;
       showDownloadToast();
       window.location.assign("/downloads/Mano.apk");
+      setTimeout(() => {
+        isDownloading = false;
+      }, 4000);
     });
   });
 
