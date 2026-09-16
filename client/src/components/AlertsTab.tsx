@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { RotateCw, CheckCircle2, Navigation } from 'lucide-react';
+import { RotateCw, CheckCircle2, Navigation, AlertOctagon, AlertTriangle, ShieldAlert, Info } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import type { RouteSummary } from '../types/transit.js';
 
@@ -123,48 +123,77 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
     });
   }, [rawAlerts, selectedFilter]);
 
-  // Determine pill badge metadata based on alert properties (strict 3 colors: white, blue #2563EB, orange #EA580C)
+  // Determine pill badge metadata and icon based on alert properties and severity level
   const getBadgeConfig = (alert: TrafficAlertItem) => {
-    const t = alert.title.toLowerCase();
+    const t = (alert.title || '').toLowerCase();
+    const d = (alert.description || '').toLowerCase();
+    const isCritical = alert.severity === 'critical';
+    const isWarning = alert.severity === 'warning';
 
-    if (t.includes('acidente')) {
+    // 1. Nível Crítico (Acidentes, Vias Interditadas, Bloqueios) -> Vermelho Sólido (#DC2626)
+    if (t.includes('acidente') || d.includes('acidente') || (alert.category === 'accidents' && !t.includes('obras'))) {
       return {
         label: 'ACIDENTE REPORTADO',
-        bg: '#EA580C',
-        color: '#FFFFFF'
+        bg: '#DC2626',
+        color: '#FFFFFF',
+        icon: AlertOctagon
       };
     }
-    if (t.includes('obras') && !t.includes('interditada')) {
-      return { label: 'OBRAS NA VIA', bg: '#EA580C', color: '#FFFFFF' };
-    }
-    if (alert.category === 'hazards') {
-      return { label: 'PERIGO NA VIA', bg: '#EA580C', color: '#FFFFFF' };
-    }
-    if (t.includes('interditada') || t.includes('bloqueio')) {
+    if (t.includes('interditada') || t.includes('bloqueio') || d.includes('interditada') || d.includes('bloqueio') || isCritical) {
       return {
         label: 'VIA INTERDITADA',
-        bg: '#EA580C',
-        color: '#FFFFFF'
+        bg: '#DC2626',
+        color: '#FFFFFF',
+        icon: AlertOctagon
       };
     }
-    if (t.includes('lentidão') || t.includes('engarrafamento') || t.includes('retenção') || t.includes('perigo')) {
+
+    // 2. Nível Alto / Obras na via -> Laranja Sólido (#EA580C)
+    if (t.includes('obras') || d.includes('obras') || t.includes('manutenção') || d.includes('manutenção')) {
+      return {
+        label: 'OBRAS NA VIA',
+        bg: '#EA580C',
+        color: '#FFFFFF',
+        icon: AlertTriangle
+      };
+    }
+
+    // 3. Nível Alerta / Perigo -> Laranja Sólido (#EA580C)
+    if (alert.category === 'hazards' || t.includes('perigo') || d.includes('perigo')) {
+      return {
+        label: 'PERIGO NA VIA',
+        bg: '#EA580C',
+        color: '#FFFFFF',
+        icon: AlertTriangle
+      };
+    }
+
+    // 4. Nível Moderado / Retenção / Lentidão -> Âmbar Sólido (#D97706)
+    if (t.includes('lentidão') || t.includes('engarrafamento') || t.includes('retenção') || d.includes('lentidão') || alert.category === 'jams' || isWarning) {
       return {
         label: 'RETENÇÃO INTENSA',
-        bg: '#EA580C',
-        color: '#FFFFFF'
+        bg: '#D97706',
+        color: '#FFFFFF',
+        icon: AlertTriangle
       };
     }
-    if (t.includes('fiscalização') || t.includes('blitz') || t.includes('immu')) {
+
+    // 5. Nível Fiscalização / IMMU / Blitz -> Azul Sólido (#2563EB)
+    if (t.includes('fiscalização') || t.includes('blitz') || t.includes('immu') || alert.category === 'police') {
       return {
         label: 'FISCALIZAÇÃO',
         bg: '#2563EB',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        icon: ShieldAlert
       };
     }
+
+    // 6. Nível Normalidade / Sistema Transurbano -> Verde Esmeralda (#059669)
     return {
       label: 'SISTEMA TRANSURBANO',
-      bg: '#2563EB',
-      color: '#FFFFFF'
+      bg: '#059669',
+      color: '#FFFFFF',
+      icon: Info
     };
   };
 
@@ -271,7 +300,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: isRefreshing ? '#EA580C' : (trafficData ? '#2563EB' : '#71717A'),
+              backgroundColor: isRefreshing ? '#F59E0B' : (trafficData ? '#10B981' : '#71717A'),
               display: 'inline-block'
             }}
           />
@@ -286,7 +315,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
           </span>
         </div>
         {isRefreshing && (
-          <span style={{ fontSize: '11px', color: '#EA580C', fontWeight: 600 }}>
+          <span style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 600 }}>
             Atualizando...
           </span>
         )}
@@ -294,10 +323,10 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       {/* Category Filter Chips */}
       <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px', overflowX: 'auto', scrollbarWidth: 'none' }}>
         {[
-          { id: 'all', label: 'Todos os Alertas' },
-          { id: 'accidents', label: 'Acidentes e Bloqueios' },
-          { id: 'jams', label: 'Lentidão no Trânsito' },
-          { id: 'police', label: 'Fiscalização' },
+          { id: 'all', label: 'Todos os Alertas', activeColor: '#2563EB' },
+          { id: 'accidents', label: 'Acidentes e Bloqueios', activeColor: '#DC2626' },
+          { id: 'jams', label: 'Lentidão no Trânsito', activeColor: '#D97706' },
+          { id: 'police', label: 'Fiscalização', activeColor: '#2563EB' },
         ].map((tab) => {
           const isActive = selectedFilter === tab.id;
           return (
@@ -313,8 +342,8 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 fontSize: '12px',
                 fontWeight: 700,
                 whiteSpace: 'nowrap',
-                border: isActive ? '1px solid #3B82F6' : '1px solid rgba(255, 255, 255, 0.08)',
-                backgroundColor: isActive ? '#2563EB' : '#18181B',
+                border: isActive ? `1px solid ${tab.activeColor}` : '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: isActive ? tab.activeColor : '#18181B',
                 color: isActive ? '#FFFFFF' : '#A1A1AA',
                 cursor: 'pointer',
                 outline: 'none',
@@ -343,6 +372,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 borderRadius: '18px',
                 padding: '18px',
                 border: '1px solid rgba(255, 255, 255, 0.09)',
+                borderLeft: `4px solid ${badge.bg}`,
                 boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
                 display: 'flex',
                 flexDirection: 'column'
@@ -360,10 +390,14 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                     borderRadius: '9999px',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px'
                   }}
                 >
-                  {badge.label}
+                  <badge.icon size={12} strokeWidth={2.8} />
+                  <span>{badge.label}</span>
                 </span>
 
                 <span style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 600 }}>
