@@ -43,17 +43,66 @@
         <div class="glass-specular-sheen"></div>
         <div class="glass-light-streak"></div>
 
-        <!-- Tela OLED com imagem nítida e de alta resolução do aplicativo -->
+        <!-- Tela OLED com visualização deslizando continuamente por dentro -->
         <div class="screen-display-area">
-          <img
-            class="motion-app-screen"
-            src="/screens/ida.webp"
-            width="768"
-            height="1670"
-            alt="Aplicativo Manô no iPhone com mapa, linhas de ônibus e trajetos de Manaus"
-            loading="eager"
-            decoding="async"
-          />
+          <div class="screen-glider-track">
+            <img
+              class="motion-app-screen"
+              src="/screens/ida.webp"
+              width="768"
+              height="1670"
+              alt="Linha 640 e Trajeto em Tempo Real"
+              loading="eager"
+              decoding="async"
+            />
+            <img
+              class="motion-app-screen"
+              src="/screens/home.webp"
+              width="768"
+              height="1670"
+              alt="Página Inicial e Linhas de Manaus"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="motion-app-screen"
+              src="/screens/ida.webp"
+              width="768"
+              height="1670"
+              alt="Linha 640 e Trajeto em Tempo Real"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="motion-app-screen"
+              src="/screens/home.webp"
+              width="768"
+              height="1670"
+              alt="Página Inicial e Linhas de Manaus"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards Flutuantes 3D em Relevo (Extrude Depth sobre a tela) -->
+      <div class="iso-floating-card card-eta" aria-hidden="true">
+        <span class="card-bus-code">640</span>
+        <div class="card-info">
+          <div class="card-title-row">
+            <span class="live-dot-pulse"></span>
+            <strong>Chegando em 3 min</strong>
+          </div>
+          <span class="card-sub-text">Próximo da sua parada • T1</span>
+        </div>
+      </div>
+
+      <div class="iso-floating-card card-status" aria-hidden="true">
+        <span class="card-status-badge">13</span>
+        <div class="card-info">
+          <strong>Ônibus Ativos</strong>
+          <span class="card-sub-text">Linha 640 operando agora</span>
         </div>
       </div>
     </div>
@@ -72,10 +121,16 @@
     const isTouchOnly = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (prefersReducedMotion || isTouchOnly) return;
 
-    let targetRotX = 8;
-    let targetRotY = -18;
-    let currentRotX = 8;
-    let currentRotY = -18;
+    const baseRotX = 50;
+    const baseRotY = 12;
+    const baseRotZ = -28;
+
+    let targetRotX = baseRotX;
+    let targetRotY = baseRotY;
+    let targetRotZ = baseRotZ;
+    let currentRotX = baseRotX;
+    let currentRotY = baseRotY;
+    let currentRotZ = baseRotZ;
     let isHovering = false;
     let animFrameId: number | null = null;
 
@@ -85,7 +140,8 @@
       if (isHovering) {
         currentRotX = lerp(currentRotX, targetRotX, 0.08);
         currentRotY = lerp(currentRotY, targetRotY, 0.08);
-        pivot.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(-2.5deg) translateZ(35px)`;
+        currentRotZ = lerp(currentRotZ, targetRotZ, 0.08);
+        pivot.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(${currentRotZ.toFixed(2)}deg) translateZ(35px)`;
       }
       animFrameId = requestAnimationFrame(updateTilt);
     };
@@ -103,8 +159,9 @@
       const pctX = (x / rect.width) * 2 - 1;
       const pctY = (y / rect.height) * 2 - 1;
 
-      targetRotY = -18 + pctX * 10;
-      targetRotX = 8 - pctY * 8;
+      targetRotY = baseRotY + pctX * 7;
+      targetRotX = baseRotX - pctY * 6;
+      targetRotZ = baseRotZ + pctX * 3;
     });
 
     stage.addEventListener('mouseleave', () => {

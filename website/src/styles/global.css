@@ -1930,16 +1930,16 @@ body:has(dialog[open]) {
   align-items: flex-start;
   text-align: left;
   z-index: 10;
-  max-width: 520px;
+  max-width: 480px;
 }
 
 .intro-split-heading {
-  font-size: clamp(40px, 4.8vw, 68px);
+  font-size: clamp(38px, 4.5vw, 64px);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.04em;
   color: #ffffff;
-  margin: 0;
+  margin: 12px 0 0;
 }
 
 .intro-split-heading .muted {
@@ -1948,15 +1948,23 @@ body:has(dialog[open]) {
   margin-top: 6px;
 }
 
-/* Coluna da Direita: iPhone 3D ocupando o espaço completo */
+.intro-split-sub {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #9ca3af;
+  margin-top: 18px;
+  max-width: 420px;
+}
+
+/* Coluna da Direita: iPhone 3D Deitado ocupando o espaço completo */
 .intro-right-showcase {
   position: relative;
   width: 100%;
-  height: 780px;
+  height: 840px;
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1600px;
+  perspective: 1500px;
   transform-style: preserve-3d;
 }
 
@@ -1967,37 +1975,37 @@ body:has(dialog[open]) {
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1600px;
+  perspective: 1500px;
   transform-style: preserve-3d;
 }
 
-/* Sombras realistas de piso / ambiente com profundidade 3D */
+/* Sombras realistas de piso / ambiente com profundidade 3D adaptadas ao plano inclinado */
 .motion-floor-shadow {
   position: absolute;
-  bottom: 24px;
+  bottom: 60px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 320px;
-  height: 44px;
-  background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 75%);
-  filter: blur(14px);
+  transform: translateX(-50%) rotateZ(-28deg);
+  width: 420px;
+  height: 100px;
+  background: radial-gradient(ellipse 68% 45% at 50% 50%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.55) 50%, transparent 75%);
+  filter: blur(20px);
   pointer-events: none;
   z-index: 1;
-  animation: shadowBreathe 6s ease-in-out infinite alternate;
+  animation: shadowBreathe 7s ease-in-out infinite alternate;
 }
 
 .motion-ambient-shadow {
   position: absolute;
-  bottom: 8px;
+  bottom: 20px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 520px;
-  height: 90px;
-  background: radial-gradient(ellipse 75% 45% at 50% 50%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 80%);
-  filter: blur(32px);
+  transform: translateX(-50%) rotateZ(-28deg);
+  width: 620px;
+  height: 160px;
+  background: radial-gradient(ellipse 78% 50% at 50% 50%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.25) 55%, transparent 80%);
+  filter: blur(36px);
   pointer-events: none;
   z-index: 0;
-  animation: shadowBreatheWide 6s ease-in-out infinite alternate;
+  animation: shadowBreatheWide 7s ease-in-out infinite alternate;
 }
 
 /* Pivot flutuante com suporte a animação idle e rastreamento de mouse */
@@ -2005,19 +2013,20 @@ body:has(dialog[open]) {
   position: relative;
   transform-style: preserve-3d;
   will-change: transform;
-  animation: iphoneFloating3D 6s ease-in-out infinite alternate;
+  animation: iphoneIsoDeitadoFloating 7s ease-in-out infinite alternate;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 2;
+  transform-origin: center center;
 }
 
 .motion-phone-pivot.is-interacting {
   animation: none;
 }
 
-/* Dispositivo iPhone Ultra-Realista (Acabamento Titânio Escuro Apple) */
+/* Dispositivo iPhone Ultra-Realista Deitado (Acabamento Titânio Escuro Apple) */
 .realistic-iphone {
-  width: 350px;
-  height: 755px;
+  width: 360px;
+  height: 775px;
   position: relative;
   border-radius: 54px;
   transform-style: preserve-3d;
@@ -2212,7 +2221,7 @@ body:has(dialog[open]) {
   animation: glassGlareSweep 8s ease-in-out infinite;
 }
 
-/* Área da Tela com Vídeo em Loop */
+/* Área da Tela com Conteúdo Deslizando Continuamente */
 .screen-display-area {
   width: 100%;
   height: 100%;
@@ -2223,25 +2232,152 @@ body:has(dialog[open]) {
   z-index: 5;
 }
 
-.motion-app-screen,
-.motion-app-video {
+.screen-glider-track {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 48px;
+  animation: screenGliderLoop 24s linear infinite;
+  will-change: transform;
 }
 
-/* Animações Flutuantes 3D de Alta Fidelidade (Ângulo voltado para a esquerda / título) */
-@keyframes iphoneFloating3D {
+.screen-glider-track:hover {
+  animation-play-state: paused;
+}
+
+.motion-app-screen {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 768 / 1670;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+@keyframes screenGliderLoop {
   0% {
-    transform: translateY(0px) rotateX(8deg) rotateY(-19deg) rotateZ(-2.5deg);
-  }
-  50% {
-    transform: translateY(-22px) rotateX(4deg) rotateY(-14deg) rotateZ(-1.5deg);
+    transform: translateY(0);
   }
   100% {
-    transform: translateY(0px) rotateX(8deg) rotateY(-19deg) rotateZ(-2.5deg);
+    transform: translateY(-50%);
+  }
+}
+
+/* Cards Flutuantes 3D em Relevo Físico (Inspirado no Dribbble 27411482) */
+.iso-floating-card {
+  position: absolute;
+  background: rgba(18, 18, 24, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 25;
+  pointer-events: none;
+  color: #ffffff;
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.92),
+    0 8px 18px -4px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.card-eta {
+  bottom: 190px;
+  left: -28px;
+  transform: translateZ(55px);
+  animation: floatingCardBob1 6s ease-in-out infinite alternate;
+}
+
+.card-status {
+  top: 170px;
+  right: -24px;
+  transform: translateZ(42px);
+  animation: floatingCardBob2 6s ease-in-out infinite alternate;
+  animation-delay: -3s;
+}
+
+.card-bus-code {
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 5px 9px;
+  border-radius: 9px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+}
+
+.card-status-badge {
+  background: rgba(37, 99, 235, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 5px 9px;
+  border-radius: 9px;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-info strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.card-sub-text {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.live-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  display: inline-block;
+  animation: livePulseAnim 2s infinite;
+}
+
+@keyframes livePulseAnim {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+@keyframes floatingCardBob1 {
+  0% { transform: translateZ(52px) translateY(0); }
+  100% { transform: translateZ(64px) translateY(-10px); }
+}
+
+@keyframes floatingCardBob2 {
+  0% { transform: translateZ(40px) translateY(0); }
+  100% { transform: translateZ(52px) translateY(-8px); }
+}
+
+/* Animações Flutuantes 3D Deitado (Perspectiva Isométrica Macro) */
+@keyframes iphoneIsoDeitadoFloating {
+  0% {
+    transform: rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateY(0px) translateZ(0px);
+  }
+  50% {
+    transform: rotateX(46deg) rotateY(9deg) rotateZ(-26deg) translateY(-18px) translateZ(24px);
+  }
+  100% {
+    transform: rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateY(0px) translateZ(0px);
   }
 }
 
@@ -2576,15 +2712,44 @@ body:has(dialog[open]) {
     height: 22px;
     top: 8px;
   }
+  .iso-floating-card {
+    padding: 8px 12px;
+    border-radius: 14px;
+    gap: 8px;
+  }
+  .card-eta {
+    bottom: 120px;
+    left: -10px;
+    transform: translateZ(35px);
+  }
+  .card-status {
+    top: 110px;
+    right: -10px;
+    transform: translateZ(30px);
+  }
+  .card-bus-code {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+  .card-status-badge {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+  .card-info strong {
+    font-size: 11px;
+  }
+  .card-sub-text {
+    font-size: 10px;
+  }
   .motion-floor-shadow {
-    width: 240px;
-    height: 38px;
-    bottom: 20px;
+    width: 260px;
+    height: 60px;
+    bottom: 30px;
   }
   .motion-ambient-shadow {
-    width: 340px;
-    height: 60px;
-    bottom: 5px;
+    width: 380px;
+    height: 90px;
+    bottom: 10px;
   }
   .card-arrival {
     left: -5px;
