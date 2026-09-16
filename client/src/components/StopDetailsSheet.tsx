@@ -52,11 +52,11 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
         left: 0,
         right: 0,
         zIndex: 250,
-        backgroundColor: '#121214',
+        backgroundColor: 'var(--bg-sheet, #121214)',
         borderTopLeftRadius: '24px',
         borderTopRightRadius: '24px',
-        borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.85)',
+        borderTop: '1px solid var(--border-medium, rgba(255, 255, 255, 0.12))',
+        boxShadow: 'var(--shadow-sheet, 0 -10px 40px rgba(0, 0, 0, 0.85))',
         maxHeight: '70vh',
         display: 'flex',
         flexDirection: 'column',
@@ -64,32 +64,32 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
       }}
     >
       {/* Handle & Close */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 10px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 10px 20px', borderBottom: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div
             style={{
               width: '38px',
               height: '38px',
               borderRadius: '12px',
-              backgroundColor: '#18181B',
-              border: '1.5px solid #3B82F6',
+              backgroundColor: 'var(--bg-card, #18181B)',
+              border: '1.5px solid #2563EB',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#3B82F6',
+              color: '#2563EB',
               flexShrink: 0
             }}
           >
             <Bus size={20} />
           </div>
           <div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em' }}>
               {stop.stopName}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#A1A1AA', marginTop: '2px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-muted, #A1A1AA)', marginTop: '2px' }}>
               <span>Parada #{stop.stopId}</span>
               <span>•</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#3B82F6', fontWeight: 700 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#2563EB', fontWeight: 700 }}>
                 <Footprints size={12} />
                 {userLocation.isRealGPS ? `${distanceMeters} m em linha reta (~${walkMinutes} min estimados)` : 'GPS indisponível'}
               </span>
@@ -103,7 +103,7 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
             onClose();
           }}
           style={{
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: 'var(--bg-pill, rgba(255, 255, 255, 0.08))',
             border: 'none',
             borderRadius: '50%',
             width: '32px',
@@ -111,7 +111,7 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#FFFFFF',
+            color: 'var(--text-primary, #FFFFFF)',
             cursor: 'pointer'
           }}
           aria-label="Fechar"
@@ -122,15 +122,14 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
 
       {/* Passing Lines & Scheduled Times */}
       <div className="scroll-container" style={{ flex: 1, overflowY: 'auto', padding: '14px 20px 24px 20px' }}>
-        <div style={{ fontSize: '11px', fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>
+        <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-muted, #71717A)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>
           Linhas que Atendem Esta Parada
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {passingLines.length === 0 && <p>Linhas desta parada indisponíveis.</p>}
+          {passingLines.length === 0 && <p style={{ color: 'var(--text-muted, #A1A1AA)' }}>Linhas desta parada indisponíveis.</p>}
           {passingLines.map((line) => {
             const colorInfo = getBusLineColor(line.code);
-
 
             return (
               <div
@@ -141,10 +140,11 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
                   onClose();
                 }}
                 style={{
-                  backgroundColor: '#18181B',
+                  backgroundColor: 'var(--bg-card, #18181B)',
                   borderRadius: '16px',
                   padding: '14px 16px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  boxShadow: 'var(--shadow-card, 0 2px 8px rgba(0,0,0,0.2))',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -168,19 +168,19 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
                     {line.code}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {line.name.includes('-') ? line.name.slice(line.name.indexOf('-') + 1).trim() : line.name}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#A1A1AA', marginTop: '3px' }}>
-                      <Clock size={13} color="#3B82F6" />
-                      <span style={{ color: '#3B82F6', fontWeight: 700 }}>Previsão indisponível</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-muted, #A1A1AA)', marginTop: '3px' }}>
+                      <Clock size={13} color="#2563EB" />
+                      <span style={{ color: '#2563EB', fontWeight: 700 }}>Previsão indisponível</span>
                       <span>•</span>
                       <span>{colorInfo.serviceType}</span>
                     </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#F97316', fontSize: '12px', fontWeight: 700, marginLeft: '10px', flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#EA580C', fontSize: '12px', fontWeight: 700, marginLeft: '10px', flexShrink: 0 }}>
                   <span>Ver rota</span>
                   <ArrowRight size={14} />
                 </div>

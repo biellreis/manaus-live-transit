@@ -91,7 +91,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             width: '40px',
             height: '4px',
             borderRadius: '999px',
-            backgroundColor: 'rgba(255, 255, 255, 0.25)'
+            backgroundColor: 'var(--border-strong, rgba(255, 255, 255, 0.25))'
           }}
         />
       </div>
@@ -116,7 +116,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             </div>
 
             <div>
-              <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em' }}>
                 {selectedLine.name.split('-')[1]?.trim() || selectedLine.name}
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
@@ -136,7 +136,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   onCloseRoute();
                 }}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
+                  background: 'var(--bg-pill, rgba(255, 255, 255, 0.08))',
                   border: 'none',
                   borderRadius: '50%',
                   width: '34px',
@@ -144,7 +144,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#FFFFFF',
+                  color: 'var(--text-primary, #FFFFFF)',
                   cursor: 'pointer'
                 }}
                 aria-label="Voltar / Fechar rota"
@@ -161,7 +161,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           <div
             style={{
               display: 'flex',
-              backgroundColor: '#18181B',
+              backgroundColor: 'var(--bg-card, #18181B)',
+              border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
               borderRadius: '12px',
               padding: '3px',
               gap: '4px',
@@ -196,7 +197,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     border: 'none',
                     cursor: 'pointer',
                     backgroundColor: isSelected ? (isFirst ? '#2563EB' : '#EA580C') : 'transparent',
-                    color: '#FFFFFF',
+                    color: isSelected ? '#FFFFFF' : 'var(--text-secondary, #A1A1AA)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -218,13 +219,14 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         {!plannedTrip && (
           <div
             style={{
-              backgroundColor: '#18181B',
+              backgroundColor: 'var(--bg-card, #18181B)',
               borderRadius: '16px',
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              border: '1px solid rgba(255, 255, 255, 0.08)'
+              border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+              boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.3))'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -243,10 +245,10 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                 <Bus size={22} />
               </div>
               <div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF' }}>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)' }}>
                   Linha {selectedLine.code} • {isVolta ? 'Trajeto de Volta' : 'Trajeto de Ida'}
                 </div>
-                <div style={{ fontSize: '12px', color: '#A1A1AA', marginTop: '1px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted, #A1A1AA)', marginTop: '1px' }}>
                   {activeTrip.stops.length} paradas • {activeTrip.totalDistanceKm > 0 ? `${activeTrip.totalDistanceKm} km` : 'Percurso urbano'}
                 </div>
               </div>
@@ -261,11 +263,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   whiteSpace: 'nowrap',
                   fontSize: '11px',
                   fontWeight: 800,
-                  color: '#FFFFFF',
-                  backgroundColor: isWithinOperationalHours ? '#2563EB' : '#18181B',
+                  color: isWithinOperationalHours ? '#FFFFFF' : 'var(--text-primary, #FFFFFF)',
+                  backgroundColor: isWithinOperationalHours ? '#2563EB' : 'var(--bg-pill, #18181B)',
                   padding: '4px 10px',
                   borderRadius: '999px',
-                  border: isWithinOperationalHours ? 'none' : '1px solid #FFFFFF',
+                  border: isWithinOperationalHours ? 'none' : '1px solid var(--border-medium, #FFFFFF)',
                   lineHeight: 1
                 }}
               >
@@ -367,16 +369,16 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
               </div>
 
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 600 }}>Passa às</span>
-                <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>Passa às</span>
+                <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   {plannedTrip.etaTime || 'Em breve'}
                 </span>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                <MapPin size={15} style={{ color: '#60A5FA', marginTop: '2px', flexShrink: 0 }} />
+                <MapPin size={15} style={{ color: '#2563EB', marginTop: '2px', flexShrink: 0 }} />
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main, #FFFFFF)', lineHeight: 1.3 }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', lineHeight: 1.3 }}>
                     {plannedTrip.originStop.stopName}
                   </div>
                   {originPoint && isOriginTerminal && (
@@ -387,7 +389,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     </div>
                   )}
                   {!isOriginTerminal && plannedTrip.walkToStopMinutes !== null && plannedTrip.walkToStopMinutes > 0 && (
-                    <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '3px', fontWeight: 500 }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', marginTop: '3px', fontWeight: 500 }}>
                       Caminhada de {formatDistance(plannedTrip.walkToStopMeters)} ({plannedTrip.walkToStopMinutes} min a pé) até a parada
                     </div>
                   )}
@@ -401,11 +403,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     alignItems: 'center',
                     gap: '6px',
                     paddingTop: '6px',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.06)'
+                    borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))'
                   }}
                 >
-                  <Clock size={13} style={{ color: '#60A5FA' }} />
-                  <span style={{ fontSize: '11px', color: '#FFFFFF', fontWeight: 600 }}>Próximos:</span>
+                  <Clock size={13} style={{ color: '#2563EB' }} />
+                  <span style={{ fontSize: '11px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>Próximos:</span>
                   {plannedTrip.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
                     <span
                       key={bIdx}
@@ -432,7 +434,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   backgroundColor: 'var(--bg-card, #18181B)',
                   borderRadius: '16px',
                   padding: '12px 16px',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.15))',
                   boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.3))',
                   display: 'flex',
                   alignItems: 'flex-start',
@@ -444,8 +446,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     width: '32px',
                     height: '32px',
                     borderRadius: '50%',
-                    backgroundColor: '#000000',
-                    border: '2px solid #FFFFFF',
+                    backgroundColor: 'var(--text-primary, #000000)',
+                    border: '2px solid var(--bg-card, #FFFFFF)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -454,7 +456,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   }}
                   title="Troca de Ônibus"
                 >
-                  <ArrowRightLeft size={14} color="#FFFFFF" strokeWidth={2.8} />
+                  <ArrowRightLeft size={14} color="var(--bg-card, #FFFFFF)" strokeWidth={2.8} />
                 </div>
 
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -466,15 +468,15 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                         gap: '4px',
                         fontSize: '10px',
                         fontWeight: 800,
-                        backgroundColor: '#FFFFFF',
-                        color: '#000000',
+                        backgroundColor: 'var(--text-primary, #FFFFFF)',
+                        color: 'var(--bg-canvas, #000000)',
                         padding: '2px 7px',
                         borderRadius: '4px',
                         textTransform: 'uppercase',
                         letterSpacing: '0.04em'
                       }}
                     >
-                      <ArrowRightLeft size={11} color="#000000" strokeWidth={3} />
+                      <ArrowRightLeft size={11} color="var(--bg-canvas, #000000)" strokeWidth={3} />
                       Troca de Ônibus
                     </span>
                     <span style={{ fontSize: '11px', fontWeight: 800, backgroundColor: '#2563EB', color: '#FFFFFF', padding: '2px 8px', borderRadius: '4px' }}>
@@ -482,11 +484,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '4px' }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)', marginTop: '4px' }}>
                     {plannedTrip.transferHubName || plannedTrip.legs[0].destStop.stopName}
                   </div>
 
-                  <div style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-secondary, #A1A1AA)', marginTop: '2px' }}>
                     Baldeação para a <strong>Linha {plannedTrip.legs[1].line.code}</strong> ({plannedTrip.legs[1].line.name})
                   </div>
                 </div>
@@ -544,17 +546,17 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 
               {plannedTrip.destEtaTime && (
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 700 }}>Chegada às</span>
-                  <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 700 }}>Chegada às</span>
+                  <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
                     {plannedTrip.destEtaTime}
                   </span>
                 </div>
               )}
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                <MapPin size={15} style={{ color: '#FB923C', marginTop: '2px', flexShrink: 0 }} />
+                <MapPin size={15} style={{ color: '#EA580C', marginTop: '2px', flexShrink: 0 }} />
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main, #FFFFFF)', lineHeight: 1.3 }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', lineHeight: 1.3 }}>
                     {plannedTrip.destStop.stopName}
                   </div>
                   {destPoint && isDestTerminal && (
@@ -564,11 +566,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       </span>
                     </div>
                   )}
-                  <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '3px' }}>
-                    Destino: <strong style={{ color: '#FFFFFF' }}>{plannedTrip.destination.name}</strong>
+                  <div style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', marginTop: '3px' }}>
+                    Destino: <strong style={{ color: 'var(--text-primary, #FFFFFF)' }}>{plannedTrip.destination.name}</strong>
                   </div>
                   {!isDestTerminal && plannedTrip.walkFromStopMinutes !== null && plannedTrip.walkFromStopMinutes > 0 && (
-                    <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '3px', fontWeight: 500 }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', marginTop: '3px', fontWeight: 500 }}>
                       Caminhada de {formatDistance(plannedTrip.walkFromStopMeters)} ({plannedTrip.walkFromStopMinutes} min a pé) até o destino
                     </div>
                   )}

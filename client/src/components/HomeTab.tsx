@@ -95,7 +95,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
           style={{
             fontSize: '22px',
             fontWeight: 800,
-            color: '#FFFFFF',
+            color: 'var(--text-primary, #FFFFFF)',
             letterSpacing: '-0.03em',
             margin: 0
           }}
@@ -124,21 +124,21 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             onOpenSearch();
           }}
           style={{
-            backgroundColor: '#18181B',
+            backgroundColor: 'var(--bg-card, #18181B)',
             borderRadius: '999px',
             padding: '11px 16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.4))',
+            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.1))',
             cursor: 'pointer',
             transition: 'transform 0.1s ease'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Search size={18} color="#FFFFFF" />
-            <span style={{ fontSize: '15px', fontWeight: 600, color: '#A1A1AA' }}>
+            <Search size={18} color="var(--text-primary, #FFFFFF)" />
+            <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-muted, #A1A1AA)' }}>
               Para onde vamos?
             </span>
           </div>
@@ -147,10 +147,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             style={{
               padding: '5px 12px',
               borderRadius: '999px',
-              backgroundColor: '#27272A',
+              backgroundColor: 'var(--bg-pill, #27272A)',
               fontSize: '11.5px',
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--text-primary, #FFFFFF)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px'
@@ -166,11 +166,11 @@ export const HomeTab: React.FC<HomeTabProps> = ({
       <div style={{ padding: '0 18px 16px 18px' }}>
         <div
           style={{
-            backgroundColor: '#18181B',
+            backgroundColor: 'var(--bg-card, #18181B)',
             borderRadius: '18px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
             overflow: 'hidden',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)'
+            boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.4))'
           }}
         >
           {recentDestinations.slice(0, 2).map((dest, idx) => {
@@ -184,7 +184,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '10px 14px',
-                  borderBottom: idx === 0 ? '1px solid rgba(255, 255, 255, 0.06)' : 'none',
+                  borderBottom: idx === 0 ? '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))' : 'none',
                   cursor: 'pointer'
                 }}
               >
@@ -194,11 +194,11 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                       width: '32px',
                       height: '32px',
                       borderRadius: '50%',
-                      backgroundColor: '#27272A',
+                      backgroundColor: 'var(--bg-pill, #27272A)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#A1A1AA',
+                      color: 'var(--text-muted, #A1A1AA)',
                       flexShrink: 0
                     }}
                   >
@@ -206,10 +206,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {dest.title}
                     </div>
-                    <div style={{ fontSize: '11.5px', color: '#71717A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted, #71717A)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {dest.address}
                     </div>
                   </div>
@@ -229,7 +229,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                   >
                     {dest.lineCode}
                   </span>
-                  <ArrowRight size={14} color="#71717A" />
+                  <ArrowRight size={14} color="var(--text-muted, #71717A)" />
                 </div>
               </div>
             );
@@ -240,10 +240,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({
       {/* "Para você" section with clear, intuitive names that everyday commuters understand */}
       <div style={{ padding: '0 18px 18px 18px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-          <div style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em' }}>
             Para você
           </div>
-          <span style={{ fontSize: '11.5px', color: '#71717A', fontWeight: 600 }}>Atalhos</span>
+          <span style={{ fontSize: '11.5px', color: 'var(--text-muted, #71717A)', fontWeight: 600 }}>Atalhos</span>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
@@ -260,17 +260,17 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                backgroundColor: '#18181B',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: 'var(--bg-card, #18181B)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)'
+                boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.4))'
               }}
             >
               <Bus size={24} color="#3B82F6" />
             </div>
-            <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#E4E4E7', marginTop: '8px', textAlign: 'center' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary, #E4E4E7)', marginTop: '8px', textAlign: 'center' }}>
               Ônibus Direto
             </span>
           </div>
@@ -288,17 +288,17 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                backgroundColor: '#18181B',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: 'var(--bg-card, #18181B)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)'
+                boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.4))'
               }}
             >
               <MapPin size={23} color="#F97316" />
             </div>
-            <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#E4E4E7', marginTop: '8px', textAlign: 'center' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary, #E4E4E7)', marginTop: '8px', textAlign: 'center' }}>
               Terminais
             </span>
           </div>
@@ -316,17 +316,17 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                backgroundColor: '#18181B',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: 'var(--bg-card, #18181B)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)'
+                boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.4))'
               }}
             >
               <Compass size={23} color="#3B82F6" />
             </div>
-            <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#E4E4E7', marginTop: '8px', textAlign: 'center' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary, #E4E4E7)', marginTop: '8px', textAlign: 'center' }}>
               Bairros
             </span>
           </div>
@@ -344,17 +344,17 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                backgroundColor: '#18181B',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: 'var(--bg-card, #18181B)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)'
+                boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.4))'
               }}
             >
               <ShieldCheck size={23} color="#F97316" />
             </div>
-            <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#E4E4E7', marginTop: '8px', textAlign: 'center' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary, #E4E4E7)', marginTop: '8px', textAlign: 'center' }}>
               Trânsito
             </span>
           </div>
@@ -363,7 +363,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
 
       {/* Rotas Mais Populares de Manaus */}
       <div style={{ padding: '0 20px 24px 20px' }}>
-        <div style={{ fontSize: '17px', fontWeight: 700, color: '#FFFFFF', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+        <div style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', marginBottom: '12px', letterSpacing: '-0.02em' }}>
           Principais Linhas de Manaus
         </div>
 
@@ -378,15 +378,15 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                   onSelectLine(line);
                 }}
                 style={{
-                  backgroundColor: '#18181B',
+                  backgroundColor: 'var(--bg-card, #18181B)',
                   borderRadius: '16px',
                   padding: '14px 16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+                  boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.3))'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
@@ -407,16 +407,16 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {line.name}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#71717A', marginTop: '2px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted, #71717A)', marginTop: '2px' }}>
                       {colorInfo.serviceType} • Manaus
                     </div>
                   </div>
                 </div>
 
-                <ArrowRight size={18} color="#71717A" style={{ marginLeft: '12px', flexShrink: 0 }} />
+                <ArrowRight size={18} color="var(--text-muted, #71717A)" style={{ marginLeft: '12px', flexShrink: 0 }} />
               </div>
             );
           })}

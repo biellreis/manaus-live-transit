@@ -619,14 +619,14 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                 width: '42px',
                 height: '42px',
                 borderRadius: '50%',
-                backgroundColor: '#000000',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#FFFFFF',
+                backgroundColor: 'var(--bg-card, #000000)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.15))',
+                color: 'var(--text-primary, #FFFFFF)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)'
+                boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.6))'
               }}
               aria-label="Voltar para busca"
               title="Voltar à busca"
@@ -657,7 +657,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
           >
             {/* Grab Handle */}
             <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 4px 0' }}>
-              <div style={{ width: '38px', height: '4px', borderRadius: '2px', backgroundColor: 'rgba(255, 255, 255, 0.25)' }} />
+              <div style={{ width: '38px', height: '4px', borderRadius: '2px', backgroundColor: 'var(--border-strong, rgba(255, 255, 255, 0.25))' }} />
             </div>
 
             {/* Content Scrollable Box */}
@@ -665,14 +665,14 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               {/* Loading Skeleton */}
               {!planResult && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '8px 0' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted, #A1A1AA)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     Calculando as Melhores Opções...
                   </div>
                   {[1, 2].map((k) => (
                     <div
                       key={k}
                       style={{
-                        backgroundColor: '#18181B',
+                        backgroundColor: 'var(--bg-card, #18181B)',
                         borderRadius: '16px',
                         padding: '16px',
                         height: '72px',
@@ -682,10 +682,10 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                         gap: '14px'
                       }}
                     >
-                      <div style={{ width: '46px', height: '46px', borderRadius: '12px', backgroundColor: '#27272A' }} />
+                      <div style={{ width: '46px', height: '46px', borderRadius: '12px', backgroundColor: 'var(--bg-pill, #27272A)' }} />
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        <div style={{ width: '60%', height: '14px', borderRadius: '4px', backgroundColor: '#27272A' }} />
-                        <div style={{ width: '80%', height: '10px', borderRadius: '4px', backgroundColor: '#27272A' }} />
+                        <div style={{ width: '60%', height: '14px', borderRadius: '4px', backgroundColor: 'var(--bg-pill, #27272A)' }} />
+                        <div style={{ width: '80%', height: '10px', borderRadius: '4px', backgroundColor: 'var(--bg-pill, #27272A)' }} />
                       </div>
                     </div>
                   ))}
@@ -695,7 +695,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               {/* Direct Bus Route Options List */}
               {planResult && planResult.options.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted, #A1A1AA)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     Linhas de Ônibus Disponíveis ({planResult.options.length})
                   </div>
 
@@ -711,8 +711,8 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                           setSelectedOptionIndex(idx);
                         }}
                         style={{
-                          backgroundColor: isSelected ? 'rgba(37, 99, 235, 0.14)' : '#18181B',
-                          border: isSelected ? '2px solid #FFFFFF' : '1px solid rgba(255, 255, 255, 0.08)',
+                          backgroundColor: isSelected ? 'rgba(37, 99, 235, 0.14)' : 'var(--bg-card, #18181B)',
+                          border: isSelected ? '2px solid #2563EB' : '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                           borderRadius: '16px',
                           padding: '14px 16px',
                           display: 'flex',
@@ -745,7 +745,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                                   position: 'absolute',
                                   bottom: '-4px',
                                   right: '-4px',
-                                  backgroundColor: '#18181B',
+                                  backgroundColor: 'var(--bg-card, #18181B)',
                                   border: '2px solid #FFFFFF',
                                   borderRadius: '50%',
                                   width: '19px',
@@ -764,17 +764,17 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                              <span style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF' }}>
+                              <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)' }}>
                                 Linha {opt.title}
                               </span>
                               {opt.totalMinutes && (
-                                <span style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 700, backgroundColor: 'rgba(255, 255, 255, 0.08)', padding: '1px 6px', borderRadius: '4px' }}>
+                                <span style={{ fontSize: '11px', color: 'var(--text-secondary, #CBD5E1)', fontWeight: 700, backgroundColor: 'var(--bg-pill, rgba(255, 255, 255, 0.08))', padding: '1px 6px', borderRadius: '4px' }}>
                                   {opt.totalMinutes} min
                                 </span>
                               )}
                             </div>
 
-                            <div style={{ fontSize: '12px', color: '#A1A1AA', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted, #A1A1AA)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {opt.subtitle}
                             </div>
 
@@ -797,13 +797,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               </span>
 
                               {opt.destEtaTime && (
-                                <span style={{ fontSize: '11px', color: '#FFFFFF', fontWeight: 700 }}>
+                                <span style={{ fontSize: '11px', color: 'var(--text-primary, #FFFFFF)', fontWeight: 700 }}>
                                   • Chega às {opt.destEtaTime}
                                 </span>
                               )}
 
                               {opt.upcomingBuses && opt.upcomingBuses.length > 0 && (
-                                <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
+                                <span style={{ fontSize: '11px', color: 'var(--text-muted, #94A3B8)', fontWeight: 600 }}>
                                   • Próximos: {opt.upcomingBuses.map((b) => b.time).join(', ')}
                                 </span>
                               )}
@@ -814,7 +814,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                         <div style={{ textAlign: 'right', flexShrink: 0, paddingLeft: '8px' }}>
                           {opt.etaTime && typeof opt.etaMinutes === 'number' ? (
                             <div>
-                              <div style={{ fontSize: '16px', fontWeight: 900, color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                              <div style={{ fontSize: '16px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
                                 {opt.etaTime}
                               </div>
                               <div
@@ -832,19 +832,19 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                                 {opt.etaMinutes <= 1 ? 'Chegando' : `em ${opt.etaMinutes} min`}
                               </div>
                               {opt.destEtaTime && (
-                                <div style={{ fontSize: '10.5px', color: '#94A3B8', marginTop: '3px', fontWeight: 600 }}>
+                                <div style={{ fontSize: '10.5px', color: 'var(--text-muted, #94A3B8)', marginTop: '3px', fontWeight: 600 }}>
                                   Destino: {opt.destEtaTime}
                                 </div>
                               )}
                             </div>
                           ) : (
                             <div>
-                              <div style={{ fontSize: '15px', fontWeight: 800, color: '#FFFFFF' }}>{opt.fare}</div>
-                              <div style={{ fontSize: '10px', color: '#71717A', marginTop: '2px' }}>
+                              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)' }}>{opt.fare}</div>
+                              <div style={{ fontSize: '10px', color: 'var(--text-muted, #71717A)', marginTop: '2px' }}>
                                 {opt.liveBusCount ? `${opt.liveBusCount} na rota` : 'Em operação'}
                               </div>
                               {opt.totalMinutes && (
-                                <div style={{ fontSize: '10.5px', color: '#94A3B8', marginTop: '2px', fontWeight: 600 }}>
+                                <div style={{ fontSize: '10.5px', color: 'var(--text-muted, #94A3B8)', marginTop: '2px', fontWeight: 600 }}>
                                   ~{opt.totalMinutes} min
                                 </div>
                               )}
@@ -862,21 +862,21 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
             {/* Bottom Confirm Action Button */}
             {activeOption && (
-              <div style={{ padding: '12px 16px max(env(safe-area-inset-bottom, 0px), 16px) 16px', display: 'flex', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#121214' }}>
+              <div style={{ padding: '12px 16px max(env(safe-area-inset-bottom, 0px), 16px) 16px', display: 'flex', gap: '10px', borderTop: '1px solid var(--border-subtle, rgba(255,255,255,0.08))', backgroundColor: 'var(--bg-sheet, #121214)' }}>
                 <button
                   id="uber-confirm-trip-btn"
                   onClick={handleConfirmRoute}
                   style={{
                     flex: 1,
-                    backgroundColor: '#FFFFFF',
-                    color: '#000000',
+                    backgroundColor: 'var(--bg-primary-btn, #FFFFFF)',
+                    color: 'var(--text-primary-btn, #000000)',
                     border: 'none',
                     borderRadius: '12px',
                     padding: '15px 0',
                     fontSize: '16px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 16px rgba(255, 255, 255, 0.2)'
+                    boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.2))'
                   }}
                 >
                   Confirmar Trajeto
@@ -913,7 +913,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#FFFFFF',
+                color: 'var(--text-primary, #FFFFFF)',
                 cursor: 'pointer',
                 padding: '8px',
                 borderRadius: '50%',
@@ -925,7 +925,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
             >
               <ArrowLeft size={22} />
             </button>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em', margin: 0 }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', margin: 0 }}>
               Planeje sua próxima rota em Manaus
             </h2>
           </div>
@@ -934,18 +934,18 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
           <div style={{ padding: '8px 16px 12px 16px' }}>
             <div
               style={{
-                backgroundColor: '#18181B',
+                backgroundColor: 'var(--bg-card, #18181B)',
                 borderRadius: '16px',
                 padding: '12px 14px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                border: '1px solid rgba(255, 255, 255, 0.12)'
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))'
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', width: '16px', flexShrink: 0 }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#3B82F6', border: '2px solid #FFFFFF' }} />
-                <div style={{ width: '2px', height: '32px', backgroundColor: 'rgba(255, 255, 255, 0.25)' }} />
+                <div style={{ width: '2px', height: '32px', backgroundColor: 'var(--border-medium, rgba(255, 255, 255, 0.25))' }} />
                 <div style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: '#F97316', border: '2px solid #FFFFFF' }} />
               </div>
 
@@ -968,7 +968,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                       background: 'transparent',
                       border: 'none',
                       outline: 'none',
-                      color: activeField === 'origin' ? '#3B82F6' : '#FFFFFF',
+                      color: activeField === 'origin' ? '#3B82F6' : 'var(--text-primary, #FFFFFF)',
                       fontSize: '14px',
                       fontWeight: 600
                     }}
@@ -1003,7 +1003,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                   )}
                 </div>
 
-                <div style={{ height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)' }} />
+                <div style={{ height: '1px', backgroundColor: 'var(--border-subtle, rgba(255, 255, 255, 0.08))' }} />
 
                 {/* Destination Input */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -1023,7 +1023,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                       background: 'transparent',
                       border: 'none',
                       outline: 'none',
-                      color: '#FFFFFF',
+                      color: 'var(--text-primary, #FFFFFF)',
                       fontSize: '15px',
                       fontWeight: 700
                     }}
@@ -1153,25 +1153,25 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                   justifyContent: 'space-between',
                   padding: '12px 14px',
                   borderRadius: '14px',
-                  backgroundColor: '#18181B',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  backgroundColor: 'var(--bg-card, #18181B)',
+                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                   cursor: 'pointer'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: '#27272A', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A1A1AA', flexShrink: 0 }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'var(--bg-pill, #27272A)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted, #A1A1AA)', flexShrink: 0 }}>
                     <MapPin size={16} />
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {item.name}
                     </div>
-                    <div style={{ fontSize: '11.5px', color: '#71717A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted, #71717A)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {item.subtitle}
                     </div>
                   </div>
                 </div>
-                <ChevronRight size={16} color="#71717A" />
+                <ChevronRight size={16} color="var(--text-muted, #71717A)" />
               </div>
             ))}
 
@@ -1191,7 +1191,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                           localStorage.removeItem(RECENT_SEARCHES_KEY);
                           setRecentSearches([]);
                         }}
-                        style={{ background: 'none', border: 'none', color: '#71717A', fontSize: '11px', cursor: 'pointer', textDecoration: 'underline' }}
+                        style={{ background: 'none', border: 'none', color: 'var(--text-muted, #71717A)', fontSize: '11px', cursor: 'pointer', textDecoration: 'underline' }}
                       >
                         Limpar
                       </button>
@@ -1217,10 +1217,10 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               <History size={16} />
                             </div>
                             <div style={{ minWidth: 0, flex: 1 }}>
-                              <div style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {item.name}
                               </div>
-                              <div style={{ fontSize: '11.5px', color: '#94A3B8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              <div style={{ fontSize: '11.5px', color: 'var(--text-muted, #94A3B8)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {item.subtitle}
                               </div>
                             </div>
@@ -1232,7 +1232,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                   </div>
                 )}
 
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '12px 0 6px 0' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted, #71717A)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '12px 0 6px 0' }}>
                   Terminais e Estações de Integração (T1-T6 / E1-E4)
                 </div>
                 {MANAUS_POPULAR_ADDRESSES.map((item) => (
@@ -1245,8 +1245,8 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                       justifyContent: 'space-between',
                       padding: '12px 14px',
                       borderRadius: '14px',
-                      backgroundColor: '#18181B',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      backgroundColor: 'var(--bg-card, #18181B)',
+                      border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                       cursor: 'pointer'
                     }}
                   >
@@ -1255,22 +1255,22 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                         width: '34px',
                         height: '34px',
                         borderRadius: '50%',
-                        backgroundColor: item.type === 'hub' ? 'rgba(59, 130, 246, 0.18)' : '#27272A',
+                        backgroundColor: item.type === 'hub' ? 'rgba(59, 130, 246, 0.18)' : 'var(--bg-pill, #27272A)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: item.type === 'hub' ? '#60A5FA' : '#A1A1AA',
+                        color: item.type === 'hub' ? '#60A5FA' : 'var(--text-muted, #A1A1AA)',
                         flexShrink: 0
                       }}>
                         {item.type === 'hub' ? (
                           <Bus size={16} color="#60A5FA" />
                         ) : (
-                          <MapPin size={16} color={item.id.includes('saporo') ? '#F97316' : item.id.includes('imprensa') ? '#3B82F6' : '#A1A1AA'} />
+                          <MapPin size={16} color={item.id.includes('saporo') ? '#F97316' : item.id.includes('imprensa') ? '#3B82F6' : 'var(--text-muted, #A1A1AA)'} />
                         )}
                       </div>
                       <div style={{ minWidth: 0, flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {item.name}
                           </span>
                           {item.type === 'hub' && item.categoryLabel && (
@@ -1287,12 +1287,12 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: '11.5px', color: '#71717A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <div style={{ fontSize: '11.5px', color: 'var(--text-muted, #71717A)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {item.subtitle}
                         </div>
                       </div>
                     </div>
-                    <ChevronRight size={16} color={item.type === 'hub' ? '#60A5FA' : '#71717A'} />
+                    <ChevronRight size={16} color={item.type === 'hub' ? '#60A5FA' : 'var(--text-muted, #71717A)'} />
                   </div>
                 ))}
               </>

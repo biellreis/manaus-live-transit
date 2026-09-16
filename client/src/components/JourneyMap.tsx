@@ -527,23 +527,27 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
           z-index: 30 !important;
         }
         .journey-map-container .maplibregl-ctrl-group {
-          background-color: #18181B !important;
-          border: 1px solid rgba(255, 255, 255, 0.2) !important;
+          background-color: var(--bg-card, #18181B) !important;
+          border: 1px solid var(--border-medium, rgba(255, 255, 255, 0.2)) !important;
           border-radius: 12px !important;
           overflow: hidden !important;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.6) !important;
+          box-shadow: var(--shadow-card, 0 4px 14px rgba(0,0,0,0.6)) !important;
         }
         .journey-map-container .maplibregl-ctrl-group button {
           width: 38px !important;
           height: 38px !important;
           background: transparent !important;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+          border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12)) !important;
         }
         .journey-map-container .maplibregl-ctrl-group button:last-child {
           border-bottom: none !important;
         }
         .journey-map-container .maplibregl-ctrl-icon {
           filter: invert(1) brightness(2) !important;
+        }
+        [data-theme="light"] .journey-map-container .maplibregl-ctrl-icon,
+        .light-theme .journey-map-container .maplibregl-ctrl-icon {
+          filter: none !important;
         }
       `}</style>
       <div className="maplibre-container maplibre-dark-mode" ref={container} style={{ width: '100%', height: '100%' }} />

@@ -228,7 +228,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
             style={{
               fontSize: '26px',
               fontWeight: 800,
-              color: '#FFFFFF',
+              color: 'var(--text-primary, #FFFFFF)',
               letterSpacing: '-0.03em',
               margin: 0
             }}
@@ -238,7 +238,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
           <p
             style={{
               fontSize: '13px',
-              color: '#A1A1AA',
+              color: 'var(--text-muted, #A1A1AA)',
               margin: '4px 0 0 0',
               fontWeight: 500
             }}
@@ -251,8 +251,8 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         <button
           onClick={handleRefresh}
           style={{
-            backgroundColor: '#18181B',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
+            backgroundColor: 'var(--bg-card, #18181B)',
+            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
             borderRadius: '50%',
             width: '42px',
             height: '42px',
@@ -261,7 +261,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
             justifyContent: 'center',
             cursor: 'pointer',
             color: '#3B82F6',
-            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+            boxShadow: 'var(--shadow-card, 0 4px 14px rgba(0, 0, 0, 0.4))',
             outline: 'none',
             flexShrink: 0
           }}
@@ -284,11 +284,11 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         style={{
           margin: '0 20px 14px',
           padding: '10px 14px',
-          background: '#18181B',
+          background: 'var(--bg-card, #18181B)',
           borderRadius: 12,
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
           fontSize: '13px',
-          color: '#A1A1AA',
+          color: 'var(--text-muted, #A1A1AA)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -304,7 +304,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               display: 'inline-block'
             }}
           />
-          <span style={{ fontWeight: 600, color: '#E4E4E7' }}>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary, #E4E4E7)' }}>
             {isLoading && !trafficData
               ? 'Consultando dados de trânsito…'
               : loadError && !trafficData
@@ -342,9 +342,9 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 fontSize: '12px',
                 fontWeight: 700,
                 whiteSpace: 'nowrap',
-                border: isActive ? `1px solid ${tab.activeColor}` : '1px solid rgba(255, 255, 255, 0.08)',
-                backgroundColor: isActive ? tab.activeColor : '#18181B',
-                color: isActive ? '#FFFFFF' : '#A1A1AA',
+                border: isActive ? `1px solid ${tab.activeColor}` : '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                backgroundColor: isActive ? tab.activeColor : 'var(--bg-card, #18181B)',
+                color: isActive ? '#FFFFFF' : 'var(--text-muted, #A1A1AA)',
                 cursor: 'pointer',
                 outline: 'none',
                 transition: 'all 0.15s ease',
@@ -368,12 +368,12 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
             <div
               key={n.id}
               style={{
-                backgroundColor: '#141417',
+                backgroundColor: 'var(--bg-card, #141417)',
                 borderRadius: '18px',
                 padding: '18px',
-                border: '1px solid rgba(255, 255, 255, 0.09)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.09))',
                 borderLeft: `4px solid ${badge.bg}`,
-                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
+                boxShadow: 'var(--shadow-card, 0 6px 20px rgba(0, 0, 0, 0.4))',
                 display: 'flex',
                 flexDirection: 'column'
               }}
@@ -400,7 +400,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                   <span>{badge.label}</span>
                 </span>
 
-                <span style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 600 }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)', fontWeight: 600 }}>
                   {n.timestamp}
                 </span>
               </div>
@@ -410,7 +410,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 style={{
                   fontSize: '20px',
                   fontWeight: 800,
-                  color: '#FFFFFF',
+                  color: 'var(--text-primary, #FFFFFF)',
                   letterSpacing: '-0.02em',
                   lineHeight: '1.25',
                   marginBottom: '3px'
@@ -423,7 +423,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               <div
                 style={{
                   fontSize: '13px',
-                  color: '#A1A1AA',
+                  color: 'var(--text-muted, #A1A1AA)',
                   fontWeight: 500,
                   marginBottom: '14px'
                 }}
@@ -436,7 +436,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 style={{
                   fontSize: '11px',
                   fontWeight: 700,
-                  color: '#71717A',
+                  color: 'var(--text-muted, #71717A)',
                   letterSpacing: '0.05em',
                   textTransform: 'uppercase',
                   marginBottom: '6px'
@@ -449,7 +449,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               <div
                 style={{
                   fontSize: '13.5px',
-                  color: '#E4E4E7',
+                  color: 'var(--text-secondary, #E4E4E7)',
                   lineHeight: '1.5',
                   fontWeight: 400
                 }}

@@ -110,7 +110,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
         inset: 0,
         zIndex: 300,
         backgroundColor: 'var(--bg-canvas, #09090B)',
-        color: 'var(--text-main, #FFFFFF)',
+        color: 'var(--text-primary, #FFFFFF)',
         display: 'flex',
         flexDirection: 'column',
         animation: 'fadeIn 0.2s ease-out'
@@ -139,9 +139,9 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              backgroundColor: 'var(--bg-pill, rgba(255, 255, 255, 0.08))',
               border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
-              color: 'var(--text-main, #FFFFFF)',
+              color: 'var(--text-primary, #FFFFFF)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -159,7 +159,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                 style={{
                   fontSize: '13px',
                   fontWeight: 900,
-                  backgroundColor: isVolta ? '#F97316' : '#2563EB',
+                  backgroundColor: isVolta ? '#EA580C' : '#2563EB',
                   color: '#FFFFFF',
                   padding: '3px 9px',
                   borderRadius: '6px',
@@ -169,7 +169,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
               >
                 Linha {lineCode}
               </span>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-sub, #A1A1AA)' }}>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted, #A1A1AA)' }}>
                 {stops.length} Paradas no Trajeto
               </span>
             </div>
@@ -178,7 +178,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
               style={{
                 fontSize: '15px',
                 fontWeight: 800,
-                color: 'var(--text-main, #FFFFFF)',
+                color: 'var(--text-primary, #FFFFFF)',
                 marginTop: '3px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -197,9 +197,9 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
             width: '36px',
             height: '36px',
             borderRadius: '50%',
-            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            backgroundColor: 'var(--bg-pill, rgba(255, 255, 255, 0.08))',
             border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
-            color: 'var(--text-main, #FFFFFF)',
+            color: 'var(--text-primary, #FFFFFF)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -244,10 +244,10 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                 <Bus size={20} />
               </div>
               <div>
-                <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)' }}>
                   {activeVehicles.length} {activeVehicles.length === 1 ? 'Ônibus em circulação' : 'Ônibus em circulação'}
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted, #A1A1AA)', marginTop: '2px' }}>
                   Monitoramento em tempo real via GPS ({isVolta ? 'Trajeto de Volta' : 'Trajeto de Ida'})
                 </div>
               </div>
@@ -318,26 +318,26 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                   cursor: 'pointer',
                   borderRadius: '14px',
                   backgroundColor: isUserBoard
-                    ? 'rgba(37, 99, 235, 0.18)'
+                    ? 'rgba(37, 99, 235, 0.12)'
                     : isUserDest
-                      ? 'rgba(234, 88, 12, 0.18)'
+                      ? 'rgba(234, 88, 12, 0.12)'
                       : isTransferStop
-                        ? 'rgba(255, 255, 255, 0.12)'
+                        ? 'var(--bg-pill, rgba(255, 255, 255, 0.08))'
                         : isHub
-                          ? 'rgba(255, 255, 255, 0.05)'
+                          ? 'var(--bg-card, rgba(255, 255, 255, 0.04))'
                           : hasBus
-                            ? (hasLeadBus ? 'rgba(37, 99, 235, 0.12)' : 'rgba(249, 115, 22, 0.08)')
+                            ? (hasLeadBus ? 'rgba(37, 99, 235, 0.08)' : 'rgba(234, 88, 12, 0.08)')
                             : 'transparent',
                   border: isUserBoard
-                    ? '1.5px solid #3B82F6'
+                    ? '1.5px solid #2563EB'
                     : isUserDest
                       ? '1.5px solid #EA580C'
                       : isTransferStop
-                        ? '1.5px solid #FFFFFF'
+                        ? '1.5px solid var(--border-strong, #FFFFFF)'
                         : isHub
-                          ? '1px solid rgba(255, 255, 255, 0.2)'
+                          ? '1px solid var(--border-medium, rgba(255, 255, 255, 0.15))'
                           : hasBus
-                            ? `1px solid ${hasLeadBus ? 'rgba(37, 99, 235, 0.3)' : 'rgba(249, 115, 22, 0.25)'}`
+                            ? `1px solid ${hasLeadBus ? '#2563EB' : '#EA580C'}`
                             : '1px solid transparent',
                   marginBottom: '4px',
                   transition: 'all 0.15s ease'
@@ -351,9 +351,9 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         width: '22px',
                         height: '22px',
                         borderRadius: '6px',
-                        backgroundColor: hasLeadBus ? '#2563EB' : '#F97316',
-                        border: '2px solid #FFFFFF',
-                        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.8)',
+                        backgroundColor: hasLeadBus ? '#2563EB' : '#EA580C',
+                        border: '2px solid var(--bg-card, #FFFFFF)',
+                        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -368,17 +368,17 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         width: '22px',
                         height: '22px',
                         borderRadius: '50%',
-                        backgroundColor: '#18181B',
-                        border: '2px solid #FFFFFF',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
+                        backgroundColor: 'var(--text-primary, #18181B)',
+                        border: '2px solid var(--bg-card, #FFFFFF)',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#FFFFFF'
+                        color: 'var(--bg-canvas, #FFFFFF)'
                       }}
                       title="Troca de ônibus"
                     >
-                      <ArrowRightLeft size={11} color="#FFFFFF" strokeWidth={3} />
+                      <ArrowRightLeft size={11} color="currentColor" strokeWidth={3} />
                     </div>
                   ) : isUserBoard ? (
                     <div
@@ -387,7 +387,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         height: '20px',
                         borderRadius: '50%',
                         backgroundColor: '#2563EB',
-                        border: '2px solid #FFFFFF',
+                        border: '2px solid var(--bg-card, #FFFFFF)',
                         boxShadow: '0 2px 8px rgba(37, 99, 235, 0.6)',
                         display: 'flex',
                         alignItems: 'center',
@@ -404,7 +404,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         height: '20px',
                         borderRadius: '50%',
                         backgroundColor: '#EA580C',
-                        border: '2px solid #FFFFFF',
+                        border: '2px solid var(--bg-card, #FFFFFF)',
                         boxShadow: '0 2px 8px rgba(234, 88, 12, 0.6)',
                         display: 'flex',
                         alignItems: 'center',
@@ -421,13 +421,13 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         height: isHub ? '14px' : isFirst || isLast ? '12px' : '9px',
                         borderRadius: isHub ? '3px' : '50%',
                         backgroundColor: isHub
-                          ? '#FFFFFF'
+                          ? 'var(--text-primary, #FFFFFF)'
                           : isFirst || isLast
-                            ? (isVolta ? '#F97316' : '#2563EB')
+                            ? (isVolta ? '#EA580C' : '#2563EB')
                             : isPassed
-                              ? 'rgba(255, 255, 255, 0.25)'
-                              : 'rgba(255, 255, 255, 0.6)',
-                        border: isHub ? '2px solid #2563EB' : '1.5px solid rgba(0, 0, 0, 0.3)'
+                              ? 'var(--border-subtle, rgba(255, 255, 255, 0.25))'
+                              : 'var(--text-muted, rgba(255, 255, 255, 0.6))',
+                        border: isHub ? '2px solid #2563EB' : '1.5px solid var(--border-subtle, rgba(0, 0, 0, 0.3))'
                       }}
                     />
                   )}
@@ -437,7 +437,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                       style={{
                         width: '2px',
                         height: '24px',
-                        backgroundColor: isPassed ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.35)',
+                        backgroundColor: isPassed ? 'var(--border-subtle, rgba(255, 255, 255, 0.15))' : 'var(--border-medium, rgba(255, 255, 255, 0.35))',
                         margin: '3px 0'
                       }}
                     />
@@ -448,7 +448,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-sub, #71717A)', minWidth: '22px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-muted, #71717A)', minWidth: '22px' }}>
                         #{index + 1}
                       </span>
                       <span
@@ -456,12 +456,10 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                           fontSize: '14.5px',
                           fontWeight: isUserBoard || isUserDest || isTransferStop || isHub ? 800 : 700,
                           color: isUserBoard
-                            ? '#60A5FA'
+                            ? '#2563EB'
                             : isUserDest
-                              ? '#FB923C'
-                              : isTransferStop
-                                ? '#FFFFFF'
-                                : 'var(--text-main, #FFFFFF)'
+                              ? '#EA580C'
+                              : 'var(--text-primary, #FFFFFF)'
                         }}
                       >
                         {stop.stopName}
@@ -475,7 +473,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                           fontSize: '11px',
                           fontWeight: 900,
                           color: '#FFFFFF',
-                          backgroundColor: hasLeadBus ? '#2563EB' : '#F97316',
+                          backgroundColor: hasLeadBus ? '#2563EB' : '#EA580C',
                           padding: '2px 8px',
                           borderRadius: '6px',
                           flexShrink: 0
@@ -499,8 +497,8 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                       </span>
                     )}
                     {isTransferStop && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800, backgroundColor: '#FFFFFF', color: '#000000', padding: '2px 7px', borderRadius: '4px' }}>
-                        <ArrowRightLeft size={10} color="#000000" strokeWidth={3} />
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800, backgroundColor: 'var(--text-primary, #FFFFFF)', color: 'var(--bg-canvas, #000000)', padding: '2px 7px', borderRadius: '4px' }}>
+                        <ArrowRightLeft size={10} color="currentColor" strokeWidth={3} />
                         Troca de Ônibus
                       </span>
                     )}
@@ -510,7 +508,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                       </span>
                     )}
                     {hasBus && busesHere.map((b, bIdx) => (
-                      <span key={bIdx} style={{ fontSize: '10px', color: '#94A3B8', fontWeight: 600 }}>
+                      <span key={bIdx} style={{ fontSize: '10px', color: 'var(--text-muted, #94A3B8)', fontWeight: 600 }}>
                         Prefixo: {b.bus.id} {b.bus.speedKmh ? `• ${Math.round(b.bus.speedKmh)} km/h` : ''}
                       </span>
                     ))}

@@ -261,7 +261,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 fontSize: '11px',
                 fontWeight: 600,
                 border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--border-subtle)',
-                background: isActive ? 'rgba(37, 99, 235, 0.2)' : 'rgba(15, 23, 42, 0.85)',
+                background: isActive ? 'rgba(37, 99, 235, 0.2)' : 'var(--bg-card, rgba(15, 23, 42, 0.85))',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',

@@ -214,8 +214,8 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
         height: '136px',
         borderRadius: '18px',
         overflow: 'hidden',
-        border: '1px solid rgba(255, 255, 255, 0.12)',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
+        border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
+        boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.5))',
         cursor: 'pointer',
         userSelect: 'none',
         WebkitUserSelect: 'none'
@@ -243,15 +243,15 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
             width: '36px',
             height: '36px',
             borderRadius: '50%',
-            backgroundColor: 'rgba(9, 9, 11, 0.9)',
+            backgroundColor: 'var(--bg-card, rgba(9, 9, 11, 0.9))',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            color: '#3B82F6',
+            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.15))',
+            color: '#2563EB',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+            boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.5))',
             outline: 'none'
           }}
           title="Minha Localização GPS"
@@ -266,15 +266,15 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
             width: '36px',
             height: '36px',
             borderRadius: '50%',
-            backgroundColor: 'rgba(9, 9, 11, 0.9)',
+            backgroundColor: 'var(--bg-card, rgba(9, 9, 11, 0.9))',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            color: '#FFFFFF',
+            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.15))',
+            color: 'var(--text-primary, #FFFFFF)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+            boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.5))',
             outline: 'none'
           }}
           title="Ver mapa completo"

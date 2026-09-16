@@ -71,7 +71,7 @@ export const LineExplorerModal: React.FC<LineExplorerModalProps> = ({
         position: 'fixed',
         inset: 0,
         zIndex: 50,
-        background: 'rgba(5, 8, 17, 0.82)',
+        background: 'var(--bg-canvas, rgba(5, 8, 17, 0.82))',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         display: 'flex',
@@ -87,7 +87,7 @@ export const LineExplorerModal: React.FC<LineExplorerModalProps> = ({
           paddingRight: '18px',
           paddingBottom: '14px',
           borderBottom: '1px solid var(--border-subtle)',
-          background: 'rgba(15, 23, 42, 0.95)'
+          background: 'var(--bg-card, rgba(15, 23, 42, 0.95))'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
@@ -201,8 +201,8 @@ export const LineExplorerModal: React.FC<LineExplorerModalProps> = ({
                   fontSize: '12px',
                   fontWeight: 600,
                   border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--border-subtle)',
-                  background: isActive ? 'rgba(37, 99, 235, 0.2)' : 'var(--bg-surface-elevated)',
-                  color: isActive ? '#93C5FD' : 'var(--text-secondary)',
+                  background: isActive ? 'var(--color-accent)' : 'var(--bg-pill, var(--bg-surface-elevated))',
+                  color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
@@ -218,7 +218,7 @@ export const LineExplorerModal: React.FC<LineExplorerModalProps> = ({
       <div
         style={{
           padding: '10px 18px',
-          background: 'rgba(9, 13, 22, 0.7)',
+          background: 'var(--bg-pill, rgba(9, 13, 22, 0.7))',
           borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',

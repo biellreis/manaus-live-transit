@@ -127,7 +127,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
           style={{
             fontSize: '26px',
             fontWeight: 800,
-            color: '#FFFFFF',
+            color: 'var(--text-primary, #FFFFFF)',
             letterSpacing: '-0.03em',
             margin: 0
           }}
@@ -137,7 +137,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
         <p
           style={{
             fontSize: '13px',
-            color: '#A1A1AA',
+            color: 'var(--text-muted, #A1A1AA)',
             margin: '3px 0 0 0',
             fontWeight: 500
           }}
@@ -146,7 +146,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
         </p>
       </div>
 
-      {stops.length === 0 && <p style={{ padding: 20, color: '#A1A1AA' }}>Paradas indisponíveis.</p>}
+      {stops.length === 0 && <p style={{ padding: 20, color: 'var(--text-muted, #A1A1AA)' }}>Paradas indisponíveis.</p>}
 
       {/* Tabs Switcher: Paradas no Entorno | Terminais (T1 ao T6) | Estações (E1 a E4) */}
       <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px' }}>
@@ -171,9 +171,9 @@ export const StopsTab: React.FC<StopsTabProps> = ({
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: isActive ? '1px solid #3B82F6' : '1px solid rgba(255, 255, 255, 0.08)',
-                backgroundColor: isActive ? '#2563EB' : '#18181B',
-                color: isActive ? '#FFFFFF' : '#A1A1AA',
+                border: isActive ? '1px solid #3B82F6' : '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                backgroundColor: isActive ? '#2563EB' : 'var(--bg-card, #18181B)',
+                color: isActive ? '#FFFFFF' : 'var(--text-muted, #A1A1AA)',
                 cursor: 'pointer',
                 outline: 'none',
                 transition: 'all 0.15s ease'
@@ -266,22 +266,22 @@ export const StopsTab: React.FC<StopsTabProps> = ({
             <div
               key={stop.id}
               style={{
-                backgroundColor: '#18181B',
+                backgroundColor: 'var(--bg-card, #18181B)',
                 borderRadius: '18px',
                 padding: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)'
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                boxShadow: 'var(--shadow-card, 0 4px 14px rgba(0, 0, 0, 0.3))'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <div style={{ flex: 1, minWidth: 0, paddingRight: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                     <MapPin size={16} color="#3B82F6" />
-                    <span style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>
+                    <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)' }}>
                       {stop.name}
                     </span>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#71717A', marginLeft: '24px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted, #71717A)', marginLeft: '24px' }}>
                     {stop.address}
                   </div>
                 </div>
@@ -291,14 +291,14 @@ export const StopsTab: React.FC<StopsTabProps> = ({
                     {stop.distText}
                   </div>
                   {stop.walkText && (
-                    <div style={{ fontSize: '11px', color: '#A1A1AA' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted, #A1A1AA)' }}>
                       {stop.walkText}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                   {stop.lines.map((code: string) => {
                     const colorInfo = getBusLineColor(code);
@@ -342,12 +342,12 @@ export const StopsTab: React.FC<StopsTabProps> = ({
                 onSelectTerminal(hub);
               }}
               style={{
-                backgroundColor: '#18181B',
+                backgroundColor: 'var(--bg-card, #18181B)',
                 borderRadius: '18px',
                 padding: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
                 cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)'
+                boxShadow: 'var(--shadow-card, 0 4px 14px rgba(0, 0, 0, 0.3))'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -365,11 +365,11 @@ export const StopsTab: React.FC<StopsTabProps> = ({
                     >
                       {hub.shortName || hub.name}
                     </span>
-                    <span style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>
+                    <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary, #FFFFFF)' }}>
                       {hub.name}
                     </span>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#71717A', marginTop: '4px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted, #71717A)', marginTop: '4px' }}>
                     {hub.address}
                   </div>
                 </div>
@@ -382,7 +382,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
               </div>
 
               {/* Terminal Platform & Key Lines Diagramming */}
-              <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', flex: 1 }}>
                   {hub.keyLines.map((code) => {
                     const colorInfo = getBusLineColor(code);
@@ -436,11 +436,11 @@ export const StopsTab: React.FC<StopsTabProps> = ({
               <div
                 key={est.id}
                 style={{
-                  backgroundColor: '#18181B',
+                  backgroundColor: 'var(--bg-card, #18181B)',
                   borderRadius: '18px',
                   padding: '16px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)'
+                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  boxShadow: 'var(--shadow-card, 0 4px 14px rgba(0, 0, 0, 0.3))'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -458,10 +458,10 @@ export const StopsTab: React.FC<StopsTabProps> = ({
                       {est.code}
                     </span>
                     <div>
-                      <div style={{ fontSize: '15.5px', fontWeight: 800, color: '#FFFFFF' }}>
+                      <div style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)' }}>
                         {est.name}
                       </div>
-                      <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '2px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)', marginTop: '2px' }}>
                         {est.via}
                       </div>
                     </div>
@@ -472,14 +472,14 @@ export const StopsTab: React.FC<StopsTabProps> = ({
                       {distInfo.distText}
                     </div>
                     {distInfo.walkText && (
-                      <div style={{ fontSize: '11px', color: '#A1A1AA' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted, #A1A1AA)' }}>
                         {distInfo.walkText}
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                   {est.lines.map((code) => {
                     const colorInfo = getBusLineColor(code);
                     return (
