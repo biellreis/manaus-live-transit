@@ -12,16 +12,21 @@ interface JourneyMapProps {
   option?: TransitOption | null;
   origin: Point;
   destination: Point;
+  userLocation?: { lat: number; lng: number; isRealGPS?: boolean } | null;
 }
 
 export const JourneyMap: React.FC<JourneyMapProps> = ({
   option,
   origin,
-  destination
+  destination,
+  userLocation
 }) => {
   const container = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
+  const userGpsMarkerRef = useRef<Marker | null>(null);
+  const lastRenderedKeyRef = useRef<string>('');
+  const lastFittedKeyRef = useRef<string>('');
   const [activeStyle] = useState<MapStyleType>('google_roadmap');
 
   const optionRef = useRef(option);
@@ -33,6 +38,13 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
     originRef.current = origin;
     destRef.current = destination;
   }, [option, origin, destination]);
+
+  const getRouteKey = (opt?: TransitOption | null, o?: Point, d?: Point) => {
+    if (!opt) return `empty_${o?.lat.toFixed(4)}_${o?.lng.toFixed(4)}_${d?.lat.toFixed(4)}_${d?.lng.toFixed(4)}`;
+    const legKey = (opt.legs || []).map(l => `${l.type}_${l.lineCode || ''}`).join(';');
+    const verifiedKey = (opt.verifiedLegs || []).map(l => `${l.line?.code || ''}_${l.originStop?.stopId}_${l.destStop?.stopId}`).join(';');
+    return `${opt.id || opt.primaryLineCode}_${opt.totalMinutes}_${opt.fare || ''}_${legKey}_${verifiedKey}_${o?.lat.toFixed(4)}_${o?.lng.toFixed(4)}_${d?.lat.toFixed(4)}_${d?.lng.toFixed(4)}`;
+  };
 
   const getStyleDefinition = (styleType: MapStyleType) => {
     if (styleType === 'google_roadmap') {
@@ -129,13 +141,23 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
       container: container.current,
       center: [origin.lng, origin.lat],
       zoom: 13.5,
+      minZoom: 8,
+      maxZoom: 22,
       pitch: 0,
       bearing: 0,
       attributionControl: false,
+      dragPan: true,
+      scrollZoom: true,
+      boxZoom: true,
+      dragRotate: false,
+      touchZoomRotate: true,
+      doubleClickZoom: true,
+      touchPitch: false,
       style: getStyleDefinition(activeStyle) as any
     });
 
-    map.addControl(new NavigationControl({ showCompass: false }), 'bottom-right');
+    const nav = new NavigationControl({ showCompass: false });
+    map.addControl(nav, 'top-right');
 
     map.on('load', () => {
       renderRouteData(map);
@@ -152,6 +174,10 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
       resizeObserver.disconnect();
       markersRef.current.forEach(m => m.remove());
       markersRef.current = [];
+      if (userGpsMarkerRef.current) {
+        userGpsMarkerRef.current.remove();
+        userGpsMarkerRef.current = null;
+      }
       map.remove();
       mapInstance.current = null;
     };
@@ -170,44 +196,56 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
     });
   }, [activeStyle]);
 
-  // Handle route option changes
+  // Dedicated live User GPS marker update (does not flicker route lines or hijack camera zoom)
+  useEffect(() => {
+    const map = mapInstance.current;
+    if (!map || !userLocation?.lat || !userLocation?.lng) return;
+
+    if (!userGpsMarkerRef.current) {
+      const el = document.createElement('div');
+      el.className = 'user-gps-marker';
+      el.innerHTML = `
+        <div class="user-gps-pulse"></div>
+        <div class="user-gps-dot"></div>
+      `;
+      userGpsMarkerRef.current = new Marker({ element: el, anchor: 'center' })
+        .setLngLat([userLocation.lng, userLocation.lat])
+        .addTo(map);
+    } else {
+      userGpsMarkerRef.current.setLngLat([userLocation.lng, userLocation.lat]);
+    }
+  }, [userLocation?.lat, userLocation?.lng]);
+
+  // Handle route option changes - guarded by route key to prevent unnecessary redraws
   useEffect(() => {
     const map = mapInstance.current;
     if (!map) return;
 
-    if (map.isStyleLoaded()) {
-      renderRouteData(map);
-    } else {
-      map.once('load', () => renderRouteData(map));
+    const currentKey = getRouteKey(option, origin, destination);
+    if (currentKey === lastRenderedKeyRef.current) {
+      return;
     }
-  }, [option, origin, destination]);
 
-  const renderRouteData = (map: MapLibreMap) => {
+    if (map.isStyleLoaded()) {
+      renderRouteData(map, currentKey);
+    } else {
+      map.once('load', () => renderRouteData(map, currentKey));
+    }
+  }, [option, origin.lat, origin.lng, destination.lat, destination.lng]);
+
+  const renderRouteData = (map: MapLibreMap, currentKey?: string) => {
+    const key = currentKey || getRouteKey(optionRef.current ?? option, originRef.current ?? origin, destRef.current ?? destination);
+    lastRenderedKeyRef.current = key;
+
     const currentOption = optionRef.current ?? option;
     const currentOrigin = originRef.current ?? origin;
     const currentDest = destRef.current ?? destination;
 
-    // Clear old markers
+    // Clear old route markers (except live user GPS marker)
     markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
 
-    // Remove existing leg layers first, then remove sources
-    const currentStyle = map.getStyle();
-    if (currentStyle?.layers) {
-      currentStyle.layers.forEach(layer => {
-        if (layer.id.startsWith('route-leg-') && map.getLayer(layer.id)) {
-          map.removeLayer(layer.id);
-        }
-      });
-    }
-    if (currentStyle?.sources) {
-      Object.keys(currentStyle.sources).forEach(sourceId => {
-        if (sourceId.startsWith('route-leg-') && map.getSource(sourceId)) {
-          map.removeSource(sourceId);
-        }
-      });
-    }
-
+    const activeSourceIds = new Set<string>();
     const allCoords: [number, number][] = [];
 
     const isTerminalOrStation = (name: string): boolean => {
@@ -225,12 +263,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
     const isOrigTerminal = isTerminalOrStation(currentOrigin.name);
     const isDestTerminal = isTerminalOrStation(currentDest.name);
 
-    // Force map canvas resize and repaint
-    map.resize();
-    map.triggerRepaint();
-
     if (currentOption && currentOption.legs) {
-      // Render bus legs and street walking legs (suppressing walking lines for terminals/stations)
       currentOption.legs.forEach((leg, idx) => {
         const isWalkOrigin = leg.type === 'walk_origin';
         const isWalkDest = leg.type === 'walk_dest';
@@ -257,45 +290,53 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
         const sourceId = `route-leg-${idx}`;
         const casingId = `route-leg-${idx}-casing`;
         const isWalk = isWalkOrigin || isWalkDest || leg.type === 'transfer_hub';
+        activeSourceIds.add(sourceId);
 
-        map.addSource(sourceId, {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: validCoords
+        const geojsonData: any = {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: validCoords
+          }
+        };
+
+        const existingSource = map.getSource(sourceId) as any;
+        if (existingSource && typeof existingSource.setData === 'function') {
+          existingSource.setData(geojsonData);
+        } else {
+          map.addSource(sourceId, {
+            type: 'geojson',
+            data: geojsonData
+          });
+
+          // Casing for contrast
+          map.addLayer({
+            id: casingId,
+            type: 'line',
+            source: sourceId,
+            layout: { 'line-cap': 'round', 'line-join': 'round' },
+            paint: {
+              'line-color': '#000000',
+              'line-width': isBus ? 10 : 8,
+              'line-opacity': 0.95
             }
-          }
-        });
+          });
 
-        // Casing for contrast
-        map.addLayer({
-          id: casingId,
-          type: 'line',
-          source: sourceId,
-          layout: { 'line-cap': 'round', 'line-join': 'round' },
-          paint: {
-            'line-color': '#000000',
-            'line-width': isBus ? 10 : 8,
-            'line-opacity': 0.95
-          }
-        });
-
-        // Core line (Azul para ônibus, Branco puro destacado para caminhada e troca)
-        map.addLayer({
-          id: sourceId,
-          type: 'line',
-          source: sourceId,
-          layout: { 'line-cap': 'round', 'line-join': 'round' },
-          paint: {
-            'line-color': isBus ? '#2563EB' : '#FFFFFF',
-            'line-width': isBus ? 6.5 : 4.5,
-            'line-opacity': 1.0,
-            ...(isWalk ? { 'line-dasharray': [1.8, 1.6] } : {})
-          }
-        });
+          // Core line (Azul para ônibus, Branco puro destacado para caminhada e troca)
+          map.addLayer({
+            id: sourceId,
+            type: 'line',
+            source: sourceId,
+            layout: { 'line-cap': 'round', 'line-join': 'round' },
+            paint: {
+              'line-color': isBus ? '#2563EB' : '#FFFFFF',
+              'line-width': isBus ? 6.5 : 4.5,
+              'line-opacity': 1.0,
+              ...(isWalk ? { 'line-dasharray': [1.8, 1.6] } : {})
+            }
+          });
+        }
 
         // Resolução dinâmica de caminhada pelas ruas reais (OSRM) caso venha em linha reta
         if (isWalk && validCoords.length <= 2 && !(isWalkOrigin && isOrigTerminal) && !(isWalkDest && isDestTerminal)) {
@@ -310,7 +351,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
             resolveStreetWalkingPath(fromPt[0], fromPt[1], toPt[0], toPt[1]).then((res) => {
               if (res?.coordinates && res.coordinates.length >= 2) {
                 const src = map.getSource(sourceId) as any;
-                if (src) {
+                if (src && typeof src.setData === 'function') {
                   src.setData({
                     type: 'Feature',
                     properties: {},
@@ -323,6 +364,26 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
               }
             }).catch(() => {});
           }
+        }
+      });
+    }
+
+    // Clean up leftover layers and sources from previous routes that had more legs
+    const currentStyle = map.getStyle();
+    if (currentStyle?.layers) {
+      currentStyle.layers.forEach(layer => {
+        if (layer.id.startsWith('route-leg-')) {
+          const baseSourceId = layer.id.replace('-casing', '');
+          if (!activeSourceIds.has(baseSourceId) && map.getLayer(layer.id)) {
+            map.removeLayer(layer.id);
+          }
+        }
+      });
+    }
+    if (currentStyle?.sources) {
+      Object.keys(currentStyle.sources).forEach(sourceId => {
+        if (sourceId.startsWith('route-leg-') && !activeSourceIds.has(sourceId) && map.getSource(sourceId)) {
+          map.removeSource(sourceId);
         }
       });
     }
@@ -421,31 +482,36 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
       markersRef.current.push(destMarker);
     }
 
-    // Fit camera smoothly around all coordinates
-    allCoords.push([currentOrigin.lng, currentOrigin.lat], [currentDest.lng, currentDest.lat]);
-    if (currentOption?.originStop) allCoords.push([currentOption.originStop.lng, currentOption.originStop.lat]);
-    if (currentOption?.destStop) allCoords.push([currentOption.destStop.lng, currentOption.destStop.lat]);
+    // Fit camera smoothly around all coordinates ONCE per route key
+    if (lastFittedKeyRef.current !== key) {
+      lastFittedKeyRef.current = key;
 
-    const lngs = allCoords.map(c => c[0]);
-    const lats = allCoords.map(c => c[1]);
+      allCoords.push([currentOrigin.lng, currentOrigin.lat], [currentDest.lng, currentDest.lat]);
+      if (currentOption?.originStop) allCoords.push([currentOption.originStop.lng, currentOption.originStop.lat]);
+      if (currentOption?.destStop) allCoords.push([currentOption.destStop.lng, currentOption.destStop.lat]);
 
-    if (lngs.length > 0 && lats.length > 0) {
-      map.fitBounds(
-        [
-          [Math.min(...lngs), Math.min(...lats)],
-          [Math.max(...lngs), Math.max(...lats)]
-        ],
-        {
-          padding: { top: 140, bottom: 280, left: 40, right: 40 },
-          maxZoom: 16,
-          duration: 600
-        }
-      );
+      const lngs = allCoords.map(c => c[0]);
+      const lats = allCoords.map(c => c[1]);
+
+      if (lngs.length > 0 && lats.length > 0) {
+        map.fitBounds(
+          [
+            [Math.min(...lngs), Math.min(...lats)],
+            [Math.max(...lngs), Math.max(...lats)]
+          ],
+          {
+            padding: { top: 140, bottom: 280, left: 40, right: 40 },
+            maxZoom: 16,
+            duration: 600
+          }
+        );
+      }
     }
   };
 
   return (
     <div
+      className="journey-map-container"
       style={{
         position: 'absolute',
         inset: 0,
@@ -454,6 +520,32 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
         overflow: 'hidden'
       }}
     >
+      <style>{`
+        .journey-map-container .maplibregl-ctrl-top-right {
+          top: max(env(safe-area-inset-top, 0px), 16px) !important;
+          right: 16px !important;
+          z-index: 30 !important;
+        }
+        .journey-map-container .maplibregl-ctrl-group {
+          background-color: #18181B !important;
+          border: 1px solid rgba(255, 255, 255, 0.2) !important;
+          border-radius: 12px !important;
+          overflow: hidden !important;
+          box-shadow: 0 4px 14px rgba(0,0,0,0.6) !important;
+        }
+        .journey-map-container .maplibregl-ctrl-group button {
+          width: 38px !important;
+          height: 38px !important;
+          background: transparent !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+        .journey-map-container .maplibregl-ctrl-group button:last-child {
+          border-bottom: none !important;
+        }
+        .journey-map-container .maplibregl-ctrl-icon {
+          filter: invert(1) brightness(2) !important;
+        }
+      `}</style>
       <div className="maplibre-container maplibre-dark-mode" ref={container} style={{ width: '100%', height: '100%' }} />
     </div>
   );

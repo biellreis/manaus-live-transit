@@ -242,19 +242,24 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
         if (!data || controller.signal.aborted) return;
         const street = data.streetName || data.name || 'Sua localização atual';
         setGpsStreetName(street);
-        if (originIsGPS) {
+        if (originIsGPS && viewState !== 'uber_overview') {
           setOriginText(street);
-          setOriginCoord({
-            name: street,
-            lat,
-            lng
+          setOriginCoord(prev => {
+            if (prev && Math.hypot(prev.lat - lat, prev.lng - lng) < 0.0001 && prev.name === street) {
+              return prev;
+            }
+            return {
+              name: street,
+              lat,
+              lng
+            };
           });
         }
       })
       .catch(() => {});
 
     return () => controller.abort();
-  }, [userLocation.lat, userLocation.lng, originIsGPS]);
+  }, [userLocation.lat, userLocation.lng, originIsGPS, viewState]);
 
   useEffect(() => {
     if (isOpen) {
@@ -304,17 +309,24 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     }
   }, [isOpen]);
 
-  // Sync user GPS with originCoord when available
+  // Sync user GPS with originCoord when available (only while searching, not while viewing route overview)
   useEffect(() => {
-    if (!originIsGPS) return;
+    if (!originIsGPS || viewState === 'uber_overview') return;
     const currentName = gpsStreetName || 'Sua localização atual';
     setOriginText(currentName);
-    setOriginCoord({
-      name: currentName,
-      lat: userLocation.lat || MANAUS_DEFAULT_LOCATION.lat,
-      lng: userLocation.lng || MANAUS_DEFAULT_LOCATION.lng
+    const newLat = userLocation.lat || MANAUS_DEFAULT_LOCATION.lat;
+    const newLng = userLocation.lng || MANAUS_DEFAULT_LOCATION.lng;
+    setOriginCoord(prev => {
+      if (prev && Math.hypot(prev.lat - newLat, prev.lng - newLng) < 0.0001 && prev.name === currentName) {
+        return prev;
+      }
+      return {
+        name: currentName,
+        lat: newLat,
+        lng: newLng
+      };
     });
-  }, [userLocation.lat, userLocation.lng, originIsGPS, gpsStreetName]);
+  }, [userLocation.lat, userLocation.lng, originIsGPS, gpsStreetName, viewState]);
 
   // Live place search auto-complete as user types
   const currentTypedText = activeField === 'origin' ? originText : destText;
@@ -588,6 +600,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               option={activeOption}
               origin={originCoord}
               destination={destCoord}
+              userLocation={userLocation}
             />
           )}
 
