@@ -23,11 +23,10 @@ if (dialog) {
         const titleEl = document.querySelector("#install-sheet-title");
         const leadEl = document.querySelector(".sheet-title-wrap p");
         const stepsWrap = document.querySelector<HTMLElement>(".modal-steps-list");
-        const qrWrap = document.querySelector<HTMLElement>("#desktop-qr-wrap");
-        const confirmBtn = document.querySelector<HTMLAnchorElement>("#sheet-confirm-btn");
+        const sheetLink = document.querySelector<HTMLAnchorElement>("#sheet-app-link");
 
-        if (confirmBtn) {
-          confirmBtn.href = target;
+        if (sheetLink) {
+          sheetLink.href = target;
         }
 
         if (platform === "ios") {
@@ -40,34 +39,16 @@ if (dialog) {
           if (stepsWrap) stepsWrap.style.display = "none";
         }
 
-        if (!isMobile && qrWrap) {
-          qrWrap.style.display = "block";
-          const qr = document.querySelector<HTMLCanvasElement>("#install-qr");
-          if (qr) {
-            qr.hidden = true;
-            try {
-              const { default: QRCode } = await import("qrcode");
-              await QRCode.toCanvas(qr, target, {
-                width: 160,
-                margin: 2,
-                color: { dark: "#09090b", light: "#ffffff" },
-              });
-              qr.hidden = false;
-            } catch {
-              // fallback
-            }
-          }
-        } else if (qrWrap) {
-          qrWrap.style.display = "none";
-        }
-
         dialog.showModal();
       });
     });
 
-  dialog
-    .querySelector(".dialog-close")
-    ?.addEventListener("click", () => dialog.close());
+  const closeBtn = dialog.querySelector(".dialog-close");
+  closeBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    dialog.close();
+  });
   dialog.addEventListener("click", (e) => {
     if (e.target === dialog) {
       const r = dialog.getBoundingClientRect();

@@ -1106,23 +1106,6 @@ dialog > p:not(.eyebrow) {
   line-height: 1.6;
   font-size: 14px;
 }
-#install-qr {
-  margin: 22px auto;
-  background: white;
-  border-radius: 12px;
-  display: block;
-  width: 176px;
-  height: 176px;
-}
-.dialog-continue {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 22px;
-  background: #2d6de7;
-  border-radius: 12px;
-  margin-top: 22px;
-  font-size: 15px;
-}
 .dialog-note {
   font-size: 10px !important;
   margin-top: 15px;
@@ -2123,30 +2106,18 @@ body:has(dialog[open]) {
   color: #9ca3af;
   margin: 4px 0 0;
 }
-.desktop-qr-wrap {
-  text-align: center;
-  margin-bottom: 20px;
-  padding: 16px;
-  background: #ffffff;
-  border-radius: 16px;
+.sheet-app-link {
   display: block;
-}
-.desktop-qr-wrap canvas {
-  display: block;
-  margin: 0 auto;
-}
-.qr-label {
-  font-size: 11px;
-  color: #374151;
-  margin-top: 8px;
-  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 .modal-steps-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   text-align: left;
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 .modal-step-item {
   display: flex;
@@ -2156,6 +2127,12 @@ body:has(dialog[open]) {
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 14px;
   padding: 12px 14px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.sheet-app-link:hover .modal-step-item {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 .step-num-badge {
   width: 22px;
@@ -2170,13 +2147,13 @@ body:has(dialog[open]) {
   flex-shrink: 0;
 }
 .step-icon-ios {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   display: grid;
   place-items: center;
-  color: #93c5fd;
+  color: #ffffff;
   flex-shrink: 0;
 }
 .step-desc strong {
@@ -2187,21 +2164,6 @@ body:has(dialog[open]) {
 .step-desc span {
   font-size: 11px;
   color: #9ca3af;
-}
-.sheet-confirm-btn {
-  width: 100%;
-  padding: 14px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.sheet-confirm-btn:hover {
-  background: #1d4ed8;
 }
 
 @media (max-width: 640px) {
@@ -2214,9 +2176,6 @@ body:has(dialog[open]) {
   }
   .sheet-handle {
     display: block;
-  }
-  .desktop-qr-wrap {
-    display: none;
   }
   .showcase-fan-stage {
     height: 490px;

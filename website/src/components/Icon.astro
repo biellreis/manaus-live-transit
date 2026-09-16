@@ -15,23 +15,21 @@ const paths: Record<string,string> = {
 ---
 {name === 'ios-dots' ? (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <rect x="2" y="6" width="20" height="12" rx="6" />
-    <circle cx="7.5" cy="12" r="1.1" fill="currentColor" />
-    <circle cx="12" cy="12" r="1.1" fill="currentColor" />
-    <circle cx="16.5" cy="12" r="1.1" fill="currentColor" />
+    <circle cx="12" cy="12" r="9.5" />
+    <circle cx="7.5" cy="12" r="1.2" fill="currentColor" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+    <circle cx="16.5" cy="12" r="1.2" fill="currentColor" />
   </svg>
 ) : name === 'ios-share' ? (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7" />
-    <path d="M12 2.5v12.5" />
-    <path d="m7.5 7 4.5-4.5 4.5 4.5" />
+    <path d="M4 12v6.5A2.5 2.5 0 0 0 6.5 21h11a2.5 2.5 0 0 0 2.5-2.5V12" />
+    <path d="M12 3v12" />
+    <path d="m7.5 7.5 4.5-4.5 4.5 4.5" />
   </svg>
 ) : name === 'ios-more' ? (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="9.5" />
-    <circle cx="8" cy="12" r="1.1" fill="currentColor" />
-    <circle cx="12" cy="12" r="1.1" fill="currentColor" />
-    <circle cx="16.5" cy="12" r="1.1" fill="currentColor" />
+    <path d="m8 10.5 4 4 4-4" />
   </svg>
 ) : name === 'ios-add-home' ? (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
