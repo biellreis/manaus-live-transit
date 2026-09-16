@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import type { TripDetail, RouteSummary, LiveBus, StopInfo, PlannedTrip } from '../types/transit.js';
-import { X, Bus, MapPin, ArrowRightLeft, Radio } from 'lucide-react';
+import { X, ArrowLeft, Bus, MapPin, ArrowRightLeft } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 
 interface TripStopsModalProps {
@@ -26,6 +26,27 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
 
   const isVolta = trip.directionType === 'volta';
   const activeDirection = isVolta ? 'volta' : 'ida';
+
+  // Listen for escape or android back button with history synchronization
+  useEffect(() => {
+    if (!isOpen) return;
+    window.history.pushState({ modal: 'trip_stops' }, '');
+    const handlePopState = (e: PopStateEvent) => {
+      e.stopImmediatePropagation();
+      onClose();
+    };
+    window.addEventListener('popstate', handlePopState, { capture: true });
+    return () => window.removeEventListener('popstate', handlePopState, { capture: true });
+  }, [isOpen, onClose]);
+
+  const handleClose = () => {
+    haptic.lightTap();
+    if (window.history.state?.modal === 'trip_stops') {
+      window.history.back();
+    } else {
+      onClose();
+    }
+  };
 
   // Filter vehicles on this trip's direction
   const activeVehicles = useMemo(() => {
@@ -83,66 +104,67 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
 
   return (
     <div
-      id="trip-stops-modal-backdrop"
+      id="trip-stops-modal-screen"
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 250,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        zIndex: 300,
+        backgroundColor: 'var(--bg-canvas, #09090B)',
+        color: 'var(--text-main, #FFFFFF)',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-end',
         animation: 'fadeIn 0.2s ease-out'
       }}
-      onClick={onClose}
     >
+      {/* Full Top Header Bar */}
       <div
-        id="trip-stops-modal-sheet"
-        onClick={(e) => e.stopPropagation()}
         style={{
+          paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)',
+          paddingBottom: '14px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+          borderBottom: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
           backgroundColor: 'var(--bg-card, #121214)',
-          borderTopLeftRadius: '28px',
-          borderTopRightRadius: '28px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-          boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.8)',
-          height: '88dvh',
-          maxHeight: '88dvh',
           display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)'
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px'
         }}
       >
-        {/* Grab Handle */}
-        <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '12px', paddingBottom: '6px' }}>
-          <div style={{ width: '42px', height: '5px', borderRadius: '3px', backgroundColor: 'rgba(255, 255, 255, 0.25)' }} />
-        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
+          <button
+            id="back-trip-stops-modal-btn"
+            onClick={handleClose}
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
+              color: 'var(--text-main, #FFFFFF)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              flexShrink: 0
+            }}
+            aria-label="Voltar para rota"
+          >
+            <ArrowLeft size={20} />
+          </button>
 
-        {/* Modal Header */}
-        <div
-          style={{
-            padding: '10px 20px 16px 20px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '12px'
-          }}
-        >
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <span
                 style={{
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontWeight: 900,
                   backgroundColor: isVolta ? '#F97316' : '#2563EB',
                   color: '#FFFFFF',
-                  padding: '4px 10px',
-                  borderRadius: '8px',
+                  padding: '3px 9px',
+                  borderRadius: '6px',
                   letterSpacing: '0.02em',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)'
+                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 Linha {lineCode}
@@ -150,32 +172,14 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
               <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-sub, #A1A1AA)' }}>
                 {stops.length} Paradas no Trajeto
               </span>
-              {activeVehicles.length > 0 && (
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '11px',
-                    fontWeight: 800,
-                    color: '#22C55E',
-                    backgroundColor: 'rgba(34, 197, 94, 0.14)',
-                    padding: '3px 8px',
-                    borderRadius: '6px',
-                    border: '1px solid rgba(34, 197, 94, 0.3)'
-                  }}
-                >
-                  <Radio size={12} className="animate-pulse" />
-                  {activeVehicles.length} {activeVehicles.length === 1 ? 'ônibus ao vivo' : 'ônibus ao vivo'}
-                </span>
-              )}
             </div>
+
             <div
               style={{
                 fontSize: '15px',
                 fontWeight: 800,
                 color: 'var(--text-main, #FFFFFF)',
-                marginTop: '6px',
+                marginTop: '3px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis'
@@ -184,40 +188,97 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
               {tripTitle}
             </div>
           </div>
-
-          <button
-            id="close-trip-stops-modal-btn"
-            onClick={() => {
-              haptic.lightTap();
-              onClose();
-            }}
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: 'var(--text-main, #FFFFFF)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              flexShrink: 0
-            }}
-            aria-label="Fechar itinerário"
-          >
-            <X size={18} />
-          </button>
         </div>
 
-        {/* Scrollable Spacious Stops Timeline */}
-        <div
-          className="scroll-container"
+        <button
+          id="close-trip-stops-modal-btn"
+          onClick={handleClose}
           style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '16px 20px',
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
+            color: 'var(--text-main, #FFFFFF)',
             display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            flexShrink: 0
+          }}
+          aria-label="Fechar itinerário"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      {/* Live Buses Status Card (Card diagramado igual aos outros, SEM COR VERDE) */}
+      {activeVehicles.length > 0 && (
+        <div style={{ padding: '14px 20px 0 20px' }}>
+          <div
+            style={{
+              backgroundColor: 'var(--bg-card, #18181B)',
+              borderRadius: '16px',
+              padding: '12px 16px',
+              border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.1))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              boxShadow: 'var(--shadow-card, 0 2px 10px rgba(0, 0, 0, 0.2))'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  backgroundColor: isVolta ? 'rgba(249, 115, 22, 0.15)' : 'rgba(59, 130, 246, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isVolta ? '#F97316' : '#3B82F6'
+                }}
+              >
+                <Bus size={20} />
+              </div>
+              <div>
+                <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)' }}>
+                  {activeVehicles.length} {activeVehicles.length === 1 ? 'Ônibus em circulação' : 'Ônibus em circulação'}
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
+                  Monitoramento em tempo real via GPS ({isVolta ? 'Trajeto de Volta' : 'Trajeto de Ida'})
+                </div>
+              </div>
+            </div>
+
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 800,
+                color: isVolta ? '#F97316' : '#3B82F6',
+                backgroundColor: isVolta ? 'rgba(249, 115, 22, 0.15)' : 'rgba(59, 130, 246, 0.15)',
+                padding: '4px 10px',
+                borderRadius: '8px',
+                border: `1px solid ${isVolta ? 'rgba(249, 115, 22, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+                letterSpacing: '0.04em'
+              }}
+            >
+              AO VIVO
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Scrollable Full-Screen Stops Timeline */}
+      <div
+        className="scroll-container"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '16px 20px',
+          display: 'flex',
             flexDirection: 'column',
             gap: '0'
           }}
@@ -461,28 +522,25 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
           })}
         </div>
 
-        {/* Bottom Footer Bar */}
-        <div style={{ padding: '12px 20px 0 20px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-          <button
-            onClick={() => {
-              haptic.lightTap();
-              onClose();
-            }}
-            style={{
-              width: '100%',
-              padding: '14px',
-              borderRadius: '14px',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: 'var(--text-main, #FFFFFF)',
-              fontSize: '15px',
-              fontWeight: 800,
-              cursor: 'pointer'
-            }}
-          >
-            Fechar Itinerário
-          </button>
-        </div>
+      {/* Bottom Footer Bar */}
+      <div style={{ padding: '12px 20px max(env(safe-area-inset-bottom, 0px), 16px) 20px', borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))', backgroundColor: 'var(--bg-card, #121214)' }}>
+        <button
+          onClick={handleClose}
+          style={{
+            width: '100%',
+            padding: '14px',
+            borderRadius: '14px',
+            backgroundColor: '#2563EB',
+            border: 'none',
+            color: '#FFFFFF',
+            fontSize: '15px',
+            fontWeight: 800,
+            cursor: 'pointer',
+            boxShadow: '0 4px 16px rgba(37, 99, 235, 0.35)'
+          }}
+        >
+          Voltar para a Rota
+        </button>
       </div>
     </div>
   );

@@ -206,6 +206,29 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     };
   }, [isOpen]);
 
+  // Synchronize 'uber_overview' state with Android hardware/gesture back button
+  useEffect(() => {
+    if (!isOpen) return;
+    if (viewState === 'uber_overview') {
+      window.history.pushState({ modal: 'planner_overview' }, '');
+      const handlePop = (e: PopStateEvent) => {
+        e.stopImmediatePropagation();
+        setViewState('search');
+      };
+      window.addEventListener('popstate', handlePop, { capture: true });
+      return () => window.removeEventListener('popstate', handlePop, { capture: true });
+    }
+  }, [isOpen, viewState]);
+
+  const handleBackToSearch = () => {
+    haptic.lightTap();
+    if (window.history.state?.modal === 'planner_overview') {
+      window.history.back();
+    } else {
+      setViewState('search');
+    }
+  };
+
   // Geocodificação reversa para identificar a rua real do GPS atual do dispositivo
   useEffect(() => {
     const lat = userLocation.lat || MANAUS_DEFAULT_LOCATION.lat;
@@ -578,10 +601,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
             }}
           >
             <button
-              onClick={() => {
-                haptic.lightTap();
-                setViewState('search');
-              }}
+              onClick={handleBackToSearch}
               style={{
                 width: '42px',
                 height: '42px',

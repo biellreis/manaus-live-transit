@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import type { RouteSummary, TripDetail, LiveBus, TransitHub, TimetableService, StopInfo, PlannedTrip } from './types/transit.js';
 import { MapView } from './components/MapView.js';
 import { BottomNav, type TabType } from './components/BottomNav.js';
@@ -159,13 +159,22 @@ export function App() {
     return () => controller.abort();
   }, [selectedLine, plannedTrip]);
 
+  // Push state to browser history when navigating forward, allowing Android hardware/gesture back buttons to work
+  const pushHistoryScreen = (screen: string) => {
+    try {
+      window.history.pushState({ appScreen: screen }, '');
+    } catch {
+      // Ignore
+    }
+  };
+
   // Handler to open route view for a line (instantly clear previous route and load new line)
   const handleSelectLineAndOpenRoute = (line: RouteSummary) => {
     setPlannedTrip(null);
     setSelectedBus(null);
     setSelectedLine(line);
     setIsRouteMode(true);
-
+    pushHistoryScreen('route');
   };
 
   // Handler to open citywide exploration mode (no forced line, shows all circulating buses & stops)
@@ -177,6 +186,7 @@ export function App() {
     setSelectedBus(null);
     setSelectedStopForDetails(null);
     setIsRouteMode(true);
+    pushHistoryScreen('explore');
   };
 
   // Handler for selecting a live bus (in explore mode, opens that bus's line trajectory)
@@ -202,6 +212,7 @@ export function App() {
     if (matchingLine) {
       setSelectedLine(matchingLine);
       setIsRouteMode(true);
+      pushHistoryScreen('route');
     }
   };
 
@@ -213,18 +224,84 @@ export function App() {
     setSelectedBus(null);
     setActiveTrip(plan.trip);
     setIsRouteMode(true);
+    pushHistoryScreen('planned-route');
   };
 
-  const handleCloseRoute = () => {
-    setIsSearchOpen(false);
-    setIsRouteMode(false);
-    setActiveTab('home');
-    setSelectedLine(null);
-    setActiveTrip(null);
-    setAllTrips([]);
-    setSelectedBus(null);
-    setSelectedStopForDetails(null);
-    setPlannedTrip(null);
+  // Unified hierarchical back navigation: returns to the immediately preceding screen
+  const handleNavigateBack = useCallback(() => {
+    // 1. If currently in Route Mode:
+    if (isRouteMode) {
+      if (plannedTrip) {
+        // Step back to TripPlanner overview with results preserved!
+        setIsRouteMode(false);
+        setPlannedTrip(null);
+        setSelectedLine(null);
+        setActiveTrip(null);
+        setSelectedBus(null);
+        setIsSearchOpen(true);
+      } else {
+        // Return to previous tab / explore view (keeps user on 'lines', 'stops', etc.)
+        setIsRouteMode(false);
+        setSelectedLine(null);
+        setActiveTrip(null);
+        setAllTrips([]);
+        setSelectedBus(null);
+        setSelectedStopForDetails(null);
+      }
+      return;
+    }
+
+    // 2. If Stop Details modal is open:
+    if (selectedStopForDetails) {
+      setSelectedStopForDetails(null);
+      return;
+    }
+
+    // 3. If Search / Trip Planner Modal is open:
+    if (isSearchOpen) {
+      setIsSearchOpen(false);
+      return;
+    }
+
+    // 4. If on another tab, return to 'home':
+    if (activeTab !== 'home') {
+      setActiveTab('home');
+      return;
+    }
+  }, [isRouteMode, plannedTrip, selectedStopForDetails, isSearchOpen, activeTab]);
+
+  // Triggers back navigation through history stack if pushed, or directly executes step-back
+  const triggerBack = useCallback(() => {
+    if (window.history.state?.appScreen) {
+      window.history.back();
+    } else {
+      handleNavigateBack();
+    }
+  }, [handleNavigateBack]);
+
+  // Listen for Android hardware/gesture back buttons via popstate
+  useEffect(() => {
+    const handlePopState = () => {
+      handleNavigateBack();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [handleNavigateBack]);
+
+  const handleOpenSearch = () => {
+    setIsSearchOpen(true);
+    pushHistoryScreen('search');
+  };
+
+  const handleTabChange = (tab: TabType) => {
+    if (tab !== activeTab) {
+      if (tab !== 'home') {
+        pushHistoryScreen(`tab-${tab}`);
+      }
+      setActiveTab(tab);
+      setIsRouteMode(false);
+    }
   };
 
   return (
@@ -264,8 +341,8 @@ export function App() {
           onSelectStop={(stop: StopInfo) => {
             setSelectedStopForDetails(stop);
           }}
-          onOpenSearch={() => setIsSearchOpen(true)}
-          onBack={handleCloseRoute}
+          onOpenSearch={handleOpenSearch}
+          onBack={triggerBack}
         />
       </div>
 
@@ -280,8 +357,8 @@ export function App() {
               stops={citywideStops}
               userLocation={userLocation}
               onSelectLine={handleSelectLineAndOpenRoute}
-              onOpenSearch={() => setIsSearchOpen(true)}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onOpenSearch={handleOpenSearch}
+              onNavigateTab={handleTabChange}
               onRequestGPS={requestLocation}
               onOpenFullMap={handleOpenExploreMap}
             />
@@ -317,15 +394,12 @@ export function App() {
           {/* Persistent Native Bottom Navigation Bar with 4 Tabs */}
           <BottomNav
             activeTab={activeTab}
-            onTabChange={(tab) => {
-              setActiveTab(tab);
-              setIsRouteMode(false);
-            }}
+            onTabChange={handleTabChange}
           />
         </>
       )}
 
-      {isRouteMode && selectedLine && !activeTrip && <div role="status" style={{position:'fixed',bottom:24,zIndex:101,background:'#18181B',color:'#fff',padding:20,borderRadius:16}}>Itinerário indisponível ou carregando. <button onClick={handleCloseRoute}>Voltar</button></div>}
+      {isRouteMode && selectedLine && !activeTrip && <div role="status" style={{position:'fixed',bottom:24,zIndex:101,background:'#18181B',color:'#fff',padding:20,borderRadius:16}}>Itinerário indisponível ou carregando. <button onClick={triggerBack}>Voltar</button></div>}
       {/* Route Tracking Mode Bottom Sheet (Uber Ride Card Style) */}
       {isRouteMode && selectedLine && activeTrip && (
         <BottomSheet
@@ -343,7 +417,7 @@ export function App() {
           }}
           onSelectStop={(stop) => setSelectedStopForDetails(stop)}
           onSelectBus={(bus) => setSelectedBus(bus)}
-          onCloseRoute={handleCloseRoute}
+          onCloseRoute={triggerBack}
         />
       )}
 
@@ -362,7 +436,7 @@ export function App() {
       {/* Trip Planner Search Modal (Planeje sua viagem - Uber Style) */}
       <TripPlannerModal
         isOpen={isSearchOpen}
-        onClose={handleCloseRoute}
+        onClose={triggerBack}
         lines={lines}
         terminals={terminals}
         citywideStops={citywideStops}

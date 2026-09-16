@@ -1,6 +1,6 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { RouteSummary, TripDetail, LiveBus, TimetableService, StopInfo, PlannedTrip } from '../types/transit.js';
-import { Bus, ChevronUp, ChevronDown, Check, X, MapPin, Clock, ArrowRightLeft } from 'lucide-react';
+import { Bus, Check, X, MapPin, Clock, ArrowRightLeft } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { TripStopsModal } from './TripStopsModal.js';
 
@@ -37,7 +37,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   onSelectBus: _onSelectBus,
   onCloseRoute
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isStopsModalOpen, setIsStopsModalOpen] = useState(false);
   const haptic = useHaptic();
 
@@ -53,58 +52,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 
 
   const isWithinOperationalHours = activeVehicles.length > 0;
-
-  // Real-time mapping of ALL circulating buses along the route stops (Lead bus, trailing buses behind)
-  const { busesPerStop, leadStopIndex } = useMemo(() => {
-    const map = new Map<number, { bus: LiveBus; rank: number; isLead: boolean }[]>();
-    if (!activeTrip || !activeTrip.stops || activeTrip.stops.length === 0 || !activeVehicles || activeVehicles.length === 0) {
-      return { busesPerStop: map, leadStopIndex: 0 };
-    }
-
-    // Map every active bus in this direction to its closest stop along the sequence
-    const positions = activeVehicles.map(bus => {
-      let closestIndex = 0;
-      let minDistance = Infinity;
-      for (let i = 0; i < activeTrip.stops.length; i++) {
-        const s = activeTrip.stops[i];
-        const d = Math.hypot(s.lat - bus.lat, s.lng - bus.lng);
-        if (d < minDistance) {
-          minDistance = d;
-          closestIndex = i;
-        }
-      }
-      return { bus, stopIndex: closestIndex };
-    });
-
-    // Sort descending by stopIndex (buses further along the route are in front, trailing buses follow behind)
-    positions.sort((a, b) => b.stopIndex - a.stopIndex);
-
-    positions.forEach((item, idx) => {
-      const existing = map.get(item.stopIndex) || [];
-      existing.push({
-        bus: item.bus,
-        rank: idx + 1,
-        isLead: idx === 0
-      });
-      map.set(item.stopIndex, existing);
-    });
-
-    const leadStopIndex = positions.length > 0 ? positions[0].stopIndex : 0;
-    return { busesPerStop: map, leadStopIndex };
-  }, [activeTrip, activeVehicles]);
-
-  // Auto-scroll to the current bus location along the route
-  useEffect(() => {
-    if (isExpanded) {
-      const timer = setTimeout(() => {
-        const el = document.getElementById('current-bus-stop-card');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 250);
-      return () => clearTimeout(timer);
-    }
-  }, [isExpanded, leadStopIndex]);
 
   if (!selectedLine || !activeTrip) return null;
 
@@ -123,8 +70,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         borderTop: '1px solid var(--border-medium, rgba(255, 255, 255, 0.12))',
         boxShadow: 'var(--shadow-sheet, 0 -10px 40px rgba(0, 0, 0, 0.8))',
         color: 'var(--text-primary, #FFFFFF)',
-        maxHeight: isExpanded ? '75vh' : 'auto',
-        transition: 'max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        maxHeight: '62dvh',
+        overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
         userSelect: 'none'
@@ -132,16 +79,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
     >
       {/* Drag Handle Bar */}
       <div
-        onClick={() => {
-          haptic.lightTap();
-          setIsExpanded(!isExpanded);
-        }}
         style={{
           width: '100%',
           padding: '10px 0 6px 0',
           display: 'flex',
-          justifyContent: 'center',
-          cursor: 'pointer'
+          justifyContent: 'center'
         }}
       >
         <div
@@ -186,28 +128,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              onClick={() => {
-                haptic.lightTap();
-                setIsExpanded(!isExpanded);
-              }}
-              style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#FFFFFF',
-                cursor: 'pointer'
-              }}
-              aria-label="Expandir detalhes"
-            >
-              {isExpanded ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
-            </button>
-
             {onCloseRoute && (
               <button
                 id="close-route-bottomsheet-button"
@@ -219,16 +139,16 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   background: 'rgba(255, 255, 255, 0.08)',
                   border: 'none',
                   borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
+                  width: '34px',
+                  height: '34px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#FFFFFF',
                   cursor: 'pointer'
                 }}
-                aria-label="Fechar trajeto"
-                title="Fechar rota"
+                aria-label="Voltar / Fechar rota"
+                title="Voltar / Fechar"
               >
                 <X size={18} />
               </button>
@@ -383,355 +303,276 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         })();
 
         return (
-          <div style={{ padding: '0 20px 10px 20px' }}>
+          <div style={{ padding: '0 16px 10px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* CARD 1: EMBARQUE & ÔNIBUS */}
             <div
               style={{
-                backgroundColor: '#18181B',
-                borderRadius: '20px',
-                padding: '18px 20px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6)',
+                backgroundColor: 'var(--bg-card, #18181B)',
+                borderRadius: '16px',
+                padding: '14px 16px',
+                border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.1))',
+                boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.3))',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '16px'
+                gap: '10px'
               }}
             >
-              {/* Top Row: Previsão de Chegada e Badge Azul */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-sub, #A1A1AA)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Passa na sua parada às
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    backgroundColor: '#2563EB',
+                    color: '#FFFFFF',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  <Bus size={12} strokeWidth={2.5} />
+                  Embarque • Linha {plannedTrip.legs[0]?.line?.code || plannedTrip.line.code}
+                </span>
+
+                {typeof plannedTrip.etaMinutes === 'number' ? (
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: '#FFFFFF',
+                      backgroundColor: 'rgba(37, 99, 235, 0.3)',
+                      border: '1px solid rgba(37, 99, 235, 0.5)',
+                      padding: '3px 10px',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    {plannedTrip.etaMinutes <= 1 ? 'Chegando agora' : `Em ${plannedTrip.etaMinutes} min`}
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      fontSize: '11.5px',
+                      fontWeight: 800,
+                      color: '#60A5FA',
+                      backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                      padding: '3px 8px',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    {plannedTrip.liveBusCount ? `${plannedTrip.liveBusCount} ônibus ativos` : 'Em operação'}
+                  </span>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', fontWeight: 600 }}>Passa às</span>
+                <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                  {plannedTrip.etaTime || 'Em breve'}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                <MapPin size={15} style={{ color: '#60A5FA', marginTop: '2px', flexShrink: 0 }} />
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main, #FFFFFF)', lineHeight: 1.3 }}>
+                    {plannedTrip.originStop.stopName}
                   </div>
-                  <div style={{ fontSize: '34px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.03em', lineHeight: 1.1, marginTop: '2px' }}>
-                    {plannedTrip.etaTime || 'Em breve'}
-                  </div>
-                  {plannedTrip.destEtaTime && (
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#38BDF8', marginTop: '4px' }}>
-                      Chegada às {plannedTrip.destEtaTime} {plannedTrip.totalMinutes ? `(${plannedTrip.totalMinutes} min de viagem)` : ''}
+                  {originPoint && isOriginTerminal && (
+                    <div style={{ marginTop: '3px' }}>
+                      <span style={{ fontSize: '10.5px', fontWeight: 800, backgroundColor: '#2563EB', color: '#FFFFFF', padding: '2px 7px', borderRadius: '4px' }}>
+                        {originPoint}
+                      </span>
                     </div>
                   )}
-                </div>
-
-                <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-                  {typeof plannedTrip.etaMinutes === 'number' ? (
-                    <>
-                      <span
-                        style={{
-                          fontSize: '13px',
-                          fontWeight: 900,
-                          color: '#FFFFFF',
-                          backgroundColor: '#2563EB',
-                          padding: '6px 14px',
-                          borderRadius: '10px',
-                          boxShadow: '0 2px 8px rgba(37, 99, 235, 0.4)'
-                        }}
-                      >
-                        {plannedTrip.etaMinutes <= 1 ? 'Chegando agora' : `Faltam ${plannedTrip.etaMinutes} min`}
-                      </span>
-                      {!isOriginTerminal && plannedTrip.walkToStopMinutes !== null && plannedTrip.walkToStopMinutes > 0 && (
-                        <span style={{ fontSize: '11px', color: 'var(--text-sub, #94A3B8)', fontWeight: 600, marginTop: '2px' }}>
-                          Caminhada de {formatDistance(plannedTrip.walkToStopMeters)} ({plannedTrip.walkToStopMinutes} min) até o ponto
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    <span
-                      style={{
-                        fontSize: '12px',
-                        fontWeight: 800,
-                        color: '#FFFFFF',
-                        backgroundColor: '#2563EB',
-                        padding: '5px 12px',
-                        borderRadius: '8px'
-                      }}
-                    >
-                      {plannedTrip.liveBusCount ? `${plannedTrip.liveBusCount} ônibus na rota` : 'Em operação'}
-                    </span>
+                  {!isOriginTerminal && plannedTrip.walkToStopMinutes !== null && plannedTrip.walkToStopMinutes > 0 && (
+                    <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '3px', fontWeight: 500 }}>
+                      Caminhada de {formatDistance(plannedTrip.walkToStopMeters)} ({plannedTrip.walkToStopMinutes} min a pé) até a parada
+                    </div>
                   )}
                 </div>
               </div>
 
-              {/* Próximos ônibus (se houver mais de 1 veículo) */}
               {plannedTrip.upcomingBuses && plannedTrip.upcomingBuses.length > 0 && (
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(255, 255, 255, 0.06)'
+                    gap: '6px',
+                    paddingTop: '6px',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.06)'
                   }}
                 >
-                  <div style={{ fontSize: '11.5px', color: '#CBD5E1', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Clock size={14} style={{ color: '#2563EB' }} />
-                    <span>Próximos ônibus:</span>
-                  </div>
+                  <Clock size={13} style={{ color: '#60A5FA' }} />
+                  <span style={{ fontSize: '11px', color: 'var(--text-sub, #A1A1AA)', fontWeight: 600 }}>Próximos:</span>
+                  {plannedTrip.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
+                    <span
+                      key={bIdx}
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        color: '#CBD5E1',
+                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                        padding: '2px 7px',
+                        borderRadius: '5px'
+                      }}
+                    >
+                      {nextBus.time} ({nextBus.minutes} min)
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* CARD 2: BALDEAÇÃO / TROCA DE ÔNIBUS (SE HOUVER) */}
+            {plannedTrip.isTransfer && plannedTrip.legs.length > 1 && (
+              <div
+                style={{
+                  backgroundColor: 'var(--bg-card, #18181B)',
+                  borderRadius: '16px',
+                  padding: '12px 16px',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.3))',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px'
+                }}
+              >
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    backgroundColor: '#000000',
+                    border: '2px solid #FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.6)'
+                  }}
+                  title="Troca de Ônibus"
+                >
+                  <ArrowRightLeft size={14} color="#FFFFFF" strokeWidth={2.8} />
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    {plannedTrip.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
-                      <span
-                        key={bIdx}
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: 800,
-                          color: '#FFFFFF',
-                          backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                          padding: '3px 8px',
-                          borderRadius: '6px'
-                        }}
-                      >
-                        {nextBus.time} <span style={{ color: '#94A3B8', fontWeight: 600 }}>({nextBus.minutes} min)</span>
-                      </span>
-                    ))}
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '10px',
+                        fontWeight: 800,
+                        backgroundColor: '#FFFFFF',
+                        color: '#000000',
+                        padding: '2px 7px',
+                        borderRadius: '4px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em'
+                      }}
+                    >
+                      <ArrowRightLeft size={11} color="#000000" strokeWidth={3} />
+                      Troca de Ônibus
+                    </span>
+                    <span style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 600 }}>Integração Gratuita</span>
                   </div>
+
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '4px' }}>
+                    {plannedTrip.transferHubName || plannedTrip.legs[0].destStop.stopName}
+                  </div>
+
+                  <div style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
+                    Baldeação para a <strong>Linha {plannedTrip.legs[1].line.code}</strong> ({plannedTrip.legs[1].line.name})
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* CARD 3: DESTINO & DESEMBARQUE MAIS PRÓXIMO */}
+            <div
+              style={{
+                backgroundColor: 'var(--bg-card, #18181B)',
+                borderRadius: '16px',
+                padding: '14px 16px',
+                border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.1))',
+                boxShadow: 'var(--shadow-card, 0 4px 16px rgba(0, 0, 0, 0.3))',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    backgroundColor: '#EA580C',
+                    color: '#FFFFFF',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  <MapPin size={12} strokeWidth={2.5} />
+                  Desembarque Mais Próximo
+                </span>
+
+                {plannedTrip.totalMinutes && (
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: '#FFFFFF',
+                      backgroundColor: 'rgba(234, 88, 12, 0.3)',
+                      border: '1px solid rgba(234, 88, 12, 0.5)',
+                      padding: '3px 10px',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    {plannedTrip.totalMinutes} min de viagem
+                  </span>
+                )}
+              </div>
+
+              {plannedTrip.destEtaTime && (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', fontWeight: 600 }}>Chegada às</span>
+                  <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                    {plannedTrip.destEtaTime}
+                  </span>
                 </div>
               )}
 
-              {/* Divisor */}
-              <div style={{ height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)' }} />
-
-              {/* TIMELINE VERTICAL ESTILO UBER / 99 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0', position: 'relative' }}>
-                {/* 1. EMBARQUE */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
-                  <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#2563EB' }} />
-                  <div
-                    style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      backgroundColor: '#2563EB',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#FFFFFF',
-                      flexShrink: 0,
-                      zIndex: 1,
-                      boxShadow: '0 2px 6px rgba(37, 99, 235, 0.5)'
-                    }}
-                  >
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FFFFFF' }} />
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                <MapPin size={15} style={{ color: '#FB923C', marginTop: '2px', flexShrink: 0 }} />
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main, #FFFFFF)', lineHeight: 1.3 }}>
+                    {plannedTrip.destStop.stopName}
                   </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#60A5FA', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      {isOriginTerminal ? 'Embarque no Terminal' : 'Ponto de Partida'}
-                    </div>
-                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '2px' }}>
-                      {plannedTrip.origin.name}
-                    </div>
-                    {isOriginTerminal ? (
-                      <div style={{ marginTop: '4px' }}>
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            backgroundColor: '#2563EB',
-                            color: '#FFFFFF',
-                            fontSize: '11px',
-                            fontWeight: 800,
-                            padding: '3px 10px',
-                            borderRadius: '6px'
-                          }}
-                        >
-                          {originPoint || 'Terminal'}
-                        </span>
-                      </div>
-                    ) : (
-                      plannedTrip.walkToStopMeters !== null && plannedTrip.walkToStopMeters > 30 && (
-                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '2px' }}>
-                          Caminhe {formatDistance(plannedTrip.walkToStopMeters)} ({plannedTrip.walkToStopMinutes || 1} min a pé) até a parada {plannedTrip.originStop.stopName}
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
-
-                {/* 2. LINHA 1 (PRIMEIRO ÔNIBUS) */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
-                  <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#F97316' }} />
-                  <div
-                    style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '8px',
-                      backgroundColor: '#F97316',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#FFFFFF',
-                      flexShrink: 0,
-                      zIndex: 1,
-                      boxShadow: '0 2px 6px rgba(249, 115, 22, 0.5)'
-                    }}
-                  >
-                    <Bus size={15} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '12px', fontWeight: 900, backgroundColor: '#F97316', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px' }}>
-                        Linha {plannedTrip.legs[0]?.line?.code || plannedTrip.line.code}
-                      </span>
-                      <span style={{ fontSize: '11.5px', color: 'var(--text-sub, #94A3B8)', fontWeight: 600 }}>
-                        {plannedTrip.legs[0]?.trip?.stops?.length || activeTrip.stops.length} paradas • Tarifa R$ 4,50
+                  {destPoint && isDestTerminal && (
+                    <div style={{ marginTop: '3px' }}>
+                      <span style={{ fontSize: '10.5px', fontWeight: 800, backgroundColor: '#EA580C', color: '#FFFFFF', padding: '2px 7px', borderRadius: '4px' }}>
+                        {destPoint}
                       </span>
                     </div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main, #E4E4E7)', marginTop: '4px' }}>
-                      {plannedTrip.legs[0]?.trip?.tripName || activeTrip.tripName || activeTrip.tripShortName}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
-                      Desembarque em <strong style={{ color: 'var(--text-main, #FFFFFF)' }}>{plannedTrip.isTransfer && plannedTrip.legs.length > 1 ? plannedTrip.legs[0].destStop.stopName : plannedTrip.destStop.stopName}</strong>
-                    </div>
+                  )}
+                  <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '3px' }}>
+                    Destino: <strong style={{ color: '#FFFFFF' }}>{plannedTrip.destination.name}</strong>
                   </div>
-                </div>
-
-                {/* 2.5 TROCA DE ÔNIBUS COM ÍCONE BRANCO (SE HOUVER BALDEAÇÃO) */}
-                {plannedTrip.isTransfer && plannedTrip.legs.length > 1 && (
-                  <>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
-                      <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#FFFFFF' }} />
-                      <div
-                        style={{
-                          width: '28px',
-                          height: '28px',
-                          borderRadius: '50%',
-                          backgroundColor: '#18181B',
-                          border: '2px solid #FFFFFF',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#FFFFFF',
-                          flexShrink: 0,
-                          zIndex: 1,
-                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.8)'
-                        }}
-                        title="Troca de ônibus"
-                      >
-                        <ArrowRightLeft size={13} color="#FFFFFF" strokeWidth={2.8} />
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              fontSize: '10px',
-                              fontWeight: 800,
-                              backgroundColor: '#FFFFFF',
-                              color: '#000000',
-                              padding: '2px 8px',
-                              borderRadius: '4px',
-                              textTransform: 'uppercase',
-                              letterSpacing: '0.04em'
-                            }}
-                          >
-                            <ArrowRightLeft size={10} color="#000000" strokeWidth={3} />
-                            Troca de Ônibus
-                          </span>
-                        </div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '3px' }}>
-                          {plannedTrip.transferHubName || plannedTrip.legs[0].destStop.stopName}
-                        </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #CBD5E1)', marginTop: '2px' }}>
-                          Faça baldeação para a <strong>Linha {plannedTrip.legs[1].line.code}</strong>
-                        </div>
-                      </div>
+                  {!isDestTerminal && plannedTrip.walkFromStopMinutes !== null && plannedTrip.walkFromStopMinutes > 0 && (
+                    <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '3px', fontWeight: 500 }}>
+                      Caminhada de {formatDistance(plannedTrip.walkFromStopMeters)} ({plannedTrip.walkFromStopMinutes} min a pé) até o destino
                     </div>
-
-                    {/* SEGUNDO ÔNIBUS */}
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
-                      <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#D97706' }} />
-                      <div
-                        style={{
-                          width: '28px',
-                          height: '28px',
-                          borderRadius: '8px',
-                          backgroundColor: '#D97706',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#FFFFFF',
-                          flexShrink: 0,
-                          zIndex: 1,
-                          boxShadow: '0 2px 6px rgba(217, 119, 6, 0.5)'
-                        }}
-                      >
-                        <Bus size={15} />
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                          <span style={{ fontSize: '12px', fontWeight: 900, backgroundColor: '#D97706', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px' }}>
-                            Linha {plannedTrip.legs[1].line.code}
-                          </span>
-                          <span style={{ fontSize: '11.5px', color: 'var(--text-sub, #94A3B8)', fontWeight: 600 }}>
-                            {plannedTrip.legs[1].trip?.stops?.length || 0} paradas • Integração Gratuita
-                          </span>
-                        </div>
-                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main, #E4E4E7)', marginTop: '4px' }}>
-                          {plannedTrip.legs[1].trip?.tripName || plannedTrip.legs[1].line.name}
-                        </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
-                          Desembarque em <strong style={{ color: 'var(--text-main, #FFFFFF)' }}>{plannedTrip.destStop.stopName}</strong>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {/* 3. DESEMBARQUE / DESTINO */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative' }}>
-                  <div
-                    style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      backgroundColor: '#EA580C',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#FFFFFF',
-                      flexShrink: 0,
-                      zIndex: 1,
-                      boxShadow: '0 2px 6px rgba(234, 88, 12, 0.5)'
-                    }}
-                  >
-                    <MapPin size={15} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#FB923C', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Destino Final
-                    </div>
-                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '2px' }}>
-                      {plannedTrip.destination.name}
-                    </div>
-                    {isDestTerminal ? (
-                      destPoint && (
-                        <div style={{ marginTop: '4px' }}>
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              backgroundColor: '#EA580C',
-                              color: '#FFFFFF',
-                              fontSize: '11px',
-                              fontWeight: 800,
-                              padding: '3px 10px',
-                              borderRadius: '6px'
-                            }}
-                          >
-                            {destPoint}
-                          </span>
-                        </div>
-                      )
-                    ) : (
-                      plannedTrip.walkFromStopMeters !== null && plannedTrip.walkFromStopMeters > 30 && (
-                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '2px' }}>
-                          Caminhada de {formatDistance(plannedTrip.walkFromStopMeters)} ({plannedTrip.walkFromStopMinutes || 1} min a pé) até o destino
-                        </div>
-                      )
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -779,190 +620,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         plannedTrip={plannedTrip}
         onSelectStop={onSelectStop}
       />
-
-      {/* Expanded Stop Timeline List */}
-      {isExpanded && (
-        <div
-          className="scroll-container"
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '0 20px 24px 20px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0 10px 0' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase' }}>
-              Itinerário Completo ({activeTrip.stops.length} Paradas)
-            </div>
-            {activeVehicles.length > 0 && (
-              <span
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  color: isVolta ? '#F97316' : '#3B82F6',
-                  backgroundColor: isVolta ? 'rgba(249, 115, 22, 0.15)' : 'rgba(59, 130, 246, 0.15)',
-                  padding: '2px 8px',
-                  borderRadius: '6px',
-                  border: `1px solid ${isVolta ? 'rgba(249, 115, 22, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`
-                }}
-              >
-                {activeVehicles.length} {activeVehicles.length === 1 ? 'ônibus ativo' : 'ônibus em sequência'} ({isVolta ? 'Volta' : 'Ida'})
-              </span>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-            {activeTrip.stops.map((stop, index) => {
-              const isFirst = index === 0;
-              const isLast = index === activeTrip.stops.length - 1;
-              const busesHere = busesPerStop.get(index) || [];
-              const hasBus = busesHere.length > 0;
-              const hasLeadBus = busesHere.some(b => b.isLead);
-              const isPassed = index < leadStopIndex;
-              const isHub = stop.stopName.toUpperCase().includes('TERMINAL') || stop.stopName.toUpperCase().includes('PLATAFORMA') || stop.stopName.toUpperCase().includes('ESTAÇÃO') || /\bT[1-6]\b/.test(stop.stopName.toUpperCase()) || /\bE[1-4]\b/.test(stop.stopName.toUpperCase());
-
-              return (
-                <div
-                  key={stop.stopId}
-                  id={hasLeadBus ? 'current-bus-stop-card' : undefined}
-                  onClick={() => {
-                    haptic.lightTap();
-                    onSelectStop(stop);
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '14px',
-                    padding: '8px 0',
-                    cursor: 'pointer',
-                    backgroundColor: isHub ? 'rgba(255, 255, 255, 0.08)' : hasBus ? (hasLeadBus ? 'rgba(59, 130, 246, 0.14)' : 'rgba(249, 115, 22, 0.10)') : 'transparent',
-                    borderRadius: '10px',
-                    paddingLeft: (hasBus || isHub) ? '10px' : '0px',
-                    paddingRight: (hasBus || isHub) ? '10px' : '0px',
-                    border: isHub ? '1px solid #FFFFFF' : hasBus ? `1px solid ${hasLeadBus ? 'rgba(59, 130, 246, 0.4)' : 'rgba(249, 115, 22, 0.35)'}` : '1px solid transparent',
-                    marginBottom: (hasBus || isHub) ? '4px' : '0px',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  {/* Timeline Graphic Indicator */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '18px', flexShrink: 0, marginTop: '2px' }}>
-                    {hasBus ? (
-                      <div
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          borderRadius: '4px',
-                          backgroundColor: hasLeadBus ? '#3B82F6' : '#F97316',
-                          border: '2px solid #FFFFFF',
-                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#FFFFFF'
-                        }}
-                      >
-                        <Bus size={10} strokeWidth={2.5} />
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          width: isHub ? '12px' : isFirst || isLast ? '10px' : '7px',
-                          height: isHub ? '12px' : isFirst || isLast ? '10px' : '7px',
-                          borderRadius: isFirst || isLast || isHub ? '2px' : '50%',
-                          backgroundColor: isHub ? '#FFFFFF' : isPassed ? '#3B82F6' : isLast ? '#F97316' : 'rgba(255, 255, 255, 0.4)',
-                          border: isHub ? '2px solid #FFFFFF' : '1.5px solid #121214',
-                          boxShadow: 'none'
-                        }}
-                      />
-                    )}
-                    {!isLast && (
-                      <div
-                        style={{
-                          width: '2px',
-                          height: hasBus ? '34px' : '28px',
-                          backgroundColor: isPassed ? 'rgba(59, 130, 246, 0.4)' : 'rgba(255, 255, 255, 0.12)',
-                          margin: '2px 0'
-                        }}
-                      />
-                    )}
-                  </div>
-
-                  <div style={{ flex: 1, minWidth: 0, paddingBottom: '4px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        {isHub && (
-                          <span
-                            style={{
-                              backgroundColor: '#FFFFFF',
-                              color: '#000000',
-                              fontSize: '9.5px',
-                              fontWeight: 900,
-                              padding: '2px 6px',
-                              borderRadius: '4px',
-                              textTransform: 'uppercase',
-                              letterSpacing: '0.03em',
-                              boxShadow: 'none',
-                              flexShrink: 0
-                            }}
-                          >
-                            TERMINAL / PLATAFORMA
-                          </span>
-                        )}
-                        <span
-                          style={{
-                            fontSize: '13px',
-                            fontWeight: isHub ? 900 : hasBus ? 800 : 600,
-                            color: isHub ? '#FFFFFF' : hasLeadBus ? '#60A5FA' : hasBus ? '#FDBA74' : isPassed ? '#E2E8F0' : '#FFFFFF',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}
-                        >
-                          {stop.stopName}
-                        </span>
-                      </div>
-
-                      {/* Display ALL active buses present at this stop (Lead & trailing buses) */}
-                      {hasBus && (
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '2px' }}>
-                          {busesHere.map(item => (
-                            <span
-                              key={item.bus.id}
-                              style={{
-                                fontSize: '10px',
-                                fontWeight: 800,
-                                color: item.isLead ? '#93C5FD' : '#FED7AA',
-                                backgroundColor: item.isLead ? 'rgba(59, 130, 246, 0.25)' : 'rgba(249, 115, 22, 0.25)',
-                                padding: '2px 8px',
-                                borderRadius: '5px',
-                                border: `1px solid ${item.isLead ? 'rgba(59, 130, 246, 0.5)' : 'rgba(249, 115, 22, 0.5)'}`,
-                                whiteSpace: 'nowrap',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '5px'
-                              }}
-                            >
-                              <Bus size={11} strokeWidth={2.5} />
-                              {item.isLead
-                                ? `ÔNIBUS NA FRENTE • CARRO ${item.bus.id}${item.bus.speedKmh && item.bus.speedKmh > 0 ? ` (${Math.round(item.bus.speedKmh)} km/h)` : ''}`
-                                : `ÔNIBUS SEGUINTE • CARRO ${item.bus.id}${item.bus.speedKmh && item.bus.speedKmh > 0 ? ` (${Math.round(item.bus.speedKmh)} km/h)` : ''}`}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <div style={{ fontSize: '11px', color: '#71717A', marginTop: '3px' }}>
-                      Parada #{index + 1} • {stop.distKm} km do início
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Safe Area Spacer */}
       <div style={{ height: 'max(env(safe-area-inset-bottom, 0px), 12px)' }} />
