@@ -1,0 +1,90 @@
+---
+---
+<div class="live-transit-map-wrapper">
+  <!-- Interactive Live Map Canvas with Vector Corridor -->
+  <svg class="radar-map-svg" viewBox="0 0 900 520" fill="none" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="corridorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1e40af"/>
+        <stop offset="50%" stop-color="#2563eb"/>
+        <stop offset="100%" stop-color="#3b82f6"/>
+      </linearGradient>
+      <filter id="busShadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.8"/>
+      </filter>
+    </defs>
+
+    <!-- Dark Base Grid / Manaus Avenue Matrix -->
+    <g class="map-grid-lines" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1.2">
+      <!-- Torquato Tapajós / Constantino Nery Axis -->
+      <path d="M 60 480 L 210 380 L 380 290 L 520 220 L 690 140 L 840 80" stroke-width="3" stroke-opacity="0.09"/>
+      <!-- Av. Djalma Batista parallel -->
+      <path d="M 120 510 L 260 410 L 420 320 L 560 250 L 730 170 L 870 110"/>
+      <!-- Crossings: Av. Darcy Vargas / E1 / São Jorge -->
+      <path d="M 180 260 L 520 460"/>
+      <path d="M 360 160 L 700 360"/>
+      <path d="M 540 80 L 880 270"/>
+    </g>
+
+    <!-- Linha 640 Transit Corridor Vector Path -->
+    <path
+      id="live-route-640"
+      d="M 80 470 C 190 390, 290 330, 390 280 C 490 230, 580 180, 680 140 C 760 110, 810 90, 860 80"
+      stroke="url(#corridorGrad)"
+      stroke-width="5"
+      stroke-linecap="round"
+      fill="none"
+    />
+
+    <!-- Real Transit Stops -->
+    <!-- Estação E1 -->
+    <g transform="translate(230, 370)">
+      <circle r="4" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+      <text x="10" y="4" fill="#9ca3af" font-size="11" font-weight="600">E1 São Jorge</text>
+    </g>
+    <!-- Terminal 1 -->
+    <g transform="translate(480, 235)">
+      <circle r="6" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+      <text x="14" y="4" fill="#ffffff" font-size="12" font-weight="700">Terminal 1 (T1)</text>
+    </g>
+    <!-- Centro Matriz -->
+    <g transform="translate(760, 110)">
+      <circle r="5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="12" y="4" fill="#9ca3af" font-size="11" font-weight="600">Centro Histórico</text>
+    </g>
+
+    <!-- Active Moving Bus 1 (Leader) -->
+    <g class="live-bus-marker bus-1">
+      <circle r="24" fill="#2563eb" fill-opacity="0.14" class="radar-ring"/>
+      <circle r="13" fill="#2563eb" stroke="#ffffff" stroke-width="2" filter="url(#busShadow)"/>
+      <path d="M -5 3 L 5 3 L 5 -4 C 5 -5 -5 -5 -5 -4 Z" stroke="#ffffff" stroke-width="1.2" fill="none"/>
+      <g transform="translate(16, -14)">
+        <rect width="44" height="22" rx="6" fill="#2563eb" filter="url(#busShadow)"/>
+        <text x="22" y="15" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">640</text>
+      </g>
+    </g>
+
+    <!-- Active Moving Bus 2 (Follower) -->
+    <g class="live-bus-marker bus-2">
+      <circle r="22" fill="#2563eb" fill-opacity="0.14" class="radar-ring"/>
+      <circle r="12" fill="#1d4ed8" stroke="#ffffff" stroke-width="1.8" filter="url(#busShadow)"/>
+      <path d="M -4 3 L 4 3 L 4 -3 C 4 -4 -4 -4 -4 -3 Z" stroke="#ffffff" stroke-width="1" fill="none"/>
+      <g transform="translate(15, -13)">
+        <rect width="42" height="21" rx="6" fill="#1d4ed8" filter="url(#busShadow)"/>
+        <text x="21" y="14" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">640</text>
+      </g>
+    </g>
+  </svg>
+
+  <!-- Live Telemetry Floating HUD -->
+  <div class="map-hud-overlay">
+    <div class="hud-chip">
+      <span class="hud-dot"></span>
+      <span>GPS SINETRAM AO VIVO</span>
+    </div>
+    <div class="hud-meta">
+      <strong>Linha 640</strong>
+      <span>13 ônibus em rota • 41 km/h</span>
+    </div>
+  </div>
+</div>

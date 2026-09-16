@@ -1,59 +1,87 @@
 import { installUrl } from "../config";
 
-const dialog = document.querySelector<HTMLDialogElement>("#install-dialog")!;
+const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");
 let opener: HTMLElement | null = null;
-document
-  .querySelectorAll<HTMLAnchorElement>("[data-install]")
-  .forEach((link) => {
-    link.addEventListener("click", async (event) => {
-      // Native links remain functional without JavaScript. Desktop gets a QR handoff.
-      if (matchMedia("(pointer:coarse)").matches) return;
-      event.preventDefault();
-      opener = link;
-      const platform = link.dataset.install === "android" ? "android" : "ios";
-      const target = installUrl(platform);
-      document.querySelector("#install-title")!.textContent =
-        platform === "ios" ? "Manô no seu iPhone." : "Manô no seu Android.";
-      document.querySelector("#install-description")!.textContent =
-        "Aponte a câmera do celular para o QR code e siga as instruções na tela.";
-      const instructions = document.querySelector("#install-instructions")!;
-      instructions.innerHTML =
-        platform === "ios"
-          ? "<strong>Instalação no iPhone:</strong><br/>1. Toque nos 3 pontinhos (...)<br/>2. Toque em Compartilhar<br/>3. Toque em Ver Mais<br/>4. Adicionar à Tela de Início"
-          : "<strong>Instalação no Android:</strong><br/>No Chrome, toque em <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong> e confirme.";
-      const qr = document.querySelector<HTMLCanvasElement>("#install-qr")!;
-      qr.hidden = true;
-      dialog.showModal();
-      try {
-        const { default: QRCode } = await import("qrcode");
-        await QRCode.toCanvas(qr, target, {
-          width: 176,
-          margin: 2,
-          color: { dark: "#09090b", light: "#ffffff" },
-        });
-        qr.hidden = false;
-      } catch {
-        document.querySelector("#install-description")!.textContent =
-          "Abra o Manô no navegador do seu celular para continuar.";
-      }
+
+if (dialog) {
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-install]")
+    .forEach((link) => {
+      link.addEventListener("click", async (event) => {
+        const platform = link.dataset.install === "android" ? "android" : "ios";
+        const isMobile = matchMedia("(max-width: 640px)").matches || matchMedia("(pointer:coarse)").matches;
+
+        // Android on mobile device opens native app/PWA directly
+        if (isMobile && platform === "android") {
+          return;
+        }
+
+        event.preventDefault();
+        opener = link;
+        const target = installUrl(platform);
+
+        const titleEl = document.querySelector("#install-sheet-title");
+        const leadEl = document.querySelector(".sheet-title-wrap p");
+        const stepsWrap = document.querySelector<HTMLElement>(".modal-steps-list");
+        const qrWrap = document.querySelector<HTMLElement>("#desktop-qr-wrap");
+        const confirmBtn = document.querySelector<HTMLAnchorElement>("#sheet-confirm-btn");
+
+        if (confirmBtn) {
+          confirmBtn.href = target;
+        }
+
+        if (platform === "ios") {
+          if (titleEl) titleEl.textContent = "Instalar no iPhone";
+          if (leadEl) leadEl.textContent = "4 passos simples no seu navegador:";
+          if (stepsWrap) stepsWrap.style.display = "flex";
+        } else {
+          if (titleEl) titleEl.textContent = "Instalar no Android";
+          if (leadEl) leadEl.textContent = "Abra no Chrome e instale com 1 toque:";
+          if (stepsWrap) stepsWrap.style.display = "none";
+        }
+
+        if (!isMobile && qrWrap) {
+          qrWrap.style.display = "block";
+          const qr = document.querySelector<HTMLCanvasElement>("#install-qr");
+          if (qr) {
+            qr.hidden = true;
+            try {
+              const { default: QRCode } = await import("qrcode");
+              await QRCode.toCanvas(qr, target, {
+                width: 160,
+                margin: 2,
+                color: { dark: "#09090b", light: "#ffffff" },
+              });
+              qr.hidden = false;
+            } catch {
+              // fallback
+            }
+          }
+        } else if (qrWrap) {
+          qrWrap.style.display = "none";
+        }
+
+        dialog.showModal();
+      });
     });
+
+  dialog
+    .querySelector(".dialog-close")
+    ?.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) {
+      const r = dialog.getBoundingClientRect();
+      if (
+        e.clientX < r.left ||
+        e.clientX > r.right ||
+        e.clientY < r.top ||
+        e.clientY > r.bottom
+      )
+        dialog.close();
+    }
   });
-dialog
-  .querySelector(".dialog-close")!
-  .addEventListener("click", () => dialog.close());
-dialog.addEventListener("click", (e) => {
-  if (e.target === dialog) {
-    const r = dialog.getBoundingClientRect();
-    if (
-      e.clientX < r.left ||
-      e.clientX > r.right ||
-      e.clientY < r.top ||
-      e.clientY > r.bottom
-    )
-      dialog.close();
-  }
-});
-dialog.addEventListener("close", () => opener?.focus());
+  dialog.addEventListener("close", () => opener?.focus());
+}
 
 function screenControl(
   attribute: string,

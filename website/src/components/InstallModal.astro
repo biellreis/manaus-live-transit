@@ -1,0 +1,68 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="install-dialog" class="ios-install-modal" aria-labelledby="install-sheet-title">
+  <div class="sheet-container">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <button class="dialog-close" aria-label="Fechar instruções"><Icon name="close" size={20}/></button>
+    
+    <div class="sheet-header">
+      <div class="sheet-app-icon">
+        <img src="/brand/icon.png" width="56" height="56" alt="Ícone do Manô"/>
+      </div>
+      <div class="sheet-title-wrap">
+        <h2 id="install-sheet-title">Instalar no iPhone</h2>
+        <p>4 passos simples no seu navegador Safari:</p>
+      </div>
+    </div>
+
+    <!-- Desktop QR Code Fallback (hidden on mobile) -->
+    <div class="desktop-qr-wrap" id="desktop-qr-wrap">
+      <canvas id="install-qr" width="160" height="160" aria-label="QR Code para instalar"></canvas>
+      <p class="qr-label">Aponte a câmera do seu celular para o QR Code</p>
+    </div>
+
+    <!-- 4 Didactic iOS Steps -->
+    <div class="modal-steps-list">
+      <div class="modal-step-item">
+        <div class="step-num-badge">1</div>
+        <div class="step-icon-ios"><Icon name="ios-dots" size={22}/></div>
+        <div class="step-desc">
+          <strong>Toque nos 3 pontinhos</strong>
+          <span>No menu inferior ou superior do navegador</span>
+        </div>
+      </div>
+
+      <div class="modal-step-item">
+        <div class="step-num-badge">2</div>
+        <div class="step-icon-ios"><Icon name="ios-share" size={22}/></div>
+        <div class="step-desc">
+          <strong>Toque em Compartilhar</strong>
+          <span>Selecione a opção de envio da Apple</span>
+        </div>
+      </div>
+
+      <div class="modal-step-item">
+        <div class="step-num-badge">3</div>
+        <div class="step-icon-ios"><Icon name="ios-more" size={22}/></div>
+        <div class="step-desc">
+          <strong>Toque em Ver Mais</strong>
+          <span>Role para baixo se a opção estiver oculta</span>
+        </div>
+      </div>
+
+      <div class="modal-step-item">
+        <div class="step-num-badge">4</div>
+        <div class="step-icon-ios"><Icon name="ios-add-home" size={22}/></div>
+        <div class="step-desc">
+          <strong>Adicionar à Tela de Início</strong>
+          <span>Toque no botão com (+) e confirme</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="https://manaus-live-transit.vercel.app/?install=ios" class="sheet-confirm-btn" id="sheet-confirm-btn" style="text-align: center; text-decoration: none; display: block;">
+      Continuar para o Aplicativo
+    </a>
+  </div>
+</dialog>

@@ -1,0 +1,24 @@
+---
+import Phone from './Phone.astro';
+---
+<div class="showcase-fan-stage" aria-label="Apresentação das principais telas do Manô em três dispositivos">
+  <div class="fan-ground-shadow"></div>
+
+  <!-- Left Device: Linhas e Catálogo -->
+  <div class="fan-phone-wrap fan-left">
+    <div class="fan-tag">Linhas de Ônibus</div>
+    <Phone screen="lines" class="phone-fan"/>
+  </div>
+
+  <!-- Center Hero Device: Trajeto Real no Mapa -->
+  <div class="fan-phone-wrap fan-center">
+    <div class="fan-tag center-tag">Ônibus em Tempo Real</div>
+    <Phone screen="ida" eager class="phone-fan phone-center-highlight"/>
+  </div>
+
+  <!-- Right Device: Terminais e Integrações -->
+  <div class="fan-phone-wrap fan-right">
+    <div class="fan-tag">Terminais T1 a T6</div>
+    <Phone screen="terminals" class="phone-fan"/>
+  </div>
+</div>

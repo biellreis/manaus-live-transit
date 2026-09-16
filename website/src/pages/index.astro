@@ -4,6 +4,11 @@ import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import Phone from '../components/Phone.astro';
 import InstallButtons from '../components/InstallButtons.astro';
+import HeroTransitMap from '../components/HeroTransitMap.astro';
+import HeroBreakoutCards from '../components/HeroBreakoutCards.astro';
+import ShowcaseFan from '../components/ShowcaseFan.astro';
+import LiveTransitMap from '../components/LiveTransitMap.astro';
+import InstallModal from '../components/InstallModal.astro';
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -23,16 +28,15 @@ import InstallButtons from '../components/InstallButtons.astro';
   <section class="hero wrap" aria-labelledby="hero-title">
     <div class="hero-copy">
       <h1 id="hero-title">Manô,<br/><span class="blue">bora?</span></h1>
-      <p class="hero-description">Instale o aplicativo e tenha Manaus na sua mão.<br/>Ônibus ao vivo no mapa, rotas inteligentes e paradas em tempo real na sua rotina.</p>
+      <p class="hero-description">O transporte público de Manaus em tempo real no seu celular.</p>
       <InstallButtons/>
     </div>
-    <div class="hero-art" id="hero-art" role="img" aria-label="Manô em um iPhone e um Android, mostrando a tela inicial e os trajetos de ônibus">
-      <div class="orbit orbit-one"></div>
-      <div class="orbit orbit-two"></div>
+    <div class="hero-art" id="hero-art" role="img" aria-label="Manô em um iPhone com mapa em tempo real de Manaus">
+      <HeroTransitMap/>
       <div class="hero-phones" id="hero-fallback">
-        <Phone screen="android-route" android class="hero-android" eager/>
-        <Phone screen="home" class="hero-iphone" eager/>
+        <Phone screen="ida" class="hero-iphone" eager/>
       </div>
+      <HeroBreakoutCards/>
       <div id="hero-canvas" aria-hidden="true"></div>
     </div>
     <div class="hero-foot">
@@ -52,9 +56,12 @@ import InstallButtons from '../components/InstallButtons.astro';
   </div>
 
   <section class="intro wrap" id="recursos">
-    <p class="eyebrow">A CIDADE NÃO PARA. VOCÊ TAMBÉM NÃO.</p>
-    <h2>Um aplicativo.<br/><span class="muted">Todos os seus caminhos.</span></h2>
-    <p>Do primeiro passo até a sua parada.<br/>O Manô conecta você ao transporte de Manaus.</p>
+    <div class="intro-header">
+      <p class="eyebrow">A CIDADE NÃO PARA. VOCÊ TAMBÉM NÃO.</p>
+      <h2>Um aplicativo.<br/><span class="muted">Todos os seus caminhos.</span></h2>
+      <p class="intro-lead">Do primeiro passo até a sua parada.<br/>O Manô conecta você ao transporte de Manaus.</p>
+    </div>
+    <ShowcaseFan/>
   </section>
 
   <section class="chapter wrap planner" id="planejar">
@@ -133,9 +140,7 @@ import InstallButtons from '../components/InstallButtons.astro';
       <p>Acompanhe os veículos disponíveis na sua linha.<br/>Mais informação para decidir quando sair.</p>
     </div>
     <div class="map-window">
-      <video class="map-video" autoplay loop muted playsinline poster="/screens/ida.webp" aria-label="Demonstração do mapa com ônibus da linha 640 se movendo em tempo real">
-        <source src="/screens/map-motion.mp4" type="video/mp4"/>
-      </video>
+      <LiveTransitMap/>
     </div>
   </section>
 
@@ -181,60 +186,10 @@ import InstallButtons from '../components/InstallButtons.astro';
     <p>Seu aplicativo de mobilidade em Manaus.<br/>No iPhone. No Android. Na sua rotina.</p>
     <InstallButtons/>
 
-    <div class="iphone-guide" id="guia-iphone" aria-label="Como instalar no iPhone">
-      <div class="guide-badge">
-        <Icon name="apple" size={18}/>
-        <span>Passo a passo no iPhone</span>
-      </div>
-      <h3 class="guide-title">Instale em 4 toques simples:</h3>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">1</span>
-            <span class="step-icon-wrap"><Icon name="ios-dots" size={24}/></span>
-          </div>
-          <div class="step-content">
-            <h4>Toque nos 3 pontinhos</h4>
-            <p>Abra o menu (...) do navegador</p>
-          </div>
-        </div>
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">2</span>
-            <span class="step-icon-wrap"><Icon name="ios-share" size={24}/></span>
-          </div>
-          <div class="step-content">
-            <h4>Toque em Compartilhar</h4>
-            <p>Ícone com a seta apontando para cima</p>
-          </div>
-        </div>
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">3</span>
-            <span class="step-icon-wrap"><Icon name="ios-more" size={24}/></span>
-          </div>
-          <div class="step-content">
-            <h4>Toque em Ver Mais</h4>
-            <p>Role a lista de ações até localizar</p>
-          </div>
-        </div>
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">4</span>
-            <span class="step-icon-wrap"><Icon name="ios-add-home" size={24}/></span>
-          </div>
-          <div class="step-content">
-            <h4>Adicionar à Tela de Início</h4>
-            <p>Toque no quadrado com (+) e confirme</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="faq">
       <details>
         <summary>Preciso baixar de uma loja de aplicativos?<span>+</span></summary>
-        <p>Não. O Manô é adicionado direto à sua tela inicial sem precisar de lojas. No iPhone, basta seguir os 4 toques acima pelo Safari. No Android, toque em Instalar e confirme no navegador.</p>
+        <p>Não. O Manô é adicionado direto à sua tela inicial sem precisar de lojas. No iPhone, basta seguir os 4 toques pelo Safari. No Android, toque em Instalar e confirme no navegador.</p>
       </details>
       <details>
         <summary>Funciona sem internet?<span>+</span></summary>
@@ -258,6 +213,6 @@ import InstallButtons from '../components/InstallButtons.astro';
     </div>
   </div>
 </footer>
-<dialog id="install-dialog" aria-labelledby="install-title"><button class="dialog-close" aria-label="Fechar instruções"><Icon name="close"/></button><img src="/brand/icon.png" width="64" height="64" alt="" class="dialog-logo"/><h2 id="install-title">Instalar o Manô no celular.</h2><p id="install-description"></p><canvas id="install-qr" width="176" height="176" aria-label="QR code para abrir o Manô no celular"></canvas><div class="install-instructions" id="install-instructions"></div><p class="dialog-note">Aponte a câmera do seu celular para o QR Code acima para instalar.</p></dialog>
+<InstallModal/>
 <script src="../scripts/main.ts"></script>
 </body></html>
