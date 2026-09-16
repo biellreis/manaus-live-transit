@@ -164,24 +164,7 @@ if (!reduced.matches) {
     });
   };
   start().catch(() => {});
-  const connection = (
-    navigator as Navigator & { connection?: { saveData?: boolean } }
-  ).connection;
-  if (!connection?.saveData) {
-    const art = document.getElementById("hero-art")!;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          observer.disconnect();
-          import("../three/hero")
-            .then((m) => m.createHero(art))
-            .catch(() => {});
-        }
-      },
-      { rootMargin: "100px" },
-    );
-    observer.observe(art);
-  }
+
 }
 
 const mapVideo = document.querySelector<HTMLVideoElement>(".map-video");

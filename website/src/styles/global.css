@@ -1585,132 +1585,258 @@ body:has(dialog[open]) {
     top: 65px;
   }
 }
-/* Cinematic cover prototype: live 3D, with the existing static fallback. */
-.hero {
+/* ==========================================================================
+   HERO FULL-SCREEN — Mapa em Tela Cheia & Ilha de Foco Centralizada
+   ========================================================================== */
+.hero.hero-fullscreen {
+  position: relative;
   width: 100%;
-  max-height: 1080px;
-  min-height: 760px;
-  overflow: clip;
+  min-height: calc(100svh - 80px);
+  height: calc(100svh - 80px);
+  min-height: 680px;
+  max-height: 1050px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(ellipse at 77% 48%, #14336555, transparent 48%),
-    radial-gradient(ellipse at 95% 80%, #f9731614, transparent 35%);
+  background: #09090b;
+  padding: 40px 24px 70px;
 }
-.hero-copy {
-  margin-left: max(56px, calc((100vw - 1240px) / 2));
-  width: min(510px, 42vw);
+
+.hero-center-stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 980px;
+  margin: auto 0;
 }
-.hero h1 {
-  font-size: clamp(100px, 10.5vw, 164px);
-  letter-spacing: -.065em;
-  line-height: .91;
+
+.hero-focal-island {
+  position: relative;
+  background: radial-gradient(130% 130% at 50% 15%, rgba(22, 22, 28, 0.65) 0%, rgba(10, 10, 14, 0.85) 100%);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 36px;
+  padding: 44px 56px;
+  box-shadow: 0 35px 90px -15px rgba(0, 0, 0, 0.9), 0 10px 30px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 860px;
+  width: 100%;
 }
-.hero-art {
-  position: absolute;
-  width: 65%;
-  height: 100%;
-  right: -4%;
-  top: 0;
-  z-index: -1;
+
+.hero-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #93c5fd;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.live-dot-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6);
+  animation: liveDotPulse 2s infinite;
+}
+
+@keyframes liveDotPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+.hero-single-title {
+  font-size: clamp(40px, 6.2vw, 76px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #ffffff;
   margin: 0;
+  white-space: nowrap;
 }
-@media (max-width: 1050px) and (min-width: 701px) {
-  .hero-copy { margin-left: 36px; }
-  .hero-description { font-size: 18px; }
-  .hero-art { width: 61%; right: -5%; }
+
+.hero-single-description {
+  font-size: clamp(15px, 1.5vw, 19px);
+  color: #94a3b8;
+  margin: 18px 0 0;
+  font-weight: 450;
+  line-height: 1.4;
+  white-space: nowrap;
 }
-@media (max-width: 700px) {
-  .hero { min-height: 0; max-height: none; padding-top: 44px; }
-  .hero-copy { margin: 0 20px; width: calc(100% - 40px); padding-bottom: 0; }
-  .hero h1 { font-size: clamp(88px, 23vw, 132px); }
-  .hero-description { font-size: 17px; }
-  .hero-art { position: relative; width: 100%; height: 510px; right: auto; margin: 0; z-index: 0; }
+
+.hero-actions-row {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
+
+.hero-actions-row .install-buttons {
+  margin-top: 0;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .hero.hero-fullscreen {
+    padding: 30px 16px 60px;
+    height: auto;
+    min-height: calc(100svh - 80px);
+  }
+  .hero-focal-island {
+    padding: 32px 20px;
+    border-radius: 28px;
+  }
+  .hero-single-title {
+    font-size: clamp(34px, 8.5vw, 48px);
+  }
+  .hero-single-description {
+    white-space: normal;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+
 /* ==========================================================================
    HERO TRANSIT MAP — Centro de Manaus em Movimento (60fps GPU Vector)
    ========================================================================== */
 .hero-transit-stage {
   position: absolute;
-  inset: -60px -80px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  z-index: 0;
-  overflow: visible;
+  z-index: 1;
+  overflow: hidden;
 }
+
+.transit-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(9, 9, 11, 0.5) 0%, rgba(9, 9, 11, 0.76) 55%, rgba(9, 9, 11, 0.96) 100%),
+              linear-gradient(to bottom, rgba(9, 9, 11, 0.85) 0%, transparent 18%, transparent 80%, #09090b 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 .transit-svg-canvas {
   width: 100%;
   height: 100%;
-  overflow: visible;
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  z-index: 1;
 }
-.transit-vehicle-640 {
-  offset-path: path("M 60 40 C 180 160, 260 260, 330 330 C 420 420, 480 470, 560 520 C 640 570, 710 590, 820 620 C 890 640, 950 635, 1010 650");
-  animation: travelCorridor640 18s linear infinite;
+
+.hero-bus-vehicle-640 {
+  offset-path: path("M 60 20 C 220 180, 320 300, 420 400 C 520 500, 620 570, 720 630 C 820 690, 910 720, 1020 750 C 1120 780, 1220 790, 1340 810");
+  animation: heroTravel640 18s linear infinite;
 }
-.transit-vehicle-300 {
-  offset-path: path("M 120 20 Q 260 210 390 340 T 630 500 T 840 610");
-  animation: travelCorridor300 24s linear infinite 4s;
+
+.hero-bus-vehicle-300 {
+  offset-path: path("M 320 -20 Q 480 220 640 400 T 920 610 T 1150 730");
+  animation: heroTravel300 24s linear infinite 3s;
 }
-@keyframes travelCorridor640 {
+
+@keyframes heroTravel640 {
+  0% { offset-distance: 0%; opacity: 0; }
+  3% { opacity: 1; }
+  96% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes heroTravel300 {
   0% { offset-distance: 0%; opacity: 0; }
   4% { opacity: 1; }
   96% { opacity: 1; }
   100% { offset-distance: 100%; opacity: 0; }
 }
-@keyframes travelCorridor300 {
-  0% { offset-distance: 0%; opacity: 0; }
-  4% { opacity: 1; }
-  96% { opacity: 1; }
-  100% { offset-distance: 100%; opacity: 0; }
-}
+
 .vehicle-pulse {
   animation: pulseRing 2.4s ease-out infinite;
   transform-origin: center;
 }
+
 @keyframes pulseRing {
-  0% { r: 10px; opacity: 0.8; }
-  100% { r: 32px; opacity: 0; }
+  0% { r: 12px; opacity: 0.8; }
+  100% { r: 36px; opacity: 0; }
 }
 
 /* ==========================================================================
-   HERO BREAKOUT 3D CARDS (FANCY / Dribbble Standard - Zero Neon)
+   HERO BREAKOUT 3D CARDS (HUD Periférico - Zero Neon)
    ========================================================================== */
 .hero-breakout-container {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 6;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
 }
+
 .breakout-card {
   position: absolute;
-  background: rgba(18, 18, 24, 0.9);
+  background: rgba(18, 18, 24, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
-  padding: 12px 15px;
+  padding: 12px 16px;
   box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 10px 20px -5px rgba(0, 0, 0, 0.7);
   color: #ffffff;
   animation: floatCard 6s ease-in-out infinite;
 }
+
 .card-arrival {
-  top: 18%;
-  left: -20px;
+  top: 16%;
+  left: max(32px, calc((100vw - 1280px) / 2));
   width: 220px;
 }
+
 .card-terminal {
-  bottom: 22%;
-  right: -10px;
+  bottom: 18%;
+  right: max(32px, calc((100vw - 1280px) / 2));
   width: 210px;
   animation-delay: -3s;
 }
+
 @keyframes floatCard {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-8px) rotate(0.8deg); }
 }
+
+@media (max-width: 960px) {
+  .hero-breakout-container {
+    display: none;
+  }
+}
+
 .card-pill-header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
 }
+
 .card-line-badge {
   background: #2563eb;
   color: #ffffff;

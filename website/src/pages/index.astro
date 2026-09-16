@@ -25,20 +25,31 @@ import InstallModal from '../components/InstallModal.astro';
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <header class="header"><a href="#" class="brand" aria-label="Manô, início"><img src="/brand/icon.png" width="38" height="38" alt="" class="brand-logo-img"/><img src="/brand/original-name-white.png" width="92" height="23" alt="Manô" class="brand-name-img"/></a><nav aria-label="Principal"><a href="#recursos">O aplicativo</a><a href="#trajetos">Trajetos</a><a href="#conexoes">Conexões</a></nav><a class="nav-install" href="#instalar">Instalar Manô <span>↗</span></a></header>
 <main id="conteudo">
-  <section class="hero wrap" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <h1 id="hero-title">Manô,<br/><span class="blue">bora?</span></h1>
-      <p class="hero-description">O transporte público de Manaus em tempo real no seu celular.</p>
-      <InstallButtons/>
-    </div>
-    <div class="hero-art" id="hero-art" role="img" aria-label="Manô em um iPhone com mapa em tempo real de Manaus">
-      <HeroTransitMap/>
-      <div class="hero-phones" id="hero-fallback">
-        <Phone screen="ida" class="hero-iphone" eager/>
+  <section class="hero hero-fullscreen" aria-labelledby="hero-title">
+    <HeroTransitMap/>
+    <HeroBreakoutCards/>
+
+    <div class="hero-center-stage">
+      <div class="hero-focal-island">
+        <div class="hero-live-badge">
+          <span class="live-dot-pulse"></span>
+          <span>OPERAÇÃO AO VIVO • MANAUS</span>
+        </div>
+
+        <h1 id="hero-title" class="hero-single-title">
+          Manô, <span class="blue">bora?</span>
+        </h1>
+
+        <p class="hero-single-description">
+          O transporte público de Manaus em tempo real no seu celular.
+        </p>
+
+        <div class="hero-actions-row">
+          <InstallButtons/>
+        </div>
       </div>
-      <HeroBreakoutCards/>
-      <div id="hero-canvas" aria-hidden="true"></div>
     </div>
+
     <div class="hero-foot">
       <a href="#recursos" class="hero-scroll-cue">Explore o Manô <span>↓</span></a>
     </div>
