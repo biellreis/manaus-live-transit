@@ -93,14 +93,18 @@ export async function createHero(host: HTMLElement) {
   renderer.setClearColor(0x09090b, 0);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-  camera.position.z = 7.6;
-  scene.add(new THREE.HemisphereLight(0xf1f5ff, 0x171b29, 3));
-  const key = new THREE.DirectionalLight(0xffffff, 5);
+  camera.position.z = 5.8;
+  scene.add(new THREE.HemisphereLight(0xf1f5ff, 0x0c0f18, 2.5));
+  const key = new THREE.DirectionalLight(0xffffff, 5.5);
   key.position.set(-3, 4, 6);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x649bff, 3);
-  rim.position.set(5, 0, 3);
-  scene.add(rim);
+  // Dual-tone chromatic rim lighting: Manaus Blue + Vibrant Orange
+  const blueRim = new THREE.DirectionalLight(0x3b82f6, 4.5);
+  blueRim.position.set(5.5, 0, 3);
+  scene.add(blueRim);
+  const orangeRim = new THREE.DirectionalLight(0xf97316, 3.2);
+  orangeRim.position.set(-5.5, -2, 2.5);
+  scene.add(orangeRim);
   const loader = new THREE.TextureLoader();
   let textures: THREE.Texture[];
   try {
@@ -119,9 +123,11 @@ export async function createHero(host: HTMLElement) {
   });
   const front = phone(textures[0], false),
     back = phone(textures[1], true);
-  front.position.set(-0.5, -0.11, 0.35);
+  front.position.set(-0.52, -0.06, 0.42);
+  front.scale.setScalar(1.08);
   front.rotation.set(0.035, 0.22, 0.14);
-  back.position.set(0.68, 0.25, -0.15);
+  back.position.set(0.72, 0.26, -0.15);
+  back.scale.setScalar(1.04);
   back.rotation.set(-0.025, -0.28, -0.16);
   // The Android texture is app-only: a narrow physical camera hole is added once.
   const hole = new THREE.Mesh(
@@ -145,7 +151,7 @@ export async function createHero(host: HTMLElement) {
     const { width, height } = host.getBoundingClientRect();
     renderer.setSize(width, height);
     camera.aspect = width / height;
-    camera.position.z = camera.aspect < 0.85 ? 7.7 : 6.4;
+    camera.position.z = camera.aspect < 0.85 ? 6.9 : 5.7;
     camera.updateProjectionMatrix();
     request();
   };
@@ -154,16 +160,20 @@ export async function createHero(host: HTMLElement) {
     if (disposed || !visible || document.hidden) return;
     currentX += (targetX - currentX) * 0.12;
     currentY += (targetY - currentY) * 0.12;
-    // A finite four-second reveal settles to demand-only pointer rendering.
-    const progress = Math.min(1, (performance.now() - introStart) / 4000);
+    const now = performance.now();
+    const progress = Math.min(1, (now - introStart) / 4000);
     const remaining = Math.pow(1 - progress, 3);
+    const time = (now - introStart) * 0.001;
+    const floatFront = Math.sin(time * 0.7) * 0.025;
+    const floatBack = Math.cos(time * 0.6) * 0.02;
+    front.position.y = -0.06 + floatFront;
+    back.position.y = 0.26 - floatBack;
     scene.rotation.y = currentX - remaining * 0.22;
     scene.rotation.x = currentY + remaining * 0.06;
     scene.scale.setScalar(1 - remaining * 0.09);
     renderer.render(scene, camera);
     host.classList.add("ready");
-    if (progress < 1 || Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.0005)
-      request();
+    request();
   };
   function request() {
     if (!frame && !disposed) frame = requestAnimationFrame(render);
