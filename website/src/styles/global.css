@@ -527,6 +527,105 @@ h1 {
   border-color: rgba(255, 255, 255, 0.16);
   transform: translateY(2px);
 }
+/* ==========================================================================
+   SISTEMA DE SEÇÕES ALTERNADAS (PRETO E AZUL) — DESIGN PROFISSIONAL
+   Sessão 1: Hero (Preto)
+   Sessão 2: Recursos / Showcase 3D (Azul)
+   Sessão 3: Planejar Viagem (Preto)
+   Sessão 4: Linhas (Azul)
+   Sessão 5: Trajetos (Preto)
+   Sessão 6: Ônibus no Mapa (Azul)
+   Sessão 7: Conexões (Preto)
+   Sessão 8: Alertas (Azul)
+   Sessão 9: Instalar (Preto)
+   Footer:   Preto
+   ========================================================================== */
+.section-full-width {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Seções Pretas */
+.section-bg-black {
+  background-color: #09090b;
+  position: relative;
+}
+
+/* Seções Azuis — Tom azul profundo sofisticado Apple / Manô transit */
+.section-bg-blue {
+  background-color: #0c1e3d;
+  background: radial-gradient(circle at 50% 18%, #17376e 0%, #0d2146 55%, #08162d 100%);
+  border-top: 1px solid rgba(59, 130, 246, 0.22);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.22);
+  position: relative;
+}
+
+/* Ajustes de contraste e legibilidade nas seções com fundo azul */
+.section-bg-blue .eyebrow:not(.orange) {
+  color: #60a5fa;
+}
+
+.section-bg-blue h2 {
+  color: #ffffff;
+}
+
+.section-bg-blue h2 .muted,
+.section-bg-blue .muted {
+  color: #93c5fd;
+  opacity: 0.9;
+}
+
+.section-bg-blue p:not(.eyebrow) {
+  color: #cbd5e1;
+}
+
+/* Linhas section dentro do fundo azul */
+.section-bg-blue.lines-section {
+  background: transparent;
+  border-block: none;
+}
+
+.section-bg-blue .line-row {
+  background: rgba(8, 18, 38, 0.75);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.section-bg-blue .line-row:hover {
+  border-color: rgba(96, 165, 250, 0.45);
+  background: rgba(12, 28, 58, 0.85);
+}
+
+.section-bg-blue .line-row small {
+  color: #93c5fd;
+  opacity: 0.85;
+}
+
+/* Mapa ao vivo dentro do fundo azul */
+.section-bg-blue .live-copy h2 .blue {
+  color: #60a5fa;
+}
+
+.section-bg-blue .map-window {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 25px 70px rgba(0, 8, 24, 0.75);
+}
+
+/* Alertas dentro do fundo azul */
+.section-bg-blue .alert-badge {
+  background: #1b120c;
+  border: 1px solid rgba(249, 115, 22, 0.55);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+}
+
+.section-bg-blue .orange-disc {
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.16), transparent 70%);
+}
+
 section[id] {
   scroll-margin-top: 36px;
 }
@@ -1933,27 +2032,46 @@ body:has(dialog[open]) {
   max-width: 480px;
 }
 
+.intro-left-diagram .eyebrow {
+  color: #60a5fa;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+}
+
 .intro-split-heading {
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(38px, 4.5vw, 64px);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
   color: #ffffff;
   margin: 12px 0 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .intro-split-heading .muted {
-  color: #71717a;
+  color: #93c5fd;
+  opacity: 0.9;
   display: block;
   margin-top: 6px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
 }
 
 .intro-split-sub {
-  font-size: 18px;
-  line-height: 1.5;
-  color: #9ca3af;
-  margin-top: 18px;
-  max-width: 420px;
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.48;
+  letter-spacing: -0.012em;
+  color: #cbd5e1;
+  margin-top: 20px;
+  max-width: 440px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Coluna da Direita: iPhone 3D Deitado ocupando o espaço completo e posicionado mais ao alto */

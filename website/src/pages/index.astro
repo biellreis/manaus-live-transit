@@ -40,7 +40,8 @@ import InstallModal from '../components/InstallModal.astro';
   </div>
 </header>
 <main id="conteudo">
-  <section class="hero hero-fullscreen" aria-labelledby="hero-title">
+  <!-- SESSÃO 1: HERO (PRETO) -->
+  <section class="hero hero-fullscreen section-bg-black" aria-labelledby="hero-title">
     <HeroTransitMap/>
 
     <div class="hero-center-content">
@@ -64,8 +65,9 @@ import InstallModal from '../components/InstallModal.astro';
     </div>
   </section>
 
-  <section class="intro-split-section wrap" id="recursos">
-    <div class="intro-split-container">
+  <!-- SESSÃO 2: RECURSOS / SHOWCASE 3D (AZUL) -->
+  <section class="section-full-width section-bg-blue intro-split-section" id="recursos">
+    <div class="wrap intro-split-container">
       <div class="intro-left-diagram">
         <p class="eyebrow">TRANSPORTE EM TEMPO REAL</p>
         <h2 class="intro-split-heading">
@@ -83,31 +85,35 @@ import InstallModal from '../components/InstallModal.astro';
     </div>
   </section>
 
-  <section class="chapter wrap planner" id="planejar">
-    <div class="chapter-copy">
-      <p class="eyebrow"><span class="chapter-number">01</span> PLANEJE SUA VIAGEM</p>
-      <h2>Para onde<br/>vamos <span class="blue">hoje?</span></h2>
-      <p>Escolha de onde sair e aonde chegar.<br/>Encontre as melhores linhas e os passos do seu percurso.</p>
-      <div class="journey-steps" aria-label="Etapas do planejamento">
-        <button class="step active" data-planner="planner" aria-pressed="true">
-          <span>1</span>
-          <div>Escolha seu destino</div>
-          <span>↗</span>
-        </button>
-        <button class="step" data-planner="journey" aria-pressed="false">
-          <span>2</span>
-          <div>Veja como chegar</div>
-          <span>↗</span>
-        </button>
+  <!-- SESSÃO 3: PLANEJAR VIAGEM (PRETO) -->
+  <section class="section-full-width section-bg-black" id="planejar">
+    <div class="wrap chapter planner">
+      <div class="chapter-copy">
+        <p class="eyebrow"><span class="chapter-number">01</span> PLANEJE SUA VIAGEM</p>
+        <h2>Para onde<br/>vamos <span class="blue">hoje?</span></h2>
+        <p>Escolha de onde sair e aonde chegar.<br/>Encontre as melhores linhas e os passos do seu percurso.</p>
+        <div class="journey-steps" aria-label="Etapas do planejamento">
+          <button class="step active" data-planner="planner" aria-pressed="true">
+            <span>1</span>
+            <div>Escolha seu destino</div>
+            <span>↗</span>
+          </button>
+          <button class="step" data-planner="journey" aria-pressed="false">
+            <span>2</span>
+            <div>Veja como chegar</div>
+            <span>↗</span>
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="chapter-art planner-art">
-      <div class="route-ring"></div>
-      <Phone screen="planner" id="planner-screen" class="feature-phone"/>
+      <div class="chapter-art planner-art">
+        <div class="route-ring"></div>
+        <Phone screen="planner" id="planner-screen" class="feature-phone"/>
+      </div>
     </div>
   </section>
 
-  <section class="lines-section" id="linhas">
+  <!-- SESSÃO 4: LINHAS (AZUL) -->
+  <section class="section-full-width section-bg-blue lines-section" id="linhas">
     <div class="wrap lines-grid">
       <div>
         <p class="eyebrow"><span class="chapter-number">02</span> ENCONTRE SUA LINHA</p>
@@ -122,48 +128,55 @@ import InstallModal from '../components/InstallModal.astro';
     </div>
   </section>
 
-  <section class="route-section wrap" id="trajetos">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow"><span class="chapter-number">03</span> CADA SENTIDO, UM CAMINHO</p>
-        <h2>Na ida. Na volta.<br/><span class="blue">Com você.</span></h2>
+  <!-- SESSÃO 5: TRAJETOS (PRETO) -->
+  <section class="section-full-width section-bg-black" id="trajetos">
+    <div class="wrap route-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="chapter-number">03</span> CADA SENTIDO, UM CAMINHO</p>
+          <h2>Na ida. Na volta.<br/><span class="blue">Com você.</span></h2>
+        </div>
+        <div>
+          <p>Visualize o percurso e suas paradas.<br/>Escolha o sentido e acompanhe no mapa.</p>
+          <div class="segmented" role="group" aria-label="Sentido do trajeto">
+            <button data-route="ida" class="active" aria-pressed="true">↗ Ida</button>
+            <button data-route="volta" aria-pressed="false">↙ Volta</button>
+          </div>
+        </div>
       </div>
-      <div>
-        <p>Visualize o percurso e suas paradas.<br/>Escolha o sentido e acompanhe no mapa.</p>
-        <div class="segmented" role="group" aria-label="Sentido do trajeto">
-          <button data-route="ida" class="active" aria-pressed="true">↗ Ida</button>
-          <button data-route="volta" aria-pressed="false">↙ Volta</button>
+      <div class="route-stage">
+        <svg class="route-decoration" viewBox="0 0 1100 560" fill="none" aria-hidden="true">
+          <path d="M-50 400H190Q250 400 250 340V230Q250 180 310 180H810Q870 180 870 120V90Q870 40 930 40H1170" stroke="currentColor" stroke-width="2"/>
+          <path d="M-50 460H250Q320 460 320 400V290Q320 240 380 240H870Q930 240 930 180V150Q930 100 990 100H1170" stroke="currentColor" stroke-width="1" opacity=".2"/>
+          <circle cx="250" cy="300" r="8" fill="currentColor"/>
+          <circle cx="870" cy="100" r="8" fill="currentColor"/>
+        </svg>
+        <Phone screen="ida" id="route-screen" class="route-phone"/>
+        <div class="route-note">
+          <span class="line-code">640</span>
+          <h3 id="route-title">Seu trajeto de ida.</h3>
+          <p id="route-description">Veja o percurso e as paradas<br/>antes mesmo de embarcar.</p>
         </div>
       </div>
     </div>
-    <div class="route-stage">
-      <svg class="route-decoration" viewBox="0 0 1100 560" fill="none" aria-hidden="true">
-        <path d="M-50 400H190Q250 400 250 340V230Q250 180 310 180H810Q870 180 870 120V90Q870 40 930 40H1170" stroke="currentColor" stroke-width="2"/>
-        <path d="M-50 460H250Q320 460 320 400V290Q320 240 380 240H870Q930 240 930 180V150Q930 100 990 100H1170" stroke="currentColor" stroke-width="1" opacity=".2"/>
-        <circle cx="250" cy="300" r="8" fill="currentColor"/>
-        <circle cx="870" cy="100" r="8" fill="currentColor"/>
-      </svg>
-      <Phone screen="ida" id="route-screen" class="route-phone"/>
-      <div class="route-note">
-        <span class="line-code">640</span>
-        <h3 id="route-title">Seu trajeto de ida.</h3>
-        <p id="route-description">Veja o percurso e as paradas<br/>antes mesmo de embarcar.</p>
+  </section>
+
+  <!-- SESSÃO 6: ÔNIBUS NO MAPA (AZUL) -->
+  <section class="section-full-width section-bg-blue" id="veiculos">
+    <div class="wrap live-section">
+      <div class="live-copy">
+        <p class="eyebrow"><span class="chapter-number">04</span> ÔNIBUS NO MAPA</p>
+        <h2>Seu ônibus.<br/>Mais <span class="blue">perto.</span></h2>
+        <p>Acompanhe os veículos disponíveis na sua linha.<br/>Mais informação para decidir quando sair.</p>
+      </div>
+      <div class="map-window">
+        <LiveTransitMap/>
       </div>
     </div>
   </section>
 
-  <section class="live-section wrap" id="veiculos">
-    <div class="live-copy">
-      <p class="eyebrow"><span class="chapter-number">04</span> ÔNIBUS NO MAPA</p>
-      <h2>Seu ônibus.<br/>Mais <span class="blue">perto.</span></h2>
-      <p>Acompanhe os veículos disponíveis na sua linha.<br/>Mais informação para decidir quando sair.</p>
-    </div>
-    <div class="map-window">
-      <LiveTransitMap/>
-    </div>
-  </section>
-
-  <section class="connections-section" id="conexoes">
+  <!-- SESSÃO 7: CONEXÕES (PRETO) -->
+  <section class="section-full-width section-bg-black connections-section" id="conexoes">
     <div class="wrap">
       <div class="center-heading">
         <p class="eyebrow"><span class="chapter-number">05</span> CONEXÕES QUE APROXIMAM</p>
@@ -183,46 +196,52 @@ import InstallModal from '../components/InstallModal.astro';
     </div>
   </section>
 
-  <section class="chapter alerts-section wrap" id="alertas">
-    <div class="chapter-art alert-art">
-      <div class="orange-disc"></div>
-      <Phone screen="alerts" class="alert-phone"/>
-      <span class="alert-badge"><Icon name="bell" size={26}/></span>
-    </div>
-    <div class="chapter-copy">
-      <p class="eyebrow orange"><span class="chapter-number">06</span> NO RITMO DA CIDADE</p>
-      <h2>Saiba antes.<br/><span class="orange">Vá melhor.</span></h2>
-      <p>Informações de trânsito em um só lugar.<br/>Confira os alertas e siga mais informado.</p>
+  <!-- SESSÃO 8: ALERTAS (AZUL) -->
+  <section class="section-full-width section-bg-blue" id="alertas">
+    <div class="wrap chapter alerts-section">
+      <div class="chapter-art alert-art">
+        <div class="orange-disc"></div>
+        <Phone screen="alerts" class="alert-phone"/>
+        <span class="alert-badge"><Icon name="bell" size={26}/></span>
+      </div>
+      <div class="chapter-copy">
+        <p class="eyebrow orange"><span class="chapter-number">06</span> NO RITMO DA CIDADE</p>
+        <h2>Saiba antes.<br/><span class="orange">Vá melhor.</span></h2>
+        <p>Informações de trânsito em um só lugar.<br/>Confira os alertas e siga mais informado.</p>
+      </div>
     </div>
   </section>
 
-  <section class="install-section wrap" id="instalar">
-    <div class="install-symbol">
-      <img src="/brand/icon.png" width="88" height="88" alt="Ícone do Manô" class="install-icon-main"/>
-    </div>
-    <p class="eyebrow">SEU PRÓXIMO CAMINHO COMEÇA AQUI.</p>
-    <h2>Leve o Manô<br/><span class="blue">com você.</span></h2>
-    <p>Seu aplicativo de mobilidade em Manaus.<br/>No iPhone. No Android. Na sua rotina.</p>
-    <InstallButtons/>
+  <!-- SESSÃO 9: INSTALAR (PRETO) -->
+  <section class="section-full-width section-bg-black" id="instalar">
+    <div class="wrap install-section">
+      <div class="install-symbol">
+        <img src="/brand/icon.png" width="88" height="88" alt="Ícone do Manô" class="install-icon-main"/>
+      </div>
+      <p class="eyebrow">SEU PRÓXIMO CAMINHO COMEÇA AQUI.</p>
+      <h2>Leve o Manô<br/><span class="blue">com você.</span></h2>
+      <p>Seu aplicativo de mobilidade em Manaus.<br/>No iPhone. No Android. Na sua rotina.</p>
+      <InstallButtons/>
 
-    <div class="faq">
-      <details>
-        <summary>Preciso baixar de uma loja de aplicativos?<span>+</span></summary>
-        <p>Não. O Manô é adicionado direto à sua tela inicial sem precisar de lojas. No iPhone, basta seguir os 4 toques pelo Safari. No Android, toque em Instalar e confirme no navegador.</p>
-      </details>
-      <details>
-        <summary>Funciona sem internet?<span>+</span></summary>
-        <p>Para consultar informações atualizadas, planejar viagens e acompanhar os ônibus, mantenha uma conexão com a internet.</p>
-      </details>
-      <details>
-        <summary>O que aparece no mapa é ao vivo?<span>+</span></summary>
-        <p>No aplicativo, os veículos são atualizados conforme os dados de telemetria e GPS da operação de transporte de Manaus.</p>
-      </details>
+      <div class="faq">
+        <details>
+          <summary>Preciso baixar de uma loja de aplicativos?<span>+</span></summary>
+          <p>Não. O Manô é adicionado direto à sua tela inicial sem precisar de lojas. No iPhone, basta seguir os 4 toques pelo Safari. No Android, toque em Instalar e confirme no navegador.</p>
+        </details>
+        <details>
+          <summary>Funciona sem internet?<span>+</span></summary>
+          <p>Para consultar informações atualizadas, planejar viagens e acompanhar os ônibus, mantenha uma conexão com a internet.</p>
+        </details>
+        <details>
+          <summary>O que aparece no mapa é ao vivo?<span>+</span></summary>
+          <p>No aplicativo, os veículos são atualizados conforme os dados de telemetria e GPS da operação de transporte de Manaus.</p>
+        </details>
+      </div>
     </div>
   </section>
 </main>
-<footer class="footer-minimal wrap">
-  <div class="footer-center">
+<footer class="footer-minimal section-bg-black">
+  <div class="wrap footer-center">
     <div class="footer-brand">
       <img src="/brand/icon.png" width="36" height="36" alt="" class="brand-logo-img"/>
       <img src="/brand/original-name-white.png" width="36" height="9" alt="Manô" class="brand-name-img"/>
