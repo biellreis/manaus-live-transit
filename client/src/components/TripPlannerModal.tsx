@@ -7,7 +7,8 @@ import {
   X,
   ArrowUpDown,
   ChevronRight,
-  History
+  History,
+  ArrowRightLeft
 } from 'lucide-react';
 import type { RouteSummary, TransitHub, StopInfo, PlanJourneyResult, TransitOption, PlannedTrip } from '../types/transit.js';
 import type { UserLocation } from '../hooks/useUserLocation.js';
@@ -388,10 +389,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               totalMinutes: opt.totalMinutes,
               isTransfer: opt.verifiedLegs.length > 1,
               transferHubName: opt.transferHubName,
+              secondLine: opt.verifiedLegs[1]?.line,
               originPlatformOrPoint: opt.originPlatformOrPoint,
               destPlatformOrPoint: opt.destPlatformOrPoint,
               etaMinutes: opt.etaMinutes,
               etaTime: opt.etaTime,
+              destEtaTime: opt.destEtaTime,
+              destEtaMinutes: opt.destEtaMinutes,
               liveBusCount: opt.liveBusCount,
               upcomingBuses: opt.upcomingBuses,
               isLiveGps: opt.isLiveGps
@@ -487,10 +491,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       totalMinutes: activeOption.totalMinutes,
       isTransfer: legs.length > 1,
       transferHubName: activeOption.transferHubName,
+      secondLine: legs[1]?.line,
       originPlatformOrPoint: activeOption.originPlatformOrPoint,
       destPlatformOrPoint: activeOption.destPlatformOrPoint,
       etaMinutes: activeOption.etaMinutes,
       etaTime: activeOption.etaTime,
+      destEtaTime: activeOption.destEtaTime,
+      destEtaMinutes: activeOption.destEtaMinutes,
       liveBusCount: activeOption.liveBusCount,
       upcomingBuses: activeOption.upcomingBuses,
       isLiveGps: activeOption.isLiveGps
@@ -516,7 +523,8 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
         position: 'fixed',
         inset: 0,
         zIndex: 200,
-        backgroundColor: '#09090B',
+        backgroundColor: 'var(--bg-canvas, #09090B)',
+        color: 'var(--text-primary, #FFFFFF)',
         display: 'flex',
         flexDirection: 'column',
         animation: 'fadeIn 0.2s ease-out'
@@ -602,11 +610,12 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
               left: 0,
               right: 0,
               zIndex: 35,
-              backgroundColor: '#09090B',
+              backgroundColor: 'var(--bg-sheet, #09090B)',
               borderTopLeftRadius: '24px',
               borderTopRightRadius: '24px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-              boxShadow: '0 -8px 30px rgba(0, 0, 0, 0.8)',
+              borderTop: '1px solid var(--border-medium, rgba(255, 255, 255, 0.12))',
+              boxShadow: 'var(--shadow-sheet, 0 -8px 30px rgba(0, 0, 0, 0.8))',
+              color: 'var(--text-primary, #FFFFFF)',
               display: 'flex',
               flexDirection: 'column',
               maxHeight: '52dvh',
@@ -680,7 +689,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                           transition: 'all 0.15s ease'
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
                           <div
                             style={{
                               width: '46px',
@@ -692,36 +701,73 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               justifyContent: 'center',
                               color: '#FFFFFF',
                               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
+                              position: 'relative',
                               flexShrink: 0
                             }}
                           >
-                            <Bus size={24} />
+                            <Bus size={isDirect ? 24 : 20} />
+                            {!isDirect && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  bottom: '-4px',
+                                  right: '-4px',
+                                  backgroundColor: '#18181B',
+                                  border: '2px solid #FFFFFF',
+                                  borderRadius: '50%',
+                                  width: '19px',
+                                  height: '19px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.8)'
+                                }}
+                                title="Troca de ônibus"
+                              >
+                                <ArrowRightLeft size={10} color="#FFFFFF" strokeWidth={2.8} />
+                              </div>
+                            )}
                           </div>
 
-                          <div>
-                            <div style={{ marginBottom: '2px' }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                               <span style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF' }}>
                                 Linha {opt.title}
                               </span>
+                              {opt.totalMinutes && (
+                                <span style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 700, backgroundColor: 'rgba(255, 255, 255, 0.08)', padding: '1px 6px', borderRadius: '4px' }}>
+                                  {opt.totalMinutes} min
+                                </span>
+                              )}
                             </div>
 
-                            <div style={{ fontSize: '12px', color: '#A1A1AA' }}>{opt.subtitle}</div>
+                            <div style={{ fontSize: '12px', color: '#A1A1AA', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {opt.subtitle}
+                            </div>
 
                             <div style={{ marginTop: '5px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                               <span
                                 style={{
                                   display: 'inline-flex',
                                   alignItems: 'center',
+                                  gap: '4px',
                                   backgroundColor: isDirect ? '#2563EB' : '#D97706',
                                   color: '#FFFFFF',
-                                  fontSize: '10px',
+                                  fontSize: '10.5px',
                                   fontWeight: 800,
                                   padding: '2px 8px',
                                   borderRadius: '999px'
                                 }}
                               >
-                                {opt.badge}
+                                {!isDirect && <ArrowRightLeft size={11} color="#FFFFFF" strokeWidth={2.8} />}
+                                <span>{opt.badge}</span>
                               </span>
+
+                              {opt.destEtaTime && (
+                                <span style={{ fontSize: '11px', color: '#38BDF8', fontWeight: 700 }}>
+                                  • Chega às {opt.destEtaTime}
+                                </span>
+                              )}
 
                               {opt.upcomingBuses && opt.upcomingBuses.length > 0 && (
                                 <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
@@ -732,7 +778,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                           </div>
                         </div>
 
-                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <div style={{ textAlign: 'right', flexShrink: 0, paddingLeft: '8px' }}>
                           {opt.etaTime && typeof opt.etaMinutes === 'number' ? (
                             <div>
                               <div style={{ fontSize: '16px', fontWeight: 900, color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
@@ -752,6 +798,11 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               >
                                 {opt.etaMinutes <= 1 ? 'Chegando' : `em ${opt.etaMinutes} min`}
                               </div>
+                              {opt.destEtaTime && (
+                                <div style={{ fontSize: '10.5px', color: '#94A3B8', marginTop: '3px', fontWeight: 600 }}>
+                                  Destino: {opt.destEtaTime}
+                                </div>
+                              )}
                             </div>
                           ) : (
                             <div>
@@ -759,6 +810,11 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               <div style={{ fontSize: '10px', color: '#71717A', marginTop: '2px' }}>
                                 {opt.liveBusCount ? `${opt.liveBusCount} na rota` : 'Em operação'}
                               </div>
+                              {opt.totalMinutes && (
+                                <div style={{ fontSize: '10.5px', color: '#94A3B8', marginTop: '2px', fontWeight: 600 }}>
+                                  ~{opt.totalMinutes} min
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>

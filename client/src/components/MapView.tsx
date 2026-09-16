@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import type { RouteSummary, TripDetail, LiveBus, TransitHub, StopInfo, PlannedTrip } from '../types/transit.js';
 import type { UserLocation } from '../hooks/useUserLocation.js';
-import { ArrowLeft, Navigation, Compass } from 'lucide-react';
+import { ArrowLeft, Navigation, Compass, Sun, Moon } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { getBusLineColor } from '../utils/transitColors.js';
 import { resolveStreetWalkingPath } from '../utils/walkingRoute.js';
@@ -855,14 +855,14 @@ export const MapView: React.FC<MapViewProps> = ({
               width: '42px',
               height: '42px',
               borderRadius: '50%',
-              backgroundColor: '#000000',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              backgroundColor: isDarkMode ? '#000000' : '#FFFFFF',
+              border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.12)',
               color: '#3B82F6',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
+              boxShadow: isDarkMode ? '0 4px 16px rgba(0, 0, 0, 0.6)' : '0 4px 16px rgba(0, 0, 0, 0.12)',
               outline: 'none'
             }}
             title="Minha Localização GPS"
@@ -880,14 +880,14 @@ export const MapView: React.FC<MapViewProps> = ({
               width: '42px',
               height: '42px',
               borderRadius: '50%',
-              backgroundColor: '#000000',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              color: '#A1A1AA',
+              backgroundColor: isDarkMode ? '#000000' : '#FFFFFF',
+              border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.12)',
+              color: isDarkMode ? '#A1A1AA' : '#475569',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
+              boxShadow: isDarkMode ? '0 4px 16px rgba(0, 0, 0, 0.6)' : '0 4px 16px rgba(0, 0, 0, 0.12)',
               outline: 'none'
             }}
             title="Redefinir Norte"
@@ -906,23 +906,21 @@ export const MapView: React.FC<MapViewProps> = ({
               width: '42px',
               height: '42px',
               borderRadius: '50%',
-              backgroundColor: '#000000',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              color: isDarkMode ? '#3B82F6' : '#FFFFFF',
+              backgroundColor: isDarkMode ? '#000000' : '#FFFFFF',
+              border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.12)',
+              color: isDarkMode ? '#F59E0B' : '#2563EB',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
-              outline: 'none',
-              fontSize: '10px',
-              fontWeight: 800
+              boxShadow: isDarkMode ? '0 4px 16px rgba(0, 0, 0, 0.6)' : '0 4px 16px rgba(0, 0, 0, 0.12)',
+              outline: 'none'
             }}
             aria-pressed={isDarkMode}
             aria-label="Alternar tema do mapa"
-            title={isDarkMode ? "Alternar para Modo Claro (Branco)" : "Alternar para Modo Escuro"}
+            title={isDarkMode ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
           >
-            {isDarkMode ? 'CLARO' : 'DARK'}
+            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
       )}
@@ -937,10 +935,10 @@ export const MapView: React.FC<MapViewProps> = ({
             left: '16px',
             right: '16px',
             zIndex: 40,
-            backgroundColor: '#121214',
+            backgroundColor: isDarkMode ? '#121214' : '#FFFFFF',
             borderRadius: '20px',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.85)',
+            border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow: isDarkMode ? '0 12px 36px rgba(0, 0, 0, 0.85)' : '0 12px 36px rgba(0, 0, 0, 0.12)',
             padding: '14px 16px',
             display: 'flex',
             flexDirection: 'column',
@@ -949,7 +947,7 @@ export const MapView: React.FC<MapViewProps> = ({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#3B82F6' }} />
-            <span style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 700 }}>
+            <span style={{ fontSize: '13px', color: isDarkMode ? '#FFFFFF' : '#0F172A', fontWeight: 700 }}>
               {vehicles.length} ônibus em circulação • {citywideStops.length} paradas mapeadas
             </span>
           </div>
@@ -965,18 +963,18 @@ export const MapView: React.FC<MapViewProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                backgroundColor: '#1C1C1E',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isDarkMode ? '#1C1C1E' : '#F1F5F9',
+                border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
                 borderRadius: '12px',
                 padding: '12px 14px',
-                color: '#FFFFFF',
+                color: isDarkMode ? '#FFFFFF' : '#0F172A',
                 cursor: 'pointer',
                 width: '100%',
                 textAlign: 'left'
               }}
             >
-              <div style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: '#FFFFFF' }} />
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#A1A1AA', flex: 1 }}>
+              <div style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: isDarkMode ? '#FFFFFF' : '#2563EB' }} />
+              <span style={{ fontSize: '14px', fontWeight: 600, color: isDarkMode ? '#A1A1AA' : '#64748B', flex: 1 }}>
                 Para onde vamos?
               </span>
             </button>

@@ -40,6 +40,7 @@ export interface TransitOption {
   totalMinutes: number | null;
   transitMinutes: number | null;
   walkingMinutes: number | null;
+  totalDistanceMeters?: number | null;
   fare: string;
   fareNote: string;
   originStop: StopInfo;
@@ -54,6 +55,8 @@ export interface TransitOption {
   destPlatformOrPoint?: string;
   etaMinutes?: number | null;
   etaTime?: string | null;
+  destEtaTime?: string | null;
+  destEtaMinutes?: number | null;
   liveBusCount?: number;
   upcomingBuses?: { time: string; minutes: number }[];
   isLiveGps?: boolean;
@@ -278,10 +281,47 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
           : distanceMeters(destination, s) <= MAX_WALK_RADIUS;
       }
 
+      // REGRA DE DESEMBARQUE EM RUAS E AVENIDAS:
+      // Quando o destino for rua ou avenida, o desembarque DEVE ser na parada mais próxima do destino final ao longo da linha.
+      let bestDestIdx = -1;
+      let minDestDist = Infinity;
+      if (!destIsTerminal) {
+        for (let k = 0; k < len; k++) {
+          const d = distanceMeters(destination, stops[k]);
+          if (d < minDestDist) {
+            minDestDist = d;
+            bestDestIdx = k;
+          }
+        }
+      }
+
       for (let i = 0; i < len - 1; i++) {
         const board = stops[i];
         const isOriginMatch = origMatches[i];
 
+        if (!destIsTerminal) {
+          // Se for rua/avenida, a ÚNICA parada de desembarque aceita nesta viagem é a parada mais próxima fisicamente do destino
+          if (bestDestIdx > i && minDestDist <= MAX_WALK_RADIUS) {
+            const alight = stops[bestDestIdx];
+            const leg = { line, trip, originStop: board, destStop: alight };
+            if (isOriginMatch) {
+              consider([leg]);
+            }
+            // Para conexões/baldeações: perna final que leva até o destino
+            const list = leavingMap.get(board.stopId) || [];
+            list.push(leg);
+            leavingMap.set(board.stopId, list);
+          }
+          if (isOriginMatch) {
+            // Guarda pernas de embarque na origem para possíveis baldeações
+            for (let j = i + 1; j < len; j++) {
+              reaching.push({ line, trip, originStop: board, destStop: stops[j] });
+            }
+          }
+          continue;
+        }
+
+        // Caso destino seja Terminal ou Estação (mantém verificação por terminal/estação)
         for (let j = i + 1; j < len; j++) {
           const alight = stops[j];
           const isDestMatch = destMatches[j];
@@ -368,6 +408,13 @@ export function findCandidates(network: CachedLineEntry[], origin: Point, destin
   return [...best.values()].sort((a, b) => a.score - b.score).map(item => item.legs);
 }
 
+export function formatDistanceLabel(meters: number): string {
+  if (meters >= 1000) {
+    return `${(meters / 1000).toFixed(1).replace('.', ',')} km`;
+  }
+  return `${Math.round(meters)} m`;
+}
+
 function walkingLeg(type: 'walk_origin' | 'walk_dest', route: WalkingRoute | null, stop: StopInfo, point: Point): PlannedLegDetail {
   const isTerminalMatch = isSameTerminalOrStation(stop.stopName, point.name);
   const terminalCoords: [number, number][] = type === 'walk_origin'
@@ -389,14 +436,16 @@ function walkingLeg(type: 'walk_origin' | 'walk_dest', route: WalkingRoute | nul
     ? [[point.lng, point.lat], [stop.lng, stop.lat]]
     : [[stop.lng, stop.lat], [point.lng, point.lat]];
 
+  const rawDist = route?.distanceMeters ?? Math.round(distanceMeters(point, stop) * 1.25);
+  const rawMins = route?.durationMinutes ?? Math.max(1, Math.round(rawDist / 80));
+  const distFormatted = formatDistanceLabel(rawDist);
+
   return {
     type,
     title: type === 'walk_origin' ? `Caminhe até ${stop.stopName}` : 'Caminhe até o destino',
-    description: route
-      ? `${route.distanceMeters} m • cerca de ${route.durationMinutes} min a pé (estimativa OSM)`
-      : 'Percurso a pé estimado em linha reta.',
-    durationMinutes: route?.durationMinutes ?? Math.max(1, Math.round(distanceMeters(point, stop) / 80)),
-    distanceMeters: route?.distanceMeters ?? distanceMeters(point, stop),
+    description: `${distFormatted} • cerca de ${rawMins} min a pé`,
+    durationMinutes: rawMins,
+    distanceMeters: rawDist,
     coordinates: route?.coordinates?.length ? route.coordinates : fallbackCoords
   };
 }
@@ -466,6 +515,11 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
         return { coords: [[from.lng, from.lat], [to.lng, to.lat]], dist: 0, mins: 0 };
       }
 
+      const rawDist = distanceMeters(from, to);
+      if (rawDist <= 20) {
+        return { coords: [[from.lng, from.lat], [to.lng, to.lat]], dist: 0, mins: 0 };
+      }
+
       const dLng = Math.abs(to.lng - from.lng);
       const dLat = Math.abs(to.lat - from.lat);
 
@@ -481,8 +535,8 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
         coords = [[from.lng, from.lat], [to.lng, to.lat]];
       }
 
-      const totalDist = Math.round(distanceMeters(from, to) * 1.25);
-      const totalMins = Math.max(1, Math.ceil(totalDist / 80));
+      const totalDist = Math.round(rawDist * 1.25);
+      const totalMins = Math.max(1, Math.round(totalDist / 80));
 
       return { coords, dist: totalDist, mins: totalMins };
     };
@@ -517,29 +571,56 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
           { lat: prevLeg.destStop.lat, lng: prevLeg.destStop.lng, name: prevLeg.destStop.stopName },
           leg.originStop
         );
+        const transferDistFormatted = formatDistanceLabel(transferWalkPath.dist);
 
         details.push({
           type: 'transfer_hub',
           title: `Troque de ônibus em ${prevLeg.destStop.stopName}`,
-          description: transferWalkPath.dist > 5
-            ? `Caminhe ${transferWalkPath.dist} m (${transferWalkPath.mins} min) até a plataforma da Linha ${leg.line.code}`
+          description: transferWalkPath.dist > 15
+            ? `Caminhe ${transferDistFormatted} (${transferWalkPath.mins} min) até a plataforma da Linha ${leg.line.code}`
             : `Desembarque e embarque direto no ${prevLeg.destStop.stopName}`,
           durationMinutes: transferWalkPath.mins,
           distanceMeters: transferWalkPath.dist,
           coordinates: transferWalkPath.coords
         });
       }
+
+      // Calcula distância e tempo real do trecho de ônibus
+      let legDistMeters = 0;
+      const slicedCoords = leg.trip.coordinates;
+      if (slicedCoords && slicedCoords.length >= 2) {
+        for (let c = 0; c < slicedCoords.length - 1; c++) {
+          legDistMeters += distanceMeters(
+            { lat: slicedCoords[c][1], lng: slicedCoords[c][0] },
+            { lat: slicedCoords[c + 1][1], lng: slicedCoords[c + 1][0] }
+          );
+        }
+      } else {
+        const stopsList = leg.trip.stops;
+        for (let s = 0; s < stopsList.length - 1; s++) {
+          legDistMeters += distanceMeters(stopsList[s], stopsList[s + 1]);
+        }
+      }
+      legDistMeters = Math.round(legDistMeters);
+
+      const intermediateStopsCount = Math.max(0, leg.trip.stops.length - 1);
+      // Velocidade média urbana comercial em Manaus: 20 km/h = 333 m/min + 30s por parada intermediária
+      const busDriveMinutes = legDistMeters / 333;
+      const stopDwellMinutes = intermediateStopsCount * 0.5;
+      const legDurationMinutes = Math.max(2, Math.round(busDriveMinutes + stopDwellMinutes));
+      const distFormatted = formatDistanceLabel(legDistMeters);
+
       details.push({
         type: 'bus',
         title: `Linha ${leg.line.code}`,
-        description: `${leg.trip.tripName}: ${leg.originStop.stopName} → ${leg.destStop.stopName}`,
-        durationMinutes: null,
-        distanceMeters: null,
+        description: `${distFormatted} • ${legDurationMinutes} min (${intermediateStopsCount} ${intermediateStopsCount === 1 ? 'parada' : 'paradas'})`,
+        durationMinutes: legDurationMinutes,
+        distanceMeters: legDistMeters,
         lineCode: leg.line.code,
         lineName: leg.line.name,
         fromStopName: leg.originStop.stopName,
         toStopName: leg.destStop.stopName,
-        stopsCount: leg.trip.stops.length - 1,
+        stopsCount: intermediateStopsCount,
         coordinates: (leg.trip.coordinates && leg.trip.coordinates.length >= 2)
           ? leg.trip.coordinates
           : (leg.trip.stops && leg.trip.stops.length >= 2)
@@ -555,6 +636,13 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
     const cleanOriginLabel = originPlatform || first.originStop.stopName;
     const cleanDestLabel = destPlatform || last.destStop.stopName;
 
+    const busTransitMinutes = details.filter(d => d.type === 'bus').reduce((sum, d) => sum + (d.durationMinutes || 0), 0);
+    const walkMins = (walkOriginRoute.durationMinutes || 0) + (walkDestRoute.durationMinutes || 0);
+    const transferHubWalkMins = details.filter(d => d.type === 'transfer_hub').reduce((sum, d) => sum + (d.durationMinutes || 0), 0);
+    const transferWaitBuffer = legs.length > 1 ? 5 : 0; // 5 minutos de intervalo médio para transbordo
+    const totalJourneyMinutes = busTransitMinutes + walkMins + transferHubWalkMins + transferWaitBuffer;
+    const totalDistMeters = details.reduce((sum, d) => sum + (d.distanceMeters || 0), 0);
+
     result.options.push({
       id: legs.map((l) => `${l.line.id}-${l.trip.tripId}-${l.originStop.sequence}-${l.destStop.sequence}`).join('/'),
       title: legs.map((l) => l.line.code).join(' + '),
@@ -564,9 +652,10 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
       primaryLineCode: first.line.code,
       secondaryLineCode: legs[1]?.line.code,
       transferHubName: legs.length > 1 ? first.destStop.stopName : undefined,
-      totalMinutes: null,
-      transitMinutes: null,
-      walkingMinutes: walkOriginRoute.durationMinutes + walkDestRoute.durationMinutes,
+      totalMinutes: totalJourneyMinutes,
+      transitMinutes: busTransitMinutes,
+      walkingMinutes: walkMins + transferHubWalkMins,
+      totalDistanceMeters: totalDistMeters,
       fare: 'R$ 4,50',
       fareNote: 'Tarifa padrão de Manaus (PassaFácil / Cartão ou Dinheiro)',
       originStop: first.originStop,
@@ -703,10 +792,16 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
       opt.etaTime = nearest.timeStr;
       opt.isLiveGps = true;
       opt.upcomingBuses = approaching.slice(1).map((b) => ({ time: b.timeStr, minutes: b.minutes }));
+      const totalArrivalMinutes = (opt.etaMinutes || 0) + (opt.totalMinutes || 0);
+      opt.destEtaMinutes = totalArrivalMinutes;
+      opt.destEtaTime = formatManausTime(new Date(now + totalArrivalMinutes * 60000));
     } else {
       opt.etaMinutes = null;
       opt.etaTime = null;
       opt.isLiveGps = false;
+      const totalArrivalMinutes = opt.totalMinutes || 0;
+      opt.destEtaMinutes = totalArrivalMinutes;
+      opt.destEtaTime = formatManausTime(new Date(now + totalArrivalMinutes * 60000));
     }
   }
 
@@ -817,6 +912,18 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
   // Aguarda enriquecimento de pedestres do OpenStreetMap para que as coordenadas reais já retornem na rota
   try {
     await Promise.all(enrichmentPromises);
+    for (const opt of result.options) {
+      const walkMins = opt.legs
+        .filter((l) => l.type === 'walk_origin' || l.type === 'walk_dest' || l.type === 'transfer_hub')
+        .reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
+      opt.walkingMinutes = walkMins;
+      const busMins = opt.transitMinutes || 0;
+      const transferBuffer = opt.verifiedLegs.length > 1 ? 5 : 0;
+      opt.totalMinutes = walkMins + busMins + transferBuffer;
+      const totalArrivalMinutes = (opt.etaMinutes || 0) + opt.totalMinutes;
+      opt.destEtaMinutes = totalArrivalMinutes;
+      opt.destEtaTime = formatManausTime(new Date(now + totalArrivalMinutes * 60000));
+    }
   } catch {
     // Mantém as geometrias calculadas
   }

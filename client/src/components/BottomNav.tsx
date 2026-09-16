@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, Bus, MapPin, Bell } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
+import { useAppTheme } from '../hooks/useMapTheme.js';
 
 export type TabType = 'home' | 'lines' | 'stops' | 'alerts';
 
@@ -16,6 +17,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   unreadAlertsCount = 0
 }) => {
   const haptic = useHaptic();
+  const isDark = useAppTheme();
 
   const handleSelect = (tab: TabType) => {
     if (tab !== activeTab) {
@@ -60,17 +62,19 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         maxWidth: '420px',
         margin: '0 auto',
         zIndex: 90,
-        backgroundColor: 'rgba(18, 18, 22, 0.85)',
+        backgroundColor: isDark ? 'rgba(18, 18, 22, 0.85)' : 'rgba(255, 255, 255, 0.9)',
         WebkitBackdropFilter: 'blur(24px) saturate(180%)',
         backdropFilter: 'blur(24px) saturate(180%)',
         borderRadius: '32px',
-        border: '1px solid rgba(255, 255, 255, 0.12)',
+        border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.08)',
         height: '60px',
         padding: '0 8px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4)',
+        boxShadow: isDark
+          ? '0 10px 30px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4)'
+          : '0 10px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04)',
         userSelect: 'none',
         WebkitUserSelect: 'none'
       }}
@@ -78,6 +82,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       {navItems.map((item) => {
         const isActive = activeTab === item.id;
         const IconComponent = item.icon;
+
+        const activeColor = isDark ? '#FFFFFF' : '#2563EB';
+        const inactiveColor = isDark ? '#A1A1AA' : '#64748B';
+        const activeBg = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(37, 99, 235, 0.1)';
 
         return (
           <button
@@ -92,11 +100,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '2px',
-              background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+              background: isActive ? activeBg : 'transparent',
               borderRadius: '20px',
               border: 'none',
               cursor: 'pointer',
-              color: isActive ? '#FFFFFF' : '#A1A1AA',
+              color: isActive ? activeColor : inactiveColor,
               transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               position: 'relative',
               outline: 'none',
@@ -116,7 +124,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               <IconComponent
                 size={21}
                 strokeWidth={isActive ? 2.5 : 1.8}
-                color={isActive ? '#FFFFFF' : '#A1A1AA'}
+                color={isActive ? activeColor : inactiveColor}
               />
               {item.badge && (
                 <span
@@ -134,7 +142,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '2px solid #000000'
+                    border: isDark ? '2px solid #000000' : '2px solid #FFFFFF'
                   }}
                 >
                   {item.badge}
@@ -157,3 +165,4 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     </nav>
   );
 };
+

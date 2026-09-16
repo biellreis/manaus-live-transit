@@ -75,3 +75,15 @@ test('provider map links preserve the source route and trip identifiers',()=>{
   assert.equal(url.searchParams.get('destination'),'-3.1,-60.02');
   assert.equal(url.searchParams.get('travelmode'),'transit');
 });
+
+test('street/avenue destination alights at the physically closest stop to the destination', () => {
+  const stops = [stop(1, -60.08), stop(2, -60.06), stop(3, -60.04), stop(4, -60.02)];
+  const routes = [{ code: '640', line: line('640'), trips: [trip(stops)] }];
+  // Destination is at -60.039 (closer to stop 3 at -60.04 than stop 4 at -60.02)
+  const streetDest = { name: 'Avenida Djalma Batista, 123', lat: -3.1, lng: -60.039 };
+  const origin = point(-60.08);
+  const candidates = findCandidates(routes, origin, streetDest);
+  assert.ok(candidates.length > 0);
+  assert.equal(candidates[0][0].destStop.stopId, 3);
+});
+

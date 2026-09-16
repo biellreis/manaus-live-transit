@@ -73,10 +73,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({
         position: 'absolute',
         inset: 0,
         zIndex: 5,
-        backgroundColor: '#09090B',
+        backgroundColor: 'var(--bg-canvas, #09090B)',
         paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)',
         overflowY: 'auto',
-        color: '#FFFFFF'
+        color: 'var(--text-primary, #FFFFFF)'
       }}
     >
       {/* Top Header with Welcome Typography (Logo removed per user request) */}

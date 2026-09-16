@@ -361,10 +361,30 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
       markersRef.current.push(boardMarker);
     }
 
-    // 2.5. Include transfer stop coordinates for smooth map camera fitting
+    // 2.5. Marker for Transfer Stop with White Icon
     if (currentOption?.verifiedLegs && currentOption.verifiedLegs.length > 1) {
       const transferStop = currentOption.verifiedLegs[0].destStop;
       allCoords.push([transferStop.lng, transferStop.lat]);
+
+      const transferEl = document.createElement('div');
+      transferEl.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+          <div style="background: #18181B; color: #FFFFFF; font-size: 11px; font-weight: 800; padding: 4px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,0.8); border: 2px solid #FFFFFF; display: flex; align-items: center; gap: 6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 3 4 4-4 4"/>
+              <path d="M20 7H4"/>
+              <path d="m8 21-4-4 4-4"/>
+              <path d="M4 17h16"/>
+            </svg>
+            <span>Troca de ônibus: ${transferStop.stopName}</span>
+          </div>
+          <div style="width: 12px; height: 12px; border-radius: 50%; background: #18181B; border: 3px solid #FFFFFF; margin-top: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.6);"></div>
+        </div>
+      `;
+      const transferMarker = new Marker({ element: transferEl, anchor: 'bottom' })
+        .setLngLat([transferStop.lng, transferStop.lat])
+        .addTo(map);
+      markersRef.current.push(transferMarker);
     }
 
     // 3. Nearest Destination Stop Marker

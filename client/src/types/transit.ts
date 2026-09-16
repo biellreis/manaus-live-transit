@@ -112,6 +112,9 @@ export interface PlannedTrip {
   destPlatformOrPoint?: string;
   etaMinutes?: number | null;
   etaTime?: string | null;
+  destEtaTime?: string | null;
+  destEtaMinutes?: number | null;
+  totalDistanceMeters?: number | null;
   liveBusCount?: number;
   upcomingBuses?: { time: string; minutes: number }[];
   isLiveGps?: boolean;
@@ -145,6 +148,7 @@ export interface TransitOption {
   totalMinutes: number | null;
   transitMinutes: number | null;
   walkingMinutes: number | null;
+  totalDistanceMeters?: number | null;
   fare: string;
   fareNote: string;
   originStop: StopInfo;
@@ -157,6 +161,8 @@ export interface TransitOption {
   walkDestCoords: [number, number][];
   etaMinutes?: number | null;
   etaTime?: string | null;
+  destEtaTime?: string | null;
+  destEtaMinutes?: number | null;
   liveBusCount?: number;
   upcomingBuses?: { time: string; minutes: number }[];
   isLiveGps?: boolean;

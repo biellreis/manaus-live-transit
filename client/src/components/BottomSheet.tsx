@@ -1,7 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import type { RouteSummary, TripDetail, LiveBus, TimetableService, StopInfo, PlannedTrip } from '../types/transit.js';
-import { Bus, ChevronUp, ChevronDown, Check, X, MapPin, Clock } from 'lucide-react';
+import { Bus, ChevronUp, ChevronDown, Check, X, MapPin, Clock, ArrowRightLeft } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
+import { TripStopsModal } from './TripStopsModal.js';
+
+function formatDistance(meters: number | null | undefined): string {
+  if (!meters) return '0 m';
+  if (meters >= 1000) {
+    return `${(meters / 1000).toFixed(1).replace('.', ',')} km`;
+  }
+  return `${Math.round(meters)} m`;
+}
 
 interface BottomSheetProps {
   selectedLine: RouteSummary | null;
@@ -29,6 +38,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   onCloseRoute
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isStopsModalOpen, setIsStopsModalOpen] = useState(false);
   const haptic = useHaptic();
 
 
@@ -107,11 +117,12 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         left: 0,
         right: 0,
         zIndex: 100,
-        backgroundColor: '#09090B',
+        backgroundColor: 'var(--bg-sheet, #09090B)',
         borderTopLeftRadius: '24px',
         borderTopRightRadius: '24px',
-        borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.8)',
+        borderTop: '1px solid var(--border-medium, rgba(255, 255, 255, 0.12))',
+        boxShadow: 'var(--shadow-sheet, 0 -10px 40px rgba(0, 0, 0, 0.8))',
+        color: 'var(--text-primary, #FFFFFF)',
         maxHeight: isExpanded ? '75vh' : 'auto',
         transition: 'max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         display: 'flex',
@@ -388,12 +399,17 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
               {/* Top Row: Previsão de Chegada e Badge Azul */}
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-sub, #A1A1AA)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Passa na sua parada às
                   </div>
-                  <div style={{ fontSize: '34px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em', lineHeight: 1.1, marginTop: '2px' }}>
+                  <div style={{ fontSize: '34px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.03em', lineHeight: 1.1, marginTop: '2px' }}>
                     {plannedTrip.etaTime || 'Em breve'}
                   </div>
+                  {plannedTrip.destEtaTime && (
+                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#38BDF8', marginTop: '4px' }}>
+                      Chegada às {plannedTrip.destEtaTime} {plannedTrip.totalMinutes ? `(${plannedTrip.totalMinutes} min de viagem)` : ''}
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
@@ -413,8 +429,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                         {plannedTrip.etaMinutes <= 1 ? 'Chegando agora' : `Faltam ${plannedTrip.etaMinutes} min`}
                       </span>
                       {!isOriginTerminal && plannedTrip.walkToStopMinutes !== null && plannedTrip.walkToStopMinutes > 0 && (
-                        <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600, marginTop: '2px' }}>
-                          Caminhada de {plannedTrip.walkToStopMinutes} min até o ponto
+                        <span style={{ fontSize: '11px', color: 'var(--text-sub, #94A3B8)', fontWeight: 600, marginTop: '2px' }}>
+                          Caminhada de {formatDistance(plannedTrip.walkToStopMeters)} ({plannedTrip.walkToStopMinutes} min) até o ponto
                         </span>
                       )}
                     </>
@@ -501,7 +517,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#60A5FA', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       {isOriginTerminal ? 'Embarque no Terminal' : 'Ponto de Partida'}
                     </div>
-                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
+                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '2px' }}>
                       {plannedTrip.origin.name}
                     </div>
                     {isOriginTerminal ? (
@@ -523,15 +539,15 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       </div>
                     ) : (
                       plannedTrip.walkToStopMeters !== null && plannedTrip.walkToStopMeters > 30 && (
-                        <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '2px' }}>
-                          Caminhe {plannedTrip.walkToStopMeters}m até a parada {plannedTrip.originStop.stopName}
+                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '2px' }}>
+                          Caminhe {formatDistance(plannedTrip.walkToStopMeters)} ({plannedTrip.walkToStopMinutes || 1} min a pé) até a parada {plannedTrip.originStop.stopName}
                         </div>
                       )
                     )}
                   </div>
                 </div>
 
-                {/* 2. LINHA DE ÔNIBUS */}
+                {/* 2. LINHA 1 (PRIMEIRO ÔNIBUS) */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
                   <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#F97316' }} />
                   <div
@@ -554,20 +570,114 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                       <span style={{ fontSize: '12px', fontWeight: 900, backgroundColor: '#F97316', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px' }}>
-                        Linha {plannedTrip.line.code}
+                        Linha {plannedTrip.legs[0]?.line?.code || plannedTrip.line.code}
                       </span>
-                      <span style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>
-                        {activeTrip.stops.length} paradas • Tarifa R$ 4,50
+                      <span style={{ fontSize: '11.5px', color: 'var(--text-sub, #94A3B8)', fontWeight: 600 }}>
+                        {plannedTrip.legs[0]?.trip?.stops?.length || activeTrip.stops.length} paradas • Tarifa R$ 4,50
                       </span>
                     </div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#E4E4E7', marginTop: '4px' }}>
-                      {activeTrip.tripName || activeTrip.tripShortName}
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main, #E4E4E7)', marginTop: '4px' }}>
+                      {plannedTrip.legs[0]?.trip?.tripName || activeTrip.tripName || activeTrip.tripShortName}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#A1A1AA', marginTop: '2px' }}>
-                      Desembarque em <strong style={{ color: '#FFFFFF' }}>{plannedTrip.destStop.stopName}</strong>
+                    <div style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
+                      Desembarque em <strong style={{ color: 'var(--text-main, #FFFFFF)' }}>{plannedTrip.isTransfer && plannedTrip.legs.length > 1 ? plannedTrip.legs[0].destStop.stopName : plannedTrip.destStop.stopName}</strong>
                     </div>
                   </div>
                 </div>
+
+                {/* 2.5 TROCA DE ÔNIBUS COM ÍCONE BRANCO (SE HOUVER BALDEAÇÃO) */}
+                {plannedTrip.isTransfer && plannedTrip.legs.length > 1 && (
+                  <>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
+                      <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#FFFFFF' }} />
+                      <div
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '50%',
+                          backgroundColor: '#18181B',
+                          border: '2px solid #FFFFFF',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#FFFFFF',
+                          flexShrink: 0,
+                          zIndex: 1,
+                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.8)'
+                        }}
+                        title="Troca de ônibus"
+                      >
+                        <ArrowRightLeft size={13} color="#FFFFFF" strokeWidth={2.8} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '10px',
+                              fontWeight: 800,
+                              backgroundColor: '#FFFFFF',
+                              color: '#000000',
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em'
+                            }}
+                          >
+                            <ArrowRightLeft size={10} color="#000000" strokeWidth={3} />
+                            Troca de Ônibus
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '3px' }}>
+                          {plannedTrip.transferHubName || plannedTrip.legs[0].destStop.stopName}
+                        </div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #CBD5E1)', marginTop: '2px' }}>
+                          Faça baldeação para a <strong>Linha {plannedTrip.legs[1].line.code}</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SEGUNDO ÔNIBUS */}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative', paddingBottom: '16px' }}>
+                      <div style={{ position: 'absolute', left: '13px', top: '26px', bottom: '0', width: '2px', backgroundColor: '#D97706' }} />
+                      <div
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          backgroundColor: '#D97706',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#FFFFFF',
+                          flexShrink: 0,
+                          zIndex: 1,
+                          boxShadow: '0 2px 6px rgba(217, 119, 6, 0.5)'
+                        }}
+                      >
+                        <Bus size={15} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 900, backgroundColor: '#D97706', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px' }}>
+                            Linha {plannedTrip.legs[1].line.code}
+                          </span>
+                          <span style={{ fontSize: '11.5px', color: 'var(--text-sub, #94A3B8)', fontWeight: 600 }}>
+                            {plannedTrip.legs[1].trip?.stops?.length || 0} paradas • Integração Gratuita
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main, #E4E4E7)', marginTop: '4px' }}>
+                          {plannedTrip.legs[1].trip?.tripName || plannedTrip.legs[1].line.name}
+                        </div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', marginTop: '2px' }}>
+                          Desembarque em <strong style={{ color: 'var(--text-main, #FFFFFF)' }}>{plannedTrip.destStop.stopName}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* 3. DESEMBARQUE / DESTINO */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', position: 'relative' }}>
@@ -592,7 +702,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#FB923C', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Destino Final
                     </div>
-                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
+                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '2px' }}>
                       {plannedTrip.destination.name}
                     </div>
                     {isDestTerminal ? (
@@ -616,8 +726,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       )
                     ) : (
                       plannedTrip.walkFromStopMeters !== null && plannedTrip.walkFromStopMeters > 30 && (
-                        <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '2px' }}>
-                          Caminhada de {plannedTrip.walkFromStopMeters}m ({plannedTrip.walkFromStopMinutes || 1} min) até o destino
+                        <div style={{ fontSize: '12px', color: 'var(--text-sub, #94A3B8)', marginTop: '2px' }}>
+                          Caminhada de {formatDistance(plannedTrip.walkFromStopMeters)} ({plannedTrip.walkFromStopMinutes || 1} min a pé) até o destino
                         </div>
                       )
                     )}
@@ -629,13 +739,13 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         );
       })()}
 
-      {/* Prominent Action Button */}
+      {/* Prominent Action Button: Opens Spacious Stops Modal */}
       <div style={{ padding: '0 20px 10px 20px' }}>
         <button
           id="uber-action-confirm-btn"
           onClick={() => {
             haptic.mediumTap();
-            setIsExpanded(!isExpanded);
+            setIsStopsModalOpen(true);
           }}
           style={{
             width: '100%',
@@ -655,9 +765,20 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             transition: 'transform 0.1s ease'
           }}
         >
-          <span>{isExpanded ? 'Ocultar Paradas do Trajeto' : `Ver ${activeTrip.stops.length} Paradas do Trajeto`}</span>
+          <span>Ver {activeTrip.stops.length} Paradas do Trajeto</span>
         </button>
       </div>
+
+      {/* Spacious Full-Screen Stops Modal */}
+      <TripStopsModal
+        isOpen={isStopsModalOpen}
+        onClose={() => setIsStopsModalOpen(false)}
+        trip={activeTrip}
+        line={selectedLine || plannedTrip?.line}
+        vehicles={vehicles}
+        plannedTrip={plannedTrip}
+        onSelectStop={onSelectStop}
+      />
 
       {/* Expanded Stop Timeline List */}
       {isExpanded && (
