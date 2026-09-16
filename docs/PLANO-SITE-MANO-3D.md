@@ -1,6 +1,19 @@
 # Manô — plano técnico do site de apresentação em 3D
 
-Data: 15/09/2026. Versão: 1.1 — análise ampliada das referências. Estado: planejamento; implementação do site ainda não iniciada.
+Data: 15/09/2026. Versão: 1.2 — implementação publicada e continuidade da evolução cinematográfica. Estado: primeira versão implementada e publicada; nova direção visual ainda não implementada.
+
+## LEIA PRIMEIRO — estado atual e ponto de retomada
+
+O site já existe. **Não recriar do zero nem executar as etapas históricas como se estivessem pendentes.** A seção 24 registra a implementação real e a seção 25 define a próxima evolução. Elas prevalecem sobre propostas das versões 1.0/1.1 que descrevem o desenvolvimento no futuro.
+
+- Site: https://mano-site-seven.vercel.app — projeto Vercel `mano-site`.
+- Aplicativo: https://manaus-live-transit.vercel.app — projeto Vercel `manaus-live-transit`.
+- Repositório: https://github.com/biellreis/manaus-live-transit — branch `master`.
+- Commit da implementação: `10a58f4` (`feat(website): build independent Mano presentation and installation journey`).
+- Código do site: `website/`; registros complementares: `docs/site-mano/`.
+- Último retorno do usuário: **as informações ficaram perfeitas**; deseja uma capa com vídeo muito grande ao fundo, como AVA, e a mesma presença visual nas demais seções.
+- Próxima ação de desenvolvimento: produzir um storyboard e um protótipo da nova capa cinematográfica, preservando conteúdo, controles e instalação. A solicitação atual é somente atualizar documentação para continuidade; não produzir o vídeo nem alterar o site nesta rodada.
+- “Manô, bora?” / “Manaus na sua mão.” é a recomendação de copy apresentada ao usuário, registrada como proposta; não houve aprovação explícita dessa frase específica.
 
 Este documento é o contrato de continuidade do trabalho. Ele define o resultado visual, a arquitetura, os arquivos de origem, a sequência de construção e os critérios de aceite. A próxima IA deve ler este arquivo inteiro, conferir o estado real do repositório e continuar pela primeira etapa incompleta. As configurações propostas abaixo não significam que arquivos, modelos, domínios ou integrações já existam.
 
@@ -10,7 +23,7 @@ Criar um site independente de apresentação do Manô, com aparência editorial 
 
 O produto é o Manô. Os aparelhos são suportes para demonstrar suas funcionalidades. O objetivo visual é a qualidade de apresentação das referências Apple e AVA, com composição própria e identidade Manô; não reproduzir textos, modelos, vídeos ou materiais proprietários dessas marcas.
 
-O pedido atual autoriza elaborar e salvar este planejamento. Não executar sua implementação, instalar dependências, modificar o aplicativo ou publicar o novo site apenas por existir este documento.
+Este plano começou como documento de preparação. Posteriormente o usuário solicitou a criação do site, e a primeira implementação foi concluída. A revisão 1.2 documenta o resultado e a evolução pretendida; sua existência, por si só, não autoriza executar novas fases sem pedido de desenvolvimento.
 
 Requisitos fixos para a futura implementação:
 
@@ -603,3 +616,158 @@ Após a etapa 0: produzir os seis quadros → acertar materiais e telas → impl
 ### Registro da revisão
 
 Versão 1.1 acrescenta análise técnica das mídias observadas, limites da inspeção mobile, matriz híbrida por seção, contrato de cor, enquadramento calculado, coordenação de estado, preparação de texturas, coreografia e critérios adicionais de teste. Não modifica o aplicativo nem inicia o site. Estes refinamentos prevalecem sobre uma leitura da versão inicial que imponha WebGL em todas as seções.
+
+## 24. Implementação real entregue — fonte de verdade
+
+### 24.1 O que foi construído
+
+Site independente com Astro 7.3.2, TypeScript, Three.js direto e GSAP. HTML estático contém textos, navegação e botões; a cena 3D e QR code carregam separadamente. Fonte Outfit local. Branco, azul e laranja sobre preto/grafite. Layout desktop e celular, FAQ, links para abrir o aplicativo e rodapé.
+
+Conteúdo entregue: capa “Manaus na sua mão.”; apresentação geral; planejamento; catálogo de linhas; ida/volta; veículos no mapa; terminais/estações/paradas; alertas; instalação. As imagens são capturas reais já disponíveis no projeto, otimizadas em WebP. Dados das capturas não são dados ao vivo do site.
+
+Controles entregues: troca de tela no planejamento, seletor de sentido com mudança de imagem/cor, seletor de conexões, FAQ expansível, diálogo com QR code no desktop e navegação para instalação no celular. O conteúdo permanece disponível quando não há animação.
+
+### 24.2 Arquivos efetivamente existentes
+
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `website/src/pages/index.astro` | Página, conteúdo dos capítulos, cabeçalho, footer e diálogo |
+| `website/src/styles/global.css` | Layout, breakpoints, aparelhos CSS, tipografia e cores |
+| `website/src/three/hero.ts` | Geometria autoral, materiais, câmera, texturas, parallax e renderização sob demanda |
+| `website/src/scripts/main.ts` | Seletores, QR, diálogo, carregamento 3D e animação de scroll |
+| `website/src/components/Phone.astro` | Mockup em camadas usado nas seções e fallback |
+| `website/src/components/InstallButtons.astro` | CTAs Apple e Android |
+| `website/src/components/Icon.astro` | Ícones vetoriais |
+| `website/src/config.ts` | Origem do PWA e links de instalação |
+| `website/scripts/prepare-assets.mjs` | Derivados de screenshots e marca |
+| `website/public/screens/` | 12 imagens WebP de distribuição |
+| `website/public/brand/` | Ícone e favicon |
+| `website/package.json`, `package-lock.json` | Dependências e comandos reproduzíveis |
+| `website/astro.config.mjs`, `vercel.json` | Build e publicação independentes |
+| `client/src/components/InstallLanding.tsx` | Tela de instalação no domínio do aplicativo |
+| `client/src/main.tsx` | Seleciona instalação ou aplicativo, considerando standalone |
+| `client/public/sw.js` | Atualizado para versão comentada 3.2 nesta entrega |
+
+Estruturas sugeridas anteriormente, como `Experience.tsx`, `chapters.ts`, arquivos GLB e `.blend`, não foram criadas. Não procurar ou declarar esses arquivos como entregues.
+
+### 24.3 Diferenças explícitas em relação ao plano
+
+- Não foi usado React Three Fiber: Three.js direto resolve a cena isolada com menos dependências.
+- Blender não estava instalado. Os aparelhos são modelos geométricos procedurais, com corpo extrudado, bevel, moldura, tela e botão lateral; não foram produzidos GLB nem modelos Blender.
+- Só a abertura renderiza 3D em tempo real. As outras seções usam screenshots em aparelhos CSS com profundidade visual e movimentos GSAP. Elas ainda não são cenas cinematográficas completas.
+- O fallback atual é aparelho CSS, não poster renderizado da mesma câmera. Substituir por poster correspondente faz parte da próxima evolução.
+- Android usa recorte de conteúdo de uma captura iOS, removendo a barra do sistema; não há captura Android física validada.
+- A abertura atual não tem vídeo. Não confundir o parallax da cena Three.js com um filme 3D produzido.
+- Não houve auditoria completa de todas as metas de desempenho, VoiceOver ou bateria do plano. Não marcar todos os critérios históricos como aprovados.
+
+### 24.4 Instalação entregue
+
+Os botões apontam para `https://manaus-live-transit.vercel.app/?install=ios` ou `?install=android`. No desktop, apresentam QR gerado localmente e link de continuidade; em ponteiro coarse, seguem o link. Sem JavaScript, o link continua válido.
+
+O PWA mostra ícone, instruções e opção de continuar no navegador. Android utiliza `beforeinstallprompt` quando disponível, com confirmação do usuário; sem evento, orienta pelo menu. Em standalone, o aplicativo abre normalmente em vez de manter a instrução. A identidade do manifesto e o domínio existente foram preservados. Não prometer instalação silenciosa nem ocultação do domínio nos menus do sistema.
+
+### 24.5 Publicação e validação efetivamente feitas
+
+- Commit `10a58f4` enviado ao GitHub, `master`.
+- Site publicado via CLI no projeto separado `mano-site`, alias `https://mano-site-seven.vercel.app`; Vercel retornou READY.
+- Push acionou publicação do PWA; Vercel retornou READY e status GitHub success.
+- Página `https://manaus-live-transit.vercel.app/?install=ios` aberta após publicação e instruções confirmadas no navegador.
+- Build do site com zero erros/avisos de tipos; build do aplicativo aprovado.
+- Auditoria do pacote do site sem vulnerabilidades após atualização de Astro/Sharp. A auditoria do pacote raiz indicou avisos preexistentes Express/qs; não foram corrigidos neste trabalho.
+- Navegador: hero renderizou com as duas texturas; seletores de Volta/Estações responderam; diálogo iPhone exibiu QR; largura 390px sem overflow horizontal na sessão testada.
+- Falha ao abrir Simulator pela ferramenta: ScreenCaptureKit `-3811`, falha de captura de áudio/vídeo. **Não foi concluído o teste Xcode nesta entrega.**
+- Não testados nesta rodada: iPhone físico, Android físico, instalação real a partir do menu, VoiceOver, métricas de campo e todas as condições de falha do plano.
+
+### 24.6 Retomada operacional sem perder trabalho
+
+Executar `git status` antes de mudar arquivos. Continuam existindo exclusões/novas screenshots e script de captura que não pertencem ao commit do site; preservá-los. Não usar `git add .` para incluir mudanças alheias.
+
+As imagens finais WebP estão versionadas. A origem `screenshots/20_detalhes_rota_rua_kobe_caminhada_osm.png` usada pelo preparador ainda estava não rastreada na inspeção: em outro checkout, recuperar essa origem antes de rodar novamente o script, ou preservar o derivado existente. O build normal não executa o preparador e usa os assets já presentes.
+
+Comandos do site, a partir de `website/`: `npm ci`, `npm run dev`, `npm run build`, `npm run preview`. O preview do Astro 7 pode permanecer como serviço; usar `astro preview status/stop` se precisar gerenciá-lo. Não encerrar outros servidores do usuário sem identificar sua origem.
+
+Publicação do site: dentro de `website/`, selecionar explicitamente projeto `mano-site` e scope `eubielreis-6334s-projects`, por exemplo `vercel deploy --prod --yes --project mano-site --scope eubielreis-6334s-projects`. Não publicar a pasta na configuração do PWA. Git deploy automático do novo projeto não foi configurado. Mudanças no PWA seguem o fluxo existente de GitHub/Vercel.
+
+## 25. Próxima evolução — direção cinematográfica solicitada
+
+### 25.1 Pedido do usuário e o que preservar
+
+O usuário gostou das informações e pediu uma capa como a AVA: vídeo muito grande atrás do conteúdo, mostrando iPhone e Android com o Manô, transmitindo grandiosidade. Deseja que as seções mantenham essa presença à medida que navega e movimenta o mouse. Quer também uma abertura com o nome Manô e conexão com “mano”, expressão familiar em Manaus.
+
+Preservar textos informativos, ordem dos recursos, funcionalidades, paleta, telas reais e fluxo de instalação. Evoluir direção de arte, escala, composição e motion. Não inventar funcionalidades, métricas ou dados ao vivo para preencher uma cena.
+
+Proposta apresentada: **“Manô, bora?”**, com apoio **“Manaus na sua mão.”**. A frase aproxima o aplicativo de uma companhia para atravessar a cidade. É a direção recomendada para o protótipo; confirmar a preferência na revisão visual, sem declarar aprovação que não ocorreu. Evitar regionalismo exagerado ou caricatural.
+
+### 25.2 Nova capa — especificação de produção
+
+- Hero full-bleed, com vídeo ocupando o cenário inteiro, em vez de uma coluna de aparelhos pequenos ao lado do texto.
+- iPhone e Android com telas reais; luz principal neutra e recortes azul/laranja sobre fundo escuro.
+- Texto e CTAs em HTML sobre região com baixa variação luminosa. Usar overlay graduado para legibilidade, não esconder o vídeo inteiro sob preto.
+- Nome Manô e mensagem principal dominantes; botões iPhone/Android visíveis logo de início. A animação não bloqueia nem atrasa o clique.
+- Desktop: cena ampla, aparelhos em escala grande e título sobre espaço negativo planejado. Mobile: composição vertical própria, com câmera e distribuição próprias; não cortar o vídeo desktop indiscriminadamente com `cover`.
+- Começar com um poster que já mostre o produto e a mensagem. Não repetir uma introdução longa totalmente escura.
+- Vídeo sem áudio, `muted`, `playsinline`, com poster e tratamento de autoplay bloqueado. Pausar fora de vista e com página oculta. Em movimento reduzido/economia de dados, manter poster.
+
+Storyboard inicial proposto para um filme de 8–12 segundos, sujeito ao orçamento final:
+
+| Tempo aproximado | Quadro | Intenção |
+| --- | --- | --- |
+| 0–2s | Contornos já reconhecíveis; iPhone/Android entram em luz, telas presentes | Identificar o aplicativo imediatamente |
+| 2–5s | Movimento lateral e aproximação suave em três quartos | Mostrar volume, material e as duas plataformas |
+| 5–8s | Uma tela de trajeto ganha espaço; outra mantém a home | Mostrar uso, não apenas hardware |
+| 8–12s | Retorno lento à composição inicial ou pose de repouso | Loop sem salto ou encerramento elegante |
+
+Revisar um animatic leve antes do render final. Loop não pode exigir reversão artificial do vídeo nem fazer telas desaparecerem. Não aplicar movimento de mouse no vídeo para fingir que a câmera interna responde: se necessário, usar deslocamento CSS de até 1–2% em camada independente, sem alterar a legibilidade. Reservar interação espacial verdadeira para cenas WebGL.
+
+### 25.3 Como produzir os materiais
+
+1. Conferir disponibilidade real de Blender ou ferramenta equivalente antes de decidir o pipeline. Não alegar uso de software inexistente.
+2. Modelar/refinar aparelhos com bevels e luzes de estúdio; aproveitar parâmetros dos modelos atuais quando útil, mas melhorar o acabamento para close-up.
+3. Aplicar screenshots sem distorção; obter captura Android adequada ou registrar a limitação do mockup. Não duplicar câmera/ilha de sistema.
+4. Definir três quadros de aprovação: abertura desktop, abertura mobile e detalhe de tela.
+5. Renderizar animatic em baixa resolução; verificar sobreposição de texto e botões no próprio site.
+6. Só depois renderizar final, comprimir e gerar posters correspondentes. Guardar fonte de autoria e configuração de câmera/exportação.
+7. Manter materiais finais locais, sem hotlink de vídeos/arquivos AVA ou Apple. Registrar autoria/licença de qualquer asset externo.
+
+Proposta de distribuição: vídeo desktop 1920×1080 e variante mobile 720×1280, 24 ou 30fps; MP4 H.264 como base, alternativa moderna apenas se medida e necessária. Alvo inicial de 2–4MB por variante; selecionar apenas uma variante por dispositivo. Esses números são metas para teste, não garantias de qualidade. Se não atingir boa nitidez e peso, reduzir duração/movimento antes de aumentar indiscriminadamente resolução.
+
+Adicionar futuros arquivos, somente quando produzidos: `website/public/films/hero-desktop.mp4`, `hero-mobile.mp4`; `website/public/posters/hero-desktop.webp`, `hero-mobile.webp`; `website/assets-source/` com autoria/receita e `docs/site-mano/ASSETS.md` com hashes e decisões. Não criar arquivos vazios como se fossem entregas.
+
+### 25.4 Seções com maior presença
+
+| Seção atual | Atualização visual proposta | Informação preservada |
+| --- | --- | --- |
+| Planejamento | Aparelho grande em palco amplo; câmera aproxima origem/destino e depois resultado | Seleção de destino e passos da viagem |
+| Linhas | Close da busca e catálogo; menos moldura/caixa em torno da apresentação | Facilidade de encontrar a linha |
+| Ida/Volta | Dois aparelhos grandes; azul/laranja organizam os sentidos; troca controlada pelo usuário | Percurso e paradas por sentido |
+| Veículos | Mapa ocupa quase toda a área visual; aparelho vira enquadramento de apoio | Dados disponíveis e natureza demonstrativa da imagem |
+| Conexões | Aparelho central com camadas de terminais/estações; profundidade moderada | Alternância entre terminais, estações e perto de você |
+| Alertas | Cena ampla quase frontal com recorte laranja e foco na informação | Alertas antes de sair |
+| Instalação | Retorno dos dois aparelhos em composição memorável | Dois CTAs e alternativa de navegador |
+
+Evitar vídeos simultâneos por seção. Usar WebGL, vídeo ou render conforme o objetivo; não converter todas as telas em vídeos pesados por uniformidade. O que unifica é direção de arte, escala e luz. No desktop, rolagem conduz a sequência; mouse produz apenas parallax sutil. No celular, rolagem e controles explícitos bastam.
+
+### 25.5 Critérios de aceite desta atualização
+
+- Primeiro quadro comunica Manô, mostra aparelhos e mantém os dois CTAs acessíveis sem assistir ao filme inteiro.
+- Visual realmente maior e cinematográfico, não apenas zoom excessivo que corta a interface.
+- Títulos/CTAs legíveis em todos os quadros e com vídeo pausado; cenas não competem com texto.
+- Composição mobile própria, sem conteúdo essencial fora da tela e sem barra horizontal.
+- Poster equivalente ao frame inicial; nenhuma tela preta em rede lenta, erro de vídeo ou bloqueio de autoplay.
+- Movimento reduzido com experiência estática completa; mouse não é requisito para entender recursos.
+- Máximo de uma mídia animada pesada ativa; medir carga, decodificação, frames e memória em aparelhos reais.
+- Preservar seletores, QR, instalação e home standalone; repetir testes de regressão desses fluxos.
+- Validar novamente Simulator quando a captura funcionar e registrar dispositivos físicos efetivamente disponíveis. Não reutilizar o teste de navegador como prova de instalação física.
+
+## 26. Checklist de passagem para a próxima IA
+
+1. Ler primeiro as seções 24–25 e os arquivos reais em `website/`.
+2. Abrir https://mano-site-seven.vercel.app para comparar o estado atual, sem presumir que esta revisão já mudou a capa.
+3. Conferir Git e preservar mudanças de screenshots não incluídas no trabalho.
+4. Quando houver pedido para implementar a nova direção, começar pelo storyboard + capa protótipo, não por reescrever todas as seções.
+5. Preservar as informações elogiadas; usar “Manô, bora?” como proposta visual revisável.
+6. Confirmar ferramentas de render disponíveis; registrar escolha, custo de mídia e eventuais limitações reais.
+7. Produzir e validar a capa antes de expandir a linguagem para as demais seções.
+8. Atualizar progresso/decisões/validação e publicar somente no projeto correto.
+
+**Ponto exato de parada desta revisão:** site v1 publicado e integração de instalação publicada; evolução cinematográfica especificada, mas nenhum vídeo novo, modelo Blender, poster cinematográfico ou alteração de copy foi produzido. A próxima IA deve continuar desse ponto.
