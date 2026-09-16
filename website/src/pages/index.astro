@@ -20,8 +20,19 @@ import InstallModal from '../components/InstallModal.astro';
   <meta property="og:title" content="Manô — Manaus na sua mão."/><meta property="og:description" content="Seu próximo caminho começa aqui. Linhas, trajetos e conexões em um só aplicativo."/><meta property="og:type" content="website"/>
 </head>
 <body>
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="header"><a href="#" class="brand" aria-label="Manô, início"><img src="/brand/icon.png" width="38" height="38" alt="" class="brand-logo-img"/><img src="/brand/original-name-white.png" width="92" height="23" alt="Manô" class="brand-name-img"/></a><nav aria-label="Principal"><a href="#recursos">O aplicativo</a><a href="#trajetos">Trajetos</a><a href="#conexoes">Conexões</a></nav><a class="nav-install" href="#instalar">Instalar Manô <span>↗</span></a></header>
+<header class="header-apple-wrapper">
+  <div class="header-apple-glass">
+    <a href="#" class="brand" aria-label="Manô, início">
+      <img src="/brand/icon.png" width="34" height="34" alt="" class="brand-logo-img"/>
+      <img src="/brand/original-name-white.png" width="86" height="21" alt="Manô" class="brand-name-img"/>
+    </a>
+    <nav class="nav-apple-links" aria-label="Principal">
+      <a href="#recursos">O aplicativo</a>
+      <a href="#trajetos">Trajetos</a>
+      <a href="#conexoes">Conexões</a>
+    </nav>
+  </div>
+</header>
 <main id="conteudo">
   <section class="hero hero-fullscreen" aria-labelledby="hero-title">
     <HeroTransitMap/>
