@@ -1605,114 +1605,115 @@ body:has(dialog[open]) {
   padding: 40px 24px 70px;
 }
 
-.hero-center-stage {
+.hero-center-content {
   position: relative;
   z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 980px;
-  margin: auto 0;
-}
-
-.hero-focal-island {
-  position: relative;
-  background: radial-gradient(130% 130% at 50% 15%, rgba(22, 22, 28, 0.65) 0%, rgba(10, 10, 14, 0.85) 100%);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 36px;
-  padding: 44px 56px;
-  box-shadow: 0 35px 90px -15px rgba(0, 0, 0, 0.9), 0 10px 30px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 860px;
   width: 100%;
+  max-width: 1200px;
+  margin: auto 0;
+  padding: 0 16px;
 }
 
-.hero-live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  background: rgba(37, 99, 235, 0.12);
-  border: 1px solid rgba(37, 99, 235, 0.3);
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #93c5fd;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
-
-.live-dot-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #3b82f6;
-  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6);
-  animation: liveDotPulse 2s infinite;
-}
-
-@keyframes liveDotPulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-}
-
-.hero-single-title {
-  font-size: clamp(40px, 6.2vw, 76px);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+.hero-mega-title {
+  font-size: clamp(64px, 9.8vw, 136px);
+  font-weight: 900;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
   color: #ffffff;
   margin: 0;
   white-space: nowrap;
+  text-shadow: 0 6px 48px rgba(0, 0, 0, 0.98), 0 2px 10px rgba(0, 0, 0, 0.9);
 }
 
-.hero-single-description {
-  font-size: clamp(15px, 1.5vw, 19px);
-  color: #94a3b8;
-  margin: 18px 0 0;
-  font-weight: 450;
-  line-height: 1.4;
+.hero-mega-title .blue {
+  color: #3b82f6;
+  text-shadow: 0 6px 48px rgba(37, 99, 235, 0.45), 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.hero-mega-description {
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 500;
+  color: #e2e8f0;
+  margin: 24px 0 0;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
   white-space: nowrap;
+  text-shadow: 0 3px 28px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-.hero-actions-row {
-  margin-top: 32px;
+.hero-actions-container {
+  margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.hero-actions-row .install-buttons {
+.hero-actions-container .install-buttons {
   margin-top: 0;
+  display: flex;
+  gap: 18px;
   justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-actions-container .install-button {
+  min-height: 72px;
+  padding: 16px 32px;
+  border-radius: 20px;
+  background: rgba(14, 14, 20, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s, border-color 0.22s, background 0.22s;
+}
+
+.hero-actions-container .install-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(22, 22, 32, 0.92);
+  box-shadow: 0 35px 80px -12px rgba(0, 0, 0, 0.98), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.hero-actions-container .button-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.hero-actions-container .button-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
 @media (max-width: 768px) {
   .hero.hero-fullscreen {
-    padding: 30px 16px 60px;
+    padding: 30px 16px 70px;
     height: auto;
     min-height: calc(100svh - 80px);
   }
-  .hero-focal-island {
-    padding: 32px 20px;
-    border-radius: 28px;
-  }
-  .hero-single-title {
-    font-size: clamp(34px, 8.5vw, 48px);
-  }
-  .hero-single-description {
+  .hero-mega-title {
+    font-size: clamp(42px, 12vw, 68px);
     white-space: normal;
-    font-size: 15px;
-    line-height: 1.5;
+  }
+  .hero-mega-description {
+    font-size: 16px;
+    white-space: normal;
+    line-height: 1.45;
+  }
+  .hero-actions-container .install-button {
+    width: 100%;
+    min-height: 66px;
+    padding: 14px 24px;
   }
 }
 
@@ -1732,8 +1733,8 @@ body:has(dialog[open]) {
 .transit-vignette-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(9, 9, 11, 0.5) 0%, rgba(9, 9, 11, 0.76) 55%, rgba(9, 9, 11, 0.96) 100%),
-              linear-gradient(to bottom, rgba(9, 9, 11, 0.85) 0%, transparent 18%, transparent 80%, #09090b 100%);
+  background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(9, 9, 11, 0.72) 0%, rgba(9, 9, 11, 0.42) 50%, rgba(9, 9, 11, 0.15) 85%, transparent 100%),
+              linear-gradient(to bottom, rgba(9, 9, 11, 0.8) 0%, transparent 16%, transparent 80%, #09090b 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -1747,166 +1748,75 @@ body:has(dialog[open]) {
   z-index: 1;
 }
 
-.hero-bus-vehicle-640 {
-  offset-path: path("M 60 20 C 220 180, 320 300, 420 400 C 520 500, 620 570, 720 630 C 820 690, 910 720, 1020 750 C 1120 780, 1220 790, 1340 810");
-  animation: heroTravel640 18s linear infinite;
+/* 5 Live Bus Path Animations in Centro de Manaus */
+.city-bus-640 {
+  offset-path: path("M 320 -30 L 360 180 L 450 380 L 550 560 L 610 680 L 760 810 L 840 860 L 870 870");
+  animation: busMove640 16s linear infinite;
 }
 
-.hero-bus-vehicle-300 {
-  offset-path: path("M 320 -20 Q 480 220 640 400 T 920 610 T 1150 730");
-  animation: heroTravel300 24s linear infinite 3s;
+.city-bus-300 {
+  offset-path: path("M 720 -30 L 760 240 L 810 480 L 850 630 L 920 760 L 970 850");
+  animation: busMove300 20s linear infinite 2s;
 }
 
-@keyframes heroTravel640 {
+.city-bus-448 {
+  offset-path: path("M 1240 180 L 1050 480 L 720 540 L 590 690 L 760 810 L 840 850");
+  animation: busMove448 18s linear infinite 5s;
+}
+
+.city-bus-120 {
+  offset-path: path("M 60 440 L 260 520 L 550 560 L 720 680 L 840 810 L 870 870 L 1060 855");
+  animation: busMove120 22s linear infinite 8s;
+}
+
+.city-bus-560 {
+  offset-path: path("M 450 380 L 730 490 L 940 520 L 950 760 L 960 860");
+  animation: busMove560 19s linear infinite 11s;
+}
+
+@keyframes busMove640 {
   0% { offset-distance: 0%; opacity: 0; }
   3% { opacity: 1; }
   96% { opacity: 1; }
   100% { offset-distance: 100%; opacity: 0; }
 }
 
-@keyframes heroTravel300 {
+@keyframes busMove300 {
   0% { offset-distance: 0%; opacity: 0; }
   4% { opacity: 1; }
   96% { opacity: 1; }
   100% { offset-distance: 100%; opacity: 0; }
 }
 
-.vehicle-pulse {
-  animation: pulseRing 2.4s ease-out infinite;
+@keyframes busMove448 {
+  0% { offset-distance: 0%; opacity: 0; }
+  4% { opacity: 1; }
+  96% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes busMove120 {
+  0% { offset-distance: 0%; opacity: 0; }
+  4% { opacity: 1; }
+  96% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes busMove560 {
+  0% { offset-distance: 0%; opacity: 0; }
+  4% { opacity: 1; }
+  96% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+.pulse-ring {
+  animation: radarPulse 2.2s ease-out infinite;
   transform-origin: center;
 }
 
-@keyframes pulseRing {
-  0% { r: 12px; opacity: 0.8; }
-  100% { r: 36px; opacity: 0; }
-}
-
-/* ==========================================================================
-   HERO BREAKOUT 3D CARDS (HUD Periférico - Zero Neon)
-   ========================================================================== */
-.hero-breakout-container {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-  width: 100%;
-  height: 100%;
-}
-
-.breakout-card {
-  position: absolute;
-  background: rgba(18, 18, 24, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 12px 16px;
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 10px 20px -5px rgba(0, 0, 0, 0.7);
-  color: #ffffff;
-  animation: floatCard 6s ease-in-out infinite;
-}
-
-.card-arrival {
-  top: 16%;
-  left: max(32px, calc((100vw - 1280px) / 2));
-  width: 220px;
-}
-
-.card-terminal {
-  bottom: 18%;
-  right: max(32px, calc((100vw - 1280px) / 2));
-  width: 210px;
-  animation-delay: -3s;
-}
-
-@keyframes floatCard {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(0.8deg); }
-}
-
-@media (max-width: 960px) {
-  .hero-breakout-container {
-    display: none;
-  }
-}
-
-.card-pill-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.card-line-badge {
-  background: #2563eb;
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 13px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  letter-spacing: -0.3px;
-}
-.card-arrival-meta strong {
-  display: block;
-  font-size: 12px;
-  color: #ffffff;
-  line-height: 1.2;
-}
-.card-arrival-meta span {
-  font-size: 10px;
-  color: #9ca3af;
-}
-.card-arrival-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 8px;
-  font-size: 11px;
-}
-.live-eta-indicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #e5e7eb;
-}
-.live-pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #2563eb;
-}
-.speed-tag {
-  font-size: 10px;
-  color: #9ca3af;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.card-terminal-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: #93c5fd;
-  margin-bottom: 6px;
-}
-.terminal-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #3b82f6;
-}
-.terminal-platform strong {
-  display: block;
-  font-size: 13px;
-  color: #ffffff;
-}
-.platform-lines {
-  font-size: 10px;
-  color: #9ca3af;
-  display: block;
-  margin-top: 2px;
+@keyframes radarPulse {
+  0% { r: 10px; opacity: 0.8; }
+  100% { r: 34px; opacity: 0; }
 }
 
 /* ==========================================================================

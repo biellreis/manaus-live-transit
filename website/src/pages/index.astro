@@ -5,7 +5,6 @@ import Icon from '../components/Icon.astro';
 import Phone from '../components/Phone.astro';
 import InstallButtons from '../components/InstallButtons.astro';
 import HeroTransitMap from '../components/HeroTransitMap.astro';
-import HeroBreakoutCards from '../components/HeroBreakoutCards.astro';
 import ShowcaseFan from '../components/ShowcaseFan.astro';
 import LiveTransitMap from '../components/LiveTransitMap.astro';
 import InstallModal from '../components/InstallModal.astro';
@@ -27,26 +26,18 @@ import InstallModal from '../components/InstallModal.astro';
 <main id="conteudo">
   <section class="hero hero-fullscreen" aria-labelledby="hero-title">
     <HeroTransitMap/>
-    <HeroBreakoutCards/>
 
-    <div class="hero-center-stage">
-      <div class="hero-focal-island">
-        <div class="hero-live-badge">
-          <span class="live-dot-pulse"></span>
-          <span>OPERAÇÃO AO VIVO • MANAUS</span>
-        </div>
+    <div class="hero-center-content">
+      <h1 id="hero-title" class="hero-mega-title">
+        Manô, <span class="blue">bora?</span>
+      </h1>
 
-        <h1 id="hero-title" class="hero-single-title">
-          Manô, <span class="blue">bora?</span>
-        </h1>
+      <p class="hero-mega-description">
+        O transporte público de Manaus em tempo real no seu celular.
+      </p>
 
-        <p class="hero-single-description">
-          O transporte público de Manaus em tempo real no seu celular.
-        </p>
-
-        <div class="hero-actions-row">
-          <InstallButtons/>
-        </div>
+      <div class="hero-actions-container">
+        <InstallButtons/>
       </div>
     </div>
 
