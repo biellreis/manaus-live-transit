@@ -43,19 +43,17 @@
         <div class="glass-specular-sheen"></div>
         <div class="glass-light-streak"></div>
 
-        <!-- Tela OLED com vídeo em movimento contínuo -->
+        <!-- Tela OLED com imagem nítida e de alta resolução do aplicativo -->
         <div class="screen-display-area">
-          <video
-            class="motion-app-video"
-            src="/screens/map-motion.mp4"
-            poster="/screens/ida.webp"
-            autoplay
-            loop
-            muted
-            playsinline
-            preload="auto"
-            aria-label="Demonstração do aplicativo Manô com mapa e linhas em movimento contínuo"
-          ></video>
+          <img
+            class="motion-app-screen"
+            src="/screens/ida.webp"
+            width="768"
+            height="1670"
+            alt="Aplicativo Manô no iPhone com mapa, linhas de ônibus e trajetos de Manaus"
+            loading="eager"
+            decoding="async"
+          />
         </div>
       </div>
     </div>
@@ -75,9 +73,9 @@
     if (prefersReducedMotion || isTouchOnly) return;
 
     let targetRotX = 8;
-    let targetRotY = -12;
+    let targetRotY = -18;
     let currentRotX = 8;
-    let currentRotY = -12;
+    let currentRotY = -18;
     let isHovering = false;
     let animFrameId: number | null = null;
 
@@ -87,7 +85,7 @@
       if (isHovering) {
         currentRotX = lerp(currentRotX, targetRotX, 0.08);
         currentRotY = lerp(currentRotY, targetRotY, 0.08);
-        pivot.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateZ(30px)`;
+        pivot.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(-2.5deg) translateZ(35px)`;
       }
       animFrameId = requestAnimationFrame(updateTilt);
     };
@@ -102,12 +100,11 @@
       const rect = stage.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      const pctX = (x / rect.width) * 2 - 1; // -1 a 1
-      const pctY = (y / rect.height) * 2 - 1; // -1 a 1
+      const pctX = (x / rect.width) * 2 - 1;
+      const pctY = (y / rect.height) * 2 - 1;
 
-      // Ângulos sutis e elegantes estilo Dribbble (entre -18deg e 18deg)
-      targetRotY = pctX * 18;
-      targetRotX = -pctY * 14 + 6;
+      targetRotY = -18 + pctX * 10;
+      targetRotX = 8 - pctY * 8;
     });
 
     stage.addEventListener('mouseleave', () => {
