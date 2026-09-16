@@ -1979,16 +1979,16 @@ body:has(dialog[open]) {
   transform-style: preserve-3d;
 }
 
-/* Sombras realistas de piso / ambiente com profundidade 3D adaptadas ao plano inclinado e posição elevada */
+/* Sombras realistas de piso / ambiente com profundidade 3D */
 .motion-floor-shadow {
   position: absolute;
-  bottom: 110px;
+  bottom: 80px;
   left: 50%;
-  transform: translateX(-50%) rotateZ(-28deg);
-  width: 440px;
-  height: 110px;
-  background: radial-gradient(ellipse 68% 45% at 50% 50%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.55) 50%, transparent 75%);
-  filter: blur(22px);
+  transform: translateX(-50%);
+  width: 360px;
+  height: 60px;
+  background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 75%);
+  filter: blur(16px);
   pointer-events: none;
   z-index: 1;
   animation: shadowBreathe 7s ease-in-out infinite alternate;
@@ -1996,13 +1996,13 @@ body:has(dialog[open]) {
 
 .motion-ambient-shadow {
   position: absolute;
-  bottom: 70px;
+  bottom: 40px;
   left: 50%;
-  transform: translateX(-50%) rotateZ(-28deg);
-  width: 620px;
-  height: 160px;
-  background: radial-gradient(ellipse 78% 50% at 50% 50%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.25) 55%, transparent 80%);
-  filter: blur(36px);
+  transform: translateX(-50%);
+  width: 540px;
+  height: 100px;
+  background: radial-gradient(ellipse 75% 45% at 50% 50%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 80%);
+  filter: blur(32px);
   pointer-events: none;
   z-index: 0;
   animation: shadowBreatheWide 7s ease-in-out infinite alternate;
@@ -2033,35 +2033,12 @@ body:has(dialog[open]) {
   isolation: isolate;
 }
 
-/* Camadas de Profundidade Física 3D e Placa Traseira */
-.iphone-3d-backplate {
-  position: absolute;
-  inset: -6px;
-  border-radius: 58px;
-  background: #141416;
-  box-shadow:
-    0 30px 60px -10px rgba(0, 0, 0, 0.95),
-    0 60px 110px -20px rgba(0, 0, 0, 1);
-  transform: translateZ(-18px);
-  z-index: -2;
-  pointer-events: none;
-}
 
-.iphone-3d-chassis-depth {
-  position: absolute;
-  inset: -5px;
-  border-radius: 56px;
-  background: linear-gradient(135deg, #3f3f46 0%, #1c1917 40%, #27272a 100%);
-  transform: translateZ(-9px);
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Chassi de Titânio com Extrusão Física Multi-Camadas (Borda Robusta e Profunda) */
+/* Chassi de Titânio com Acabamento Metálico Suave (Sem Degraus ou Ranhuras) */
 .titanium-chassis {
   position: absolute;
-  inset: -5px;
-  border-radius: 57px;
+  inset: -4px;
+  border-radius: 56px;
   background: linear-gradient(
     135deg,
     #52525b 0%,
@@ -2073,26 +2050,10 @@ body:has(dialog[open]) {
     #27272a 100%
   );
   box-shadow:
-    /* Chanfro frontal e brilho do bisel */
-    inset 0 0 0 1.5px rgba(255, 255, 255, 0.35),
-    inset 0 2px 3px rgba(255, 255, 255, 0.45),
-    /* Extrusão física das paredes laterais de titânio (Passo a passo 3D denso) */
-    1px 2px 0 #3f3f46,
-    2px 4px 0 #27272a,
-    3px 6px 0 #3f3f46,
-    4px 8px 0 #27272a,
-    5px 10px 0 #18181b,
-    6px 12px 0 #27272a,
-    7px 14px 0 #18181b,
-    8px 16px 0 #27272a,
-    9px 18px 0 #18181b,
-    10px 20px 0 #09090b,
-    11px 22px 0 #09090b,
-    /* Linha de luz na borda inferior do chanfro */
-    12px 24px 0 rgba(113, 113, 122, 0.55),
-    /* Sombras de contato pesadas projetadas pela lateral */
-    14px 28px 35px rgba(0, 0, 0, 0.9),
-    22px 50px 85px rgba(0, 0, 0, 0.98);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.38),
+    0 25px 50px -10px rgba(0, 0, 0, 0.9),
+    0 50px 100px -20px rgba(0, 0, 0, 0.95);
   z-index: 1;
   pointer-events: none;
 }
@@ -2408,16 +2369,16 @@ body:has(dialog[open]) {
   100% { transform: translateZ(52px) translateY(-8px); }
 }
 
-/* Animações Flutuantes 3D Deitado (Posicionamento Mais Elevado para afastar da Seção 3) */
+/* Animações Flutuantes 3D Elegantes (Posicionamento Mais Elevado e Ângulo Natural Apple) */
 @keyframes iphoneIsoDeitadoFloating {
   0% {
-    transform: translateY(-60px) rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateZ(0px);
+    transform: translateY(-40px) rotateX(8deg) rotateY(-18deg) rotateZ(-2deg);
   }
   50% {
-    transform: translateY(-78px) rotateX(46deg) rotateY(9deg) rotateZ(-26deg) translateZ(24px);
+    transform: translateY(-56px) rotateX(5deg) rotateY(-14deg) rotateZ(-1deg);
   }
   100% {
-    transform: translateY(-60px) rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateZ(0px);
+    transform: translateY(-40px) rotateX(8deg) rotateY(-18deg) rotateZ(-2deg);
   }
 }
 

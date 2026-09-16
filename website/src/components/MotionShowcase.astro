@@ -10,10 +10,6 @@
   <!-- Container flutuante com perspectiva 3D -->
   <div class="motion-phone-pivot" id="motionPhonePivot">
     <div class="realistic-iphone" aria-hidden="true">
-      <!-- Placa traseira e camadas de profundidade física 3D do iPhone -->
-      <div class="iphone-3d-backplate"></div>
-      <div class="iphone-3d-chassis-depth"></div>
-
       <!-- Borda em Titânio Natural / Dark Titanium -->
       <div class="titanium-chassis"></div>
       <div class="titanium-chamfer-edge"></div>
@@ -47,50 +43,21 @@
         <div class="glass-specular-sheen"></div>
         <div class="glass-light-streak"></div>
 
-        <!-- Tela OLED com visualização deslizando continuamente por dentro -->
+        <!-- Tela OLED com visualização nítida oficial do aplicativo -->
         <div class="screen-display-area">
-          <div class="screen-glider-track">
-            <img
-              class="motion-app-screen"
-              src="/screens/ida.webp"
-              width="768"
-              height="1670"
-              alt="Linha 640 e Trajeto em Tempo Real"
-              loading="eager"
-              decoding="async"
-            />
-            <img
-              class="motion-app-screen"
-              src="/screens/home.webp"
-              width="768"
-              height="1670"
-              alt="Página Inicial e Linhas de Manaus"
-              loading="lazy"
-              decoding="async"
-            />
-            <img
-              class="motion-app-screen"
-              src="/screens/ida.webp"
-              width="768"
-              height="1670"
-              alt="Linha 640 e Trajeto em Tempo Real"
-              loading="lazy"
-              decoding="async"
-            />
-            <img
-              class="motion-app-screen"
-              src="/screens/home.webp"
-              width="768"
-              height="1670"
-              alt="Página Inicial e Linhas de Manaus"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
+          <img
+            class="motion-app-screen"
+            src="/screens/ida.webp"
+            width="768"
+            height="1670"
+            alt="Linha 640 e Trajeto em Tempo Real no Manô"
+            loading="eager"
+            decoding="async"
+          />
         </div>
       </div>
 
-      <!-- Cards Flutuantes 3D em Relevo (Extrude Depth sobre a tela) -->
+      <!-- Cards Flutuantes 3D em Relevo Físico sobre a tela -->
       <div class="iso-floating-card card-eta" aria-hidden="true">
         <span class="card-bus-code">640</span>
         <div class="card-info">
@@ -106,7 +73,7 @@
         <span class="card-status-badge">13</span>
         <div class="card-info">
           <strong>Ônibus Ativos</strong>
-          <span class="card-sub-text">Linha 640 operando agora</span>
+          <span class="card-sub-text">Linha 640 em tempo real</span>
         </div>
       </div>
     </div>
@@ -125,9 +92,9 @@
     const isTouchOnly = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (prefersReducedMotion || isTouchOnly) return;
 
-    const baseRotX = 50;
-    const baseRotY = 12;
-    const baseRotZ = -28;
+    const baseRotX = 8;
+    const baseRotY = -18;
+    const baseRotZ = -2;
 
     let targetRotX = baseRotX;
     let targetRotY = baseRotY;
@@ -145,7 +112,7 @@
         currentRotX = lerp(currentRotX, targetRotX, 0.08);
         currentRotY = lerp(currentRotY, targetRotY, 0.08);
         currentRotZ = lerp(currentRotZ, targetRotZ, 0.08);
-        pivot.style.transform = `translateY(-60px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(${currentRotZ.toFixed(2)}deg) translateZ(35px)`;
+        pivot.style.transform = `translateY(-40px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(${currentRotZ.toFixed(2)}deg) translateZ(35px)`;
       }
       animFrameId = requestAnimationFrame(updateTilt);
     };
