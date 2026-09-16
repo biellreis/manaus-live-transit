@@ -127,7 +127,7 @@ export const BusTelemetryCard: React.FC<BusTelemetryCardProps> = ({
                 }}
               >
                 <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
-                GPS Ao Vivo
+                Conectado
               </span>
             </div>
             <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
@@ -245,7 +245,7 @@ export const BusTelemetryCard: React.FC<BusTelemetryCardProps> = ({
           <div style={{ fontWeight: 700, color: '#10B981', fontSize: '11px' }}>
             {timeText}
           </div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)', marginTop: '1px' }}>Sinal GPS</div>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)', marginTop: '1px' }}>Sinal</div>
         </div>
       </div>
     </div>

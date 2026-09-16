@@ -168,7 +168,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               color: isConnected ? '#6EE7B7' : '#FCA5A5'
             }}
           >
-            {vehiclesCount} GPS
+            {vehiclesCount} ativos
           </span>
         </div>
 

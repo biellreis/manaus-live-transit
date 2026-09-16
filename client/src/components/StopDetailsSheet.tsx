@@ -91,7 +91,7 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
               <span>•</span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#2563EB', fontWeight: 700 }}>
                 <Footprints size={12} />
-                {userLocation.isRealGPS ? `${distanceMeters} m em linha reta (~${walkMinutes} min estimados)` : 'GPS indisponível'}
+                {userLocation.isRealGPS ? `${distanceMeters} m em linha reta (~${walkMinutes} min estimados)` : 'Localização indisponível'}
               </span>
             </div>
           </div>

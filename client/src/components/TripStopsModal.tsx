@@ -248,24 +248,10 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                   {activeVehicles.length} {activeVehicles.length === 1 ? 'Ônibus em circulação' : 'Ônibus em circulação'}
                 </div>
                 <div style={{ fontSize: '11.5px', color: 'var(--text-muted, #A1A1AA)', marginTop: '2px' }}>
-                  Monitoramento em tempo real via GPS ({isVolta ? 'Trajeto de Volta' : 'Trajeto de Ida'})
+                  Monitoramento em tempo real ({isVolta ? 'Trajeto de Volta' : 'Trajeto de Ida'})
                 </div>
               </div>
             </div>
-
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 800,
-                color: '#FFFFFF',
-                backgroundColor: isVolta ? '#EA580C' : '#2563EB',
-                padding: '4px 10px',
-                borderRadius: '8px',
-                letterSpacing: '0.04em'
-              }}
-            >
-              AO VIVO
-            </span>
           </div>
         </div>
       )}

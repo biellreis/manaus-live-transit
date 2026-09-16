@@ -890,7 +890,7 @@ export const MapView: React.FC<MapViewProps> = ({
               boxShadow: isDarkMode ? '0 4px 16px rgba(0, 0, 0, 0.6)' : '0 4px 16px rgba(0, 0, 0, 0.12)',
               outline: 'none'
             }}
-            title="Minha Localização GPS"
+            title="Minha Localização"
           >
             <Navigation size={18} />
           </button>

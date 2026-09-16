@@ -32,7 +32,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
 
   // Haversine formula for exact distance calculation in meters / km
   const getDistanceInfo = (lat2: number, lon2: number) => {
-    if (!userLocation.isRealGPS) return { distText: 'GPS indisponível', walkText: '', distKm: Infinity };
+    if (!userLocation.isRealGPS) return { distText: 'Localização indisponível', walkText: '', distKm: Infinity };
     const R = 6371; // Earth radius in km
     const dLat = (lat2 - userLocation.lat) * (Math.PI / 180);
     const dLon = (lon2 - userLocation.lng) * (Math.PI / 180);
@@ -142,7 +142,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
             fontWeight: 500
           }}
         >
-          {userLocation.isRealGPS ? 'Distâncias calculadas pelo GPS do dispositivo' : 'GPS indisponível • escolha uma parada'}
+          {userLocation.isRealGPS ? 'Distâncias calculadas a partir da sua localização' : 'Localização indisponível • escolha uma parada'}
         </p>
       </div>
 

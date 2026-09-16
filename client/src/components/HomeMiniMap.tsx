@@ -238,7 +238,7 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
         <button
           id="mini-map-gps-btn"
           onClick={handleRecenter}
-          aria-label="Atualizar meu GPS"
+          aria-label="Atualizar minha localização"
           style={{
             width: '36px',
             height: '36px',
@@ -254,7 +254,7 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
             boxShadow: 'var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.5))',
             outline: 'none'
           }}
-          title="Minha Localização GPS"
+          title="Minha Localização"
         >
           <Navigation size={17} />
         </button>

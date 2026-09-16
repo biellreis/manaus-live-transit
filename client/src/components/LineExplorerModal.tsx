@@ -341,7 +341,7 @@ export const LineExplorerModal: React.FC<LineExplorerModalProps> = ({
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span>Partidas diárias ativas</span>
                       <span>•</span>
-                      <span>GPS Oficial 4.5s</span>
+                      <span>Atualização 4.5s</span>
                     </div>
                   </div>
                 </div>

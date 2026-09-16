@@ -124,7 +124,7 @@ export function WebLaunchOverlay() {
         {/* Layer 3: Yellow GPS Arrow Accent */}
         <img
           src="/logo-assets/arrow.png"
-          alt="Seta GPS Amarela Manô"
+          alt="Seta Amarela Manô"
           className="mano-layer-arrow"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
         />
