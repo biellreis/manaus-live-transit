@@ -20,16 +20,19 @@ import InstallModal from '../components/InstallModal.astro';
   <meta property="og:title" content="Manô — Manaus na sua mão."/><meta property="og:description" content="Seu próximo caminho começa aqui. Linhas, trajetos e conexões em um só aplicativo."/><meta property="og:type" content="website"/>
 </head>
 <body>
-<header class="header-apple-wrapper">
-  <div class="header-apple-glass">
+<header class="top-nav-bar">
+  <div class="top-nav-inner">
     <a href="#" class="brand" aria-label="Manô, início">
       <img src="/brand/icon.png" width="36" height="36" alt="" class="brand-logo-img"/>
       <img src="/brand/original-name-white.png" width="36" height="9" alt="Manô" class="brand-name-img"/>
     </a>
-    <nav class="nav-apple-links" aria-label="Principal">
-      <a href="#recursos">O aplicativo</a>
-      <a href="#trajetos">Trajetos</a>
-      <a href="#conexoes">Conexões</a>
+    <nav class="top-nav-links" aria-label="Navegação das seções">
+      <a href="#planejar" class="top-nav-item"><Icon name="route" size={16}/><span>Planejar</span></a>
+      <a href="#linhas" class="top-nav-item"><Icon name="search" size={16}/><span>Linhas</span></a>
+      <a href="#trajetos" class="top-nav-item"><Icon name="bus" size={16}/><span>Trajetos</span></a>
+      <a href="#veiculos" class="top-nav-item"><Icon name="map" size={16}/><span>No Mapa</span></a>
+      <a href="#conexoes" class="top-nav-item"><Icon name="pin" size={16}/><span>Conexões</span></a>
+      <a href="#alertas" class="top-nav-item"><Icon name="bell" size={16}/><span>Alertas</span></a>
     </nav>
   </div>
 </header>
@@ -57,17 +60,6 @@ import InstallModal from '../components/InstallModal.astro';
       <a href="#recursos" class="hero-scroll-cue">Explore o Manô <span>↓</span></a>
     </div>
   </section>
-
-  <div class="feature-nav">
-    <div class="wrap">
-      <a href="#planejar"><Icon name="route"/>Planejar</a>
-      <a href="#linhas"><Icon name="search"/>Linhas</a>
-      <a href="#trajetos"><Icon name="bus"/>Trajetos</a>
-      <a href="#veiculos"><Icon name="map"/>No Mapa</a>
-      <a href="#conexoes"><Icon name="pin"/>Conexões</a>
-      <a href="#alertas"><Icon name="bell"/>Alertas</a>
-    </div>
-  </div>
 
   <section class="intro wrap" id="recursos">
     <div class="intro-header">

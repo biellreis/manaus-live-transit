@@ -86,39 +86,31 @@ svg {
   margin-right: 9px;
 }
 /* ==========================================================================
-   HEADER — Apple Liquid Glass Floating Capsule (VisionOS / macOS Style)
+   HEADER — Retângulo de Ponta a Ponta com Opacidade (Fixo na 1ª Seção)
    ========================================================================== */
-.header-apple-wrapper {
-  position: sticky;
-  top: 16px;
-  z-index: 100;
+.top-nav-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 0 24px;
-  margin-bottom: -80px;
-  pointer-events: none;
+  z-index: 50;
+  background: rgba(9, 9, 11, 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.header-apple-glass {
-  pointer-events: auto;
+.top-nav-inner {
   width: 100%;
-  max-width: 1080px;
-  height: 68px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
-  border-radius: 22px;
-  background: rgba(13, 14, 18, 0.76);
-  -webkit-backdrop-filter: blur(40px) saturate(190%);
-  backdrop-filter: blur(40px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.25),
-              inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.45),
-              0 24px 48px -12px rgba(0, 0, 0, 0.85),
-              0 0 0 1px rgba(255, 255, 255, 0.04);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease;
+  gap: 24px;
 }
 
 .brand {
@@ -129,6 +121,7 @@ svg {
   gap: 3px;
   text-decoration: none;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .brand-logo-img {
@@ -145,25 +138,35 @@ svg {
   object-fit: contain;
 }
 
-.nav-apple-links {
+.top-nav-links {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: nowrap;
 }
 
-.nav-apple-links a {
-  font-size: 13px;
+.top-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
   font-weight: 500;
   color: #a1a1aa;
-  padding: 8px 16px;
-  border-radius: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.18s ease, background 0.18s ease;
 }
 
-.nav-apple-links a:hover {
+.top-nav-item:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.08);
+}
+
+.top-nav-item svg {
+  color: var(--blue);
+  flex-shrink: 0;
 }
 .hero {
   min-height: 700px;
@@ -524,41 +527,8 @@ h1 {
   border-color: rgba(255, 255, 255, 0.16);
   transform: translateY(2px);
 }
-.feature-nav {
-  border-top: none;
-  border-bottom: 1px solid var(--line);
-  padding: 14px 0;
-  background: rgba(9, 9, 11, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-.feature-nav .wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
-}
-.feature-nav a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #9ea0ac;
-  padding: 6px 14px;
-  border-radius: 999px;
-  transition: all 0.2s ease;
-}
-.feature-nav a:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.07);
-}
-.feature-nav svg {
-  color: var(--blue);
+section[id] {
+  scroll-margin-top: 36px;
 }
 .intro {
   padding: 130px 0 110px;
@@ -1273,15 +1243,10 @@ body:has(dialog[open]) {
   .wrap {
     width: calc(100% - 40px);
   }
-  .header-apple-wrapper {
-    top: 10px;
-    padding: 0 12px;
-    margin-bottom: -66px;
-  }
-  .header-apple-glass {
-    height: 56px;
-    padding: 0 14px;
-    border-radius: 18px;
+  .top-nav-inner {
+    padding: 0 16px;
+    height: 60px;
+    gap: 12px;
   }
   .brand-logo-img,
   .footer-brand .brand-logo-img {
@@ -1293,12 +1258,26 @@ body:has(dialog[open]) {
     width: 28px;
     height: auto;
   }
-  .nav-apple-links {
-    gap: 2px;
+  .top-nav-links {
+    gap: 3px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0;
   }
-  .nav-apple-links a {
+  .top-nav-links::-webkit-scrollbar {
+    display: none;
+  }
+  .top-nav-item {
     font-size: 11.5px;
-    padding: 5px 8px;
+    padding: 6px 10px;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .top-nav-item svg {
+    width: 14px;
+    height: 14px;
   }
   .hero {
     height: auto;
@@ -1372,28 +1351,6 @@ body:has(dialog[open]) {
     position: static;
     border-top: 1px solid var(--line);
     padding: 20px 0;
-  }
-  .feature-nav {
-    padding: 12px 0;
-  }
-  .feature-nav .wrap {
-    gap: 8px;
-    justify-content: flex-start;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-inline: 4px;
-  }
-  .feature-nav .wrap::-webkit-scrollbar {
-    display: none;
-  }
-  .feature-nav a {
-    font-size: 11px;
-    padding: 5px 12px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .feature-nav svg {
-    width: 14px;
   }
   .intro {
     padding: 80px 0 35px;
