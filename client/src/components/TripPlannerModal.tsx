@@ -771,7 +771,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                                   display: 'inline-flex',
                                   alignItems: 'center',
                                   gap: '4px',
-                                  backgroundColor: isDirect ? '#2563EB' : '#D97706',
+                                  backgroundColor: isDirect ? '#2563EB' : '#EA580C',
                                   color: '#FFFFFF',
                                   fontSize: '10.5px',
                                   fontWeight: 800,
@@ -784,7 +784,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                               </span>
 
                               {opt.destEtaTime && (
-                                <span style={{ fontSize: '11px', color: '#38BDF8', fontWeight: 700 }}>
+                                <span style={{ fontSize: '11px', color: '#FFFFFF', fontWeight: 700 }}>
                                   • Chega às {opt.destEtaTime}
                                 </span>
                               )}

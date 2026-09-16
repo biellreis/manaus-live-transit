@@ -157,7 +157,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         </div>
 
         {/* Direction Switcher (Sentido Ida vs Volta - strictly equal 50% width) */}
-        {allTrips.length >= 2 && (
+        {!plannedTrip && allTrips.length >= 2 && (
           <div
             style={{
               display: 'flex',
@@ -261,11 +261,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   whiteSpace: 'nowrap',
                   fontSize: '11px',
                   fontWeight: 800,
-                  color: isWithinOperationalHours ? '#3B82F6' : '#94A3B8',
-                  backgroundColor: isWithinOperationalHours ? 'rgba(59, 130, 246, 0.15)' : 'rgba(148, 163, 184, 0.15)',
+                  color: '#FFFFFF',
+                  backgroundColor: isWithinOperationalHours ? '#2563EB' : '#18181B',
                   padding: '4px 10px',
                   borderRadius: '999px',
-                  border: isWithinOperationalHours ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(148, 163, 184, 0.3)',
+                  border: isWithinOperationalHours ? 'none' : '1px solid #FFFFFF',
                   lineHeight: 1
                 }}
               >
@@ -343,9 +343,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       fontSize: '12px',
                       fontWeight: 800,
                       color: '#FFFFFF',
-                      backgroundColor: 'rgba(37, 99, 235, 0.3)',
-                      border: '1px solid rgba(37, 99, 235, 0.5)',
-                      padding: '3px 10px',
+                      backgroundColor: '#2563EB',
+                      padding: '4px 10px',
                       borderRadius: '8px'
                     }}
                   >
@@ -356,10 +355,9 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                     style={{
                       fontSize: '11.5px',
                       fontWeight: 800,
-                      color: '#60A5FA',
-                      backgroundColor: 'rgba(59, 130, 246, 0.15)',
-                      border: '1px solid rgba(59, 130, 246, 0.3)',
-                      padding: '3px 8px',
+                      color: '#FFFFFF',
+                      backgroundColor: '#2563EB',
+                      padding: '4px 10px',
                       borderRadius: '8px'
                     }}
                   >
@@ -369,7 +367,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
               </div>
 
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', fontWeight: 600 }}>Passa às</span>
+                <span style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 600 }}>Passa às</span>
                 <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   {plannedTrip.etaTime || 'Em breve'}
                 </span>
@@ -407,17 +405,17 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   }}
                 >
                   <Clock size={13} style={{ color: '#60A5FA' }} />
-                  <span style={{ fontSize: '11px', color: 'var(--text-sub, #A1A1AA)', fontWeight: 600 }}>Próximos:</span>
+                  <span style={{ fontSize: '11px', color: '#FFFFFF', fontWeight: 600 }}>Próximos:</span>
                   {plannedTrip.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
                     <span
                       key={bIdx}
                       style={{
                         fontSize: '11px',
                         fontWeight: 700,
-                        color: '#CBD5E1',
-                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                        padding: '2px 7px',
-                        borderRadius: '5px'
+                        color: '#FFFFFF',
+                        backgroundColor: '#2563EB',
+                        padding: '3px 8px',
+                        borderRadius: '6px'
                       }}
                     >
                       {nextBus.time} ({nextBus.minutes} min)
@@ -479,7 +477,9 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       <ArrowRightLeft size={11} color="#000000" strokeWidth={3} />
                       Troca de Ônibus
                     </span>
-                    <span style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 600 }}>Integração Gratuita</span>
+                    <span style={{ fontSize: '11px', fontWeight: 800, backgroundColor: '#2563EB', color: '#FFFFFF', padding: '2px 8px', borderRadius: '4px' }}>
+                      Integração Gratuita
+                    </span>
                   </div>
 
                   <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main, #FFFFFF)', marginTop: '4px' }}>
@@ -532,9 +532,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       fontSize: '12px',
                       fontWeight: 800,
                       color: '#FFFFFF',
-                      backgroundColor: 'rgba(234, 88, 12, 0.3)',
-                      border: '1px solid rgba(234, 88, 12, 0.5)',
-                      padding: '3px 10px',
+                      backgroundColor: '#EA580C',
+                      padding: '4px 10px',
                       borderRadius: '8px'
                     }}
                   >
@@ -545,7 +544,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 
               {plannedTrip.destEtaTime && (
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'var(--text-sub, #A1A1AA)', fontWeight: 600 }}>Chegada às</span>
+                  <span style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 700 }}>Chegada às</span>
                   <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-main, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
                     {plannedTrip.destEtaTime}
                   </span>
@@ -592,7 +591,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             width: '100%',
             padding: '14px',
             borderRadius: '14px',
-            backgroundColor: '#F97316',
+            backgroundColor: '#EA580C',
             color: '#FFFFFF',
             fontSize: '15px',
             fontWeight: 800,

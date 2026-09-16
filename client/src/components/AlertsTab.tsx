@@ -123,14 +123,14 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
     });
   }, [rawAlerts, selectedFilter]);
 
-  // Determine pill badge metadata based on alert properties
+  // Determine pill badge metadata based on alert properties (strict 3 colors: white, blue #2563EB, orange #EA580C)
   const getBadgeConfig = (alert: TrafficAlertItem) => {
     const t = alert.title.toLowerCase();
 
     if (t.includes('acidente')) {
       return {
         label: 'ACIDENTE REPORTADO',
-        bg: '#DC2626', // Red
+        bg: '#EA580C',
         color: '#FFFFFF'
       };
     }
@@ -138,32 +138,32 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       return { label: 'OBRAS NA VIA', bg: '#EA580C', color: '#FFFFFF' };
     }
     if (alert.category === 'hazards') {
-      return { label: 'PERIGO NA VIA', bg: '#D97706', color: '#FFFFFF' };
+      return { label: 'PERIGO NA VIA', bg: '#EA580C', color: '#FFFFFF' };
     }
     if (t.includes('interditada') || t.includes('bloqueio')) {
       return {
         label: 'VIA INTERDITADA',
-        bg: '#EA580C', // Orange
+        bg: '#EA580C',
         color: '#FFFFFF'
       };
     }
     if (t.includes('lentidão') || t.includes('engarrafamento') || t.includes('retenção') || t.includes('perigo')) {
       return {
         label: 'RETENÇÃO INTENSA',
-        bg: '#D97706', // Amber
+        bg: '#EA580C',
         color: '#FFFFFF'
       };
     }
     if (t.includes('fiscalização') || t.includes('blitz') || t.includes('immu')) {
       return {
         label: 'FISCALIZAÇÃO',
-        bg: '#2563EB', // Blue
+        bg: '#2563EB',
         color: '#FFFFFF'
       };
     }
     return {
       label: 'SISTEMA TRANSURBANO',
-      bg: '#059669', // Emerald
+      bg: '#2563EB',
       color: '#FFFFFF'
     };
   };
@@ -271,7 +271,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: isRefreshing ? '#F59E0B' : (trafficData ? '#10B981' : '#71717A'),
+              backgroundColor: isRefreshing ? '#EA580C' : (trafficData ? '#2563EB' : '#71717A'),
               display: 'inline-block'
             }}
           />
@@ -286,7 +286,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
           </span>
         </div>
         {isRefreshing && (
-          <span style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 600 }}>
+          <span style={{ fontSize: '11px', color: '#EA580C', fontWeight: 600 }}>
             Atualizando...
           </span>
         )}
@@ -426,30 +426,64 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
           );
         })}
 
-        {/* Empty State when no alerts match */}
+        {/* Empty State when no alerts match (Solid 100% Blue Card, organized & diagrammed, title only) */}
         {!isLoading && !loadError && filteredAlerts.length === 0 && (
           <div
             style={{
-              backgroundColor: '#141417',
+              backgroundColor: '#2563EB',
               borderRadius: '20px',
-              padding: '28px 20px',
-              border: '1px solid rgba(16, 185, 129, 0.25)',
+              padding: '26px 20px',
               textAlign: 'center',
-              boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
-              marginTop: '10px'
+              boxShadow: '0 8px 24px rgba(37, 99, 235, 0.4)',
+              marginTop: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px'
             }}
           >
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', margin: '0 auto 12px auto' }}>
-              <CheckCircle2 size={24} />
+            <div
+              style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '50%',
+                backgroundColor: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#2563EB',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+              }}
+            >
+              <CheckCircle2 size={26} strokeWidth={2.5} />
             </div>
-            <div style={{ fontSize: '17px', fontWeight: 800, color: '#FFFFFF', marginBottom: '6px' }}>
+            <div
+              style={{
+                fontSize: '18px',
+                fontWeight: 800,
+                color: '#FFFFFF',
+                letterSpacing: '-0.02em',
+                lineHeight: '1.3'
+              }}
+            >
               Nenhuma ocorrência nesta categoria
             </div>
-            <div style={{ fontSize: '13px', color: '#94A3B8', maxWidth: '320px', margin: '0 auto 16px auto', lineHeight: '1.45' }}>
-              Nenhuma ocorrência recente registrada para este filtro.
-            </div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '5px 14px', borderRadius: '999px', color: '#10B981', fontSize: '12px', fontWeight: 800 }}>
-              <Navigation size={13} />
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: '#FFFFFF',
+                color: '#2563EB',
+                padding: '6px 16px',
+                borderRadius: '999px',
+                fontSize: '12px',
+                fontWeight: 800,
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+              }}
+            >
+              <Navigation size={13} strokeWidth={2.5} />
               <span>Monitoramento em Tempo Real</span>
             </div>
           </div>

@@ -234,11 +234,11 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                   width: '38px',
                   height: '38px',
                   borderRadius: '10px',
-                  backgroundColor: isVolta ? 'rgba(249, 115, 22, 0.15)' : 'rgba(59, 130, 246, 0.15)',
+                  backgroundColor: isVolta ? '#EA580C' : '#2563EB',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: isVolta ? '#F97316' : '#3B82F6'
+                  color: '#FFFFFF'
                 }}
               >
                 <Bus size={20} />
@@ -257,11 +257,10 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
               style={{
                 fontSize: '11px',
                 fontWeight: 800,
-                color: isVolta ? '#F97316' : '#3B82F6',
-                backgroundColor: isVolta ? 'rgba(249, 115, 22, 0.15)' : 'rgba(59, 130, 246, 0.15)',
+                color: '#FFFFFF',
+                backgroundColor: isVolta ? '#EA580C' : '#2563EB',
                 padding: '4px 10px',
                 borderRadius: '8px',
-                border: `1px solid ${isVolta ? 'rgba(249, 115, 22, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
                 letterSpacing: '0.04em'
               }}
             >
@@ -506,7 +505,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                       </span>
                     )}
                     {isHub && (
-                      <span style={{ fontSize: '10px', fontWeight: 800, backgroundColor: 'rgba(255, 255, 255, 0.12)', color: '#CBD5E1', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 800, backgroundColor: '#2563EB', color: '#FFFFFF', padding: '2px 7px', borderRadius: '4px' }}>
                         Terminal / Estação
                       </span>
                     )}

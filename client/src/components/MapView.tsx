@@ -539,6 +539,31 @@ export const MapView: React.FC<MapViewProps> = ({
         plannedMarkers.current.push(depMarker);
       }
 
+      // 1.5. Transfer Stop Marker on Map (Identificação de Troca de Ônibus no Mapa)
+      if (plannedTrip.isTransfer && plannedTrip.legs.length > 1) {
+        const transferStop = plannedTrip.legs[0].destStop;
+        bounds.extend([transferStop.lng, transferStop.lat]);
+
+        const transferEl = document.createElement('div');
+        transferEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;cursor:pointer;z-index:25;';
+        transferEl.innerHTML = `
+          <div style="background:#18181B;color:#FFFFFF;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,0.85);border:2px solid #FFFFFF;display:flex;align-items:center;gap:6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 3 4 4-4 4"/>
+              <path d="M20 7H4"/>
+              <path d="m8 21-4-4 4-4"/>
+              <path d="M4 17h16"/>
+            </svg>
+            <span>Troca de Ônibus: ${plannedTrip.transferHubName || transferStop.stopName}</span>
+          </div>
+          <div style="width:12px;height:12px;border-radius:50%;background:#18181B;border:3px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.6);margin-top:2px;"></div>
+        `;
+        const transferMarker = new maplibregl.Marker({ element: transferEl, anchor: 'bottom' })
+          .setLngLat([transferStop.lng, transferStop.lat])
+          .addTo(map.current);
+        plannedMarkers.current.push(transferMarker);
+      }
+
       // 2. Destination Markers
       if (isDestTerminal) {
         const destEl = document.createElement('div');
