@@ -58,12 +58,14 @@ import Icon from './Icon.astro';
       </div>
     </a>
 
-    <!-- Android Flow: Single Direct Install Button -->
+    <!-- Android Flow: Single Direct Install Link to the App -->
     <div class="modal-android-flow" id="modal-android-flow" style="display: none;">
-      <button type="button" class="android-direct-btn" id="android-direct-btn" aria-label="Instalar aplicativo Manô no Android">
+      <a href="https://manaus-live-transit.vercel.app/" target="_blank" rel="noopener" class="android-direct-btn" id="android-direct-btn" aria-label="Acessar e instalar aplicativo Manô no Android">
         <Icon name="android" size={24}/>
-        <span>Instalar no Android</span>
-      </button>
+        <span>Instalar aplicativo</span>
+        <span class="android-btn-arrow" aria-hidden="true">↗</span>
+      </a>
+      <p class="android-modal-hint">Toque para abrir o aplicativo e confirme em <strong>Instalar</strong> no seu navegador.</p>
     </div>
   </div>
 </dialog>

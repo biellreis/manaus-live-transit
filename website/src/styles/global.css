@@ -2759,6 +2759,26 @@ body:has(dialog[open]) {
   color: #09090b;
   flex-shrink: 0;
 }
+.android-btn-arrow {
+  margin-left: auto;
+  font-size: 18px;
+  color: #71717a;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.android-direct-btn:hover .android-btn-arrow {
+  transform: translate(2px, -2px);
+  color: #09090b;
+}
+.android-modal-hint {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #9ca3af;
+  margin: 14px 0 4px;
+}
+.android-modal-hint strong {
+  color: #ffffff;
+}
 
 @media (max-width: 990px) {
   .intro-split-section {

@@ -1,11 +1,5 @@
 export {};
 
-let deferredPrompt: any = null;
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");
 let activeOpener: HTMLElement | null = null;
 
@@ -33,7 +27,7 @@ if (dialog) {
           if (androidFlow) androidFlow.style.display = "none";
         } else {
           if (titleEl) titleEl.textContent = "Instalar no Android";
-          if (subTitleEl) subTitleEl.textContent = "Instalação direta com 1 toque no seu celular:";
+          if (subTitleEl) subTitleEl.textContent = "Acesse o aplicativo para salvar no seu celular:";
           if (iosLink) iosLink.style.display = "none";
           if (androidFlow) androidFlow.style.display = "block";
         }
@@ -42,25 +36,12 @@ if (dialog) {
       });
     });
 
-  const androidDirectBtn = document.querySelector<HTMLButtonElement>("#android-direct-btn");
+  const androidDirectBtn = document.querySelector<HTMLAnchorElement>("#android-direct-btn");
   if (androidDirectBtn) {
-    androidDirectBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      if (deferredPrompt) {
-        try {
-          await deferredPrompt.prompt();
-          const choice = await deferredPrompt.userChoice;
-          deferredPrompt = null;
-          if (choice.outcome === "accepted") {
-            dialog.close();
-            return;
-          }
-        } catch {
-          // fallback
-        }
-      }
-      window.open("https://manaus-live-transit.vercel.app/", "_blank", "noopener");
-      dialog.close();
+    androidDirectBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        dialog.close();
+      }, 300);
     });
   }
 
