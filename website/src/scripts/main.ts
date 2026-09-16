@@ -12,6 +12,14 @@ if (dialog) {
         activeOpener = link;
         const platform = link.dataset.install === "android" ? "android" : "ios";
 
+        if (platform === "android") {
+          // Download direto do APK nativo sem abrir aba do navegador
+          return;
+        }
+
+        event.preventDefault();
+        activeOpener = link;
+
         const titleEl = document.querySelector("#install-sheet-title");
         const subTitleEl = document.querySelector("#install-sheet-subtitle");
         const iosLink = document.querySelector<HTMLAnchorElement>("#sheet-app-link");
@@ -25,11 +33,6 @@ if (dialog) {
             iosLink.href = "https://manaus-live-transit.vercel.app/";
           }
           if (androidFlow) androidFlow.style.display = "none";
-        } else {
-          if (titleEl) titleEl.textContent = "Instalar no Android";
-          if (subTitleEl) subTitleEl.textContent = "Acesse o aplicativo para salvar no seu celular:";
-          if (iosLink) iosLink.style.display = "none";
-          if (androidFlow) androidFlow.style.display = "block";
         }
 
         dialog.showModal();

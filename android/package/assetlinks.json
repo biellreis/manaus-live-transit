@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.mano.transit",
+        "sha256_cert_fingerprints": ["39:A4:18:AB:6D:7D:B1:BC:7F:8B:EC:33:AC:C8:3F:C6:30:CD:D5:B8:3C:87:D7:80:60:FC:85:4F:E4:C3:74:25"]
+      }
+    }]
