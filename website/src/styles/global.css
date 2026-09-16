@@ -2900,6 +2900,64 @@ body:has(dialog[open]) {
     width: 170px;
     bottom: 12%;
   }
+/* ==========================================================================
+   FEEDBACK TOAST DE DOWNLOAD DO APK
+   ========================================================================== */
+.download-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  z-index: 1000;
+  background: rgba(18, 18, 22, 0.96);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  color: #ffffff;
+  padding: 14px 22px;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 20px rgba(59, 130, 246, 0.2);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  opacity: 0;
+  pointer-events: none;
+  max-width: calc(100% - 40px);
+  width: max-content;
+}
+.download-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.18);
+  font-size: 18px;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+.toast-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.toast-text strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+.toast-text span {
+  font-size: 12px;
+  color: #93c5fd;
+  margin-top: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

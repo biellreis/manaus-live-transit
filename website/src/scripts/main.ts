@@ -3,20 +3,45 @@ export {};
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");
 let activeOpener: HTMLElement | null = null;
 
+function showDownloadToast() {
+  let toast = document.querySelector<HTMLElement>("#download-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "download-toast";
+    toast.className = "download-toast";
+    toast.innerHTML = `
+      <div class="toast-content">
+        <span class="toast-icon">⬇</span>
+        <div class="toast-text">
+          <strong>Baixando Mano.apk...</strong>
+          <span>Verifique a barra de notificações para instalar.</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast?.classList.remove("show");
+  }, 4500);
+}
+
+// Manipulador dedicado para todos os botões Android
+document
+  .querySelectorAll<HTMLAnchorElement>(".install-android, #android-direct-btn")
+  .forEach((btn) => {
+    btn.addEventListener("click", () => {
+      showDownloadToast();
+      window.location.assign("/downloads/Mano.apk");
+    });
+  });
+
 if (dialog) {
+  // Apenas links do iOS abrem o modal
   document
-    .querySelectorAll<HTMLAnchorElement>("[data-install]")
+    .querySelectorAll<HTMLAnchorElement>("[data-install='ios']")
     .forEach((link) => {
       link.addEventListener("click", (event) => {
-        event.preventDefault();
-        activeOpener = link;
-        const platform = link.dataset.install === "android" ? "android" : "ios";
-
-        if (platform === "android") {
-          // Download direto do APK nativo sem abrir aba do navegador
-          return;
-        }
-
         event.preventDefault();
         activeOpener = link;
 
@@ -25,28 +50,17 @@ if (dialog) {
         const iosLink = document.querySelector<HTMLAnchorElement>("#sheet-app-link");
         const androidFlow = document.querySelector<HTMLElement>("#modal-android-flow");
 
-        if (platform === "ios") {
-          if (titleEl) titleEl.textContent = "Instalar no iPhone";
-          if (subTitleEl) subTitleEl.textContent = "4 passos simples no seu navegador:";
-          if (iosLink) {
-            iosLink.style.display = "block";
-            iosLink.href = "https://manaus-live-transit.vercel.app/";
-          }
-          if (androidFlow) androidFlow.style.display = "none";
+        if (titleEl) titleEl.textContent = "Instalar no iPhone";
+        if (subTitleEl) subTitleEl.textContent = "4 passos simples no seu navegador:";
+        if (iosLink) {
+          iosLink.style.display = "block";
+          iosLink.href = "https://manaus-live-transit.vercel.app/";
         }
+        if (androidFlow) androidFlow.style.display = "none";
 
         dialog.showModal();
       });
     });
-
-  const androidDirectBtn = document.querySelector<HTMLAnchorElement>("#android-direct-btn");
-  if (androidDirectBtn) {
-    androidDirectBtn.addEventListener("click", () => {
-      setTimeout(() => {
-        dialog.close();
-      }, 300);
-    });
-  }
 
   const closeBtn = dialog.querySelector(".dialog-close");
   closeBtn?.addEventListener("click", (e) => {
