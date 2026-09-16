@@ -1,8 +1,6 @@
 import { installUrl } from "../config";
 
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog")!;
-const continueLink =
-  document.querySelector<HTMLAnchorElement>("#install-continue")!;
 let opener: HTMLElement | null = null;
 document
   .querySelectorAll<HTMLAnchorElement>("[data-install]")
@@ -14,15 +12,15 @@ document
       opener = link;
       const platform = link.dataset.install === "android" ? "android" : "ios";
       const target = installUrl(platform);
-      continueLink.href = target;
       document.querySelector("#install-title")!.textContent =
         platform === "ios" ? "Manô no seu iPhone." : "Manô no seu Android.";
       document.querySelector("#install-description")!.textContent =
-        "Aponte a câmera do celular para o QR code e continue por lá.";
-      document.querySelector("#install-instructions")!.textContent =
+        "Aponte a câmera do celular para o QR code e siga as instruções na tela.";
+      const instructions = document.querySelector("#install-instructions")!;
+      instructions.innerHTML =
         platform === "ios"
-          ? "No Safari: Compartilhar → Adicionar à Tela de Início."
-          : "No Chrome: siga a opção Instalar aplicativo ou Adicionar à tela inicial.";
+          ? "<strong>Instalação no iPhone:</strong><br/>1. Toque nos 3 pontinhos (...)<br/>2. Toque em Compartilhar<br/>3. Toque em Ver Mais<br/>4. Adicionar à Tela de Início"
+          : "<strong>Instalação no Android:</strong><br/>No Chrome, toque em <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong> e confirme.";
       const qr = document.querySelector<HTMLCanvasElement>("#install-qr")!;
       qr.hidden = true;
       dialog.showModal();
@@ -156,4 +154,21 @@ if (!reduced.matches) {
     );
     observer.observe(art);
   }
+}
+
+const mapVideo = document.querySelector<HTMLVideoElement>(".map-video");
+if (mapVideo) {
+  const videoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          mapVideo.play().catch(() => {});
+        } else {
+          mapVideo.pause();
+        }
+      });
+    },
+    { threshold: 0.15 },
+  );
+  videoObserver.observe(mapVideo);
 }

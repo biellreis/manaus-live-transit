@@ -98,16 +98,18 @@ svg {
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 30px;
-  font-weight: 650;
-  letter-spacing: -1.4px;
+  gap: 10px;
+  text-decoration: none;
 }
-.brand img {
-  border-radius: 10px;
+.brand-logo-img {
+  border-radius: 9px;
+  display: block;
 }
-.brand-dot {
-  color: var(--blue);
+.brand-name-img {
+  display: block;
+  height: 23px;
+  width: auto;
+  object-fit: contain;
 }
 .header nav {
   display: flex;
@@ -162,44 +164,75 @@ h1 {
 }
 .install-buttons {
   display: flex;
-  gap: 12px;
-  margin-top: 34px;
+  gap: 14px;
+  margin-top: 36px;
   flex-wrap: wrap;
 }
 .install-button {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 13px 16px;
-  border-radius: 12px;
-  min-height: 60px;
-  font-size: 13px;
-  font-weight: 500;
-  transition:
-    transform 0.2s,
-    background 0.2s;
+  gap: 14px;
+  padding: 14px 22px;
+  border-radius: 16px;
+  min-height: 64px;
+  text-decoration: none;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s, background 0.22s;
+  cursor: pointer;
 }
-.install-button:hover {
-  transform: translateY(-3px);
+.install-ios {
+  background: #ffffff;
+  color: #09090b;
+  box-shadow: 0 8px 28px rgba(59, 130, 246, 0.3), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
-.install-button small {
-  display: block;
-  font-size: 10px;
-  font-weight: 400;
-  opacity: 0.7;
-  margin-bottom: 3px;
+.install-ios:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 38px rgba(59, 130, 246, 0.45);
 }
-.primary {
-  background: #f5f5f7;
-  color: #111115;
+.install-android {
+  background: #141419;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
-.secondary {
-  border: 1px solid #ffffff35;
-  background: #151519;
+.install-android:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: #1c1c24;
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.28);
+}
+.button-icon-wrapper {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.button-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.button-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.button-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  margin-top: 1px;
 }
 .button-arrow {
-  font-size: 16px;
+  font-size: 18px;
   margin-left: 6px;
+  opacity: 0.6;
+  transition: transform 0.2s;
+}
+.install-button:hover .button-arrow {
+  transform: translate(2px, -2px);
+  opacity: 1;
 }
 .micro {
   color: #656773;
@@ -702,10 +735,14 @@ h2 {
   box-shadow: 20px 35px 80px rgba(0, 0, 0, 0.8);
   background: #09090b;
 }
-.map-window > img {
+.map-window > img,
+.map-window > video,
+.map-video {
   width: 100%;
   height: auto;
   transform: translateY(-8%);
+  display: block;
+  object-fit: cover;
 }
 .connections-section {
   background: linear-gradient(#111115, #0c0c10);
@@ -805,75 +842,128 @@ h2 {
 .install-section .install-buttons {
   justify-content: center;
 }
-.browser-link {
-  display: inline-block;
-  font-size: 12px;
-  color: #8d929f;
-  margin-top: 24px;
+.install-icon-main {
+  border-radius: 22px;
+  display: block;
 }
-.browser-link span {
-  margin-left: 10px;
-}
-.faq {
+.iphone-guide {
+  margin: 56px auto 32px;
+  max-width: 880px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 36px 30px;
   text-align: left;
-  max-width: 660px;
-  margin: 85px auto 0;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 }
-.faq details {
-  border-top: 1px solid #ffffff15;
+.guide-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border-radius: 20px;
+  margin-bottom: 14px;
 }
-.faq details:last-child {
-  border-bottom: 1px solid #ffffff15;
+.guide-title {
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+  margin-bottom: 24px;
 }
-.faq summary {
-  list-style: none;
-  cursor: pointer;
-  font-size: 15px;
-  padding: 23px 0;
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.step-card {
+  background: rgba(18, 18, 23, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 20px 16px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
 }
-.faq summary::-webkit-details-marker {
-  display: none;
+.step-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(22, 22, 29, 0.95);
 }
-.faq summary span {
-  font-size: 21px;
-  color: #7d8493;
-}
-.faq details[open] summary span {
-  transform: rotate(45deg);
-}
-.faq p {
-  font-size: 14px;
-  color: #979aa5;
-  line-height: 1.7;
-  padding: 0 30px 25px 0;
-}
-footer {
-  border-top: 1px solid #ffffff14;
-  padding: 38px 0 25px;
+.step-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 30px;
 }
-footer > span {
+.step-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
   font-size: 13px;
-  color: #858895;
+  font-weight: 700;
 }
-footer > a:last-of-type {
+.step-icon-wrap {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #93c5fd;
+}
+.step-content h4 {
+  font-size: 14px;
+  font-weight: 650;
+  color: #ffffff;
+  line-height: 1.35;
+  margin-bottom: 5px;
+}
+.step-content p {
   font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.45;
+  margin: 0;
+}
+.footer-minimal {
+  padding: 60px 0 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 80px;
+}
+.footer-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  margin: 0 auto;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.footer-brand:hover {
+  opacity: 1;
 }
 .footer-bottom {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: #646875;
-  border-top: 1px solid #ffffff0a;
-  padding-top: 25px;
-  margin-top: 10px;
+  font-size: 13px;
+  color: #6b7280;
+  letter-spacing: 0.2px;
 }
 .skip {
   position: fixed;
@@ -1362,24 +1452,21 @@ body:has(dialog[open]) {
   .faq p {
     font-size: 13px;
   }
-  footer {
-    gap: 20px;
+  .steps-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
-  footer > span {
-    display: none;
+  .iphone-guide {
+    padding: 26px 18px;
+    margin: 40px auto 24px;
   }
-  .footer-bottom {
-    gap: 16px;
-    flex-wrap: wrap;
-    line-height: 1.5;
+  .guide-title {
+    font-size: 19px;
+    margin-bottom: 18px;
   }
-  .footer-bottom > span:nth-child(2) {
-    order: 3;
-    width: 100%;
-    font-size: 9px;
-  }
-  .footer-bottom a {
-    margin-left: auto;
+  .footer-minimal {
+    padding: 45px 0 35px;
+    margin-top: 60px;
   }
   dialog {
     padding: 30px 24px;

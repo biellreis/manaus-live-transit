@@ -4,25 +4,26 @@ import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import Phone from '../components/Phone.astro';
 import InstallButtons from '../components/InstallButtons.astro';
-import {APP_URL} from '../config';
 ---
 <!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="theme-color" content="#09090b"/><meta name="description" content="Sua cidade, seu caminho. Conheça o Manô: planeje viagens, encontre linhas e acompanhe os ônibus de Manaus. Instale no iPhone ou Android."/>
-  <title>Manô — Manaus na sua mão.</title><link rel="icon" href="/brand/favicon.svg"/>
+  <title>Manô — Manaus na sua mão.</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png"/>
   <meta property="og:title" content="Manô — Manaus na sua mão."/><meta property="og:description" content="Seu próximo caminho começa aqui. Linhas, trajetos e conexões em um só aplicativo."/><meta property="og:type" content="website"/>
 </head>
 <body>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="header"><a href="#" class="brand" aria-label="Manô, início"><img src="/brand/icon.png" width="40" height="40" alt=""/><span>manô<span class="brand-dot">.</span></span></a><nav aria-label="Principal"><a href="#recursos">O aplicativo</a><a href="#trajetos">Trajetos</a><a href="#conexoes">Conexões</a></nav><a class="nav-install" href="#instalar">Instalar Manô <span>↗</span></a></header>
+<header class="header"><a href="#" class="brand" aria-label="Manô, início"><img src="/brand/icon.png" width="38" height="38" alt="" class="brand-logo-img"/><img src="/brand/original-name-white.png" width="92" height="23" alt="Manô" class="brand-name-img"/></a><nav aria-label="Principal"><a href="#recursos">O aplicativo</a><a href="#trajetos">Trajetos</a><a href="#conexoes">Conexões</a></nav><a class="nav-install" href="#instalar">Instalar Manô <span>↗</span></a></header>
 <main id="conteudo">
   <section class="hero wrap" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="eyebrow"><span class="live-dot"></span> TRANSPORTE PÚBLICO EM TEMPO REAL</p>
       <h1 id="hero-title">Manô,<br/><span class="blue">bora?</span></h1>
-      <p class="hero-description">Manaus na sua mão.<br/>Menos dúvidas. Mais cidade no seu caminho.</p>
+      <p class="hero-description">Instale o aplicativo e tenha Manaus na sua mão.<br/>Ônibus ao vivo no mapa, rotas inteligentes e paradas em tempo real na sua rotina.</p>
       <InstallButtons/>
     </div>
     <div class="hero-art" id="hero-art" role="img" aria-label="Manô em um iPhone e um Android, mostrando a tela inicial e os trajetos de ônibus">
@@ -86,7 +87,6 @@ import {APP_URL} from '../config';
         <p class="eyebrow"><span class="chapter-number">02</span> ENCONTRE SUA LINHA</p>
         <h2>A sua linha.<br/><span class="muted">Sem complicar.</span></h2>
         <p>Busque pelo número, explore as opções<br/>e encontre o caminho que faz sentido para você.</p>
-        <a class="text-link" href={APP_URL}>Explorar no Manô <Icon name="arrow"/></a>
       </div>
       <div class="line-stack" aria-label="Exemplos de linhas disponíveis no aplicativo">
         <div class="line-row"><span class="line-code">640</span><div>T4 / T3 / E4 / E2 / E1 / T1</div><span>↗</span></div>
@@ -133,7 +133,9 @@ import {APP_URL} from '../config';
       <p>Acompanhe os veículos disponíveis na sua linha.<br/>Mais informação para decidir quando sair.</p>
     </div>
     <div class="map-window">
-      <img src="/screens/ida.webp" width="768" height="1670" alt="Exemplo do mapa do Manô com veículos da linha 640" loading="lazy"/>
+      <video class="map-video" autoplay loop muted playsinline poster="/screens/ida.webp" aria-label="Demonstração do mapa com ônibus da linha 640 se movendo em tempo real">
+        <source src="/screens/map-motion.mp4" type="video/mp4"/>
+      </video>
     </div>
   </section>
 
@@ -167,23 +169,72 @@ import {APP_URL} from '../config';
       <p class="eyebrow orange"><span class="chapter-number">06</span> NO RITMO DA CIDADE</p>
       <h2>Saiba antes.<br/><span class="orange">Vá melhor.</span></h2>
       <p>Informações de trânsito em um só lugar.<br/>Confira os alertas e siga mais informado.</p>
-      <a href={APP_URL} class="text-link orange">Conferir os alertas <Icon name="arrow"/></a>
     </div>
   </section>
 
   <section class="install-section wrap" id="instalar">
     <div class="install-symbol">
-      <img src="/brand/icon.png" width="88" height="88" alt="Ícone do Manô"/>
+      <img src="/brand/icon.png" width="88" height="88" alt="Ícone do Manô" class="install-icon-main"/>
     </div>
     <p class="eyebrow">SEU PRÓXIMO CAMINHO COMEÇA AQUI.</p>
     <h2>Leve o Manô<br/><span class="blue">com você.</span></h2>
     <p>Seu aplicativo de mobilidade em Manaus.<br/>No iPhone. No Android. Na sua rotina.</p>
     <InstallButtons/>
-    <a class="browser-link" href={APP_URL}>Ou abra agora no navegador <span>↗</span></a>
+
+    <div class="iphone-guide" id="guia-iphone" aria-label="Como instalar no iPhone">
+      <div class="guide-badge">
+        <Icon name="apple" size={18}/>
+        <span>Passo a passo no iPhone</span>
+      </div>
+      <h3 class="guide-title">Instale em 4 toques simples:</h3>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-header">
+            <span class="step-badge">1</span>
+            <span class="step-icon-wrap"><Icon name="ios-dots" size={24}/></span>
+          </div>
+          <div class="step-content">
+            <h4>Toque nos 3 pontinhos</h4>
+            <p>Abra o menu (...) do navegador</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-header">
+            <span class="step-badge">2</span>
+            <span class="step-icon-wrap"><Icon name="ios-share" size={24}/></span>
+          </div>
+          <div class="step-content">
+            <h4>Toque em Compartilhar</h4>
+            <p>Ícone com a seta apontando para cima</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-header">
+            <span class="step-badge">3</span>
+            <span class="step-icon-wrap"><Icon name="ios-more" size={24}/></span>
+          </div>
+          <div class="step-content">
+            <h4>Toque em Ver Mais</h4>
+            <p>Role a lista de ações até localizar</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-header">
+            <span class="step-badge">4</span>
+            <span class="step-icon-wrap"><Icon name="ios-add-home" size={24}/></span>
+          </div>
+          <div class="step-content">
+            <h4>Adicionar à Tela de Início</h4>
+            <p>Toque no quadrado com (+) e confirme</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="faq">
       <details>
-        <summary>Preciso baixar de uma loja?<span>+</span></summary>
-        <p>Não. O Manô é um aplicativo web que você pode adicionar à tela inicial. No iPhone, use Compartilhar e Adicionar à Tela de Início. No Android, siga a opção de instalação do navegador.</p>
+        <summary>Preciso baixar de uma loja de aplicativos?<span>+</span></summary>
+        <p>Não. O Manô é adicionado direto à sua tela inicial sem precisar de lojas. No iPhone, basta seguir os 4 toques acima pelo Safari. No Android, toque em Instalar e confirme no navegador.</p>
       </details>
       <details>
         <summary>Funciona sem internet?<span>+</span></summary>
@@ -191,12 +242,22 @@ import {APP_URL} from '../config';
       </details>
       <details>
         <summary>O que aparece no mapa é ao vivo?<span>+</span></summary>
-        <p>No aplicativo, os veículos são atualizados conforme os dados disponíveis da operação. As imagens deste site são demonstrações de momentos capturados.</p>
+        <p>No aplicativo, os veículos são atualizados conforme os dados de telemetria e GPS da operação de transporte de Manaus.</p>
       </details>
     </div>
   </section>
 </main>
-<footer class="wrap"><a class="brand" href="#"><img src="/brand/icon.png" width="36" height="36" alt=""/><span>manô.</span></a><span>Feito para os caminhos de Manaus.</span><a href={APP_URL}>Abrir aplicativo ↗</a><div class="footer-bottom"><span>© {new Date().getFullYear()} Manô</span><span>Imagens demonstrativas. Mapas: © OpenStreetMap contributors.</span><a href="#conteudo">Voltar ao topo ↑</a></div></footer>
-<dialog id="install-dialog" aria-labelledby="install-title"><button class="dialog-close" aria-label="Fechar instruções"><Icon name="close"/></button><img src="/brand/icon.png" width="64" height="64" alt=""/><p class="eyebrow">MANÔ NA SUA TELA INICIAL</p><h2 id="install-title">Seu próximo passo.</h2><p id="install-description"></p><canvas id="install-qr" width="176" height="176" aria-label="QR code para abrir o Manô no celular"></canvas><div class="install-instructions" id="install-instructions"></div><a id="install-continue" class="dialog-continue" href={APP_URL}>Abrir Manô <span>↗</span></a><p class="dialog-note">A instalação é concluída no navegador do celular.</p></dialog>
+<footer class="footer-minimal wrap">
+  <div class="footer-center">
+    <div class="footer-brand">
+      <img src="/brand/icon.png" width="34" height="34" alt="" class="brand-logo-img"/>
+      <img src="/brand/original-name-white.png" width="84" height="21" alt="Manô" class="brand-name-img"/>
+    </div>
+    <div class="footer-bottom">
+      <span>© {new Date().getFullYear()} Manô</span>
+    </div>
+  </div>
+</footer>
+<dialog id="install-dialog" aria-labelledby="install-title"><button class="dialog-close" aria-label="Fechar instruções"><Icon name="close"/></button><img src="/brand/icon.png" width="64" height="64" alt="" class="dialog-logo"/><h2 id="install-title">Instalar o Manô no celular.</h2><p id="install-description"></p><canvas id="install-qr" width="176" height="176" aria-label="QR code para abrir o Manô no celular"></canvas><div class="install-instructions" id="install-instructions"></div><p class="dialog-note">Aponte a câmera do seu celular para o QR Code acima para instalar.</p></dialog>
 <script src="../scripts/main.ts"></script>
 </body></html>

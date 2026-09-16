@@ -3,6 +3,20 @@ import Icon from './Icon.astro';
 import { installUrl } from '../config';
 ---
 <div class="install-buttons">
-  <a class="install-button primary" href={installUrl('ios')} data-install="ios"><Icon name="apple" size={24}/><span><small>Disponível para</small>Instalar no iPhone</span><span class="button-arrow">↗</span></a>
-  <a class="install-button secondary" href={installUrl('android')} data-install="android"><Icon name="android" size={23}/><span><small>Disponível para</small>Instalar no Android</span><span class="button-arrow">↗</span></a>
+  <a class="install-button install-ios" href={installUrl('ios')} data-install="ios" aria-label="Instalar o aplicativo Manô no iPhone">
+    <span class="button-icon-wrapper"><Icon name="apple" size={26}/></span>
+    <span class="button-content">
+      <span class="button-tag">Baixar Aplicativo</span>
+      <strong class="button-title">Instalar no iPhone</strong>
+    </span>
+    <span class="button-arrow">↗</span>
+  </a>
+  <a class="install-button install-android" href={installUrl('android')} data-install="android" aria-label="Instalar o aplicativo Manô no Android">
+    <span class="button-icon-wrapper"><Icon name="android" size={25}/></span>
+    <span class="button-content">
+      <span class="button-tag">Baixar Aplicativo</span>
+      <strong class="button-title">Instalar no Android</strong>
+    </span>
+    <span class="button-arrow">↗</span>
+  </a>
 </div>
