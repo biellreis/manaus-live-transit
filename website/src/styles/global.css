@@ -1908,7 +1908,7 @@ body:has(dialog[open]) {
    ========================================================================== */
 .intro-split-section {
   position: relative;
-  padding: 80px 0 40px;
+  padding: 80px 0 120px;
   overflow: visible;
 }
 
@@ -1918,7 +1918,7 @@ body:has(dialog[open]) {
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-  min-height: 740px;
+  min-height: 680px;
   position: relative;
 }
 
@@ -1956,11 +1956,11 @@ body:has(dialog[open]) {
   max-width: 420px;
 }
 
-/* Coluna da Direita: iPhone 3D Deitado ocupando o espaço completo */
+/* Coluna da Direita: iPhone 3D Deitado ocupando o espaço completo e posicionado mais ao alto */
 .intro-right-showcase {
   position: relative;
   width: 100%;
-  height: 840px;
+  height: 720px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1979,16 +1979,16 @@ body:has(dialog[open]) {
   transform-style: preserve-3d;
 }
 
-/* Sombras realistas de piso / ambiente com profundidade 3D adaptadas ao plano inclinado */
+/* Sombras realistas de piso / ambiente com profundidade 3D adaptadas ao plano inclinado e posição elevada */
 .motion-floor-shadow {
   position: absolute;
-  bottom: 60px;
+  bottom: 110px;
   left: 50%;
   transform: translateX(-50%) rotateZ(-28deg);
-  width: 420px;
-  height: 100px;
+  width: 440px;
+  height: 110px;
   background: radial-gradient(ellipse 68% 45% at 50% 50%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.55) 50%, transparent 75%);
-  filter: blur(20px);
+  filter: blur(22px);
   pointer-events: none;
   z-index: 1;
   animation: shadowBreathe 7s ease-in-out infinite alternate;
@@ -1996,7 +1996,7 @@ body:has(dialog[open]) {
 
 .motion-ambient-shadow {
   position: absolute;
-  bottom: 20px;
+  bottom: 70px;
   left: 50%;
   transform: translateX(-50%) rotateZ(-28deg);
   width: 620px;
@@ -2008,7 +2008,7 @@ body:has(dialog[open]) {
   animation: shadowBreatheWide 7s ease-in-out infinite alternate;
 }
 
-/* Pivot flutuante com suporte a animação idle e rastreamento de mouse */
+/* Pivot flutuante posicionado mais para cima para dar folga para a Seção 3 */
 .motion-phone-pivot {
   position: relative;
   transform-style: preserve-3d;
@@ -2033,11 +2033,35 @@ body:has(dialog[open]) {
   isolation: isolate;
 }
 
-/* Chassi de Titânio de Grau Aeroespacial com Reflexo Metálico Multi-Stop */
+/* Camadas de Profundidade Física 3D e Placa Traseira */
+.iphone-3d-backplate {
+  position: absolute;
+  inset: -6px;
+  border-radius: 58px;
+  background: #141416;
+  box-shadow:
+    0 30px 60px -10px rgba(0, 0, 0, 0.95),
+    0 60px 110px -20px rgba(0, 0, 0, 1);
+  transform: translateZ(-18px);
+  z-index: -2;
+  pointer-events: none;
+}
+
+.iphone-3d-chassis-depth {
+  position: absolute;
+  inset: -5px;
+  border-radius: 56px;
+  background: linear-gradient(135deg, #3f3f46 0%, #1c1917 40%, #27272a 100%);
+  transform: translateZ(-9px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Chassi de Titânio com Extrusão Física Multi-Camadas (Borda Robusta e Profunda) */
 .titanium-chassis {
   position: absolute;
-  inset: -4px;
-  border-radius: 56px;
+  inset: -5px;
+  border-radius: 57px;
   background: linear-gradient(
     135deg,
     #52525b 0%,
@@ -2049,10 +2073,26 @@ body:has(dialog[open]) {
     #27272a 100%
   );
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.24),
-    inset 0 1px 2px rgba(255, 255, 255, 0.32),
-    0 25px 60px -10px rgba(0, 0, 0, 0.85),
-    0 50px 110px -20px rgba(0, 0, 0, 0.98);
+    /* Chanfro frontal e brilho do bisel */
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.35),
+    inset 0 2px 3px rgba(255, 255, 255, 0.45),
+    /* Extrusão física das paredes laterais de titânio (Passo a passo 3D denso) */
+    1px 2px 0 #3f3f46,
+    2px 4px 0 #27272a,
+    3px 6px 0 #3f3f46,
+    4px 8px 0 #27272a,
+    5px 10px 0 #18181b,
+    6px 12px 0 #27272a,
+    7px 14px 0 #18181b,
+    8px 16px 0 #27272a,
+    9px 18px 0 #18181b,
+    10px 20px 0 #09090b,
+    11px 22px 0 #09090b,
+    /* Linha de luz na borda inferior do chanfro */
+    12px 24px 0 rgba(113, 113, 122, 0.55),
+    /* Sombras de contato pesadas projetadas pela lateral */
+    14px 28px 35px rgba(0, 0, 0, 0.9),
+    22px 50px 85px rgba(0, 0, 0, 0.98);
   z-index: 1;
   pointer-events: none;
 }
@@ -2368,16 +2408,16 @@ body:has(dialog[open]) {
   100% { transform: translateZ(52px) translateY(-8px); }
 }
 
-/* Animações Flutuantes 3D Deitado (Perspectiva Isométrica Macro) */
+/* Animações Flutuantes 3D Deitado (Posicionamento Mais Elevado para afastar da Seção 3) */
 @keyframes iphoneIsoDeitadoFloating {
   0% {
-    transform: rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateY(0px) translateZ(0px);
+    transform: translateY(-60px) rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateZ(0px);
   }
   50% {
-    transform: rotateX(46deg) rotateY(9deg) rotateZ(-26deg) translateY(-18px) translateZ(24px);
+    transform: translateY(-78px) rotateX(46deg) rotateY(9deg) rotateZ(-26deg) translateZ(24px);
   }
   100% {
-    transform: rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateY(0px) translateZ(0px);
+    transform: translateY(-60px) rotateX(50deg) rotateY(12deg) rotateZ(-28deg) translateZ(0px);
   }
 }
 

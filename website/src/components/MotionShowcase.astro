@@ -10,6 +10,10 @@
   <!-- Container flutuante com perspectiva 3D -->
   <div class="motion-phone-pivot" id="motionPhonePivot">
     <div class="realistic-iphone" aria-hidden="true">
+      <!-- Placa traseira e camadas de profundidade física 3D do iPhone -->
+      <div class="iphone-3d-backplate"></div>
+      <div class="iphone-3d-chassis-depth"></div>
+
       <!-- Borda em Titânio Natural / Dark Titanium -->
       <div class="titanium-chassis"></div>
       <div class="titanium-chamfer-edge"></div>
@@ -141,7 +145,7 @@
         currentRotX = lerp(currentRotX, targetRotX, 0.08);
         currentRotY = lerp(currentRotY, targetRotY, 0.08);
         currentRotZ = lerp(currentRotZ, targetRotZ, 0.08);
-        pivot.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(${currentRotZ.toFixed(2)}deg) translateZ(35px)`;
+        pivot.style.transform = `translateY(-60px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(${currentRotZ.toFixed(2)}deg) translateZ(35px)`;
       }
       animFrameId = requestAnimationFrame(updateTilt);
     };
