@@ -1909,73 +1909,337 @@ body:has(dialog[open]) {
   padding: 100px 0 60px;
 }
 .intro-header {
-  margin-bottom: 50px;
+  margin-bottom: 24px;
 }
-.intro-lead {
-  font-size: 18px;
-  color: #9ca3af;
-  margin-top: 16px;
-}
-.showcase-fan-stage {
+
+/* ==========================================================================
+   SEÇÃO 2: MOTION SHOWCASE (iPhone 3D Ultra-Realista + Vídeo em Movimento)
+   Inspirado em referências Dribbble (FANCY / Alex Bender)
+   ========================================================================== */
+.motion-showcase-stage {
   position: relative;
-  margin: 40px auto 10px;
-  max-width: 1020px;
-  height: 620px;
+  margin: 10px auto 10px;
+  max-width: 960px;
+  height: 760px;
   display: flex;
   align-items: center;
   justify-content: center;
   perspective: 1400px;
+  transform-style: preserve-3d;
 }
-.fan-phone-wrap {
+
+/* Sombras realistas de piso / ambiente com profundidade 3D */
+.motion-floor-shadow {
   position: absolute;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-}
-.fan-left {
-  left: 6%;
-  transform: rotateY(18deg) rotateZ(-3deg) scale(0.86);
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 44px;
+  background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 75%);
+  filter: blur(14px);
+  pointer-events: none;
   z-index: 1;
-  opacity: 0.85;
+  animation: shadowBreathe 6s ease-in-out infinite alternate;
 }
-.fan-center {
-  transform: scale(1.04) translateZ(80px);
-  z-index: 3;
-}
-.fan-right {
-  right: 6%;
-  transform: rotateY(-18deg) rotateZ(3deg) scale(0.86);
-  z-index: 1;
-  opacity: 0.85;
-}
-.fan-phone-wrap:hover {
-  opacity: 1;
-  transform: scale(1.02) translateZ(60px);
-}
-.phone-fan {
-  width: 260px;
-}
-.phone-center-highlight {
-  width: 280px;
-  box-shadow: 0 45px 110px -20px rgba(0, 0, 0, 0.95);
-}
-.fan-tag {
-  text-align: center;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #9ca3af;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-}
-.center-tag {
-  color: #60a5fa;
-}
-.fan-ground-shadow {
+
+.motion-ambient-shadow {
   position: absolute;
-  bottom: 0;
-  width: 85%;
-  height: 50px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, transparent 70%);
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 520px;
+  height: 90px;
+  background: radial-gradient(ellipse 75% 45% at 50% 50%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 80%);
+  filter: blur(32px);
+  pointer-events: none;
   z-index: 0;
+  animation: shadowBreatheWide 6s ease-in-out infinite alternate;
+}
+
+/* Pivot flutuante com suporte a animação idle e rastreamento de mouse */
+.motion-phone-pivot {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  animation: iphoneFloating3D 6s ease-in-out infinite alternate;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.motion-phone-pivot.is-interacting {
+  animation: none;
+}
+
+/* Dispositivo iPhone Ultra-Realista (Acabamento Titânio Escuro Apple) */
+.realistic-iphone {
+  width: 330px;
+  height: 712px;
+  position: relative;
+  border-radius: 54px;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+/* Chassi de Titânio de Grau Aeroespacial com Reflexo Metálico Multi-Stop */
+.titanium-chassis {
+  position: absolute;
+  inset: -4px;
+  border-radius: 56px;
+  background: linear-gradient(
+    135deg,
+    #52525b 0%,
+    #27272a 20%,
+    #71717a 38%,
+    #18181b 56%,
+    #3f3f46 76%,
+    #71717a 90%,
+    #27272a 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.24),
+    inset 0 1px 2px rgba(255, 255, 255, 0.32),
+    0 25px 60px -10px rgba(0, 0, 0, 0.85),
+    0 50px 110px -20px rgba(0, 0, 0, 0.98);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.titanium-chamfer-edge {
+  position: absolute;
+  inset: -1px;
+  border-radius: 53px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.85);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Linhas de antena do corpo metálico */
+.antenna-band {
+  position: absolute;
+  background: #18181b;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  z-index: 3;
+  pointer-events: none;
+}
+.band-top-left { left: -4px; top: 92px; width: 4px; height: 3px; }
+.band-top-right { right: -4px; top: 92px; width: 4px; height: 3px; }
+.band-bot-left { left: -4px; bottom: 92px; width: 4px; height: 3px; }
+.band-bot-right { right: -4px; bottom: 92px; width: 4px; height: 3px; }
+
+/* Botões físicos de titânio (Action, Vol +, Vol -, Power) */
+.hw-btn {
+  position: absolute;
+  background: linear-gradient(180deg, #52525b 0%, #27272a 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+.hw-action-button {
+  left: -7px;
+  top: 125px;
+  width: 4px;
+  height: 26px;
+  border-radius: 3px 0 0 3px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+.hw-volume-up {
+  left: -7px;
+  top: 172px;
+  width: 4px;
+  height: 50px;
+  border-radius: 3px 0 0 3px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+.hw-volume-down {
+  left: -7px;
+  top: 234px;
+  width: 4px;
+  height: 50px;
+  border-radius: 3px 0 0 3px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+.hw-power-button {
+  right: -7px;
+  top: 180px;
+  width: 4px;
+  height: 74px;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+/* Fenda auricular superior */
+.earpiece-slit {
+  position: absolute;
+  top: 3.5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2.5px;
+  background: #09090b;
+  border-radius: 2px;
+  z-index: 12;
+  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.9);
+}
+
+/* Moldura e Bezel da Tela OLED */
+.screen-bezel-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 52px;
+  background: #000000;
+  overflow: hidden;
+  border: 3.5px solid #000000;
+  z-index: 4;
+}
+
+/* Ilha Dinâmica Pro */
+.dynamic-island-pro {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 98px;
+  height: 26px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  gap: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+}
+.island-lens {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1e293b 0%, #030712 80%);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+.lens-specular {
+  position: absolute;
+  top: 1.5px;
+  left: 1.5px;
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: rgba(96, 165, 250, 0.75);
+  filter: blur(0.3px);
+}
+.island-sensor-dot {
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #0f172a 0%, #000000 90%);
+}
+
+/* Especular de Vidro (Apple Glass Glare & Sheen) */
+.glass-specular-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 49px;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.035) 28%,
+    transparent 54%
+  );
+  z-index: 10;
+  pointer-events: none;
+}
+
+.glass-light-streak {
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: linear-gradient(
+    45deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 56%
+  );
+  transform: rotate(-25deg);
+  z-index: 11;
+  pointer-events: none;
+  animation: glassGlareSweep 8s ease-in-out infinite;
+}
+
+/* Área da Tela com Vídeo em Loop */
+.screen-display-area {
+  width: 100%;
+  height: 100%;
+  border-radius: 48px;
+  overflow: hidden;
+  background: #09090b;
+  position: relative;
+  z-index: 5;
+}
+
+.motion-app-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 48px;
+}
+
+/* Animações Flutuantes 3D de Alta Fidelidade */
+@keyframes iphoneFloating3D {
+  0% {
+    transform: translateY(0px) rotateX(9deg) rotateY(-13deg) rotateZ(-2deg);
+  }
+  50% {
+    transform: translateY(-20px) rotateX(5deg) rotateY(-8deg) rotateZ(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotateX(9deg) rotateY(-13deg) rotateZ(-2deg);
+  }
+}
+
+@keyframes shadowBreathe {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.88);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.95;
+  }
+}
+
+@keyframes shadowBreatheWide {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.92);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.75;
+  }
+}
+
+@keyframes glassGlareSweep {
+  0%, 100% {
+    transform: translate(-30%, -30%) rotate(-25deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(20%, 20%) rotate(-25deg);
+    opacity: 0.65;
+  }
 }
 
 /* ==========================================================================
@@ -2208,22 +2472,41 @@ body:has(dialog[open]) {
   .sheet-handle {
     display: block;
   }
-  .showcase-fan-stage {
-    height: 490px;
+  .motion-showcase-stage {
+    height: 570px;
+    margin: 10px auto 10px;
   }
-  .fan-left {
-    left: -8%;
-    transform: rotateY(16deg) scale(0.72);
+  .realistic-iphone {
+    width: 258px;
+    height: 558px;
+    border-radius: 44px;
   }
-  .fan-right {
-    right: -8%;
-    transform: rotateY(-16deg) scale(0.72);
+  .titanium-chassis {
+    border-radius: 46px;
   }
-  .phone-center-highlight {
-    width: 230px;
+  .titanium-chamfer-edge {
+    border-radius: 43px;
   }
-  .phone-fan {
-    width: 200px;
+  .screen-bezel-frame,
+  .screen-display-area,
+  .motion-app-video,
+  .glass-specular-sheen {
+    border-radius: 39px;
+  }
+  .dynamic-island-pro {
+    width: 82px;
+    height: 22px;
+    top: 8px;
+  }
+  .motion-floor-shadow {
+    width: 240px;
+    height: 38px;
+    bottom: 20px;
+  }
+  .motion-ambient-shadow {
+    width: 340px;
+    height: 60px;
+    bottom: 5px;
   }
   .card-arrival {
     left: -5px;

@@ -1,0 +1,123 @@
+---
+// MotionShowcase.astro - Apresentação 3D realista do iPhone com o app Manô em movimento
+---
+
+<div class="motion-showcase-stage" id="motionShowcaseStage" aria-label="Apresentação do aplicativo Manô em um iPhone realista em 3D">
+  <!-- Sombra de contato e piso 3D -->
+  <div class="motion-floor-shadow" aria-hidden="true"></div>
+  <div class="motion-ambient-shadow" aria-hidden="true"></div>
+
+  <!-- Container flutuante com perspectiva 3D -->
+  <div class="motion-phone-pivot" id="motionPhonePivot">
+    <div class="realistic-iphone" aria-hidden="true">
+      <!-- Borda em Titânio Natural / Dark Titanium -->
+      <div class="titanium-chassis"></div>
+      <div class="titanium-chamfer-edge"></div>
+
+      <!-- Linhas de antena do corpo de titânio -->
+      <span class="antenna-band band-top-left"></span>
+      <span class="antenna-band band-top-right"></span>
+      <span class="antenna-band band-bot-left"></span>
+      <span class="antenna-band band-bot-right"></span>
+
+      <!-- Botões físicos com profundidade chanfrada -->
+      <div class="hw-btn hw-action-button" title="Action Button"></div>
+      <div class="hw-btn hw-volume-up" title="Aumentar Volume"></div>
+      <div class="hw-btn hw-volume-down" title="Diminuir Volume"></div>
+      <div class="hw-btn hw-power-button" title="Botão Lateral"></div>
+
+      <!-- Fenda do alto-falante auricular -->
+      <div class="earpiece-slit"></div>
+
+      <!-- Moldura frontal da tela (Bezel ultrafino) -->
+      <div class="screen-bezel-frame">
+        <!-- Ilha Dinâmica Apple com lente e reflexo de sensor -->
+        <div class="dynamic-island-pro">
+          <div class="island-lens">
+            <span class="lens-specular"></span>
+          </div>
+          <div class="island-sensor-dot"></div>
+        </div>
+
+        <!-- Reflexo especular de vidro Apple (Glass Glare & Shimmer) -->
+        <div class="glass-specular-sheen"></div>
+        <div class="glass-light-streak"></div>
+
+        <!-- Tela OLED com vídeo em movimento contínuo -->
+        <div class="screen-display-area">
+          <video
+            class="motion-app-video"
+            src="/screens/map-motion.mp4"
+            poster="/screens/ida.webp"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+            aria-label="Demonstração do aplicativo Manô com mapa e linhas em movimento contínuo"
+          ></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Interatividade 3D suave com movimento do cursor (Progressive Enhancement)
+  (() => {
+    const stage = document.getElementById('motionShowcaseStage');
+    const pivot = document.getElementById('motionPhonePivot');
+    if (!stage || !pivot) return;
+
+    // Se preferir movimento reduzido ou dispositivo móvel com toque primário, mantém animação CSS nativa
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchOnly = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (prefersReducedMotion || isTouchOnly) return;
+
+    let targetRotX = 8;
+    let targetRotY = -12;
+    let currentRotX = 8;
+    let currentRotY = -12;
+    let isHovering = false;
+    let animFrameId: number | null = null;
+
+    const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
+
+    const updateTilt = () => {
+      if (isHovering) {
+        currentRotX = lerp(currentRotX, targetRotX, 0.08);
+        currentRotY = lerp(currentRotY, targetRotY, 0.08);
+        pivot.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateZ(30px)`;
+      }
+      animFrameId = requestAnimationFrame(updateTilt);
+    };
+
+    stage.addEventListener('mouseenter', () => {
+      isHovering = true;
+      pivot.classList.add('is-interacting');
+      if (!animFrameId) animFrameId = requestAnimationFrame(updateTilt);
+    });
+
+    stage.addEventListener('mousemove', (e) => {
+      const rect = stage.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const pctX = (x / rect.width) * 2 - 1; // -1 a 1
+      const pctY = (y / rect.height) * 2 - 1; // -1 a 1
+
+      // Ângulos sutis e elegantes estilo Dribbble (entre -18deg e 18deg)
+      targetRotY = pctX * 18;
+      targetRotX = -pctY * 14 + 6;
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      isHovering = false;
+      pivot.classList.remove('is-interacting');
+      pivot.style.transform = '';
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
+  })();
+</script>
