@@ -1497,6 +1497,53 @@ body:has(dialog[open]) {
     top: 65px;
   }
 }
+/* Cinematic cover prototype: live 3D, with the existing static fallback. */
+.hero {
+  width: 100%;
+  max-height: 1080px;
+  min-height: 760px;
+  overflow: clip;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 77% 48%, #14336555, transparent 48%),
+    radial-gradient(ellipse at 95% 80%, #f9731614, transparent 35%);
+}
+.hero-copy {
+  margin-left: max(56px, calc((100vw - 1240px) / 2));
+  width: min(510px, 42vw);
+}
+.hero h1 {
+  font-size: clamp(100px, 10.5vw, 164px);
+  letter-spacing: -.065em;
+  line-height: .91;
+}
+.hero-art {
+  position: absolute;
+  width: 65%;
+  height: 100%;
+  right: -4%;
+  top: 0;
+  z-index: -1;
+  margin: 0;
+}
+.hero-foot {
+  left: max(56px, calc((100vw - 1240px) / 2));
+  right: max(56px, calc((100vw - 1240px) / 2));
+}
+.hero-art .art-caption { bottom: 95px; }
+@media (max-width: 1050px) and (min-width: 701px) {
+  .hero-copy { margin-left: 36px; }
+  .hero-description { font-size: 18px; }
+  .hero-art { width: 61%; right: -5%; }
+}
+@media (max-width: 700px) {
+  .hero { min-height: 0; max-height: none; padding-top: 44px; }
+  .hero-copy { margin: 0 20px; width: calc(100% - 40px); padding-bottom: 0; }
+  .hero h1 { font-size: clamp(88px, 23vw, 132px); }
+  .hero-description { font-size: 17px; }
+  .hero-art { position: relative; width: 100%; height: 510px; right: auto; margin: 0; z-index: 0; }
+  .hero-art .art-caption { bottom: 20px; }
+  .hero-foot { left: 20px; right: 20px; }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

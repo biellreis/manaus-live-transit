@@ -140,11 +140,12 @@ export async function createHero(host: HTMLElement) {
     targetY = 0,
     currentX = 0,
     currentY = 0;
+  const introStart = performance.now();
   const resize = () => {
     const { width, height } = host.getBoundingClientRect();
     renderer.setSize(width, height);
     camera.aspect = width / height;
-    camera.position.z = camera.aspect < 0.85 ? 8.4 : 7.4;
+    camera.position.z = camera.aspect < 0.85 ? 7.7 : 6.4;
     camera.updateProjectionMatrix();
     request();
   };
@@ -153,11 +154,15 @@ export async function createHero(host: HTMLElement) {
     if (disposed || !visible || document.hidden) return;
     currentX += (targetX - currentX) * 0.12;
     currentY += (targetY - currentY) * 0.12;
-    scene.rotation.y = currentX;
-    scene.rotation.x = currentY;
+    // A finite four-second reveal settles to demand-only pointer rendering.
+    const progress = Math.min(1, (performance.now() - introStart) / 4000);
+    const remaining = Math.pow(1 - progress, 3);
+    scene.rotation.y = currentX - remaining * 0.22;
+    scene.rotation.x = currentY + remaining * 0.06;
+    scene.scale.setScalar(1 - remaining * 0.09);
     renderer.render(scene, camera);
     host.classList.add("ready");
-    if (Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.0005)
+    if (progress < 1 || Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.0005)
       request();
   };
   function request() {

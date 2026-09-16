@@ -1,6 +1,6 @@
 # Manô — plano técnico do site de apresentação em 3D
 
-Data: 15/09/2026. Versão: 1.2 — implementação publicada e continuidade da evolução cinematográfica. Estado: primeira versão implementada e publicada; nova direção visual ainda não implementada.
+Data: 15/09/2026. Versão: 1.3 — primeira evolução da capa implementada; vídeo cinematográfico e ampliação das demais seções pendentes.
 
 ## LEIA PRIMEIRO — estado atual e ponto de retomada
 
@@ -12,8 +12,8 @@ O site já existe. **Não recriar do zero nem executar as etapas históricas com
 - Commit da implementação: `10a58f4` (`feat(website): build independent Mano presentation and installation journey`).
 - Código do site: `website/`; registros complementares: `docs/site-mano/`.
 - Último retorno do usuário: **as informações ficaram perfeitas**; deseja uma capa com vídeo muito grande ao fundo, como AVA, e a mesma presença visual nas demais seções.
-- Próxima ação de desenvolvimento: produzir um storyboard e um protótipo da nova capa cinematográfica, preservando conteúdo, controles e instalação. A solicitação atual é somente atualizar documentação para continuidade; não produzir o vídeo nem alterar o site nesta rodada.
-- “Manô, bora?” / “Manaus na sua mão.” é a recomendação de copy apresentada ao usuário, registrada como proposta; não houve aprovação explícita dessa frase específica.
+- Atualização com orçamento restante: capa ampla com fundo luminoso azul/laranja, aparelhos maiores, título “Manô, bora?” e apoio “Manaus na sua mão.” aplicados. Animação Three.js inicial de quatro segundos, seguida de renderização sob demanda ao mouse. Não é vídeo.
+- Próxima ação: produzir storyboard, vídeo e posters responsivos conforme seção 25; depois ampliar as demais seções. A copy foi aplicada como escolha de implementação revisável, sem confirmação específica da frase pelo usuário.
 
 Este documento é o contrato de continuidade do trabalho. Ele define o resultado visual, a arquitetura, os arquivos de origem, a sequência de construção e os critérios de aceite. A próxima IA deve ler este arquivo inteiro, conferir o estado real do repositório e continuar pela primeira etapa incompleta. As configurações propostas abaixo não significam que arquivos, modelos, domínios ou integrações já existam.
 
@@ -762,12 +762,12 @@ Evitar vídeos simultâneos por seção. Usar WebGL, vídeo ou render conforme o
 ## 26. Checklist de passagem para a próxima IA
 
 1. Ler primeiro as seções 24–25 e os arquivos reais em `website/`.
-2. Abrir https://mano-site-seven.vercel.app para comparar o estado atual, sem presumir que esta revisão já mudou a capa.
+2. Abrir https://mano-site-seven.vercel.app para comparar a capa ampliada com o código local; conferir a publicação antes de iniciar.
 3. Conferir Git e preservar mudanças de screenshots não incluídas no trabalho.
-4. Quando houver pedido para implementar a nova direção, começar pelo storyboard + capa protótipo, não por reescrever todas as seções.
+4. Continuar a capa protótipo existente com storyboard, vídeo e posters; não reescrever todas as seções.
 5. Preservar as informações elogiadas; usar “Manô, bora?” como proposta visual revisável.
 6. Confirmar ferramentas de render disponíveis; registrar escolha, custo de mídia e eventuais limitações reais.
 7. Produzir e validar a capa antes de expandir a linguagem para as demais seções.
 8. Atualizar progresso/decisões/validação e publicar somente no projeto correto.
 
-**Ponto exato de parada desta revisão:** site v1 publicado e integração de instalação publicada; evolução cinematográfica especificada, mas nenhum vídeo novo, modelo Blender, poster cinematográfico ou alteração de copy foi produzido. A próxima IA deve continuar desse ponto.
+**Ponto exato de parada desta revisão:** capa protótipo ampliada em `website/src/pages/index.astro`, `website/src/styles/global.css` e `website/src/three/hero.ts`, com nova copy e entrada 3D suave. Build e tipos aprovados; composição desktop e viewport móvel de 390px inspecionados no navegador. Nenhum vídeo, modelo Blender ou poster cinematográfico foi produzido. Demais seções mantêm a implementação anterior. Continuar pela produção audiovisual da seção 25 e, depois, evolução visual das seções. Não confundir esta etapa parcial com toda a direção cinematográfica concluída. Preservar as alterações de screenshots de outros trabalhos.

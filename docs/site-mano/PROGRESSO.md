@@ -1,12 +1,12 @@
 # Progresso do site Manô
 
-Atualização de continuidade: planejamento principal v1.2, seções 24–26. Commit da primeira implementação: `10a58f4`.
+Atualização de continuidade: planejamento principal v1.3, seções 24–26. Commit da primeira implementação: `10a58f4`.
 
 ## Próxima evolução solicitada
 
-O usuário aprovou as informações e deseja apresentação mais grandiosa, com vídeo de iPhone/Android ao fundo da capa inspirado na AVA e cenas maiores nas demais seções. Copy recomendada: “Manô, bora?” / “Manaus na sua mão.”, ainda proposta e não escolha explicitamente confirmada. Não implementado nesta revisão documental.
+O usuário aprovou as informações e deseja apresentação mais grandiosa, com vídeo de iPhone/Android ao fundo da capa inspirado na AVA e cenas maiores nas demais seções. Nesta rodada limitada pelo orçamento, a capa foi ampliada, com “Manô, bora?” / “Manaus na sua mão.”, luz azul/laranja e entrada Three.js de quatro segundos. É um protótipo com 3D em tempo real; vídeo não produzido. Restante das seções preservado.
 
-Próxima ação de desenvolvimento: storyboard, três quadros mestres e protótipo da capa com poster, vídeo responsivo e CTAs em HTML. Preservar os conteúdos e controles atuais. Ver seção 25 do plano para pipeline, sequência do vídeo e critérios de aceite.
+Próxima ação de desenvolvimento: storyboard, três quadros mestres e evolução da capa existente com poster e vídeo responsivo. Preservar CTAs em HTML, conteúdos e controles atuais. Ver seção 25 do plano para pipeline, sequência do vídeo e critérios de aceite. Build desta revisão aprovado; inspeção visual desktop e 390px realizada, sem overflow horizontal no móvel. Validação física e Simulator continuam pendentes.
 
 ## Implementado
 
