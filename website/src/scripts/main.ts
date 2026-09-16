@@ -1,47 +1,68 @@
-import { installUrl } from "../config";
+export {};
+
+let deferredPrompt: any = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
 
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");
-let opener: HTMLElement | null = null;
+let activeOpener: HTMLElement | null = null;
 
 if (dialog) {
   document
     .querySelectorAll<HTMLAnchorElement>("[data-install]")
     .forEach((link) => {
-      link.addEventListener("click", async (event) => {
-        const platform = link.dataset.install === "android" ? "android" : "ios";
-        const isMobile = matchMedia("(max-width: 640px)").matches || matchMedia("(pointer:coarse)").matches;
-
-        // Android on mobile device opens native app/PWA directly
-        if (isMobile && platform === "android") {
-          return;
-        }
-
+      link.addEventListener("click", (event) => {
         event.preventDefault();
-        opener = link;
-        const target = installUrl(platform);
+        activeOpener = link;
+        const platform = link.dataset.install === "android" ? "android" : "ios";
 
         const titleEl = document.querySelector("#install-sheet-title");
-        const leadEl = document.querySelector(".sheet-title-wrap p");
-        const stepsWrap = document.querySelector<HTMLElement>(".modal-steps-list");
-        const sheetLink = document.querySelector<HTMLAnchorElement>("#sheet-app-link");
-
-        if (sheetLink) {
-          sheetLink.href = target;
-        }
+        const subTitleEl = document.querySelector("#install-sheet-subtitle");
+        const iosLink = document.querySelector<HTMLAnchorElement>("#sheet-app-link");
+        const androidFlow = document.querySelector<HTMLElement>("#modal-android-flow");
 
         if (platform === "ios") {
           if (titleEl) titleEl.textContent = "Instalar no iPhone";
-          if (leadEl) leadEl.textContent = "4 passos simples no seu navegador:";
-          if (stepsWrap) stepsWrap.style.display = "flex";
+          if (subTitleEl) subTitleEl.textContent = "4 passos simples no seu navegador:";
+          if (iosLink) {
+            iosLink.style.display = "block";
+            iosLink.href = "https://manaus-live-transit.vercel.app/";
+          }
+          if (androidFlow) androidFlow.style.display = "none";
         } else {
           if (titleEl) titleEl.textContent = "Instalar no Android";
-          if (leadEl) leadEl.textContent = "Abra no Chrome e instale com 1 toque:";
-          if (stepsWrap) stepsWrap.style.display = "none";
+          if (subTitleEl) subTitleEl.textContent = "Instalação direta com 1 toque no seu celular:";
+          if (iosLink) iosLink.style.display = "none";
+          if (androidFlow) androidFlow.style.display = "block";
         }
 
         dialog.showModal();
       });
     });
+
+  const androidDirectBtn = document.querySelector<HTMLButtonElement>("#android-direct-btn");
+  if (androidDirectBtn) {
+    androidDirectBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      if (deferredPrompt) {
+        try {
+          await deferredPrompt.prompt();
+          const choice = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          if (choice.outcome === "accepted") {
+            dialog.close();
+            return;
+          }
+        } catch {
+          // fallback
+        }
+      }
+      window.open("https://manaus-live-transit.vercel.app/", "_blank", "noopener");
+      dialog.close();
+    });
+  }
 
   const closeBtn = dialog.querySelector(".dialog-close");
   closeBtn?.addEventListener("click", (e) => {
@@ -61,7 +82,7 @@ if (dialog) {
         dialog.close();
     }
   });
-  dialog.addEventListener("close", () => opener?.focus());
+  dialog.addEventListener("close", () => activeOpener?.focus());
 }
 
 function screenControl(

@@ -5,21 +5,21 @@ import Icon from './Icon.astro';
   <div class="sheet-container">
     <button class="dialog-close" aria-label="Fechar instruções"><Icon name="close" size={20}/></button>
 
-    <a href="https://manaus-live-transit.vercel.app/?install=ios" target="_blank" rel="noopener" class="sheet-app-link" id="sheet-app-link" aria-label="Acessar aplicativo Manô para instalar">
-      <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-handle" aria-hidden="true"></div>
 
-      <div class="sheet-header">
-        <div class="sheet-app-icon">
-          <img src="/brand/icon.png" width="56" height="56" alt="Ícone do Manô"/>
-        </div>
-        <div class="sheet-title-wrap">
-          <h2 id="install-sheet-title">Instalar no iPhone</h2>
-          <p>4 passos simples no seu navegador:</p>
-        </div>
+    <div class="sheet-header">
+      <div class="sheet-app-icon">
+        <img src="/brand/icon.png" width="56" height="56" alt="Ícone do Manô"/>
       </div>
+      <div class="sheet-title-wrap">
+        <h2 id="install-sheet-title">Instalar no iPhone</h2>
+        <p id="install-sheet-subtitle">4 passos simples no seu navegador:</p>
+      </div>
+    </div>
 
-      <!-- 4 Didactic iOS Steps -->
-      <div class="modal-steps-list">
+    <!-- iOS Flow: 4 didactic steps inside a clickable link to the app -->
+    <a href="https://manaus-live-transit.vercel.app/" target="_blank" rel="noopener" class="sheet-app-link" id="sheet-app-link" aria-label="Acessar aplicativo Manô para instalar">
+      <div class="modal-steps-list" id="modal-steps-ios">
         <div class="modal-step-item">
           <div class="step-num-badge">1</div>
           <div class="step-icon-ios"><Icon name="ios-dots" size={22}/></div>
@@ -57,5 +57,13 @@ import Icon from './Icon.astro';
         </div>
       </div>
     </a>
+
+    <!-- Android Flow: Single Direct Install Button -->
+    <div class="modal-android-flow" id="modal-android-flow" style="display: none;">
+      <button type="button" class="android-direct-btn" id="android-direct-btn" aria-label="Instalar aplicativo Manô no Android">
+        <Icon name="android" size={24}/>
+        <span>Instalar no Android</span>
+      </button>
+    </div>
   </div>
 </dialog>
