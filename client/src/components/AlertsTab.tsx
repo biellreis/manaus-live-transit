@@ -468,7 +468,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               borderRadius: '20px',
               padding: '26px 20px',
               textAlign: 'center',
-              boxShadow: '0 8px 24px rgba(37, 99, 235, 0.4)',
+              boxShadow: 'none',
               marginTop: '10px',
               display: 'flex',
               flexDirection: 'column',
@@ -487,7 +487,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#2563EB',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+                boxShadow: 'none'
               }}
             >
               <CheckCircle2 size={26} strokeWidth={2.5} />
@@ -514,7 +514,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 borderRadius: '999px',
                 fontSize: '12px',
                 fontWeight: 800,
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                boxShadow: 'none'
               }}
             >
               <Navigation size={13} strokeWidth={2.5} />

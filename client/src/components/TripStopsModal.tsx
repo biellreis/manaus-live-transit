@@ -374,7 +374,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         borderRadius: '50%',
                         backgroundColor: '#2563EB',
                         border: '2px solid var(--bg-card, #FFFFFF)',
-                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.6)',
+                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -391,7 +391,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                         borderRadius: '50%',
                         backgroundColor: '#EA580C',
                         border: '2px solid var(--bg-card, #FFFFFF)',
-                        boxShadow: '0 2px 8px rgba(234, 88, 12, 0.6)',
+                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -519,7 +519,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
             fontSize: '15px',
             fontWeight: 800,
             cursor: 'pointer',
-            boxShadow: '0 4px 16px rgba(37, 99, 235, 0.35)'
+            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)'
           }}
         >
           Voltar para a Rota
