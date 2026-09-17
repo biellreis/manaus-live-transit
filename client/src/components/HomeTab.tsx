@@ -5,6 +5,7 @@ import type { UserLocation } from '../hooks/useUserLocation.js';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { HomeMiniMap } from './HomeMiniMap.js';
 import { getBusLineColor } from '../utils/transitColors.js';
+import { useRecentDestinations, type RecentDestination } from '../utils/recentDestinations.js';
 
 interface HomeTabProps {
   lines: RouteSummary[];
@@ -14,6 +15,7 @@ interface HomeTabProps {
   userLocation: UserLocation;
   onSelectLine: (line: RouteSummary) => void;
   onOpenSearch: () => void;
+  onOpenSearchWithDestination?: (dest: RecentDestination) => void;
   onNavigateTab: (tab: 'lines' | 'stops' | 'alerts') => void;
   onRequestGPS: () => void;
   onOpenFullMap: () => void;
@@ -27,41 +29,23 @@ export const HomeTab: React.FC<HomeTabProps> = ({
   userLocation,
   onSelectLine,
   onOpenSearch,
+  onOpenSearchWithDestination,
   onNavigateTab,
   onRequestGPS,
   onOpenFullMap
 }) => {
   const haptic = useHaptic();
+  const recentDestinations = useRecentDestinations();
 
-  // Frequent destinations in Manaus with official line codes
-  const recentDestinations = [
-    {
-      title: 'Terminal 1 - Constantino Nery',
-      address: 'Av. Constantino Nery, 5286 - Centro / Flores',
-      lineCode: '640'
-    },
-    {
-      title: 'Terminal 4 - Jorge Teixeira',
-      address: 'Av. Camapuã, Jorge Teixeira - Manaus',
-      lineCode: '300'
-    },
-    {
-      title: 'Baratão da Carne - Torres',
-      address: 'Av. Governador José Lindoso - Parque 10',
-      lineCode: '448'
-    },
-    {
-      title: 'Manauara Shopping',
-      address: 'Av. Mário Ypiranga, 1300 - Adrianópolis',
-      lineCode: '652'
-    }
-  ];
-
-  const handleDestinationClick = (lineCode: string) => {
+  const handleDestinationClick = (dest: RecentDestination) => {
     haptic.mediumTap();
-    const line = lines.find(l => l.code === lineCode) || lines[0];
-    if (line) {
-      onSelectLine(line);
+    if (onOpenSearchWithDestination) {
+      onOpenSearchWithDestination(dest);
+    } else {
+      const line = lines.find(l => l.code === dest.lineCode) || lines[0];
+      if (line) {
+        onSelectLine(line);
+      }
     }
   };
 
@@ -177,14 +161,14 @@ export const HomeTab: React.FC<HomeTabProps> = ({
             const colorInfo = getBusLineColor(dest.lineCode);
             return (
               <div
-                key={idx}
-                onClick={() => handleDestinationClick(dest.lineCode)}
+                key={dest.id || idx}
+                onClick={() => handleDestinationClick(dest)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '10px 14px',
-                  borderBottom: idx === 0 ? '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))' : 'none',
+                  borderBottom: idx === 0 && recentDestinations.length > 1 ? '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))' : 'none',
                   cursor: 'pointer'
                 }}
               >
@@ -217,6 +201,13 @@ export const HomeTab: React.FC<HomeTabProps> = ({
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '8px', flexShrink: 0 }}>
                   <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      haptic.mediumTap();
+                      const line = lines.find(l => l.code === dest.lineCode) || lines[0];
+                      if (line) onSelectLine(line);
+                    }}
+                    title={`Ver linha ${dest.lineCode}`}
                     style={{
                       fontSize: '11px',
                       fontWeight: 800,
@@ -224,7 +215,8 @@ export const HomeTab: React.FC<HomeTabProps> = ({
                       borderRadius: '6px',
                       backgroundColor: colorInfo.badgeBg,
                       color: colorInfo.accent,
-                      border: `1px solid ${colorInfo.border}`
+                      border: `1px solid ${colorInfo.border}`,
+                      cursor: 'pointer'
                     }}
                   >
                     {dest.lineCode}

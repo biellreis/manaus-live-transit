@@ -13,6 +13,7 @@ import { useLiveVehicles } from './hooks/useLiveVehicles.js';
 import { useUserLocation } from './hooks/useUserLocation.js';
 import { notifyManoReady } from './utils/notifyManoReady.js';
 import { WebLaunchOverlay } from './components/WebLaunchOverlay.js';
+import { saveRecentDestination, type RecentDestination } from './utils/recentDestinations.js';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -28,6 +29,7 @@ export function App() {
   const [selectedBus, setSelectedBus] = useState<LiveBus | null>(null);
   const [selectedStopForDetails, setSelectedStopForDetails] = useState<StopInfo | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [initialDestinationForPlanner, setInitialDestinationForPlanner] = useState<RecentDestination | null>(null);
   const [plannedTrip, setPlannedTrip] = useState<PlannedTrip | null>(null);
 
   // User real GPS position
@@ -204,6 +206,13 @@ export function App() {
 
   // Handler to open route view for terminal
   const handleSelectTerminal = (hub: TransitHub) => {
+    saveRecentDestination({
+      title: hub.name,
+      address: hub.address || `${hub.name}, Manaus - AM`,
+      lineCode: hub.keyLines[0] || '640',
+      lat: hub.lat,
+      lng: hub.lng
+    });
     setPlannedTrip(null);
     setActiveTrip(null);
     setAllTrips([]);
@@ -218,6 +227,14 @@ export function App() {
 
   // Handler to open planned trip route with official IMMU itinerary
   const handleSelectPlannedTrip = (plan: PlannedTrip) => {
+    if (plan.destination?.name) {
+      saveRecentDestination({
+        title: plan.destination.name,
+        lineCode: plan.line?.code,
+        lat: plan.destination.lat,
+        lng: plan.destination.lng
+      });
+    }
     setIsSearchOpen(false);
     setPlannedTrip(plan);
     setSelectedLine(plan.line);
@@ -260,6 +277,7 @@ export function App() {
     // 3. If Search / Trip Planner Modal is open:
     if (isSearchOpen) {
       setIsSearchOpen(false);
+      setInitialDestinationForPlanner(null);
       return;
     }
 
@@ -289,7 +307,8 @@ export function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [handleNavigateBack]);
 
-  const handleOpenSearch = () => {
+  const handleOpenSearch = (initialDest?: RecentDestination | null) => {
+    setInitialDestinationForPlanner(initialDest || null);
     setIsSearchOpen(true);
     pushHistoryScreen('search');
   };
@@ -358,6 +377,7 @@ export function App() {
               userLocation={userLocation}
               onSelectLine={handleSelectLineAndOpenRoute}
               onOpenSearch={handleOpenSearch}
+              onOpenSearchWithDestination={(dest) => handleOpenSearch(dest)}
               onNavigateTab={handleTabChange}
               onRequestGPS={requestLocation}
               onOpenFullMap={handleOpenExploreMap}
@@ -436,13 +456,17 @@ export function App() {
       {/* Trip Planner Search Modal (Planeje sua viagem - Uber Style) */}
       <TripPlannerModal
         isOpen={isSearchOpen}
-        onClose={triggerBack}
+        onClose={() => {
+          setInitialDestinationForPlanner(null);
+          triggerBack();
+        }}
         lines={lines}
         terminals={terminals}
         citywideStops={citywideStops}
         userLocation={userLocation}
         onSelectPlannedTrip={handleSelectPlannedTrip}
         onSelectLine={handleSelectLineAndOpenRoute}
+        initialDestination={initialDestinationForPlanner}
       />
     </div>
   );

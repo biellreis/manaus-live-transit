@@ -42,3 +42,15 @@ test('live direction follows trip IDs and preserves northern Manaus vehicles', a
     assert.deepEqual(buses.map(b=>b.direction),['ida','volta','desconhecido']);
   } finally { globalThis.fetch=original; }
 });
+
+test('recent destinations logic deduplicates, infers line codes, and prepends newly chosen destinations', async () => {
+  const { guessLineCode } = await import('../client/src/utils/recentDestinations.js');
+  assert.equal(guessLineCode('Terminal 1 - Constantino Nery'), '640');
+  assert.equal(guessLineCode('Terminal 4 - Jorge Teixeira'), '300');
+  assert.equal(guessLineCode('Terminal 2 - Cachoeirinha'), '448');
+  assert.equal(guessLineCode('Terminal 3 - Cidade Nova'), '350');
+  assert.equal(guessLineCode('Terminal 5 - São José'), '652');
+  assert.equal(guessLineCode('Terminal 6 - Lago Azul'), '356');
+  assert.equal(guessLineCode('Ponta Negra'), '450');
+});
+

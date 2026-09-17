@@ -14,6 +14,7 @@ import type { RouteSummary, TransitHub, StopInfo, PlanJourneyResult, TransitOpti
 import type { UserLocation } from '../hooks/useUserLocation.js';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { MANAUS_DEFAULT_LOCATION } from '../hooks/useUserLocation.js';
+import { saveRecentDestination, type RecentDestination } from '../utils/recentDestinations.js';
 
 const RECENT_SEARCHES_KEY = 'manaus_recent_searches';
 
@@ -49,6 +50,7 @@ interface TripPlannerModalProps {
   userLocation: UserLocation;
   onSelectPlannedTrip: (plan: PlannedTrip) => void;
   onSelectLine: (line: RouteSummary) => void;
+  initialDestination?: RecentDestination | { title?: string; name?: string; lat?: number; lng?: number; address?: string; lineCode?: string } | null;
 }
 
 export interface ManausAddressItem {
@@ -163,7 +165,8 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   isOpen,
   onClose,
   userLocation,
-  onSelectPlannedTrip
+  onSelectPlannedTrip,
+  initialDestination
 }) => {
   const [viewState, setViewState] = useState<'search' | 'uber_overview'>('search');
 
@@ -264,6 +267,28 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setRecentSearches(getRecentSearches());
+
+      const targetTitle = (initialDestination as any)?.title || (initialDestination as any)?.name;
+      if (initialDestination && targetTitle) {
+        const destItem = {
+          name: targetTitle,
+          lat: initialDestination.lat ?? MANAUS_DEFAULT_LOCATION.lat,
+          lng: initialDestination.lng ?? MANAUS_DEFAULT_LOCATION.lng
+        };
+        setDestText(targetTitle);
+        setDestCoord(destItem);
+        setViewState('uber_overview');
+        calculateRoute(originCoord, destItem);
+        saveRecentDestination({
+          title: targetTitle,
+          address: initialDestination.address,
+          lineCode: initialDestination.lineCode,
+          lat: initialDestination.lat,
+          lng: initialDestination.lng
+        });
+        return;
+      }
+
       const params = new URLSearchParams(window.location.search);
       const origQ = params.get('orig') || params.get('origem');
       const destQ = params.get('dest') || params.get('destino');
@@ -307,7 +332,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
         setTimeout(() => destInputRef.current?.focus(), 150);
       }
     }
-  }, [isOpen]);
+  }, [isOpen, initialDestination]);
 
   // Sync user GPS with originCoord when available (only while searching, not while viewing route overview)
   useEffect(() => {
@@ -401,6 +426,17 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
         setPlanResult(data);
         setSelectedOptionIndex(0);
 
+        const primaryLeg = data.options?.[0]?.verifiedLegs?.[0];
+        const primaryLine = primaryLeg?.line?.code;
+        if (dest && dest.name) {
+          saveRecentDestination({
+            title: dest.name,
+            lineCode: primaryLine,
+            lat: dest.lat,
+            lng: dest.lng
+          });
+        }
+
         const params = new URLSearchParams(window.location.search);
         if (params.get('confirm') === 'true' || params.get('confirm') === '0') {
           const opt = data.options[0];
@@ -475,6 +511,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       setDestText(item.name);
       setDestCoord(newDest);
 
+      saveRecentDestination({
+        title: item.name,
+        address: item.subtitle,
+        lat: item.lat,
+        lng: item.lng
+      });
+
       setViewState('uber_overview');
       calculateRoute(originCoord, newDest);
     }
@@ -537,6 +580,15 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       upcomingBuses: activeOption.upcomingBuses,
       isLiveGps: activeOption.isLiveGps
     };
+
+    if (destCoord && legs[0]?.line?.code) {
+      saveRecentDestination({
+        title: destCoord.name,
+        lineCode: legs[0].line.code,
+        lat: destCoord.lat,
+        lng: destCoord.lng
+      });
+    }
 
     onSelectPlannedTrip(planned);
   };
