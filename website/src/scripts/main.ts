@@ -190,3 +190,238 @@ if (mapVideo) {
   );
   videoObserver.observe(mapVideo);
 }
+
+/* ==========================================================================
+   APPLE IPHONE 18 PRO INTERACTIVE MOTION & 3D PHYSICS
+   ========================================================================== */
+
+// 1. HERO 3D IPHONE EMERGENCE & POINTER TILT (LERP 60FPS)
+(() => {
+  const stage = document.getElementById("heroStage");
+  const rig = document.getElementById("heroPhoneRig");
+  const shadow = document.getElementById("heroFloorShadow");
+  const glare = document.getElementById("heroGlassGlare");
+  if (!stage || !rig) return;
+
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) return;
+
+  const baseRotX = 8;
+  const baseRotY = -14;
+  const baseRotZ = -1.5;
+
+  let targetRotX = baseRotX;
+  let targetRotY = baseRotY;
+  let targetRotZ = baseRotZ;
+  let targetTranslateY = 0;
+  let targetGlareX = 0;
+  let targetGlareY = 0;
+  let targetShadowX = 0;
+
+  let currentRotX = baseRotX;
+  let currentRotY = baseRotY;
+  let currentRotZ = baseRotZ;
+  let currentTranslateY = 0;
+  let currentGlareX = 0;
+  let currentGlareY = 0;
+  let currentShadowX = 0;
+
+  let animFrameId: number | null = null;
+  let isHovered = false;
+
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+  const updateRig = () => {
+    currentRotX = lerp(currentRotX, targetRotX, 0.08);
+    currentRotY = lerp(currentRotY, targetRotY, 0.08);
+    currentRotZ = lerp(currentRotZ, targetRotZ, 0.08);
+    currentTranslateY = lerp(currentTranslateY, targetTranslateY, 0.08);
+    currentGlareX = lerp(currentGlareX, targetGlareX, 0.08);
+    currentGlareY = lerp(currentGlareY, targetGlareY, 0.08);
+    currentShadowX = lerp(currentShadowX, targetShadowX, 0.08);
+
+    rig.style.transform = `translateY(${currentTranslateY.toFixed(2)}px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) rotateZ(${currentRotZ.toFixed(2)}deg)`;
+    if (shadow) {
+      shadow.style.transform = `translateX(calc(-50% + ${currentShadowX.toFixed(1)}px)) scale(${1 - Math.abs(currentRotY) * 0.005})`;
+    }
+    if (glare) {
+      glare.style.transform = `rotate(-25deg) translate(${currentGlareX.toFixed(1)}px, ${currentGlareY.toFixed(1)}px)`;
+    }
+
+    animFrameId = requestAnimationFrame(updateRig);
+  };
+
+  stage.addEventListener("mouseenter", () => {
+    isHovered = true;
+    if (!animFrameId) animFrameId = requestAnimationFrame(updateRig);
+  });
+
+  stage.addEventListener("mousemove", (e) => {
+    const rect = stage.getBoundingClientRect();
+    const normX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const normY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+
+    targetRotY = baseRotY + normX * 16;
+    targetRotX = baseRotX - normY * 12;
+    targetRotZ = baseRotZ + normX * 3;
+    targetTranslateY = -normY * 15;
+    targetGlareX = -normX * 80;
+    targetGlareY = -normY * 80;
+    targetShadowX = normX * 30;
+
+    if (!animFrameId) animFrameId = requestAnimationFrame(updateRig);
+  });
+
+  stage.addEventListener("mouseleave", () => {
+    isHovered = false;
+    targetRotX = baseRotX;
+    targetRotY = baseRotY;
+    targetRotZ = baseRotZ;
+    targetTranslateY = 0;
+    targetGlareX = 0;
+    targetGlareY = 0;
+    targetShadowX = 0;
+  });
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (isHovered) return;
+      const scrollProgress = Math.min(1, window.scrollY / 600);
+      targetRotX = baseRotX + scrollProgress * 5;
+      targetRotY = baseRotY - scrollProgress * 7;
+      targetTranslateY = scrollProgress * 35;
+      if (!animFrameId) animFrameId = requestAnimationFrame(updateRig);
+    },
+    { passive: true },
+  );
+
+  animFrameId = requestAnimationFrame(updateRig);
+})();
+
+// 2. HIGHLIGHTS RIBBON HORIZONTAL CAROUSEL CONTROLS
+(() => {
+  const track = document.getElementById("highlightsTrack");
+  const prevBtn = document.getElementById("highlightsPrevBtn") as HTMLButtonElement | null;
+  const nextBtn = document.getElementById("highlightsNextBtn") as HTMLButtonElement | null;
+  const paginationDots = document.querySelectorAll<HTMLButtonElement>(".pagination-dot");
+  if (!track) return;
+
+  const updateButtons = () => {
+    if (prevBtn) prevBtn.disabled = track.scrollLeft <= 10;
+    if (nextBtn)
+      nextBtn.disabled =
+        track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
+
+    const firstCard = track.firstElementChild as HTMLElement | null;
+    const cardWidth = firstCard?.clientWidth || 500;
+    const activeIndex = Math.round(track.scrollLeft / (cardWidth + 24));
+    paginationDots.forEach((dot, idx) => {
+      dot.classList.toggle("active", idx === activeIndex);
+    });
+  };
+
+  prevBtn?.addEventListener("click", () => {
+    const firstCard = track.firstElementChild as HTMLElement | null;
+    const cardWidth = firstCard?.clientWidth || 500;
+    track.scrollBy({ left: -(cardWidth + 24), behavior: "smooth" });
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    const firstCard = track.firstElementChild as HTMLElement | null;
+    const cardWidth = firstCard?.clientWidth || 500;
+    track.scrollBy({ left: cardWidth + 24, behavior: "smooth" });
+  });
+
+  paginationDots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      const idx = Number(dot.dataset.index || 0);
+      const firstCard = track.firstElementChild as HTMLElement | null;
+      const cardWidth = firstCard?.clientWidth || 500;
+      track.scrollTo({ left: idx * (cardWidth + 24), behavior: "smooth" });
+    });
+  });
+
+  track.addEventListener("scroll", updateButtons, { passive: true });
+  updateButtons();
+})();
+
+// 3. CLOSER LOOK 3D INTERACTIVE PRODUCT VIEWER & SCREEN SWITCHER
+(() => {
+  const stage = document.getElementById("closerLookStage");
+  const pivot = document.getElementById("closerLookPivot");
+  const glare = document.getElementById("closerLookGlassGlare");
+  const screenImg = document.getElementById("closerLookScreenImg") as HTMLImageElement | null;
+  const captionEl = document.getElementById("closerLookCaption");
+  const tabPills = document.querySelectorAll<HTMLButtonElement>(".apple-tab-pill");
+  if (!stage || !pivot) return;
+
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduced) {
+    let targetX = 0;
+    let targetY = 0;
+    let currX = 0;
+    let currY = 0;
+    let animId: number | null = null;
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    const loop = () => {
+      currX = lerp(currX, targetX, 0.08);
+      currY = lerp(currY, targetY, 0.08);
+      pivot.style.transform = `rotateX(${currY.toFixed(2)}deg) rotateY(${currX.toFixed(2)}deg)`;
+      if (glare) {
+        glare.style.transform = `rotate(-25deg) translate(${(-currX * 5).toFixed(1)}px, ${(-currY * 5).toFixed(1)}px)`;
+      }
+      animId = requestAnimationFrame(loop);
+    };
+
+    stage.addEventListener("mousemove", (e) => {
+      const rect = stage.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      targetX = x * 22;
+      targetY = -y * 16;
+      if (!animId) animId = requestAnimationFrame(loop);
+    });
+
+    stage.addEventListener("mouseleave", () => {
+      targetX = 0;
+      targetY = 0;
+    });
+
+    animId = requestAnimationFrame(loop);
+  }
+
+  // Tab Pill screen switching with smooth Apple cross-dissolve
+  tabPills.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const screen = btn.dataset.screen;
+      const caption = btn.dataset.caption;
+      if (!screen || !screenImg) return;
+
+      tabPills.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle("active", active);
+        b.setAttribute("aria-selected", String(active));
+      });
+
+      screenImg.style.opacity = "0.3";
+      if (captionEl && caption) {
+        captionEl.style.opacity = "0.3";
+      }
+
+      const img = new Image();
+      img.src = `/screens/${screen}.webp`;
+      img.onload = () => {
+        screenImg.src = img.src;
+        screenImg.style.opacity = "1";
+        if (captionEl && caption) {
+          captionEl.textContent = caption;
+          captionEl.style.opacity = "1";
+        }
+      };
+    });
+  });
+})();
+

@@ -1,0 +1,119 @@
+---
+import InstallButtons from './InstallButtons.astro';
+import HeroTransitMap from './HeroTransitMap.astro';
+---
+
+<section class="apple-hero-stage" id="heroStage" aria-labelledby="hero-title">
+  <!-- Subtle dark geometric transit map background -->
+  <HeroTransitMap/>
+
+  <!-- Vignette overlay for cinematic depth -->
+  <div class="apple-hero-vignette" aria-hidden="true"></div>
+
+  <!-- Hero Typography & Actions Lockup -->
+  <div class="apple-hero-header">
+    <p class="apple-hero-eyebrow">MANÔ TRANSIT</p>
+    <h1 id="hero-title" class="apple-hero-title">
+      Manô, <span class="apple-hero-accent">bora?</span>
+    </h1>
+    <p class="apple-hero-sub">
+      O transporte público de Manaus em tempo real no seu celular.
+    </p>
+
+    <div class="apple-hero-cta">
+      <InstallButtons/>
+      <div class="apple-hero-link-row">
+        <a href="#destaques" class="apple-text-link">
+          Explore os recursos
+          <span class="link-chevron" aria-hidden="true">›</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D iPhone Emergence & Interactive Pointer Tracking Canvas -->
+  <div class="apple-hero-viewport" id="heroViewport">
+    <!-- Contact Floor Shadow with dynamic blur and spread -->
+    <div class="apple-hero-floor-shadow" id="heroFloorShadow" aria-hidden="true"></div>
+
+    <!-- 3D Transform Pivot with spring physics -->
+    <div class="apple-phone-rig" id="heroPhoneRig">
+      <div class="apple-pro-device" aria-hidden="true">
+        <!-- Titanium Grade 5 Unibody Chassis -->
+        <div class="device-titanium-bezel"></div>
+        <div class="device-chamfer-rim"></div>
+
+        <!-- Laser-cut Antenna Bands -->
+        <span class="band band-tl"></span>
+        <span class="band band-tr"></span>
+        <span class="band band-bl"></span>
+        <span class="band band-br"></span>
+
+        <!-- Precision Hardware Buttons with Micro-Shadows -->
+        <div class="btn-action" title="Action Button"></div>
+        <div class="btn-vol-up" title="Aumentar Volume"></div>
+        <div class="btn-vol-down" title="Diminuir Volume"></div>
+        <div class="btn-power" title="Botão Lateral"></div>
+
+        <!-- Earpiece Micro-Mesh -->
+        <div class="device-earpiece"></div>
+
+        <!-- Bezel & Super Retina XDR OLED Display -->
+        <div class="device-screen-frame">
+          <!-- Dynamic Island Pro -->
+          <div class="device-dynamic-island">
+            <div class="island-camera-lens">
+              <span class="lens-specular-dot"></span>
+            </div>
+            <div class="island-sensor-dot"></div>
+          </div>
+
+          <!-- Dynamic Glass Glare Sweep (Moves with cursor) -->
+          <div class="device-glass-glare" id="heroGlassGlare"></div>
+          <div class="device-glass-sheen"></div>
+
+          <!-- High-Resolution Screen Image -->
+          <div class="device-screen-content">
+            <img
+              src="/screens/ida.webp"
+              width="768"
+              height="1670"
+              alt="Manô - Linha 640 e Trajeto em Tempo Real"
+              class="device-screen-img"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <!-- Apple-grade Spatial Floating Badges -->
+        <div class="apple-spatial-badge badge-eta" id="heroBadgeEta">
+          <span class="badge-bus-num">640</span>
+          <div class="badge-body">
+            <div class="badge-heading">
+              <span class="pulse-indicator"></span>
+              <strong>Chegando em 3 min</strong>
+            </div>
+            <span class="badge-meta">Próximo da sua parada • T1</span>
+          </div>
+        </div>
+
+        <div class="apple-spatial-badge badge-fleet" id="heroBadgeFleet">
+          <span class="badge-fleet-pill">13</span>
+          <div class="badge-body">
+            <strong>Ônibus Ativos</strong>
+            <span class="badge-meta">Linha 640 em circulação</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll down cue -->
+  <div class="apple-hero-scroll-cue" aria-hidden="true">
+    <a href="#destaques" class="scroll-cue-link">
+      <span>Role para explorar</span>
+      <span class="scroll-cue-arrow">↓</span>
+    </a>
+  </div>
+</section>

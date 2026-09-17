@@ -1,0 +1,131 @@
+---
+---
+
+<section class="apple-closer-look-section" id="closer-look" aria-labelledby="closer-look-heading">
+  <div class="closer-look-container">
+    <div class="closer-look-header">
+      <p class="apple-eyebrow-accent">VISÃO INTERATIVA 3D</p>
+      <h2 id="closer-look-heading" class="apple-section-headline">
+        Dê uma olhada de perto.
+      </h2>
+      <p class="apple-section-subhead">
+        Passe o cursor sobre o aparelho para inspecionar cada ângulo em perspectiva 3D e alterne entre as telas principais do aplicativo.
+      </p>
+    </div>
+
+    <!-- 3D Inspection Stage -->
+    <div class="closer-look-stage" id="closerLookStage">
+      <div class="closer-look-floor-shadow" aria-hidden="true"></div>
+
+      <!-- 3D Device Pivot with Real-time Physics -->
+      <div class="closer-look-phone-pivot" id="closerLookPivot">
+        <div class="apple-inspection-device" aria-hidden="true">
+          <!-- Titanium Chamfer Edge -->
+          <div class="inspection-chassis"></div>
+          <div class="inspection-chamfer"></div>
+
+          <!-- Antenna bands -->
+          <span class="insp-band insp-tl"></span>
+          <span class="insp-band insp-tr"></span>
+          <span class="insp-band insp-bl"></span>
+          <span class="insp-band insp-br"></span>
+
+          <!-- Hardware Buttons -->
+          <div class="insp-btn-action"></div>
+          <div class="insp-btn-vol-up"></div>
+          <div class="insp-btn-vol-down"></div>
+          <div class="insp-btn-power"></div>
+
+          <!-- Display & Bezel -->
+          <div class="inspection-screen-bezel">
+            <!-- Dynamic Island -->
+            <div class="inspection-island">
+              <div class="insp-lens">
+                <span class="insp-lens-dot"></span>
+              </div>
+              <div class="insp-sensor"></div>
+            </div>
+
+            <!-- Glare and Sheen Shimmer -->
+            <div class="inspection-glass-glare" id="closerLookGlassGlare"></div>
+            <div class="inspection-specular-sheen"></div>
+
+            <!-- Active Screen (Switches with buttons) -->
+            <div class="inspection-screen-area">
+              <img
+                id="closerLookScreenImg"
+                src="/screens/planner.webp"
+                width="768"
+                height="1670"
+                alt="Tela ativa do Manô"
+                class="inspection-screen-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Apple Pill Control Bar -->
+    <div class="closer-look-controls" role="tablist" aria-label="Selecione uma funcionalidade do Manô para inspecionar">
+      <button
+        class="apple-tab-pill active"
+        role="tab"
+        aria-selected="true"
+        data-screen="planner"
+        data-caption="Digite sua origem e destino. O Manô calcula a rota direta com o menor tempo de caminhada e paradas exatas."
+      >
+        <span>Planejador</span>
+      </button>
+
+      <button
+        class="apple-tab-pill"
+        role="tab"
+        aria-selected="false"
+        data-screen="ida"
+        data-caption="Linha 640 Expressa. Acompanhe a estimativa do próximo ônibus em minutos e a frota em operação."
+      >
+        <span>Linha 640</span>
+      </button>
+
+      <button
+        class="apple-tab-pill"
+        role="tab"
+        aria-selected="false"
+        data-screen="journey"
+        data-caption="Acompanhamento do trajeto no mapa com paradas georreferenciadas e linhas de transferência."
+      >
+        <span>No Mapa</span>
+      </button>
+
+      <button
+        class="apple-tab-pill"
+        role="tab"
+        aria-selected="false"
+        data-screen="terminals"
+        data-caption="Localização e linhas disponíveis nos grandes terminais de integração T1, T2, T3, T4 e T5."
+      >
+        <span>Terminais</span>
+      </button>
+
+      <button
+        class="apple-tab-pill"
+        role="tab"
+        aria-selected="false"
+        data-screen="alerts"
+        data-caption="Fique sabendo de interdições, desvios de linhas e ocorrências no trânsito de Manaus em tempo real."
+      >
+        <span>Alertas</span>
+      </button>
+    </div>
+
+    <!-- Dynamic Caption beneath the switcher -->
+    <div class="closer-look-caption-wrap">
+      <p id="closerLookCaption" class="closer-look-caption">
+        Digite sua origem e destino. O Manô calcula a rota direta com o menor tempo de caminhada e paradas exatas.
+      </p>
+    </div>
+  </div>
+</section>
