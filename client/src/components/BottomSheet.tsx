@@ -3,6 +3,7 @@ import type { RouteSummary, TripDetail, LiveBus, TimetableService, StopInfo, Pla
 import { Bus, Check, X, MapPin, Clock, ArrowRightLeft } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { TripStopsModal } from './TripStopsModal.js';
+import { useRealtimeTripEta } from '../utils/realtimeEta.js';
 
 function formatDistance(meters: number | null | undefined): string {
   if (!meters) return '0 m';
@@ -39,6 +40,14 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 }) => {
   const [isStopsModalOpen, setIsStopsModalOpen] = useState(false);
   const haptic = useHaptic();
+
+  // Real-time intelligent ETA tracking for the planned trip
+  const realtimeEta = useRealtimeTripEta(
+    activeTrip,
+    plannedTrip?.originStop || null,
+    vehicles,
+    plannedTrip
+  );
 
 
   const isVolta = activeTrip?.directionType === 'volta';
@@ -339,7 +348,20 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   Embarque • Linha {plannedTrip.legs[0]?.line?.code || plannedTrip.line.code}
                 </span>
 
-                {typeof plannedTrip.etaMinutes === 'number' ? (
+                {realtimeEta.status === 'passed_no_next' ? (
+                  <span
+                    style={{
+                      fontSize: '11.5px',
+                      fontWeight: 800,
+                      color: '#FFFFFF',
+                      backgroundColor: '#EA580C',
+                      padding: '4px 10px',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    Ônibus já passou
+                  </span>
+                ) : realtimeEta.status === 'at_stop' || realtimeEta.etaMinutes === 0 ? (
                   <span
                     style={{
                       fontSize: '12px',
@@ -350,7 +372,20 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       borderRadius: '8px'
                     }}
                   >
-                    {plannedTrip.etaMinutes <= 1 ? 'Chegando agora' : `Em ${plannedTrip.etaMinutes} min`}
+                    Chegando agora
+                  </span>
+                ) : typeof realtimeEta.etaMinutes === 'number' && realtimeEta.etaMinutes > 0 ? (
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: '#FFFFFF',
+                      backgroundColor: '#2563EB',
+                      padding: '4px 10px',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    {realtimeEta.etaMinutes === 1 ? 'Em 1 min' : `Em ${realtimeEta.etaMinutes} min`}
                   </span>
                 ) : (
                   <span
@@ -363,17 +398,68 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       borderRadius: '8px'
                     }}
                   >
-                    {plannedTrip.liveBusCount ? `${plannedTrip.liveBusCount} ônibus ativos` : 'Em operação'}
+                    {realtimeEta.totalActiveBuses ? `${realtimeEta.totalActiveBuses} ônibus ativos` : 'Em operação'}
                   </span>
                 )}
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>Passa às</span>
-                <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
-                  {plannedTrip.etaTime || 'Em breve'}
-                </span>
-              </div>
+              {realtimeEta.status === 'passed_no_next' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <span style={{ fontSize: '12px', color: '#EA580C', fontWeight: 800 }}>Status</span>
+                    <span style={{ fontSize: '22px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                      Passou da parada
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor: 'var(--bg-pill, #27272A)',
+                      borderRadius: '10px',
+                      padding: '10px 12px',
+                      border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.1))',
+                      fontSize: '12px',
+                      color: 'var(--text-primary, #FFFFFF)',
+                      lineHeight: 1.4
+                    }}
+                  >
+                    O ônibus desta rota acabou de passar pela sua parada e não há outro veículo próximo vindo atrás no momento. Aguarde a saída do próximo veículo do terminal ou consulte linhas alternativas.
+                  </div>
+                </div>
+              ) : realtimeEta.status === 'passed_has_next' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>Próximo passa às</span>
+                    <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                      {realtimeEta.etaTime || 'Em breve'}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      backgroundColor: '#2563EB',
+                      color: '#FFFFFF',
+                      borderRadius: '6px',
+                      padding: '3px 8px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      width: 'fit-content'
+                    }}
+                  >
+                    Ônibus anterior passou • Acompanhando próximo veículo
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>
+                    {realtimeEta.status === 'at_stop' ? 'Chegando agora' : 'Passa às'}
+                  </span>
+                  <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                    {realtimeEta.etaTime || 'Em breve'}
+                  </span>
+                </div>
+              )}
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                 <MapPin size={15} style={{ color: '#2563EB', marginTop: '2px', flexShrink: 0 }} />
@@ -396,19 +482,20 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                 </div>
               </div>
 
-              {plannedTrip.upcomingBuses && plannedTrip.upcomingBuses.length > 0 && (
+              {realtimeEta.upcomingBuses && realtimeEta.upcomingBuses.length > 0 && (
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
                     paddingTop: '6px',
-                    borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))'
+                    borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))',
+                    flexWrap: 'wrap'
                   }}
                 >
-                  <Clock size={13} style={{ color: '#2563EB' }} />
-                  <span style={{ fontSize: '11px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>Próximos:</span>
-                  {plannedTrip.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
+                  <Clock size={13} style={{ color: '#2563EB', flexShrink: 0 }} />
+                  <span style={{ fontSize: '11px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 600 }}>Próximos atrás:</span>
+                  {realtimeEta.upcomingBuses.slice(0, 2).map((nextBus, bIdx) => (
                     <span
                       key={bIdx}
                       style={{
@@ -544,14 +631,21 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                 )}
               </div>
 
-              {plannedTrip.destEtaTime && (
+              {realtimeEta.status === 'passed_no_next' ? (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 700 }}>Chegada</span>
+                  <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.01em' }}>
+                    Aguardando próximo veículo
+                  </span>
+                </div>
+              ) : (realtimeEta.destEtaTime || plannedTrip.destEtaTime) ? (
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                   <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94A3B8)', fontWeight: 700 }}>Chegada às</span>
                   <span style={{ fontSize: '26px', fontWeight: 900, color: 'var(--text-primary, #FFFFFF)', letterSpacing: '-0.02em', lineHeight: 1 }}>
-                    {plannedTrip.destEtaTime}
+                    {realtimeEta.destEtaTime || plannedTrip.destEtaTime}
                   </span>
                 </div>
-              )}
+              ) : null}
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                 <MapPin size={15} style={{ color: '#EA580C', marginTop: '2px', flexShrink: 0 }} />

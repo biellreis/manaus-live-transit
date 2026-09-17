@@ -749,10 +749,15 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
         }
       }
 
+      // If the bus's closest stop is after the boarding stop, it has ALREADY PASSED
+      if (closestIdx > boardIdx) {
+        continue;
+      }
+
       const distDirectToBoard = Math.hypot(boardStop.lat - bus.lat, boardStop.lng - bus.lng) * 111000;
 
-      // Ônibus antes do embarque na linha OU já na parada de embarque (<= 350m)
-      if (distDirectToBoard <= 350) {
+      // Bus is arriving right at the boarding stop (<= 60m)
+      if (closestIdx === boardIdx && distDirectToBoard <= 60) {
         const arrivalDate = new Date(now + 60000);
         approaching.push({
           busId: bus.id,
@@ -760,7 +765,7 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
           timeStr: formatManausTime(arrivalDate),
           distanceMeters: Math.round(distDirectToBoard)
         });
-      } else if (closestIdx !== -1 && closestIdx <= boardIdx) {
+      } else if (closestIdx !== -1 && closestIdx < boardIdx) {
         let distM = distanceMeters({ lat: bus.lat, lng: bus.lng }, stopsToSearch[closestIdx]);
         for (let i = closestIdx; i < boardIdx; i++) {
           distM += distanceMeters(stopsToSearch[i], stopsToSearch[i + 1]);

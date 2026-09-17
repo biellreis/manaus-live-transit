@@ -54,3 +54,72 @@ test('recent destinations logic deduplicates, infers line codes, and prepends ne
   assert.equal(guessLineCode('Ponta Negra'), '450');
 });
 
+test('calculateLiveTripEta accurately detects approaching buses, passed buses, and advances to behind vehicles', async () => {
+  const { calculateLiveTripEta } = await import('../client/src/utils/realtimeEta.js');
+
+  const mockStops = [
+    { stopId: 101, stopName: 'Parada 1 - Inicio', lat: -3.0780, lng: -60.0050, sequence: 1, distKm: 0, timeSeconds: 0 },
+    { stopId: 102, stopName: 'Parada 2 - Av Torres 10', lat: -3.0720, lng: -60.0030, sequence: 2, distKm: 0.8, timeSeconds: 120 },
+    { stopId: 103, stopName: 'AV JOSÉ LINDOSO 15', lat: -3.0650, lng: -60.0010, sequence: 3, distKm: 1.6, timeSeconds: 240 },
+    { stopId: 104, stopName: 'Parada 4 - Av Torres 20', lat: -3.0580, lng: -59.9990, sequence: 4, distKm: 2.4, timeSeconds: 360 },
+    { stopId: 105, stopName: 'Terminal 3 - Cidade Nova', lat: -3.0369, lng: -60.0062, sequence: 5, distKm: 5.0, timeSeconds: 700 }
+  ];
+
+  const boardStop = mockStops[2]; // AV JOSÉ LINDOSO 15
+  const now = new Date('2026-09-16T21:20:00-04:00').getTime();
+
+  // Test Case 1: Bus 1 is approaching before the stop (between Parada 1 and 2)
+  const approachingBus = {
+    id: 'bus-lead',
+    lat: -3.0750,
+    lng: -60.0040,
+    heading: 0,
+    headsign: 'T3',
+    timestamp: now,
+    speedKmh: 20
+  };
+
+  const res1 = calculateLiveTripEta(mockStops as any, boardStop as any, [approachingBus as any], now, 24, 'ida');
+  assert.equal(res1.status, 'approaching');
+  assert.ok(typeof res1.etaMinutes === 'number' && res1.etaMinutes > 0);
+  assert.equal(res1.primaryBus?.id, 'bus-lead');
+  assert.equal(res1.passedBusesCount, 0);
+
+  // Test Case 2: Bus 1 has PASSED the stop (now at Parada 4, north of AV JOSÉ LINDOSO 15)
+  const passedBus = {
+    id: 'bus-lead',
+    lat: -3.0570,
+    lng: -59.9985,
+    heading: 0,
+    headsign: 'T3',
+    timestamp: now,
+    speedKmh: 25
+  };
+
+  // Case 2A: ONLY passed bus is on route -> status must be 'passed_no_next'
+  const res2A = calculateLiveTripEta(mockStops as any, boardStop as any, [passedBus as any], now, 24, 'ida');
+  assert.equal(res2A.status, 'passed_no_next');
+  assert.equal(res2A.primaryBus, null);
+  assert.equal(res2A.passedBusesCount, 1);
+  assert.ok(res2A.noticeMessage?.includes('já passou'));
+
+  // Case 2B: Bus 1 has passed, but Bus 2 is coming BEHIND (at Parada 1)
+  const behindBus = {
+    id: 'bus-behind',
+    lat: -3.0780,
+    lng: -60.0050,
+    heading: 0,
+    headsign: 'T3',
+    timestamp: now,
+    speedKmh: 20
+  };
+
+  const res2B = calculateLiveTripEta(mockStops as any, boardStop as any, [passedBus as any, behindBus as any], now, 24, 'ida');
+  assert.equal(res2B.status, 'passed_has_next');
+  assert.equal(res2B.primaryBus?.id, 'bus-behind');
+  assert.equal(res2B.passedBusesCount, 1);
+  assert.ok(typeof res2B.etaMinutes === 'number' && res2B.etaMinutes > 0);
+  assert.ok(res2B.noticeMessage?.includes('Ônibus anterior já passou'));
+});
+
+
