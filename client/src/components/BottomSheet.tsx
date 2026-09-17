@@ -422,7 +422,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                       lineHeight: 1.4
                     }}
                   >
-                    O ônibus desta rota acabou de passar pela sua parada e não há outro veículo próximo vindo atrás no momento. Aguarde a saída do próximo veículo do terminal ou consulte linhas alternativas.
+                    O ônibus já passou por esta parada e não há outro a caminho no momento.
                   </div>
                 </div>
               ) : realtimeEta.status === 'passed_has_next' ? (

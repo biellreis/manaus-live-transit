@@ -317,7 +317,7 @@ export function calculateLiveTripEta(
       passedBusesCount: passedCount,
       totalActiveBuses: relevantVehicles.length,
       distanceToBoardingMeters: null,
-      noticeMessage: 'O ônibus desta linha já passou por esta parada e não há outro veículo próximo se aproximando no momento.',
+      noticeMessage: 'O ônibus já passou por esta parada e não há outro a caminho no momento.',
       isRealtime: true
     };
   }
