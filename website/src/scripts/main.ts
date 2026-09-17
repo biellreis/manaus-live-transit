@@ -425,3 +425,13 @@ if (mapVideo) {
   });
 })();
 
+// Suporte a scroll instantâneo para inspeção e testes visuais de seções
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("y")) {
+    const y = Number(params.get("y"));
+    window.scrollTo({ top: y, behavior: "instant" });
+  }
+})();
+
+

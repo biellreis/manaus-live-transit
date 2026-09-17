@@ -2901,6 +2901,8 @@ body:has(dialog[open]) {
     width: 170px;
     bottom: 12%;
   }
+}
+
 /* ==========================================================================
    FEEDBACK TOAST DE DOWNLOAD DO APK
    ========================================================================== */
@@ -3077,6 +3079,30 @@ body:has(dialog[open]) {
   justify-content: flex-start;
   padding: 60px 24px 70px;
   isolation: isolate;
+}
+
+.apple-hero-spotlight {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 550px;
+  height: 850px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(41, 151, 255, 0.08) 35%, transparent 72%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.apple-hero-ambient-glow {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 113, 227, 0.09) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .apple-hero-vignette {
