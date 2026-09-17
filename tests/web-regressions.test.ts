@@ -120,6 +120,55 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
   assert.equal(res2B.passedBusesCount, 1);
   assert.ok(typeof res2B.etaMinutes === 'number' && res2B.etaMinutes > 0);
   assert.ok(res2B.noticeMessage?.includes('Ônibus anterior já passou'));
+
+  // Test Case 3: Bus is AT THE STOP (<= 45m) -> status 'at_stop', 0 min
+  const atStopBus = {
+    id: 'bus-lead',
+    lat: boardStop.lat + 0.0001, // ~11m from stop
+    lng: boardStop.lng,
+    heading: 0,
+    headsign: 'T3',
+    timestamp: now,
+    speedKmh: 10
+  };
+  const res3 = calculateLiveTripEta(mockStops as any, boardStop as any, [atStopBus as any], now, 24, 'ida');
+  assert.equal(res3.status, 'at_stop');
+  assert.equal(res3.etaMinutes, 0);
+
+  // Test Case 4: Sliced stops vs Full Trip stops (Line 457 scenario)
+  // When a planned trip has sliced stops starting at the boarding stop (index 0),
+  // using the full stops list detects an incoming bus driving 1.5km before the boarding stop.
+  const fullRouteStops = [
+    { stopId: 1, stopName: 'Terminal 3', lat: -3.0369, lng: -60.0062, sequence: 1, distKm: 0, timeSeconds: 0 },
+    { stopId: 2, stopName: 'Av Gov Jose Lindoso 03', lat: -3.0473, lng: -59.9854, sequence: 2, distKm: 1.5, timeSeconds: 180 },
+    { stopId: 3, stopName: 'Av Gov Jose Lindoso 06', lat: -3.0600, lng: -59.9878, sequence: 3, distKm: 3.0, timeSeconds: 360 },
+    { stopId: 4, stopName: 'Av Gov Jose Lindoso 08', lat: -3.0693, lng: -59.9913, sequence: 4, distKm: 4.2, timeSeconds: 500 },
+    { stopId: 5, stopName: 'AV JOSÉ LINDOSO 09', lat: -3.0747, lng: -59.9929, sequence: 5, distKm: 5.0, timeSeconds: 600 },
+    { stopId: 6, stopName: 'AV LEONARDO MALCHER 05', lat: -3.1317, lng: -60.0245, sequence: 6, distKm: 12.0, timeSeconds: 1500 }
+  ];
+  const targetBoard = fullRouteStops[4]; // AV JOSÉ LINDOSO 09
+  const busBeforeStop = {
+    id: 'bus-457',
+    lat: fullRouteStops[2].lat, // at Av Gov Jose Lindoso 06 (~2km before board stop)
+    lng: fullRouteStops[2].lng,
+    heading: 180,
+    headsign: 'Centro',
+    timestamp: now,
+    speedKmh: 22
+  };
+
+  // With fullRouteStops: correctly tracks approaching bus with dynamic minutes!
+  const resFull = calculateLiveTripEta(fullRouteStops as any, targetBoard as any, [busBeforeStop as any], now, 24, 'ida');
+  assert.equal(resFull.status, 'approaching');
+  assert.ok(typeof resFull.etaMinutes === 'number' && resFull.etaMinutes >= 4 && resFull.etaMinutes <= 8);
+  assert.equal(resFull.primaryBus?.id, 'bus-457');
+  assert.equal(resFull.passedBusesCount, 0);
+
+  // When bus gets closer (to stop 4, ~600m before board):
+  const busCloser = { ...busBeforeStop, lat: fullRouteStops[3].lat, lng: fullRouteStops[3].lng };
+  const resCloser = calculateLiveTripEta(fullRouteStops as any, targetBoard as any, [busCloser as any], now, 24, 'ida');
+  assert.equal(resCloser.status, 'approaching');
+  assert.ok(typeof resCloser.etaMinutes === 'number' && resCloser.etaMinutes < (resFull.etaMinutes || 10));
 });
 
 

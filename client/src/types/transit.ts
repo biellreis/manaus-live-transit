@@ -78,6 +78,7 @@ export interface TimetableService {
 export interface PlannedLeg {
   line: RouteSummary;
   trip: TripDetail;
+  fullTrip?: TripDetail;
   originStop: StopInfo;
   destStop: StopInfo;
 }
@@ -99,6 +100,8 @@ export interface PlannedTrip {
   destStop: StopInfo;
   line: RouteSummary;
   trip: TripDetail;
+  fullTrip?: TripDetail;
+  createdAt?: number;
   walkToStopMeters: number | null;
   walkToStopMinutes: number | null;
   walkFromStopMeters: number | null;

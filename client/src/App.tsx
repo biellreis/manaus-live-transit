@@ -136,7 +136,7 @@ export function App() {
     const request = ++lineRequest.current;
     const controller = new AbortController();
     setSchedule([]);
-    if (plannedTrip) { setAllTrips(plannedTrip.legs.map(l=>l.trip)); setActiveTrip(plannedTrip.trip); return; }
+    if (plannedTrip) { setAllTrips(plannedTrip.legs.map(l => l.fullTrip || l.trip)); setActiveTrip(plannedTrip.trip); return; }
     setActiveTrip(null); setAllTrips([]);
     if (!selectedLine) return;
     for (const endpoint of ['itinerary', 'schedule']) {

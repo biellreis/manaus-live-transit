@@ -93,7 +93,7 @@ export function formatManausTime(date: Date): string {
 /**
  * Evaluates live vehicle positions against the active route stops and boarding stop.
  * Accurately determines which buses are approaching, which have already passed,
- * and dynamically calculates ETA minutes and passage times.
+ * and dynamically calculates ETA minutes and passage times along the cumulative route.
  */
 export function calculateLiveTripEta(
   stops: StopInfo[],
@@ -125,7 +125,7 @@ export function calculateLiveTripEta(
   if (boardIdx === -1) {
     let minD = Infinity;
     for (let i = 0; i < stops.length; i++) {
-      const d = Math.hypot(stops[i].lat - boardStop.lat, stops[i].lng - boardStop.lng);
+      const d = distanceMeters(stops[i], boardStop);
       if (d < minD) {
         minD = d;
         boardIdx = i;
@@ -160,11 +160,15 @@ export function calculateLiveTripEta(
     };
   }
 
-  // Precompute segment distances along route
+  // Precompute segment distances & cumulative distances along route
   const segDistances: number[] = [];
+  const cumDistances: number[] = [0];
   for (let i = 0; i < stops.length - 1; i++) {
-    segDistances.push(distanceMeters(stops[i], stops[i + 1]));
+    const d = distanceMeters(stops[i], stops[i + 1]);
+    segDistances.push(d);
+    cumDistances.push(cumDistances[i] + d);
   }
+  const sBoard = cumDistances[boardIdx] ?? 0;
 
   const approaching: {
     bus: LiveBus;
@@ -192,43 +196,42 @@ export function calculateLiveTripEta(
       }
     }
 
-    // If bus is too far from the corridor (> 600m), skip it
-    if (bestProjDist > 600 && directDistToBoard > 600) {
+    // If bus is too far from the corridor (> 800m) and far from boarding stop, skip it
+    if (bestProjDist > 800 && directDistToBoard > 800) {
       continue;
     }
 
-    // Determine if bus is strictly before or has passed the boarding stop
+    // Compute the bus's cumulative position along the route
+    let sBus = 0;
+    if (bestSegIdx !== -1) {
+      sBus = cumDistances[bestSegIdx] + bestFraction * (segDistances[bestSegIdx] ?? 0);
+    } else {
+      let closestIdx = 0;
+      let minD = Infinity;
+      for (let i = 0; i < stops.length; i++) {
+        const d = distanceMeters(bus, stops[i]);
+        if (d < minD) {
+          minD = d;
+          closestIdx = i;
+        }
+      }
+      sBus = cumDistances[closestIdx] ?? 0;
+    }
+
+    const deltaMeters = sBoard - sBus;
+
+    // Determine state: at stop, approaching, or passed
+    let isAtStop = false;
     let hasPassed = false;
     let distRemaining = 0;
 
-    if (bestSegIdx !== -1) {
-      if (bestSegIdx < boardIdx - 1) {
-        // Bus is on an earlier segment approaching the stop
-        const remainingOnCurrentSeg = (1 - bestFraction) * segDistances[bestSegIdx];
-        let remainingIntermediary = 0;
-        for (let k = bestSegIdx + 1; k < boardIdx; k++) {
-          remainingIntermediary += segDistances[k];
-        }
-        distRemaining = Math.round(remainingOnCurrentSeg + remainingIntermediary);
-      } else if (bestSegIdx === boardIdx - 1) {
-        // Bus is on the segment immediately arriving at boardStop
-        distRemaining = Math.round((1 - bestFraction) * segDistances[bestSegIdx]);
-        // If within 40m, consider arrived at stop
-        if (distRemaining <= 40) {
-          distRemaining = 0;
-        }
-      } else {
-        // bestSegIdx >= boardIdx: The bus is on a segment AFTER the boarding stop!
-        // It has passed the stop and is moving away from it.
-        hasPassed = true;
-      }
+    if (directDistToBoard <= 45 || (deltaMeters >= -45 && deltaMeters <= 45)) {
+      isAtStop = true;
+      distRemaining = 0;
+    } else if (deltaMeters > 45 && (bestSegIdx === -1 || bestSegIdx <= boardIdx)) {
+      distRemaining = Math.round(deltaMeters);
     } else {
-      // Fallback if less than 2 stops
-      if (directDistToBoard <= 50) {
-        distRemaining = 0;
-      } else {
-        distRemaining = Math.round(directDistToBoard);
-      }
+      hasPassed = true;
     }
 
     // Check if the bus has already passed
@@ -246,7 +249,7 @@ export function calculateLiveTripEta(
     const speedMpm = (effectiveSpeedKmh * 1000) / 60;
 
     let minutes = 0;
-    if (distRemaining > 45) {
+    if (!isAtStop && distRemaining > 45) {
       minutes = Math.max(1, Math.round(distRemaining / speedMpm));
     }
 
@@ -265,7 +268,7 @@ export function calculateLiveTripEta(
 
   if (approaching.length > 0) {
     const lead = approaching[0];
-    const isAtStop = lead.distanceMeters <= 50 || lead.minutes <= 0;
+    const isAtStop = lead.distanceMeters <= 45 || lead.minutes <= 0;
     const etaMinutes = isAtStop ? 0 : lead.minutes;
     const destArrivalDate = new Date(nowMs + (etaMinutes + transitDurationMinutes) * 60000);
 
@@ -356,10 +359,21 @@ export function useRealtimeTripEta(
   }, []);
 
   return useMemo(() => {
-    const stops = activeTrip?.stops || plannedTrip?.legs[0]?.trip?.stops || [];
     const targetBoardStop = boardStop || plannedTrip?.originStop || null;
+    const fullTrip = plannedTrip?.fullTrip || plannedTrip?.legs?.[0]?.fullTrip;
+    const fullStops = fullTrip?.stops && fullTrip.stops.length > 0 ? fullTrip.stops : null;
+    const activeStops = activeTrip?.stops && activeTrip.stops.length > 0 ? activeTrip.stops : null;
+    const fallbackStops = plannedTrip?.legs?.[0]?.trip?.stops && plannedTrip.legs[0].trip.stops.length > 0 ? plannedTrip.legs[0].trip.stops : [];
+
+    // CRITICAL: Always prioritize the full line stops (from start of the line),
+    // so incoming vehicles driving along earlier stops before the boarding stop
+    // are accurately tracked, projected, and matched without being sliced out!
+    const stops = (fullStops && fullStops.length >= (activeStops?.length || 0))
+      ? fullStops
+      : (activeStops && activeStops.length > fallbackStops.length ? activeStops : (fullStops || fallbackStops || []));
+
     const transitDuration = plannedTrip?.transitMinutes || plannedTrip?.totalMinutes || 24;
-    const direction = activeTrip?.directionType;
+    const direction = activeTrip?.directionType || fullTrip?.directionType;
 
     const computed = calculateLiveTripEta(
       stops,
@@ -370,15 +384,23 @@ export function useRealtimeTripEta(
       direction
     );
 
-    // If live calculation yields no buses but plannedTrip had a recent estimate,
-    // fallback gracefully to plannedTrip values if still within valid window
+    // If live calculation yields no buses but plannedTrip had an estimate,
+    // dynamically count down from creation time so values are NEVER frozen/static!
     if (computed.status === 'no_buses' && plannedTrip?.etaMinutes) {
+      const initialEta = plannedTrip.etaMinutes;
+      const createdAt = plannedTrip.createdAt || now;
+      const elapsedMinutes = Math.floor(Math.max(0, now - createdAt) / 60000);
+      const dynamicEtaMinutes = Math.max(1, initialEta - elapsedMinutes);
+      const dynamicPassageTime = formatManausTime(new Date(now + dynamicEtaMinutes * 60000));
+      const dynamicDestMinutes = dynamicEtaMinutes + transitDuration;
+      const dynamicDestTime = formatManausTime(new Date(now + dynamicDestMinutes * 60000));
+
       return {
         ...computed,
-        etaMinutes: plannedTrip.etaMinutes,
-        etaTime: plannedTrip.etaTime || computed.etaTime,
-        destEtaMinutes: plannedTrip.destEtaMinutes || computed.destEtaMinutes,
-        destEtaTime: plannedTrip.destEtaTime || computed.destEtaTime
+        etaMinutes: dynamicEtaMinutes,
+        etaTime: dynamicPassageTime,
+        destEtaMinutes: dynamicDestMinutes,
+        destEtaTime: dynamicDestTime
       };
     }
 
