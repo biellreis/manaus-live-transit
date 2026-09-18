@@ -3929,7 +3929,7 @@ body:has(dialog[open]) {
 
 /* 4. APPLE CLOSER LOOK / DUAL-IPHONE 3D SHOWCASE */
 .apple-closer-look-section {
-  padding: 130px 0 120px;
+  padding: 100px 0 90px;
   background: #000000;
   position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -3944,7 +3944,7 @@ body:has(dialog[open]) {
 
 .closer-look-header {
   text-align: left;
-  margin-bottom: 48px;
+  margin-bottom: 36px;
   max-width: 720px;
 }
 
@@ -3971,7 +3971,7 @@ body:has(dialog[open]) {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 22px;
   z-index: 10;
 }
 
@@ -4040,7 +4040,7 @@ body:has(dialog[open]) {
   background: rgba(18, 18, 22, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  padding: 24px 26px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -4066,7 +4066,7 @@ body:has(dialog[open]) {
 .closer-look-stage-col {
   flex: 1;
   max-width: 840px;
-  height: 740px;
+  height: 680px;
   position: relative;
   perspective: 1600px;
   display: flex;
@@ -4089,8 +4089,8 @@ body:has(dialog[open]) {
 
 .apple-dual-phones-rig {
   position: relative;
-  width: 720px;
-  height: 720px;
+  width: 700px;
+  height: 680px;
   transform-style: preserve-3d;
   display: flex;
   align-items: center;
@@ -4120,15 +4120,15 @@ body:has(dialog[open]) {
   position: absolute;
   transform-style: preserve-3d;
   isolation: isolate;
-  border-radius: 54px;
+  border-radius: 52px;
 }
 
 /* Phone 1: Rear Dark Titanium Device */
 .phone-rear {
-  width: 325px;
-  height: 675px;
-  left: 40px;
-  top: 30px;
+  width: 310px;
+  height: 645px;
+  left: 35px;
+  top: 25px;
   z-index: 2;
   transform: translate3d(-30px, 0, -40px) rotateY(16deg) rotateX(2deg);
   transition: transform 0.25s ease-out;
@@ -4137,7 +4137,7 @@ body:has(dialog[open]) {
 .phone-titanium-case {
   position: absolute;
   inset: -4px;
-  border-radius: 58px;
+  border-radius: 56px;
   background: linear-gradient(
     135deg,
     #58585c 0%,
@@ -4159,7 +4159,7 @@ body:has(dialog[open]) {
 .phone-chamfer-edge {
   position: absolute;
   inset: -1px;
-  border-radius: 55px;
+  border-radius: 53px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   z-index: 2;
   pointer-events: none;
@@ -4184,7 +4184,7 @@ body:has(dialog[open]) {
 .phone-backplate {
   position: absolute;
   inset: 0;
-  border-radius: 54px;
+  border-radius: 52px;
   background: radial-gradient(circle at 45% 30%, #28282b 0%, #161618 60%, #0c0c0e 100%);
   overflow: hidden;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
@@ -4318,10 +4318,10 @@ body:has(dialog[open]) {
 
 /* Phone 2: Front OLED Device with Super Retina XDR Display */
 .phone-front {
-  width: 335px;
-  height: 695px;
-  right: 50px;
-  bottom: 10px;
+  width: 320px;
+  height: 665px;
+  right: 45px;
+  bottom: 12px;
   z-index: 5;
   transform: translate3d(50px, -15px, 50px) rotateY(-8deg) rotateX(1deg);
   transition: transform 0.25s ease-out;
@@ -4342,7 +4342,7 @@ body:has(dialog[open]) {
 .phone-screen-frame {
   position: absolute;
   inset: 0;
-  border-radius: 54px;
+  border-radius: 52px;
   background: #000000;
   border: 3.5px solid #000000;
   overflow: hidden;
@@ -4415,7 +4415,7 @@ body:has(dialog[open]) {
 .front-glass-specular {
   position: absolute;
   inset: 0;
-  border-radius: 51px;
+  border-radius: 49px;
   background: linear-gradient(
     125deg,
     rgba(255, 255, 255, 0.18) 0%,
@@ -4429,7 +4429,7 @@ body:has(dialog[open]) {
 .front-screen-canvas {
   width: 100%;
   height: 100%;
-  border-radius: 50px;
+  border-radius: 48px;
   overflow: hidden;
   background: #000000;
   position: relative;
@@ -4446,9 +4446,9 @@ body:has(dialog[open]) {
 
 .closer-spatial-badge {
   position: absolute;
-  bottom: 80px;
-  left: -28px;
-  z-index: 30;
+  bottom: 110px;
+  left: -48px;
+  z-index: 35;
   background: rgba(20, 20, 24, 0.88);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
