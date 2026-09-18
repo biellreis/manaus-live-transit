@@ -346,18 +346,40 @@ if (mapVideo) {
   updateButtons();
 })();
 
-// 3. CLOSER LOOK 3D INTERACTIVE PRODUCT VIEWER & SCREEN SWITCHER
+// 3. CLOSER LOOK DUAL-IPHONE 3D INTERACTIVE SHOWCASE & FEATURE RAIL
 (() => {
-  const stage = document.getElementById("closerLookStage");
-  const pivot = document.getElementById("closerLookPivot");
-  const glare = document.getElementById("closerLookGlassGlare");
+  const section = document.getElementById("closer-look");
+  const stageCol = document.getElementById("closerLookStageWrap");
+  const dualRig = document.getElementById("closerLookDualRig");
+  const phoneRear = document.getElementById("closerLookPhoneRear");
+  const phoneFront = document.getElementById("closerLookPhoneFront");
+  const glare = document.getElementById("closerLookGlareFront");
+  const badge = document.getElementById("closerSpatialBadge");
   const screenImg = document.getElementById("closerLookScreenImg") as HTMLImageElement | null;
-  const captionEl = document.getElementById("closerLookCaption");
-  const tabPills = document.querySelectorAll<HTMLButtonElement>(".apple-tab-pill");
-  if (!stage || !pivot) return;
+  const detailTitle = document.getElementById("closerLookDetailTitle");
+  const detailDesc = document.getElementById("closerLookDetailDesc");
+  const badgeNum = document.getElementById("closerBadgeNum");
+  const badgeHeading = document.getElementById("closerBadgeHeading");
+  const railItems = document.querySelectorAll<HTMLButtonElement>(".apple-rail-item");
 
+  if (!section) return;
+
+  // Emergence on viewport entry (Scroll-triggered Apple reveal)
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          section.classList.add("is-in-view");
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  observer.observe(section);
+
+  // 3D Parallax Mouse Tracking for Dual Phones Rig
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!reduced) {
+  if (!reduced && stageCol && dualRig) {
     let targetX = 0;
     let targetY = 0;
     let currX = 0;
@@ -369,23 +391,43 @@ if (mapVideo) {
     const loop = () => {
       currX = lerp(currX, targetX, 0.08);
       currY = lerp(currY, targetY, 0.08);
-      pivot.style.transform = `rotateX(${currY.toFixed(2)}deg) rotateY(${currX.toFixed(2)}deg)`;
-      if (glare) {
-        glare.style.transform = `rotate(-25deg) translate(${(-currX * 5).toFixed(1)}px, ${(-currY * 5).toFixed(1)}px)`;
+
+      // Rotate whole dual rig slightly
+      dualRig.style.transform = `scale(1) rotateX(${(-currY * 12).toFixed(2)}deg) rotateY(${(currX * 14).toFixed(2)}deg)`;
+
+      // Rear phone subtle counter-parallax
+      if (phoneRear) {
+        phoneRear.style.transform = `translate3d(${(-30 - currX * 12).toFixed(1)}px, ${(-currY * 8).toFixed(1)}px, -40px) rotateY(${(16 + currX * 6).toFixed(2)}deg) rotateX(${(2 - currY * 4).toFixed(2)}deg)`;
       }
+
+      // Front phone dynamic foreground parallax
+      if (phoneFront) {
+        phoneFront.style.transform = `translate3d(${(50 + currX * 22).toFixed(1)}px, ${(-15 + currY * 14).toFixed(1)}px, 50px) rotateY(${(-8 + currX * 10).toFixed(2)}deg) rotateX(${(1 - currY * 6).toFixed(2)}deg)`;
+      }
+
+      // Interactive Glare on front phone
+      if (glare) {
+        glare.style.transform = `rotate(-25deg) translate(${(-currX * 18).toFixed(1)}px, ${(-currY * 18).toFixed(1)}px)`;
+      }
+
+      // Spatial floating badge parallax
+      if (badge) {
+        badge.style.transform = `translateZ(60px) translate3d(${(currX * 26).toFixed(1)}px, ${(currY * 20).toFixed(1)}px, 0)`;
+      }
+
       animId = requestAnimationFrame(loop);
     };
 
-    stage.addEventListener("mousemove", (e) => {
-      const rect = stage.getBoundingClientRect();
+    stageCol.addEventListener("mousemove", (e) => {
+      const rect = stageCol.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-      targetX = x * 22;
-      targetY = -y * 16;
+      targetX = Math.max(-1, Math.min(1, x));
+      targetY = Math.max(-1, Math.min(1, y));
       if (!animId) animId = requestAnimationFrame(loop);
     });
 
-    stage.addEventListener("mouseleave", () => {
+    stageCol.addEventListener("mouseleave", () => {
       targetX = 0;
       targetY = 0;
     });
@@ -393,32 +435,48 @@ if (mapVideo) {
     animId = requestAnimationFrame(loop);
   }
 
-  // Tab Pill screen switching with smooth Apple cross-dissolve
-  tabPills.forEach((btn) => {
+  // Feature Hotspot Rail Interactive Switching
+  railItems.forEach((btn) => {
     btn.addEventListener("click", () => {
       const screen = btn.dataset.screen;
-      const caption = btn.dataset.caption;
+      const title = btn.dataset.title;
+      const desc = btn.dataset.desc;
+      const bNum = btn.dataset.badgeNum;
+      const bText = btn.dataset.badgeText;
       if (!screen || !screenImg) return;
 
-      tabPills.forEach((b) => {
+      railItems.forEach((b) => {
         const active = b === btn;
         b.classList.toggle("active", active);
         b.setAttribute("aria-selected", String(active));
+        const icon = b.querySelector(".rail-hotspot-icon");
+        if (icon) icon.textContent = active ? "•" : "+";
       });
 
-      screenImg.style.opacity = "0.3";
-      if (captionEl && caption) {
-        captionEl.style.opacity = "0.3";
-      }
+      // Smooth cross-fade of active OLED screen
+      screenImg.style.opacity = "0.2";
+      if (detailTitle && title) detailTitle.style.opacity = "0.3";
+      if (detailDesc && desc) detailDesc.style.opacity = "0.3";
 
       const img = new Image();
       img.src = `/screens/${screen}.webp`;
       img.onload = () => {
         screenImg.src = img.src;
         screenImg.style.opacity = "1";
-        if (captionEl && caption) {
-          captionEl.textContent = caption;
-          captionEl.style.opacity = "1";
+
+        if (detailTitle && title) {
+          detailTitle.textContent = title;
+          detailTitle.style.opacity = "1";
+        }
+        if (detailDesc && desc) {
+          detailDesc.textContent = desc;
+          detailDesc.style.opacity = "1";
+        }
+        if (badgeNum && bNum) {
+          badgeNum.textContent = bNum;
+        }
+        if (badgeHeading && bText) {
+          badgeHeading.textContent = bText;
         }
       };
     });

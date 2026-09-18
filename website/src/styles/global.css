@@ -3927,19 +3927,25 @@ body:has(dialog[open]) {
   border-radius: 4px;
 }
 
-/* 4. APPLE CLOSER LOOK / 3D PRODUCT VIEWER */
+/* 4. APPLE CLOSER LOOK / DUAL-IPHONE 3D SHOWCASE */
 .apple-closer-look-section {
-  padding: 120px 0 110px;
+  padding: 130px 0 120px;
   background: #000000;
-  text-align: center;
   position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
 .closer-look-container {
-  max-width: 1024px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
+}
+
+.closer-look-header {
+  text-align: left;
+  margin-bottom: 48px;
+  max-width: 720px;
 }
 
 .apple-eyebrow-accent {
@@ -3948,185 +3954,447 @@ body:has(dialog[open]) {
   letter-spacing: 0.05em;
   color: #2997ff;
   margin-bottom: 8px;
+  text-transform: uppercase;
 }
 
-.closer-look-stage {
+.closer-look-showcase {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  position: relative;
+}
+
+/* Left Column: Feature Hotspot Rail */
+.closer-look-rail-col {
+  width: 380px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  z-index: 10;
+}
+
+.apple-feature-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.apple-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 20px;
+  border-radius: 980px;
+  background: rgba(30, 30, 35, 0.5);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #86868b;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
   width: 100%;
-  max-width: 700px;
-  height: 560px;
-  margin: 36px auto 28px;
-  perspective: 1200px;
+  letter-spacing: -0.01em;
+}
+
+.apple-rail-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5f5f7;
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateX(4px);
+}
+
+.apple-rail-item.active {
+  background: #f5f5f7;
+  color: #000000;
+  border-color: #f5f5f7;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
+  transform: translateX(6px);
+}
+
+.rail-hotspot-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.closer-look-floor-shadow {
+.apple-rail-item.active .rail-hotspot-icon {
+  background: #0071e3;
+  color: #ffffff;
+}
+
+.closer-look-feature-detail {
+  background: rgba(18, 18, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.feature-detail-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f5f5f7;
+  letter-spacing: -0.02em;
+}
+
+.feature-detail-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #86868b;
+  letter-spacing: -0.01em;
+}
+
+/* Right Column: Massive Dual-Phone 3D Stage */
+.closer-look-stage-col {
+  flex: 1;
+  max-width: 840px;
+  height: 740px;
+  position: relative;
+  perspective: 1600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closer-look-studio-shadow {
   position: absolute;
-  bottom: 20px;
+  bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  width: 440px;
-  height: 80px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 75%);
-  filter: blur(20px);
+  width: 760px;
+  height: 110px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 75%);
+  filter: blur(28px);
   pointer-events: none;
+  z-index: 1;
 }
 
-.closer-look-phone-pivot {
+.apple-dual-phones-rig {
   position: relative;
-  z-index: 2;
+  width: 720px;
+  height: 720px;
   transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   will-change: transform;
   cursor: grab;
+  transition: transform 0.12s ease-out;
 }
 
-.closer-look-phone-pivot:active {
+.apple-dual-phones-rig:active {
   cursor: grabbing;
 }
 
-.apple-inspection-device {
-  width: 290px;
-  height: 595px;
-  position: relative;
-  border-radius: 48px;
-  transform-style: preserve-3d;
-  isolation: isolate;
+/* Scroll-Driven Emergence Animation */
+.apple-closer-look-section .apple-dual-phones-rig {
+  transform: scale(0.9) translateY(60px) rotateX(10deg);
+  opacity: 0.2;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
 }
 
-.inspection-chassis {
+.apple-closer-look-section.is-in-view .apple-dual-phones-rig {
+  transform: scale(1) translateY(0) rotateX(0);
+  opacity: 1;
+}
+
+.dual-phone {
+  position: absolute;
+  transform-style: preserve-3d;
+  isolation: isolate;
+  border-radius: 54px;
+}
+
+/* Phone 1: Rear Dark Titanium Device */
+.phone-rear {
+  width: 325px;
+  height: 675px;
+  left: 40px;
+  top: 30px;
+  z-index: 2;
+  transform: translate3d(-30px, 0, -40px) rotateY(16deg) rotateX(2deg);
+  transition: transform 0.25s ease-out;
+}
+
+.phone-titanium-case {
   position: absolute;
   inset: -4px;
-  border-radius: 52px;
+  border-radius: 58px;
   background: linear-gradient(
     135deg,
-    #636366 0%,
-    #2c2c2e 20%,
-    #8e8e93 40%,
+    #58585c 0%,
+    #222224 20%,
+    #707078 40%,
     #1c1c1e 56%,
-    #48484a 74%,
-    #8e8e93 90%,
-    #2c2c2e 100%
+    #4a4a4e 74%,
+    #707078 90%,
+    #222224 100%
   );
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.3),
     inset 0 1.5px 2px rgba(255, 255, 255, 0.4),
-    0 30px 70px -10px rgba(0, 0, 0, 0.95);
+    0 35px 80px rgba(0, 0, 0, 0.95);
   z-index: 1;
   pointer-events: none;
 }
 
-.inspection-chamfer {
+.phone-chamfer-edge {
   position: absolute;
   inset: -1px;
-  border-radius: 49px;
+  border-radius: 55px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   z-index: 2;
   pointer-events: none;
 }
 
-.insp-band {
+.p-band {
   position: absolute;
   background: #1c1c1e;
   border: 0.5px solid rgba(255, 255, 255, 0.08);
   z-index: 3;
 }
-.insp-tl { left: -4px; top: 76px; width: 4px; height: 3px; }
-.insp-tr { right: -4px; top: 76px; width: 4px; height: 3px; }
-.insp-bl { left: -4px; bottom: 76px; width: 4px; height: 3px; }
-.insp-br { right: -4px; bottom: 76px; width: 4px; height: 3px; }
+.p-band-tl { left: -4px; top: 80px; width: 4px; height: 3px; }
+.p-band-tr { right: -4px; top: 80px; width: 4px; height: 3px; }
+.p-band-bl { left: -4px; bottom: 80px; width: 4px; height: 3px; }
+.p-band-br { right: -4px; bottom: 80px; width: 4px; height: 3px; }
 
-.insp-btn-action {
-  position: absolute;
-  left: -7px;
-  top: 104px;
-  width: 4px;
-  height: 22px;
-  background: #48484a;
-  border-radius: 2px 0 0 2px;
-}
-.insp-btn-vol-up {
-  position: absolute;
-  left: -7px;
-  top: 140px;
-  width: 4px;
-  height: 42px;
-  background: #48484a;
-  border-radius: 2px 0 0 2px;
-}
-.insp-btn-vol-down {
-  position: absolute;
-  left: -7px;
-  top: 192px;
-  width: 4px;
-  height: 42px;
-  background: #48484a;
-  border-radius: 2px 0 0 2px;
-}
-.insp-btn-power {
-  position: absolute;
-  right: -7px;
-  top: 148px;
-  width: 4px;
-  height: 60px;
-  background: #48484a;
-  border-radius: 0 2px 2px 0;
-}
+.p-btn-action { position: absolute; left: -7px; top: 110px; width: 4px; height: 24px; background: #48484a; border-radius: 2px 0 0 2px; }
+.p-btn-vol-up { position: absolute; left: -7px; top: 150px; width: 4px; height: 46px; background: #48484a; border-radius: 2px 0 0 2px; }
+.p-btn-vol-down { position: absolute; left: -7px; top: 206px; width: 4px; height: 46px; background: #48484a; border-radius: 2px 0 0 2px; }
+.p-btn-power { position: absolute; right: -7px; top: 160px; width: 4px; height: 68px; background: #48484a; border-radius: 0 2px 2px 0; }
 
-.inspection-screen-bezel {
+.phone-backplate {
   position: absolute;
   inset: 0;
-  border-radius: 48px;
-  background: #000000;
+  border-radius: 54px;
+  background: radial-gradient(circle at 45% 30%, #28282b 0%, #161618 60%, #0c0c0e 100%);
   overflow: hidden;
-  border: 3px solid #000000;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+  z-index: 3;
+}
+
+.backplate-glass-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.mano-monogram-emboss {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.12));
+}
+
+/* Sculpted Triple Camera Plateau */
+.camera-island-plateau {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 154px;
+  height: 166px;
+  border-radius: 40px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(28, 28, 32, 0.95) 40%, rgba(14, 14, 16, 0.98) 100%);
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.25), 0 10px 28px rgba(0, 0, 0, 0.85);
+  z-index: 5;
+}
+
+.camera-lens {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.lens-main { top: 14px; left: 14px; }
+.lens-ultra { bottom: 14px; left: 14px; }
+.lens-tele { top: 52px; right: 14px; }
+
+.lens-metal-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3.5px solid #4a4a4e;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), 0 3px 8px rgba(0, 0, 0, 0.85);
+  background: #18181a;
+}
+
+.lens-glass-element {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1e1b4b 0%, #030712 75%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+}
+
+.lens-iris-pupil {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #050508;
+  box-shadow: 0 0 2px rgba(96, 165, 250, 0.4);
+}
+
+.lens-antireflective-glint {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(96, 165, 250, 0.75);
+  filter: blur(0.8px);
+}
+
+.camera-flash-module {
+  position: absolute;
+  top: 18px;
+  right: 26px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #242426;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flash-inner-diffuser {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fef08a 0%, #ca8a04 100%);
+}
+
+.camera-lidar-module {
+  position: absolute;
+  bottom: 20px;
+  right: 26px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.camera-mic-aperture {
+  position: absolute;
+  bottom: 44px;
+  right: 17px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #050507;
+}
+
+/* Phone 2: Front OLED Device with Super Retina XDR Display */
+.phone-front {
+  width: 335px;
+  height: 695px;
+  right: 50px;
+  bottom: 10px;
+  z-index: 5;
+  transform: translate3d(50px, -15px, 50px) rotateY(-8deg) rotateX(1deg);
+  transition: transform 0.25s ease-out;
+}
+
+.phone-front-earpiece {
+  position: absolute;
+  top: 3.5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 2.5px;
+  background: #000000;
+  border-radius: 2px;
+  z-index: 20;
+}
+
+.phone-screen-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 54px;
+  background: #000000;
+  border: 3.5px solid #000000;
+  overflow: hidden;
   z-index: 4;
 }
 
-.inspection-island {
+.front-dynamic-island {
   position: absolute;
-  top: 10px;
+  top: 11px;
   left: 50%;
   transform: translateX(-50%);
-  width: 86px;
-  height: 24px;
+  width: 96px;
+  height: 26px;
   background: #000000;
-  border-radius: 18px;
+  border-radius: 20px;
   z-index: 25;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 10px;
-  gap: 6px;
+  padding-right: 12px;
+  gap: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
 }
 
-.insp-lens {
-  width: 8px;
-  height: 8px;
+.island-cam {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: #1e293b;
+  background: radial-gradient(circle at 35% 35%, #1e293b 0%, #030712 85%);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
   position: relative;
 }
 
-.insp-lens-dot {
+.cam-glint {
   position: absolute;
   top: 1.5px;
   left: 1.5px;
-  width: 2px;
-  height: 2px;
+  width: 2.5px;
+  height: 2.5px;
   border-radius: 50%;
-  background: #60a5fa;
+  background: rgba(96, 165, 250, 0.8);
+  filter: blur(0.3px);
 }
 
-.insp-sensor {
+.island-sensor {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #09090b;
+  background: #08080a;
 }
 
-.inspection-glass-glare {
+.front-glass-glare {
   position: absolute;
   top: -80%;
   left: -80%;
@@ -4144,84 +4412,110 @@ body:has(dialog[open]) {
   transition: transform 0.1s ease-out;
 }
 
-.inspection-specular-sheen {
+.front-glass-specular {
   position: absolute;
   inset: 0;
-  border-radius: 46px;
+  border-radius: 51px;
   background: linear-gradient(
     125deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0.035) 28%,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.04) 28%,
     transparent 54%
   );
   z-index: 14;
   pointer-events: none;
 }
 
-.inspection-screen-area {
+.front-screen-canvas {
   width: 100%;
   height: 100%;
-  border-radius: 45px;
+  border-radius: 50px;
   overflow: hidden;
   background: #000000;
   position: relative;
   z-index: 5;
 }
 
-.inspection-screen-img {
+.front-screen-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.22s ease;
 }
 
-.closer-look-controls {
+.closer-spatial-badge {
+  position: absolute;
+  bottom: 80px;
+  left: -28px;
+  z-index: 30;
+  background: rgba(20, 20, 24, 0.88);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 10px 16px;
   display: flex;
-  justify-content: center;
+  align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 24px;
-}
-
-.apple-tab-pill {
-  border-radius: 980px;
-  padding: 9px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #86868b;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  letter-spacing: -0.01em;
-}
-
-.apple-tab-pill:hover {
-  background: rgba(255, 255, 255, 0.15);
   color: #f5f5f7;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85);
+  transform: translateZ(60px);
+  pointer-events: none;
+  transition: all 0.25s ease;
 }
 
-.apple-tab-pill.active {
-  background: #f5f5f7;
-  color: #000000;
-  border-color: #f5f5f7;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+.closer-spatial-badge .badge-num {
+  background: #0071e3;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
-.closer-look-caption-wrap {
-  margin-top: 20px;
-  min-height: 48px;
+.closer-spatial-badge .badge-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
 }
 
-.closer-look-caption {
-  font-size: 16px;
-  color: #86868b;
-  max-width: 580px;
-  margin: 0 auto;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  transition: opacity 0.2s ease;
+@media (max-width: 1100px) {
+  .closer-look-showcase {
+    flex-direction: column;
+    align-items: center;
+  }
+  .closer-look-rail-col {
+    width: 100%;
+    max-width: 600px;
+  }
+  .closer-look-stage-col {
+    width: 100%;
+    max-width: 680px;
+    height: 640px;
+  }
+  .apple-dual-phones-rig {
+    width: 100%;
+    transform: scale(0.9);
+  }
+}
+
+@media (max-width: 768px) {
+  .closer-look-stage-col {
+    height: 520px;
+  }
+  .apple-dual-phones-rig {
+    transform: scale(0.72);
+  }
+  .phone-rear {
+    display: none;
+  }
+  .phone-front {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 /* 5. AIO DEEP DIVE STAT GRID */

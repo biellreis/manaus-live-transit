@@ -3,129 +3,238 @@
 
 <section class="apple-closer-look-section" id="closer-look" aria-labelledby="closer-look-heading">
   <div class="closer-look-container">
+    <!-- Apple Header -->
     <div class="closer-look-header">
-      <p class="apple-eyebrow-accent">VISÃO INTERATIVA 3D</p>
+      <p class="apple-eyebrow-accent">DESIGN & ENGENHARIA</p>
       <h2 id="closer-look-heading" class="apple-section-headline">
         Dê uma olhada de perto.
       </h2>
       <p class="apple-section-subhead">
-        Passe o cursor sobre o aparelho para inspecionar cada ângulo em perspectiva 3D e alterne entre as telas principais do aplicativo.
+        Forjado em titânio aeroespacial. Construído para dominar cada rota e parada de Manaus.
       </p>
     </div>
 
-    <!-- 3D Inspection Stage -->
-    <div class="closer-look-stage" id="closerLookStage">
-      <div class="closer-look-floor-shadow" aria-hidden="true"></div>
+    <!-- Apple 2-Column Showcase Layout (Interactive Rail Left + Dual 3D Phones Right) -->
+    <div class="closer-look-showcase">
+      <!-- Left Column: Apple Feature Hotspot Rail -->
+      <div class="closer-look-rail-col">
+        <div class="apple-feature-rail" role="tablist" aria-label="Recursos do Manô para inspeção">
+          <button
+            class="apple-rail-item active"
+            role="tab"
+            aria-selected="true"
+            data-screen="ida"
+            data-title="Linhas Expressas e Troncos"
+            data-desc="Monitore em tempo real as frotas da Linha 640 e dos principais corredores expressos da Constantino Nery e Djalma Batista."
+            data-badge-num="640"
+            data-badge-text="Chegando em 3 min"
+          >
+            <span class="rail-hotspot-icon">•</span>
+            <span class="rail-hotspot-label">Linhas Expressas (640)</span>
+          </button>
 
-      <!-- 3D Device Pivot with Real-time Physics -->
-      <div class="closer-look-phone-pivot" id="closerLookPivot">
-        <div class="apple-inspection-device" aria-hidden="true">
-          <!-- Titanium Chamfer Edge -->
-          <div class="inspection-chassis"></div>
-          <div class="inspection-chamfer"></div>
+          <button
+            class="apple-rail-item"
+            role="tab"
+            aria-selected="false"
+            data-screen="planner"
+            data-title="Planejador Ponto a Ponto"
+            data-desc="Digite de onde você sai e onde quer chegar. O algoritmo calcula a caminhada exata e indica onde embarcar sem perda de tempo."
+            data-badge-num="ROTA"
+            data-badge-text="Menor caminhada a pé"
+          >
+            <span class="rail-hotspot-icon">+</span>
+            <span class="rail-hotspot-label">Planejador de Viagens</span>
+          </button>
 
-          <!-- Antenna bands -->
-          <span class="insp-band insp-tl"></span>
-          <span class="insp-band insp-tr"></span>
-          <span class="insp-band insp-bl"></span>
-          <span class="insp-band insp-br"></span>
+          <button
+            class="apple-rail-item"
+            role="tab"
+            aria-selected="false"
+            data-screen="journey"
+            data-title="Itinerário no Mapa Vetorial"
+            data-desc="Mapa com todas as estações e paradas georreferenciadas. Saiba onde o ônibus está e qual a sua próxima parada."
+            data-badge-num="MAPA"
+            data-badge-text="34 Paradas Mapeadas"
+          >
+            <span class="rail-hotspot-icon">+</span>
+            <span class="rail-hotspot-label">Trajetos & Paradas</span>
+          </button>
 
-          <!-- Hardware Buttons -->
-          <div class="insp-btn-action"></div>
-          <div class="insp-btn-vol-up"></div>
-          <div class="insp-btn-vol-down"></div>
-          <div class="insp-btn-power"></div>
+          <button
+            class="apple-rail-item"
+            role="tab"
+            aria-selected="false"
+            data-screen="terminals"
+            data-title="Terminais de Integração T1 a T5"
+            data-desc="Acesso direto aos grandes nós de integração urbana de Manaus: T1, T2, T3, T4 e T5 com todas as conexões disponíveis."
+            data-badge-num="T1-T5"
+            data-badge-text="5 Terminais Mapeados"
+          >
+            <span class="rail-hotspot-icon">+</span>
+            <span class="rail-hotspot-label">Terminais Urbanos</span>
+          </button>
 
-          <!-- Display & Bezel -->
-          <div class="inspection-screen-bezel">
-            <!-- Dynamic Island -->
-            <div class="inspection-island">
-              <div class="insp-lens">
-                <span class="insp-lens-dot"></span>
+          <button
+            class="apple-rail-item"
+            role="tab"
+            aria-selected="false"
+            data-screen="alerts"
+            data-title="Alertas de Trânsito em Tempo Real"
+            data-desc="Interdições na pista, mudanças de itinerário por obras e avisos meteorológicos da Defesa Civil de Manaus na palma da mão."
+            data-badge-num="AVISO"
+            data-badge-text="Trânsito em Tempo Real"
+          >
+            <span class="rail-hotspot-icon">+</span>
+            <span class="rail-hotspot-label">Alertas da Cidade</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Caption Details Box -->
+        <div class="closer-look-feature-detail">
+          <h3 id="closerLookDetailTitle" class="feature-detail-title">Linhas Expressas e Troncos</h3>
+          <p id="closerLookDetailDesc" class="feature-detail-desc">
+            Monitore em tempo real as frotas da Linha 640 e dos principais corredores expressos da Constantino Nery e Djalma Batista.
+          </p>
+          <a href="#destaques" class="apple-text-link">
+            <span>Ver em funcionamento</span>
+            <span class="link-chevron" aria-hidden="true">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Massive Dual-iPhone 3D Stage -->
+      <div class="closer-look-stage-col" id="closerLookStageWrap">
+        <!-- Dramatic Floor Shadow -->
+        <div class="closer-look-studio-shadow" aria-hidden="true"></div>
+
+        <!-- 3D Dual Rig -->
+        <div class="apple-dual-phones-rig" id="closerLookDualRig">
+          <!-- PHONE 1: BACK DEVICE (Dark Titanium with Triple Camera Island) -->
+          <div class="dual-phone phone-rear" id="closerLookPhoneRear" aria-hidden="true">
+            <!-- Titanium Unibody & Rim -->
+            <div class="phone-titanium-case"></div>
+            <div class="phone-chamfer-edge"></div>
+
+            <!-- Antenna Bands -->
+            <span class="p-band p-band-tl"></span>
+            <span class="p-band p-band-tr"></span>
+            <span class="p-band p-band-bl"></span>
+            <span class="p-band p-band-br"></span>
+
+            <!-- Hardware Buttons -->
+            <div class="p-btn-action"></div>
+            <div class="p-btn-vol-up"></div>
+            <div class="p-btn-vol-down"></div>
+            <div class="p-btn-power"></div>
+
+            <!-- Matte Frosted Backplate with Embossed Monogram -->
+            <div class="phone-backplate">
+              <div class="backplate-glass-sheen"></div>
+              <div class="mano-monogram-emboss">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                  <path d="M8 30C12 30 14 20 18 20C22 20 24 28 28 28C32 28 34 16 40 16" stroke="rgba(255,255,255,0.22)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </div>
-              <div class="insp-sensor"></div>
+
+              <!-- Sculpted Triple-Camera Plateau -->
+              <div class="camera-island-plateau">
+                <!-- Camera 1: Main Fusion 48MP -->
+                <div class="camera-lens lens-main">
+                  <div class="lens-metal-rim"></div>
+                  <div class="lens-glass-element">
+                    <span class="lens-iris-pupil"></span>
+                    <span class="lens-antireflective-glint"></span>
+                  </div>
+                </div>
+
+                <!-- Camera 2: Ultra Wide 48MP -->
+                <div class="camera-lens lens-ultra">
+                  <div class="lens-metal-rim"></div>
+                  <div class="lens-glass-element">
+                    <span class="lens-iris-pupil"></span>
+                    <span class="lens-antireflective-glint"></span>
+                  </div>
+                </div>
+
+                <!-- Camera 3: 5x Telephoto Periscope -->
+                <div class="camera-lens lens-tele">
+                  <div class="lens-metal-rim"></div>
+                  <div class="lens-glass-element">
+                    <span class="lens-iris-pupil"></span>
+                    <span class="lens-antireflective-glint"></span>
+                  </div>
+                </div>
+
+                <!-- TrueTone Flash Module -->
+                <div class="camera-flash-module">
+                  <div class="flash-inner-diffuser"></div>
+                </div>
+
+                <!-- LiDAR Scanner Module -->
+                <div class="camera-lidar-module"></div>
+
+                <!-- Audio Zoom Microphone -->
+                <div class="camera-mic-aperture"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHONE 2: FRONT DEVICE (Super Retina XDR OLED with Dynamic Island) -->
+          <div class="dual-phone phone-front" id="closerLookPhoneFront" aria-hidden="true">
+            <!-- Titanium Unibody & Edge -->
+            <div class="phone-titanium-case"></div>
+            <div class="phone-chamfer-edge"></div>
+
+            <!-- Antenna Bands -->
+            <span class="p-band p-band-tl"></span>
+            <span class="p-band p-band-tr"></span>
+            <span class="p-band p-band-bl"></span>
+            <span class="p-band p-band-br"></span>
+
+            <!-- Earpiece -->
+            <div class="phone-front-earpiece"></div>
+
+            <!-- Screen Frame & OLED Display -->
+            <div class="phone-screen-frame">
+              <!-- Dynamic Island Pro -->
+              <div class="front-dynamic-island">
+                <div class="island-cam">
+                  <span class="cam-glint"></span>
+                </div>
+                <div class="island-sensor"></div>
+              </div>
+
+              <!-- Interactive Glass Sheen Glare -->
+              <div class="front-glass-glare" id="closerLookGlareFront"></div>
+              <div class="front-glass-specular"></div>
+
+              <!-- Active High-Res Screen -->
+              <div class="front-screen-canvas">
+                <img
+                  id="closerLookScreenImg"
+                  src="/screens/ida.webp"
+                  width="768"
+                  height="1670"
+                  alt="Tela ativa do Manô"
+                  class="front-screen-img"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
             </div>
 
-            <!-- Glare and Sheen Shimmer -->
-            <div class="inspection-glass-glare" id="closerLookGlassGlare"></div>
-            <div class="inspection-specular-sheen"></div>
-
-            <!-- Active Screen (Switches with buttons) -->
-            <div class="inspection-screen-area">
-              <img
-                id="closerLookScreenImg"
-                src="/screens/planner.webp"
-                width="768"
-                height="1670"
-                alt="Tela ativa do Manô"
-                class="inspection-screen-img"
-                loading="lazy"
-                decoding="async"
-              />
+            <!-- Spatial Floating Badge on Front Phone -->
+            <div class="closer-spatial-badge" id="closerSpatialBadge">
+              <span class="badge-num" id="closerBadgeNum">640</span>
+              <div class="badge-text">
+                <span class="pulse-indicator"></span>
+                <strong id="closerBadgeHeading">Chegando em 3 min</strong>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Interactive Apple Pill Control Bar -->
-    <div class="closer-look-controls" role="tablist" aria-label="Selecione uma funcionalidade do Manô para inspecionar">
-      <button
-        class="apple-tab-pill active"
-        role="tab"
-        aria-selected="true"
-        data-screen="planner"
-        data-caption="Digite sua origem e destino. O Manô calcula a rota direta com o menor tempo de caminhada e paradas exatas."
-      >
-        <span>Planejador</span>
-      </button>
-
-      <button
-        class="apple-tab-pill"
-        role="tab"
-        aria-selected="false"
-        data-screen="ida"
-        data-caption="Linha 640 Expressa. Acompanhe a estimativa do próximo ônibus em minutos e a frota em operação."
-      >
-        <span>Linha 640</span>
-      </button>
-
-      <button
-        class="apple-tab-pill"
-        role="tab"
-        aria-selected="false"
-        data-screen="journey"
-        data-caption="Acompanhamento do trajeto no mapa com paradas georreferenciadas e linhas de transferência."
-      >
-        <span>No Mapa</span>
-      </button>
-
-      <button
-        class="apple-tab-pill"
-        role="tab"
-        aria-selected="false"
-        data-screen="terminals"
-        data-caption="Localização e linhas disponíveis nos grandes terminais de integração T1, T2, T3, T4 e T5."
-      >
-        <span>Terminais</span>
-      </button>
-
-      <button
-        class="apple-tab-pill"
-        role="tab"
-        aria-selected="false"
-        data-screen="alerts"
-        data-caption="Fique sabendo de interdições, desvios de linhas e ocorrências no trânsito de Manaus em tempo real."
-      >
-        <span>Alertas</span>
-      </button>
-    </div>
-
-    <!-- Dynamic Caption beneath the switcher -->
-    <div class="closer-look-caption-wrap">
-      <p id="closerLookCaption" class="closer-look-caption">
-        Digite sua origem e destino. O Manô calcula a rota direta com o menor tempo de caminhada e paradas exatas.
-      </p>
     </div>
   </div>
 </section>
