@@ -1078,7 +1078,7 @@ h2 {
   align-items: center;
   justify-content: space-between;
 }
-.step-badge {
+.legacy-install-step-badge {
   display: inline-grid;
   place-items: center;
   width: 26px;
@@ -4551,6 +4551,9 @@ body:has(dialog[open]) {
 .step-badge {
   display: inline-flex;
   align-items: center;
+  width: auto;
+  height: auto;
+  white-space: nowrap;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.05em;
