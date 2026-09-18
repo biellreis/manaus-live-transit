@@ -3066,267 +3066,201 @@ body:has(dialog[open]) {
   box-shadow: 0 4px 12px rgba(0, 113, 227, 0.4);
 }
 
-/* 2. APPLE HERO STAGE & 3D IPHONE EMERGENCE */
-.apple-hero-stage {
+/* 2. APPLE HERO STAGE (SESSÃO 1: MAPA AO VIVO 100% COVER + MANÔ, BORA?) */
+.hero-map-full-cover {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
+  width: 100%;
+  min-height: 94vh;
+  min-height: 94svh;
   background: #000000;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding: 64px 48px 48px;
-  isolation: isolate;
+  padding-bottom: 72px;
+  padding-top: 60px;
+  box-sizing: border-box;
 }
 
-/* Overhead luminaire fixture */
-.apple-hero-lamp {
+.hero-map-background {
   position: absolute;
-  top: 52px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  z-index: 3;
+  z-index: 1;
 }
 
-.apple-hero-lamp-hex {
-  width: 80px;
-  height: 26px;
-  background: radial-gradient(ellipse at center, #ffffff 10%, #e2e8f0 60%, #64748b 100%);
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  box-shadow: 0 0 45px 12px rgba(255, 255, 255, 0.95), 0 0 90px 25px rgba(41, 151, 255, 0.45);
-}
-
-.apple-hero-spotlight {
+.hero-map-background .transit-svg-canvas {
+  width: 100%;
+  height: 100%;
   position: absolute;
-  top: 64px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 520px;
-  height: 800px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(200, 225, 255, 0.12) 30%, transparent 85%);
-  clip-path: polygon(42% 0%, 58% 0%, 95% 100%, 5% 100%);
-  filter: blur(12px);
+  inset: 0;
+  object-fit: cover;
+  opacity: 0.88;
+}
+
+.hero-bottom-gradient-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.2) 35%,
+    rgba(0, 0, 0, 0.65) 65%,
+    rgba(0, 0, 0, 0.95) 88%,
+    #000000 100%
+  );
   pointer-events: none;
   z-index: 2;
 }
 
-.apple-hero-ambient-glow {
-  position: absolute;
-  top: 22%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 860px;
-  height: 640px;
-  background: radial-gradient(circle, rgba(0, 113, 227, 0.11) 0%, transparent 68%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.apple-hero-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 35%, transparent 35%, #000000 92%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Giant 3D Metallic Chrome "MANÔ" Backdrop Word */
-.apple-hero-backdrop-word {
-  position: absolute;
-  top: 36%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.02em;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
-  font-size: clamp(140px, 24vw, 340px);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1.05;
-  padding-top: 0.1em;
-  user-select: none;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.chrome-letter {
-  background: linear-gradient(
-    135deg,
-    #52525b 0%,
-    #a1a1aa 15%,
-    #ffffff 35%,
-    #71717a 50%,
-    #e4e4e7 65%,
-    #27272a 80%,
-    #ffffff 92%,
-    #3f3f46 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.95));
-  opacity: 0.82;
-}
-
-/* Hero Viewport com Perspectiva 3D */
-.apple-hero-viewport {
-  position: relative;
-  z-index: 5;
-  width: 100%;
-  max-width: 900px;
-  height: 520px;
-  margin: auto 0 20px;
-  perspective: 1400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Apple Canonical Bottom Billboard Lockup */
-.apple-hero-billboard {
+.hero-cover-content {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1240px;
+  max-width: 980px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.hero-cover-inner {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 32px;
-  margin-top: auto;
+  flex-direction: column;
+  align-items: center;
 }
 
-.apple-hero-billboard-left {
-  max-width: 580px;
-  text-align: left;
-}
-
-.apple-hero-eyebrow {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #86868b;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-
-.apple-hero-title {
-  font-size: clamp(40px, 5.2vw, 68px);
+.hero-cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 980px;
+  padding: 6px 16px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  letter-spacing: 0.12em;
   color: #f5f5f7;
-  margin: 0;
+  text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
-.apple-hero-accent {
-  background: linear-gradient(135deg, #2997ff 0%, #60a5fa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hero-cover-title {
+  font-size: clamp(52px, 8vw, 84px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: #ffffff;
+  margin: 0 0 16px;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.85);
 }
 
-.apple-hero-sub {
-  font-size: clamp(16px, 1.8vw, 19px);
+.hero-cover-subtitle {
+  font-size: clamp(17px, 2vw, 21px);
   font-weight: 400;
   line-height: 1.45;
-  color: #86868b;
-  margin: 12px 0 0;
+  color: #a1a1a6;
+  max-width: 620px;
+  margin: 0 auto 36px;
   letter-spacing: -0.015em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
 }
 
-.apple-hero-billboard-right {
-  display: flex;
-  align-items: flex-end;
-}
-
-.apple-hero-pricing-pill {
+.hero-cover-cta-group {
   display: flex;
   align-items: center;
-  gap: 20px;
-  background: rgba(30, 30, 35, 0.72);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
-  padding: 10px 14px 10px 24px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
 }
 
-.pricing-pill-text {
+.hero-btn-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 30px;
+  border-radius: 980px;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.hero-btn-apple {
+  background: #0071e3;
+  color: #ffffff;
+}
+
+.hero-btn-apple:hover {
+  background: #0077ed;
+  transform: scale(1.03);
+  box-shadow: 0 12px 32px rgba(0, 113, 227, 0.45);
+}
+
+.hero-btn-android {
+  background: #18181c;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero-btn-android:hover {
+  background: #24242a;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.03);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+.btn-icon {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  max-width: 24px !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  flex-shrink: 0;
+  display: block;
+}
+
+.btn-text-block {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.pricing-headline {
-  font-size: 13px;
-  font-weight: 600;
-  color: #f5f5f7;
-  letter-spacing: -0.01em;
-}
-
-.pricing-sub {
+.btn-subtext {
   font-size: 11px;
-  color: #86868b;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
   letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
-.pricing-pill-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.btn-maintext {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
-.apple-pill-ghost {
-  background: rgba(255, 255, 255, 0.08);
-  color: #f5f5f7;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.apple-pill-ghost:hover {
-  background: rgba(255, 255, 255, 0.16);
-}
-
-@media (max-width: 900px) {
-  .apple-hero-stage {
-    padding: 60px 20px 36px;
+@media (max-width: 640px) {
+  .hero-map-full-cover {
+    min-height: 88vh;
+    padding-bottom: 48px;
+    padding-top: 50px;
   }
-  .apple-hero-billboard {
+  .hero-cover-cta-group {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-  }
-  .apple-hero-billboard-left {
-    text-align: center;
-  }
-  .apple-hero-pricing-pill {
-    flex-direction: column;
-    padding: 16px 20px;
-    border-radius: 24px;
     width: 100%;
-    max-width: 360px;
   }
-}
-
-.apple-hero-floor-shadow {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 480px;
-  height: 90px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 75%);
-  filter: blur(22px);
-  pointer-events: none;
-  z-index: 1;
-  transition: transform 0.1s ease-out;
+  .hero-btn-large {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
 }
 
 .apple-phone-rig {
@@ -4609,35 +4543,44 @@ body:has(dialog[open]) {
 .step-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 8px;
 }
 
 .step-badge {
+  display: inline-flex;
+  align-items: center;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  padding: 3px 8px;
+  padding: 4px 8px;
   border-radius: 6px;
+  line-height: 1;
 }
 
 .badge-walk { background: rgba(48, 209, 88, 0.15); color: #30d158; }
 .badge-dest { background: rgba(255, 69, 58, 0.15); color: #ff453a; }
 
 .bus-number-badge {
+  display: inline-flex;
+  align-items: center;
   background: #0071e3;
   color: #ffffff;
   font-size: 13px;
   font-weight: 800;
   padding: 3px 9px;
   border-radius: 6px;
+  line-height: 1.2;
 }
 
 .bus-name-badge {
+  display: inline-flex;
+  align-items: center;
   font-size: 13px;
   font-weight: 600;
   color: #f5f5f7;
+  line-height: 1.2;
 }
 
 .live-pill {
@@ -4648,14 +4591,18 @@ body:has(dialog[open]) {
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 980px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  line-height: 1.2;
 }
 
 .step-duration {
   font-size: 12px;
   color: #86868b;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
 }
 
 .step-headline {
