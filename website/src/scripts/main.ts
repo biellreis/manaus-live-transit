@@ -346,13 +346,12 @@ if (mapVideo) {
   updateButtons();
 })();
 
-// 3. CLOSER LOOK DUAL-IPHONE 3D INTERACTIVE SHOWCASE & FEATURE RAIL
+// 3. CLOSER LOOK STUDIO FRONT-FACING 3D SHOWCASE & FEATURE RAIL
 (() => {
   const section = document.getElementById("closer-look");
   const stageCol = document.getElementById("closerLookStageWrap");
-  const dualRig = document.getElementById("closerLookDualRig");
-  const phoneRear = document.getElementById("closerLookPhoneRear");
-  const phoneFront = document.getElementById("closerLookPhoneFront");
+  const singleStage = document.getElementById("closerSinglePhoneStage");
+  const phoneFront = document.getElementById("closerPhoneFront");
   const glare = document.getElementById("closerLookGlareFront");
   const badge = document.getElementById("closerSpatialBadge");
   const screenImg = document.getElementById("closerLookScreenImg") as HTMLImageElement | null;
@@ -361,6 +360,12 @@ if (mapVideo) {
   const badgeNum = document.getElementById("closerBadgeNum");
   const badgeHeading = document.getElementById("closerBadgeHeading");
   const railItems = document.querySelectorAll<HTMLButtonElement>(".apple-rail-item");
+
+  // Ensure hero video autoplays smoothly
+  const heroVideo = document.getElementById("appleHeroVideo") as HTMLVideoElement | null;
+  if (heroVideo) {
+    heroVideo.play().catch(() => {});
+  }
 
   if (!section) return;
 
@@ -377,9 +382,9 @@ if (mapVideo) {
   );
   observer.observe(section);
 
-  // 3D Parallax Mouse Tracking for Dual Phones Rig
+  // 3D Parallax Mouse Tracking for Front Phone Stage
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!reduced && stageCol && dualRig) {
+  if (!reduced && stageCol && singleStage) {
     let targetX = 0;
     let targetY = 0;
     let currX = 0;
@@ -392,27 +397,22 @@ if (mapVideo) {
       currX = lerp(currX, targetX, 0.08);
       currY = lerp(currY, targetY, 0.08);
 
-      // Rotate whole dual rig slightly
-      dualRig.style.transform = `scale(1) rotateX(${(-currY * 12).toFixed(2)}deg) rotateY(${(currX * 14).toFixed(2)}deg)`;
-
-      // Rear phone subtle counter-parallax
-      if (phoneRear) {
-        phoneRear.style.transform = `translate3d(${(-30 - currX * 12).toFixed(1)}px, ${(-currY * 8).toFixed(1)}px, -40px) rotateY(${(16 + currX * 6).toFixed(2)}deg) rotateX(${(2 - currY * 4).toFixed(2)}deg)`;
-      }
+      // Rotate single front phone stage
+      singleStage.style.transform = `scale(1) rotateX(${(-currY * 14).toFixed(2)}deg) rotateY(${(currX * 18).toFixed(2)}deg)`;
 
       // Front phone dynamic foreground parallax
       if (phoneFront) {
-        phoneFront.style.transform = `translate3d(${(50 + currX * 22).toFixed(1)}px, ${(-15 + currY * 14).toFixed(1)}px, 50px) rotateY(${(-8 + currX * 10).toFixed(2)}deg) rotateX(${(1 - currY * 6).toFixed(2)}deg)`;
+        phoneFront.style.transform = `translate3d(${(currX * 16).toFixed(1)}px, ${(currY * 12).toFixed(1)}px, 30px)`;
       }
 
       // Interactive Glare on front phone
       if (glare) {
-        glare.style.transform = `rotate(-25deg) translate(${(-currX * 18).toFixed(1)}px, ${(-currY * 18).toFixed(1)}px)`;
+        glare.style.transform = `rotate(-25deg) translate(${(-currX * 22).toFixed(1)}px, ${(-currY * 22).toFixed(1)}px)`;
       }
 
       // Spatial floating badge parallax
       if (badge) {
-        badge.style.transform = `translateZ(60px) translate3d(${(currX * 26).toFixed(1)}px, ${(currY * 20).toFixed(1)}px, 0)`;
+        badge.style.transform = `translateZ(60px) translate3d(${(currX * 28).toFixed(1)}px, ${(currY * 22).toFixed(1)}px, 0)`;
       }
 
       animId = requestAnimationFrame(loop);

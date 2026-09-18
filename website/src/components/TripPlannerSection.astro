@@ -1,0 +1,90 @@
+---
+---
+
+<section class="apple-planner-section" id="planejador" aria-labelledby="planner-heading">
+  <div class="apple-container">
+    <div class="apple-section-header">
+      <p class="apple-eyebrow-accent">ROTA PONTO A PONTO</p>
+      <h2 id="planner-heading" class="apple-section-headline">
+        Planeje qualquer trajeto.<br/>
+        <span class="apple-headline-gradient">Menos passos, zero complicação.</span>
+      </h2>
+      <p class="apple-section-subhead">
+        Digite sua origem e seu destino em Manaus. O Manô calcula a caminhada a pé exata, indica o ponto de embarque ideal e a melhor conexão entre linhas.
+      </p>
+    </div>
+
+    <!-- Apple Interactive Planner Showcase Stage -->
+    <div class="planner-showcase-stage">
+      <!-- Left: Interactive Route Stepper Card -->
+      <div class="planner-card-stack">
+        <div class="planner-step-item">
+          <div class="step-node-col">
+            <span class="node-dot dot-origin"></span>
+            <span class="node-connector"></span>
+          </div>
+          <div class="step-body">
+            <span class="step-label">ORIGEM</span>
+            <strong class="step-title">Rua Kobe — Parque 10 de Novembro</strong>
+            <p class="step-detail">Caminhada a pé: 240 m (3 minutos até o ponto)</p>
+          </div>
+        </div>
+
+        <div class="planner-step-item">
+          <div class="step-node-col">
+            <span class="node-dot dot-bus"></span>
+            <span class="node-connector"></span>
+          </div>
+          <div class="step-body">
+            <div class="step-tag-row">
+              <span class="step-label">EMBARQUE</span>
+              <span class="bus-chip">Linha 640 Expresso</span>
+              <span class="bus-eta-chip">Em 3 min</span>
+            </div>
+            <strong class="step-title">Estação E2 — Arena da Amazônia</strong>
+            <p class="step-detail">Corredor Constantino Nery expresso sem paradas laterais</p>
+          </div>
+        </div>
+
+        <div class="planner-step-item">
+          <div class="step-node-col">
+            <span class="node-dot dot-destination"></span>
+          </div>
+          <div class="step-body">
+            <span class="step-label">DESTINO</span>
+            <strong class="step-title">Terminal 1 (T1) — Centro Histórico</strong>
+            <p class="step-detail">Duração total estimada: 18 min • Integração gratuita</p>
+          </div>
+        </div>
+
+        <div class="planner-summary-footer">
+          <div class="summary-metric">
+            <span class="metric-num">18 min</span>
+            <span class="metric-caption">Tempo total de porta a porta</span>
+          </div>
+          <div class="summary-metric">
+            <span class="metric-num">240 m</span>
+            <span class="metric-caption">Menor percurso a pé</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Front View Display of Trip Planner UI -->
+      <div class="planner-screen-preview" aria-hidden="true">
+        <div class="planner-device-chassis">
+          <div class="planner-device-rim"></div>
+          <div class="planner-device-island"></div>
+          <img
+            src="/screens/planner.webp"
+            width="768"
+            height="1670"
+            alt="Interface do Planejador de Viagens do Manô"
+            class="planner-screen-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

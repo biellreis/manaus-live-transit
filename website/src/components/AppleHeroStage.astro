@@ -21,60 +21,25 @@ import { installUrl } from '../config';
     <span class="chrome-letter">Ô</span>
   </div>
 
-  <!-- 3D iPhone Emergence & Interactive Pointer Tracking Stage -->
+  <!-- 3D Studio Video Stage with Front-Facing iPhone Pro -->
   <div class="apple-hero-viewport" id="heroViewport">
-    <!-- Contact Floor Shadow with dynamic blur and spread -->
+    <!-- Contact Floor Shadow with dynamic blur -->
     <div class="apple-hero-floor-shadow" id="heroFloorShadow" aria-hidden="true"></div>
 
     <!-- 3D Transform Pivot with spring physics -->
     <div class="apple-phone-rig" id="heroPhoneRig">
-      <div class="apple-pro-device" aria-hidden="true">
-        <!-- Titanium Grade 5 Unibody Chassis -->
-        <div class="device-titanium-bezel"></div>
-        <div class="device-chamfer-rim"></div>
-
-        <!-- Laser-cut Antenna Bands -->
-        <span class="band band-tl"></span>
-        <span class="band band-tr"></span>
-        <span class="band band-bl"></span>
-        <span class="band band-br"></span>
-
-        <!-- Precision Hardware Buttons with Micro-Shadows -->
-        <div class="btn-action" title="Action Button"></div>
-        <div class="btn-vol-up" title="Aumentar Volume"></div>
-        <div class="btn-vol-down" title="Diminuir Volume"></div>
-        <div class="btn-power" title="Botão Lateral"></div>
-
-        <!-- Earpiece Micro-Mesh -->
-        <div class="device-earpiece"></div>
-
-        <!-- Bezel & Super Retina XDR OLED Display -->
-        <div class="device-screen-frame">
-          <!-- Dynamic Island Pro -->
-          <div class="device-dynamic-island">
-            <div class="island-camera-lens">
-              <span class="lens-specular-dot"></span>
-            </div>
-            <div class="island-sensor-dot"></div>
-          </div>
-
-          <!-- Dynamic Glass Glare Sweep (Moves with cursor) -->
-          <div class="device-glass-glare" id="heroGlassGlare"></div>
-          <div class="device-glass-sheen"></div>
-
-          <!-- High-Resolution Screen Image -->
-          <div class="device-screen-content">
-            <img
-              src="/screens/ida.webp"
-              width="768"
-              height="1670"
-              alt="Manô - Linha 640 e Trajeto em Tempo Real"
-              class="device-screen-img"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        </div>
+      <div class="apple-hero-video-wrapper" aria-hidden="true">
+        <video
+          id="appleHeroVideo"
+          class="apple-hero-studio-video"
+          src="/videos/hero-studio-front.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          aria-label="Apresentação em vídeo 3D de estúdio do Manô no iPhone Pro"
+        ></video>
 
         <!-- Apple-grade Spatial Floating Badges -->
         <div class="apple-spatial-badge badge-eta" id="heroBadgeEta">

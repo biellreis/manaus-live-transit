@@ -1,238 +1,84 @@
 ---
 import '../styles/global.css';
-import Icon from '../components/Icon.astro';
-import Phone from '../components/Phone.astro';
-import InstallButtons from '../components/InstallButtons.astro';
-import InstallModal from '../components/InstallModal.astro';
-import LiveTransitMap from '../components/LiveTransitMap.astro';
 
-// Componentes exclusivos no padrão Apple iPhone 18 Pro
+// Componentes no padrão Apple Flagship
 import AppleNav from '../components/AppleNav.astro';
 import AppleHeroStage from '../components/AppleHeroStage.astro';
 import HighlightsRibbon from '../components/HighlightsRibbon.astro';
 import ProductViewer3D from '../components/ProductViewer3D.astro';
+import PredictiveEngineSection from '../components/PredictiveEngineSection.astro';
+import TripPlannerSection from '../components/TripPlannerSection.astro';
+import TerminalsNetworkSection from '../components/TerminalsNetworkSection.astro';
+import CityAlertsSection from '../components/CityAlertsSection.astro';
+import NativeInstallSection from '../components/NativeInstallSection.astro';
+import InstallModal from '../components/InstallModal.astro';
 ---
 <!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <meta name="theme-color" content="#000000"/><meta name="description" content="Sua cidade, seu caminho. Conheça o Manô: planeje viagens, encontre linhas e acompanhe os ônibus de Manaus. Instale no iPhone ou Android."/>
+  <meta name="theme-color" content="#000000"/>
+  <meta name="description" content="Sua cidade, seu caminho. Conheça o Manô: telemetria em tempo real, motor preditivo de chegada e itinerários completos de Manaus. 100% PWA nativo."/>
   <title>Manô — O Transporte de Manaus em Tempo Real</title>
   <meta name="apple-mobile-web-app-title" content="Manô"/>
   <meta name="application-name" content="Manô"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32x32.png"/>
   <link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png"/>
-  <meta property="og:title" content="Manô"/><meta property="og:description" content="Seu próximo caminho começa aqui. Linhas, trajetos e conexões em um só aplicativo."/><meta property="og:type" content="website"/>
+  <meta property="og:title" content="Manô — Mobilidade Urbana em Manaus"/>
+  <meta property="og:description" content="Telemetria em tempo real, motor preditivo de chegada, trajetos de linhas expressas e integração dos 5 terminais urbanos de Manaus."/>
+  <meta property="og:type" content="website"/>
 </head>
 <body>
 
-<!-- 1. APPLE LOCAL NAV (PINNED BAR) -->
+<!-- 1. BARRA DE NAVEGAÇÃO LOCAL FIXA (APPLE LOCAL NAV) -->
 <AppleNav/>
 
 <main id="conteudo">
-  <!-- 2. SESSÃO HERO APPLE COM EMERGÊNCIA 3D E FÍSICA LERP -->
+  <!-- 2. SESSÃO HERO CINEMATOGRÁFICA COM VÍDEO 3D DE ESTÚDIO FRONTAL -->
   <AppleHeroStage/>
 
-  <!-- 3. SESSÃO DESTAQUES / HIGHLIGHTS HORIZONTAL ("GET THE HIGHLIGHTS.") -->
+  <!-- 3. CARROSSEL DE DESTAQUES APPLE ("GET THE HIGHLIGHTS.") -->
   <HighlightsRibbon/>
 
-  <!-- 4. SESSÃO PRODUTO 3D INTERATIVO ("TAKE A CLOSER LOOK.") -->
+  <!-- 4. VISÃO DETALHADA DO PRODUTO FRONTAL EM ESTÚDIO ("TAKE A CLOSER LOOK. ZERO TRASEIRA.") -->
   <ProductViewer3D/>
 
-  <!-- 5. DEEP DIVE: LINHAS & MÉTRICAS (AIO LOCKUP NO PADRÃO APPLE) -->
-  <section class="section-full-width section-bg-black" id="linhas">
-    <div class="wrap" style="padding: 110px 0 90px;">
-      <div style="max-width: 820px;">
-        <p class="apple-eyebrow-accent">LINHAS EXPRESSAS</p>
-        <h2 class="apple-section-headline" style="margin-top: 10px;">
-          A sua linha.<br/>
-          <span style="color: #86868b;">Direto ao ponto.</span>
-        </h2>
-        <p class="apple-section-subhead" style="margin-top: 16px;">
-          Acesso instantâneo aos eixos troncais que cortam Manaus de norte a sul pelas avenidas Constantino Nery, Djalma Batista e Torquato Tapajós.
-        </p>
-      </div>
+  <!-- 5. ARQUITETURA: MOTOR PREDITIVO EM TEMPO REAL (BENTO GRID APPLE SILICON) -->
+  <PredictiveEngineSection/>
 
-      <!-- Stat Grid Apple Titanium Specs -->
-      <div class="aio-stat-grid">
-        <div class="aio-stat-card">
-          <div class="aio-stat-val">13</div>
-          <p class="aio-stat-label">
-            Ônibus ativos monitorados em tempo real na linha 640 Expressa.
-          </p>
-        </div>
+  <!-- 6. PLANEJADOR INTELIGENTE DE VIAGENS PONTO A PONTO -->
+  <TripPlannerSection/>
 
-        <div class="aio-stat-card">
-          <div class="aio-stat-val">3 min</div>
-          <p class="aio-stat-label">
-            Tempo médio de espera no corredor central em horários de pico.
-          </p>
-        </div>
+  <!-- 7. REDE DE INTEGRAÇÃO URBANA: TERMINAIS T1 A T5 E ESTAÇÕES DE TRANSFERÊNCIA -->
+  <TerminalsNetworkSection/>
 
-        <div class="aio-stat-card">
-          <div class="aio-stat-val">100%</div>
-          <p class="aio-stat-label">
-            Paradas e terminais urbanos georreferenciados na malha de Manaus.
-          </p>
-        </div>
-      </div>
+  <!-- 8. CENTRAL DE ALERTAS DA CIDADE E DEFESA CIVIL (ZERO NEON) -->
+  <CityAlertsSection/>
 
-      <!-- Exemplos de Linhas Integradas -->
-      <div class="line-stack" aria-label="Exemplos de linhas disponíveis no aplicativo" style="margin-top: 40px;">
-        <div class="line-row">
-          <span class="line-code">640</span>
-          <div>T4 / T3 / E4 / E2 / E1 / Centro (Constantino Nery)</div>
-          <span style="color: #2997ff;">↗</span>
-        </div>
-        <div class="line-row">
-          <span class="line-code">300</span>
-          <div>Expresso Norte (T4 / T3 / Centro)</div>
-          <span style="color: #2997ff;">↗</span>
-        </div>
-        <div class="line-row">
-          <span class="line-code">448</span>
-          <div>Cidade de Deus / T3 / T4 (Via Djalma Batista)</div>
-          <span style="color: #2997ff;">↗</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. DEEP DIVE: TRAJETOS IDA E VOLTA -->
-  <section class="section-full-width section-bg-black" id="trajetos">
-    <div class="wrap route-section" style="padding: 100px 0 110px;">
-      <div class="section-heading">
-        <div>
-          <p class="apple-eyebrow-accent">CADA SENTIDO, UM CAMINHO</p>
-          <h2 class="apple-section-headline" style="margin-top: 8px;">
-            Na ida. Na volta.<br/>
-            <span style="color: #2997ff;">Com você.</span>
-          </h2>
-        </div>
-        <div>
-          <p class="apple-section-subhead" style="margin: 0 0 18px;">
-            Visualize o percurso e todas as paradas.<br/>Escolha o sentido e acompanhe no mapa.
-          </p>
-          <div class="segmented" role="group" aria-label="Sentido do trajeto">
-            <button data-route="ida" class="active" aria-pressed="true">↗ Ida</button>
-            <button data-route="volta" aria-pressed="false">↙ Volta</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="route-stage">
-        <svg class="route-decoration" viewBox="0 0 1100 560" fill="none" aria-hidden="true">
-          <path d="M-50 400H190Q250 400 250 340V230Q250 180 310 180H810Q870 180 870 120V90Q870 40 930 40H1170" stroke="currentColor" stroke-width="2"/>
-          <path d="M-50 460H250Q320 460 320 400V290Q320 240 380 240H870Q930 240 930 180V150Q930 100 990 100H1170" stroke="currentColor" stroke-width="1" opacity=".18"/>
-          <circle cx="250" cy="300" r="8" fill="currentColor"/>
-          <circle cx="870" cy="100" r="8" fill="currentColor"/>
-        </svg>
-        <Phone screen="ida" id="route-screen" class="route-phone"/>
-        <div class="route-note" style="background: rgba(22, 22, 26, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12);">
-          <span class="line-code">640</span>
-          <h3 id="route-title" style="color: #f5f5f7;">Seu trajeto de ida.</h3>
-          <p id="route-description" style="color: #86868b;">Veja o percurso e as paradas<br/>antes mesmo de embarcar.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. SESSÃO ÔNIBUS NO MAPA -->
-  <section class="section-full-width section-bg-blue" id="veiculos">
-    <div class="wrap live-section" style="padding: 100px 0 110px;">
-      <div class="live-copy">
-        <p class="apple-eyebrow-accent">RADAR DE MOBILIDADE</p>
-        <h2 class="apple-section-headline" style="margin-top: 8px;">
-          Seu ônibus.<br/>
-          Mais <span style="color: #2997ff;">perto.</span>
-        </h2>
-        <p class="apple-section-subhead" style="margin-top: 14px;">
-          Acompanhe os veículos disponíveis na sua linha com atualização contínua. Mais clareza para decidir a hora exata de sair de casa.
-        </p>
-      </div>
-      <div class="map-window">
-        <LiveTransitMap/>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. SESSÃO ALERTAS -->
-  <section class="section-full-width section-bg-black" id="alertas">
-    <div class="wrap chapter alerts-section" style="padding: 110px 0 100px;">
-      <div class="chapter-art alert-art">
-        <div class="orange-disc"></div>
-        <Phone screen="alerts" class="alert-phone"/>
-        <span class="alert-badge"><Icon name="bell" size={26}/></span>
-      </div>
-      <div class="chapter-copy">
-        <p class="apple-eyebrow-accent" style="color: #f56300;">NO RITMO DA CIDADE</p>
-        <h2 class="apple-section-headline" style="margin-top: 8px;">
-          Saiba antes.<br/>
-          <span style="color: #f56300;">Vá melhor.</span>
-        </h2>
-        <p class="apple-section-subhead" style="margin-top: 14px;">
-          Informações de trânsito em um só lugar. Confira os alertas, desvios e interdições para seguir mais informado pelo trânsito de Manaus.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. SESSÃO INSTALAR (CANON APPLE CTA) -->
-  <section class="section-full-width section-bg-black" id="instalar">
-    <div class="wrap install-section" style="padding: 120px 0 90px;">
-      <div class="install-symbol" style="margin-bottom: 24px;">
-        <img src="/brand/icon.png" width="96" height="96" alt="Ícone do Manô" class="install-icon-main" style="border-radius: 22px; box-shadow: 0 20px 50px rgba(0, 113, 227, 0.35);"/>
-      </div>
-      <p class="apple-eyebrow-accent">SEU PRÓXIMO CAMINHO COMEÇA AQUI</p>
-      <h2 class="apple-section-headline" style="margin-top: 10px;">
-        Leve o Manô<br/>
-        <span style="color: #2997ff;">com você.</span>
-      </h2>
-      <p class="apple-section-subhead" style="margin: 16px auto 32px; text-align: center;">
-        Seu aplicativo de mobilidade em Manaus.<br/>No iPhone. No Android. Na sua rotina diária.
-      </p>
-
-      <div style="display: flex; justify-content: center;">
-        <InstallButtons/>
-      </div>
-
-      <div class="faq" style="margin-top: 64px; max-width: 780px; margin-left: auto; margin-right: auto;">
-        <details>
-          <summary>Preciso baixar de uma loja de aplicativos?<span>+</span></summary>
-          <p>Não. O Manô é adicionado direto à sua tela inicial sem precisar de lojas. No iPhone, basta seguir os 4 toques pelo Safari. No Android, toque em Instalar e confirme no navegador.</p>
-        </details>
-        <details>
-          <summary>Funciona sem internet?<span>+</span></summary>
-          <p>Para consultar informações atualizadas, planejar viagens e acompanhar os ônibus, mantenha uma conexão ativa com a internet.</p>
-        </details>
-        <details>
-          <summary>O que aparece no mapa é em tempo real?<span>+</span></summary>
-          <p>No aplicativo, os veículos são atualizados conforme os dados de telemetria e GPS da operação de transporte público de Manaus.</p>
-        </details>
-      </div>
-    </div>
-  </section>
+  <!-- 9. GUIA VISUAL DE INSTALAÇÃO PWA DIRETA NO IPHONE E ANDROID -->
+  <NativeInstallSection/>
 </main>
 
 <!-- 10. APPLE CANON FOOTER -->
-<footer class="apple-footer" style="background: #000000; border-top: 1px solid rgba(255,255,255,0.08); padding: 48px 0 60px;">
-  <div class="wrap" style="max-width: 1024px; font-size: 12px; color: #6e6e73; line-height: 1.6;">
-    <p style="margin-bottom: 16px;">
-      1. Os tempos estimados de chegada e a localização dos veículos dependem da transmissão contínua de telemetria GPS pela frota urbana de Manaus. Os dados são fornecidos para planejamento e orientação do usuário.
+<footer class="apple-footer">
+  <div class="apple-footer-wrap">
+    <p class="apple-footer-note">
+      1. Os tempos estimados de chegada e a localização dos veículos dependem da transmissão contínua de telemetria GPS pela frota urbana de Manaus. O algoritmo atualiza a rota automaticamente para o próximo veículo em circulação.
     </p>
-    <p style="margin-bottom: 24px;">
-      2. O Manô é uma plataforma independente de mobilidade urbana concebida para a cidade de Manaus. Todas as marcas, linhas e referências citadas pertencem aos seus respectivos titulares.
+    <p class="apple-footer-note">
+      2. O Manô é uma plataforma independente de tecnologia e mobilidade urbana concebida para a cidade de Manaus. Todas as marcas, linhas e referências citadas pertencem aos seus respectivos titulares.
     </p>
-    <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-      <div>
-        <span>Copyright © {new Date().getFullYear()} Manô Inc. Todos os direitos reservados.</span>
-      </div>
-      <div style="display: flex; gap: 16px;">
-        <a href="#destaques" style="color: #86868b; text-decoration: none;">Destaques</a>
-        <a href="#closer-look" style="color: #86868b; text-decoration: none;">Visão 3D</a>
-        <a href="#trajetos" style="color: #86868b; text-decoration: none;">Trajetos</a>
-        <a href="#instalar" style="color: #86868b; text-decoration: none;">Instalar</a>
+    <div class="apple-footer-bottom">
+      <span class="copyright">Copyright © {new Date().getFullYear()} Manô Inc. Todos os direitos reservados.</span>
+      <div class="apple-footer-links">
+        <a href="#destaques">Destaques</a>
+        <a href="#closer-look">Visão 3D</a>
+        <a href="#motor-preditivo">Motor Preditivo</a>
+        <a href="#planejador">Planejador</a>
+        <a href="#terminais">Terminais</a>
+        <a href="#alertas">Alertas</a>
+        <a href="#instalar">Instalar</a>
       </div>
     </div>
   </div>
