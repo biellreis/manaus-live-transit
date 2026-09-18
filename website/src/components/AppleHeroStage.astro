@@ -2,104 +2,220 @@
 import { installUrl } from '../config';
 ---
 
-<section class="apple-hero-stage" id="heroStage" aria-labelledby="hero-title">
-  <!-- Apple Luminaire & Vertical Cone Beam -->
-  <div class="apple-hero-lamp" aria-hidden="true">
-    <div class="apple-hero-lamp-hex"></div>
+<section class="hero-map-full-cover" id="inicio" aria-label="Abertura Manô Transit">
+  <!-- 1. FULL-BLEED LIVE TRANSIT MAP OF MANAUS (100% COVER) -->
+  <div class="hero-map-background" aria-hidden="true">
+    <svg class="transit-svg-canvas" viewBox="0 0 1600 900" fill="none" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- Corridors: Blue & Orange -->
+        <linearGradient id="corridorBlue120" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e40af" stop-opacity="0.35"/>
+          <stop offset="50%" stop-color="#2563eb" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.9"/>
+        </linearGradient>
+
+        <linearGradient id="corridorBlue640" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.4"/>
+          <stop offset="50%" stop-color="#2563eb" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.95"/>
+        </linearGradient>
+
+        <linearGradient id="corridorBlue300" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e40af" stop-opacity="0.3"/>
+          <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.85"/>
+        </linearGradient>
+
+        <linearGradient id="corridorOrange448" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ea580c" stop-opacity="0.85"/>
+          <stop offset="50%" stop-color="#f97316" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#fb923c" stop-opacity="0.4"/>
+        </linearGradient>
+
+        <linearGradient id="corridorBlue652" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e40af" stop-opacity="0.35"/>
+          <stop offset="50%" stop-color="#2563eb" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.9"/>
+        </linearGradient>
+
+        <linearGradient id="corridorOrange560" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ea580c" stop-opacity="0.4"/>
+          <stop offset="50%" stop-color="#f97316" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#ea580c" stop-opacity="0.85"/>
+        </linearGradient>
+
+        <filter id="busDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.9"/>
+        </filter>
+      </defs>
+
+      <!-- STREETS & AVENUES OF MANAUS -->
+      <g stroke="#ffffff" stroke-linecap="round">
+        <path d="M 80 -40 L 90 200 L 130 450 L 180 700 L 260 840" stroke-width="2.2" stroke-opacity="0.12"/>
+        <path d="M 220 -40 L 250 250 L 320 500 L 420 720 L 520 830" stroke-width="2" stroke-opacity="0.1"/>
+        <path d="M 360 -40 L 390 220 L 460 440 L 540 640 L 680 770" stroke-width="3" stroke-opacity="0.16"/>
+        <path d="M 720 -40 L 750 240 L 800 480 L 860 660 L 920 780" stroke-width="3" stroke-opacity="0.16"/>
+        <path d="M 1080 -40 L 1110 260 L 1150 500 L 1180 720 L 1200 820" stroke-width="2.2" stroke-opacity="0.12"/>
+        <path d="M 1320 -40 L 1340 240 L 1370 480 L 1400 700 L 1420 830" stroke-width="2.5" stroke-opacity="0.12"/>
+        <path d="M 1520 -40 L 1490 220 L 1460 460 L 1430 680 L 1390 840" stroke-width="2.2" stroke-opacity="0.1"/>
+      </g>
+
+      <!-- STATIONS & HUBS -->
+      <g transform="translate(90, 200)">
+        <circle r="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+        <text x="14" y="4" fill="#ffffff" font-size="11" font-weight="700">Ponta Negra</text>
+      </g>
+
+      <g transform="translate(130, 450)">
+        <circle r="5" fill="#2563eb" stroke="#ffffff" stroke-width="1.8"/>
+        <text x="14" y="4" fill="#ffffff" font-size="11" font-weight="600">São Jorge</text>
+      </g>
+
+      <g transform="translate(460, 440)">
+        <circle r="15" fill="#2563eb" fill-opacity="0.2" stroke="#2563eb" stroke-width="2"/>
+        <circle r="6" fill="#ffffff"/>
+        <text x="-16" y="5" fill="#ffffff" font-size="13" font-weight="800" text-anchor="end">Terminal 1 (T1)</text>
+        <text x="-16" y="20" fill="#ffffff" fill-opacity="0.6" font-size="11" text-anchor="end">Constantino Nery</text>
+      </g>
+
+      <g transform="translate(540, 640)">
+        <circle r="6" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+        <text x="-16" y="4" fill="#ffffff" font-size="12" font-weight="700" text-anchor="end">Praça da Saudade</text>
+      </g>
+
+      <g transform="translate(680, 770)">
+        <circle r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+        <text x="18" y="5" fill="#ffffff" font-size="13" font-weight="800">Matriz • Centro</text>
+      </g>
+
+      <g transform="translate(1340, 240)">
+        <circle r="6" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+        <text x="-14" y="4" fill="#ffffff" font-size="11" font-weight="700" text-anchor="end">Coroado • V8</text>
+      </g>
+
+      <g transform="translate(1490, 220)">
+        <circle r="13" fill="#f97316" fill-opacity="0.2" stroke="#f97316" stroke-width="2"/>
+        <circle r="6" fill="#ffffff"/>
+        <text x="-16" y="5" fill="#ffffff" font-size="12" font-weight="800" text-anchor="end">Terminal 4 (T4)</text>
+      </g>
+
+      <!-- CORRIDOR PATHS -->
+      <path id="cleanRoute120" d="M 80 -40 L 90 200 L 130 450 L 180 700 L 260 840" stroke="url(#corridorBlue120)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path id="cleanRoute640" d="M 360 -40 L 390 220 L 460 440 L 540 640 L 680 770" stroke="url(#corridorBlue640)" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path id="cleanRoute300" d="M 720 -40 L 750 240 L 800 480 L 860 660 L 920 780" stroke="url(#corridorBlue300)" stroke-width="4" stroke-dasharray="10 8" stroke-linecap="round" fill="none"/>
+      <path id="cleanRoute448" d="M 700 780 L 820 620 L 940 440 L 990 220 L 1020 -40" stroke="url(#corridorOrange448)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path id="cleanRoute652" d="M 1320 -40 L 1340 240 L 1370 480 L 1400 700 L 1420 830" stroke="url(#corridorBlue652)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path id="cleanRoute560" d="M 1520 -40 L 1490 220 L 1460 460 L 1430 680 L 1390 840" stroke="url(#corridorOrange560)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+      <!-- UPRIGHT LIVE BUSES PASSING -->
+      <!-- Ônibus 120 -->
+      <g class="bus-unit-120">
+        <circle r="22" fill="#2563eb" fill-opacity="0.2" class="bus-pulse"/>
+        <circle r="14" fill="#2563eb" stroke="#ffffff" stroke-width="2.2" filter="url(#busDropShadow)"/>
+        <path d="M -5.5 4 L 5.5 4 L 5.5 -4.5 C 5.5 -6 -5.5 -6 -5.5 -4.5 Z M -5.5 -1 L 5.5 -1 M -3.5 4 L -3.5 6.5 M 3.5 4 L 3.5 6.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        <g transform="translate(18, -15)">
+          <rect width="46" height="23" rx="7" fill="#2563eb" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+          <text x="23" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif">120</text>
+        </g>
+      </g>
+
+      <!-- Ônibus 640 -->
+      <g class="bus-unit-640">
+        <circle r="24" fill="#2563eb" fill-opacity="0.25" class="bus-pulse"/>
+        <circle r="15" fill="#2563eb" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+        <path d="M -6 4.5 L 6 4.5 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z M -6 -1 L 6 -1 M -4 4.5 L -4 7 M 4 4.5 L 4 7" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        <g transform="translate(18, -16)">
+          <rect width="48" height="24" rx="7" fill="#2563eb" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+          <text x="24" y="16" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif" letter-spacing="-0.3">640</text>
+        </g>
+      </g>
+
+      <!-- Ônibus 300 -->
+      <g class="bus-unit-300">
+        <circle r="22" fill="#3b82f6" fill-opacity="0.2" class="bus-pulse"/>
+        <circle r="14" fill="#3b82f6" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+        <path d="M -5.5 4 L 5.5 4 L 5.5 -4.5 C 5.5 -6 -5.5 -6 -5.5 -4.5 Z M -5.5 -1 L 5.5 -1 M -3.5 4 L -3.5 6.5 M 3.5 4 L 3.5 6.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        <g transform="translate(18, -15)">
+          <rect width="46" height="23" rx="7" fill="#3b82f6" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+          <text x="23" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif">300</text>
+        </g>
+      </g>
+
+      <!-- Ônibus 448 -->
+      <g class="bus-unit-448">
+        <circle r="24" fill="#f97316" fill-opacity="0.25" class="bus-pulse"/>
+        <circle r="15" fill="#f97316" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+        <path d="M -6 4.5 L 6 4.5 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z M -6 -1 L 6 -1 M -4 4.5 L -4 7 M 4 4.5 L 4 7" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        <g transform="translate(18, -16)">
+          <rect width="48" height="24" rx="7" fill="#f97316" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+          <text x="24" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif" letter-spacing="-0.3">448</text>
+        </g>
+      </g>
+
+      <!-- Ônibus 652 -->
+      <g class="bus-unit-652">
+        <circle r="22" fill="#2563eb" fill-opacity="0.2" class="bus-pulse"/>
+        <circle r="14" fill="#2563eb" stroke="#ffffff" stroke-width="2.2" filter="url(#busDropShadow)"/>
+        <path d="M -5.5 4 L 5.5 4 L 5.5 -4.5 C 5.5 -6 -5.5 -6 -5.5 -4.5 Z M -5.5 -1 L 5.5 -1 M -3.5 4 L -3.5 6.5 M 3.5 4 L 3.5 6.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        <g transform="translate(18, -15)">
+          <rect width="46" height="23" rx="7" fill="#2563eb" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+          <text x="23" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif">652</text>
+        </g>
+      </g>
+
+      <!-- Ônibus 560 -->
+      <g class="bus-unit-560">
+        <circle r="24" fill="#f97316" fill-opacity="0.25" class="bus-pulse"/>
+        <circle r="15" fill="#f97316" stroke="#ffffff" stroke-width="2.5" filter="url(#busDropShadow)"/>
+        <path d="M -6 4.5 L 6 4.5 L 6 -5 C 6 -6.5 -6 -6.5 -6 -5 Z M -6 -1 L 6 -1 M -4 4.5 L -4 7 M 4 4.5 L 4 7" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        <g transform="translate(18, -16)">
+          <rect width="48" height="24" rx="7" fill="#f97316" stroke="#ffffff" stroke-width="1" filter="url(#busDropShadow)"/>
+          <text x="24" y="16" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle" font-family="-apple-system, SF Pro Text, sans-serif" letter-spacing="-0.3">560</text>
+        </g>
+      </g>
+    </svg>
   </div>
-  <div class="apple-hero-spotlight" aria-hidden="true"></div>
-  <div class="apple-hero-ambient-glow" aria-hidden="true"></div>
 
-  <!-- Vignette overlay for cinema contrast -->
-  <div class="apple-hero-vignette" aria-hidden="true"></div>
+  <!-- 2. DARK GRADIENT OVERLAY (FADING SMOOTHLY INTO BLACK #000000) -->
+  <div class="hero-bottom-gradient-fade" aria-hidden="true"></div>
 
-  <!-- Giant Metallic 3D "MANÔ" Letters Backdrop (Liquid Titanium Specular Sheen) -->
-  <div class="apple-hero-backdrop-word" aria-hidden="true">
-    <span class="chrome-letter">M</span>
-    <span class="chrome-letter">A</span>
-    <span class="chrome-letter">N</span>
-    <span class="chrome-letter">Ô</span>
-  </div>
-
-  <!-- 3D Studio Video Stage with Front-Facing iPhone Pro -->
-  <div class="apple-hero-viewport" id="heroViewport">
-    <!-- Contact Floor Shadow with dynamic blur -->
-    <div class="apple-hero-floor-shadow" id="heroFloorShadow" aria-hidden="true"></div>
-
-    <!-- 3D Transform Pivot with spring physics -->
-    <div class="apple-phone-rig" id="heroPhoneRig">
-      <div class="apple-hero-video-wrapper" aria-hidden="true">
-        <video
-          id="appleHeroVideo"
-          class="apple-hero-studio-video"
-          src="/videos/hero-studio-front.mp4"
-          autoplay
-          loop
-          muted
-          playsinline
-          preload="auto"
-          aria-label="Apresentação em vídeo 3D de estúdio do Manô no iPhone Pro"
-        ></video>
-
-        <!-- Apple-grade Spatial Floating Badges -->
-        <div class="apple-spatial-badge badge-eta" id="heroBadgeEta">
-          <span class="badge-bus-num">640</span>
-          <div class="badge-body">
-            <div class="badge-heading">
-              <span class="pulse-indicator"></span>
-              <strong>Chegando em 3 min</strong>
-            </div>
-            <span class="badge-meta">Próximo da sua parada • T1</span>
-          </div>
-        </div>
-
-        <div class="apple-spatial-badge badge-fleet" id="heroBadgeFleet">
-          <span class="badge-fleet-pill">13</span>
-          <div class="badge-body">
-            <strong>Ônibus Ativos</strong>
-            <span class="badge-meta">Linha 640 em circulação</span>
-          </div>
-        </div>
+  <!-- 3. HERO BOTTOM CONTENT (Manô, bora? + Subtítulo + 2 Botões Grandes) -->
+  <div class="hero-cover-content">
+    <div class="hero-cover-inner">
+      <div class="hero-cover-badge">
+        <span class="pulse-dot"></span>
+        MANAUS AO VIVO
       </div>
-    </div>
-  </div>
 
-  <!-- Apple Canonical Bottom Billboard Lockup (Typography Left, Frosted Pill Right) -->
-  <div class="apple-hero-billboard">
-    <div class="apple-hero-billboard-left">
-      <p class="apple-hero-eyebrow">MANÔ TRANSIT</p>
-      <h1 id="hero-title" class="apple-hero-title">
-        O tempo real.<br/>
-        <span class="apple-hero-accent">Levado a sério.</span>
+      <h1 class="hero-cover-title">
+        Manô, bora?
       </h1>
-      <p class="apple-hero-sub">
+
+      <p class="hero-cover-subtitle">
         Monitore linhas, ônibus e paradas de Manaus sem atrasos.
       </p>
-    </div>
 
-    <div class="apple-hero-billboard-right">
-      <div class="apple-hero-pricing-pill">
-        <div class="pricing-pill-text">
-          <strong class="pricing-headline">100% gratuito • PWA nativo</strong>
-          <span class="pricing-sub">Instale no iPhone ou baixe o APK para Android</span>
-        </div>
-        <div class="pricing-pill-actions">
-          <a href={installUrl('ios')} class="apple-pill-btn apple-pill-blue" data-install="ios" aria-label="Instalar no celular">
-            Instalar
-          </a>
-          <a href="#destaques" class="apple-pill-btn apple-pill-ghost" aria-label="Explorar destaques">
-            Explorar
-          </a>
-        </div>
+      <!-- 2 GRANDES BOTOES (APPLE & ANDROID) -->
+      <div class="hero-cover-cta-group">
+        <a href={installUrl('ios')} class="hero-btn-large hero-btn-apple" data-install="ios" aria-label="Instalar no iPhone">
+          <svg class="btn-icon" viewBox="0 0 170 170" fill="currentColor" aria-hidden="true">
+            <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.69-7.85-12.01-14.42-7.05-10.76-12.22-22.75-15.5-35.97-3.28-13.22-4.93-25.79-4.93-37.71 0-14.68 3.59-27.05 10.76-37.11 7.17-10.06 16.32-15.2 27.46-15.42 5.09 0 10.74 1.34 16.96 4.03 6.22 2.68 10.02 4.09 11.4 4.22 2.01-.27 6.01-1.81 12.01-4.63 6-2.82 11.39-4.06 16.18-3.73 13.27.75 23.95 5.37 32.04 13.86-11.83 7.17-17.63 17.06-17.41 29.68.22 10.06 4.06 18.49 11.53 25.29 7.47 6.8 16.48 10.59 27.03 11.37-2.58 7.83-5.71 15.48-9.4 22.95zm-33.88-112.58c0-8.15 2.87-15.68 8.61-22.58 5.74-6.9 12.72-10.99 20.94-12.27.22 1.3.33 2.45.33 3.44 0 8.04-3.04 15.76-9.13 23.16-6.09 7.4-13.22 11.57-21.39 12.51-.43-1.41-.64-2.83-.64-4.26z"/>
+          </svg>
+          <div class="btn-text-block">
+            <span class="btn-subtext">Disponível para iOS</span>
+            <span class="btn-maintext">Instalar no iPhone</span>
+          </div>
+        </a>
+
+        <a href={installUrl('android')} class="hero-btn-large hero-btn-android" data-install="android" aria-label="Instalar no Android">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5896 8.4239 13.8566 8 12 8s-3.5896.4239-5.1368.9507L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+          </svg>
+          <div class="btn-text-block">
+            <span class="btn-subtext">Disponível para Android</span>
+            <span class="btn-maintext">Instalar no Android</span>
+          </div>
+        </a>
       </div>
     </div>
-  </div>
-
-  <!-- Subtle Scroll Down Indicator -->
-  <div class="apple-hero-scroll-cue" aria-hidden="true">
-    <a href="#destaques" class="scroll-cue-link">
-      <span>Role para explorar</span>
-      <span class="scroll-cue-arrow">↓</span>
-    </a>
   </div>
 </section>

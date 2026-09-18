@@ -14,75 +14,136 @@
       </p>
     </div>
 
-    <!-- Apple Interactive Planner Showcase Stage -->
-    <div class="planner-showcase-stage">
-      <!-- Left: Interactive Route Stepper Card -->
-      <div class="planner-card-stack">
-        <div class="planner-step-item">
-          <div class="step-node-col">
-            <span class="node-dot dot-origin"></span>
-            <span class="node-connector"></span>
-          </div>
-          <div class="step-body">
-            <span class="step-label">ORIGEM</span>
-            <strong class="step-title">Rua Kobe — Parque 10 de Novembro</strong>
-            <p class="step-detail">Caminhada a pé: 240 m (3 minutos até o ponto)</p>
-          </div>
-        </div>
-
-        <div class="planner-step-item">
-          <div class="step-node-col">
-            <span class="node-dot dot-bus"></span>
-            <span class="node-connector"></span>
-          </div>
-          <div class="step-body">
-            <div class="step-tag-row">
-              <span class="step-label">EMBARQUE</span>
-              <span class="bus-chip">Linha 640 Expresso</span>
-              <span class="bus-eta-chip">Em 3 min</span>
+    <!-- Apple Interactive Planner: Large Detailed App Box (Zero Phone Mockup) -->
+    <div class="planner-showcase-large-card">
+      <!-- Search & Origin/Destination Bar -->
+      <div class="planner-card-header-bar">
+        <div class="planner-inputs-container">
+          <div class="planner-input-row">
+            <span class="planner-pin origin-pin"></span>
+            <div class="planner-field-info">
+              <span class="planner-field-label">ORIGEM</span>
+              <span class="planner-field-value">Rua Kobe — Parque 10 de Novembro</span>
             </div>
-            <strong class="step-title">Estação E2 — Arena da Amazônia</strong>
-            <p class="step-detail">Corredor Constantino Nery expresso sem paradas laterais</p>
+          </div>
+          <div class="planner-inputs-divider">
+            <span class="divider-line"></span>
+            <button class="planner-swap-btn" aria-label="Inverter origem e destino">⇅</button>
+          </div>
+          <div class="planner-input-row">
+            <span class="planner-pin dest-pin"></span>
+            <div class="planner-field-info">
+              <span class="planner-field-label">DESTINO</span>
+              <span class="planner-field-value">Terminal 1 (T1) — Constantino Nery • Centro</span>
+            </div>
           </div>
         </div>
 
-        <div class="planner-step-item">
-          <div class="step-node-col">
-            <span class="node-dot dot-destination"></span>
-          </div>
-          <div class="step-body">
-            <span class="step-label">DESTINO</span>
-            <strong class="step-title">Terminal 1 (T1) — Centro Histórico</strong>
-            <p class="step-detail">Duração total estimada: 18 min • Integração gratuita</p>
-          </div>
+        <!-- Filter Pills -->
+        <div class="planner-filter-pills">
+          <span class="filter-pill active">⚡ Rota mais rápida (18 min)</span>
+          <span class="filter-pill">🚶 Menor caminhada (240 m)</span>
+          <span class="filter-pill">🔄 Linha direta sem baldeação</span>
         </div>
+      </div>
 
-        <div class="planner-summary-footer">
-          <div class="summary-metric">
-            <span class="metric-num">18 min</span>
-            <span class="metric-caption">Tempo total de porta a porta</span>
+      <!-- Main Step-by-Step Itinerary Body -->
+      <div class="planner-itinerary-body">
+        <div class="itinerary-timeline">
+          <!-- Step 1: Walking -->
+          <div class="itinerary-step">
+            <div class="timeline-gutter">
+              <span class="timeline-dot dot-walk"></span>
+              <span class="timeline-line walk-line"></span>
+            </div>
+            <div class="timeline-content">
+              <div class="step-meta">
+                <span class="step-badge badge-walk">CAMINHADA</span>
+                <span class="step-duration">3 min • 240 metros</span>
+              </div>
+              <h4 class="step-headline">Caminhe até a Estação E2 — Arena da Amazônia</h4>
+              <p class="step-subtext">Siga pela calçada da Av. Pedro Teixeira em direção ao canteiro central da Constantino Nery.</p>
+            </div>
           </div>
-          <div class="summary-metric">
-            <span class="metric-num">240 m</span>
-            <span class="metric-caption">Menor percurso a pé</span>
+
+          <!-- Step 2: Board Bus -->
+          <div class="itinerary-step step-highlighted">
+            <div class="timeline-gutter">
+              <span class="timeline-dot dot-bus-board"></span>
+              <span class="timeline-line bus-line"></span>
+            </div>
+            <div class="timeline-content">
+              <div class="step-meta">
+                <span class="bus-number-badge">640</span>
+                <span class="bus-name-badge">Expresso T4 / T3 / Centro</span>
+                <span class="live-pill">
+                  <span class="pulse-dot"></span>
+                  Chegando em 3 min
+                </span>
+              </div>
+              <h4 class="step-headline">Embarque na Estação E2 (Plataforma B - Sentido Centro)</h4>
+              <p class="step-subtext">Veículo equipado com ar-condicionado • Próximo ônibus previsto para as 14:38.</p>
+
+              <!-- Intermediate Stops Mini List -->
+              <div class="intermediate-stops-box">
+                <div class="stops-summary">
+                  <span class="stops-count">6 paradas no corredor expresso (12 min)</span>
+                  <span class="stops-corridor">Faixa exclusiva sem semáforo</span>
+                </div>
+                <div class="stops-tags-list">
+                  <span class="stop-tag">E2 Arena</span>
+                  <span class="stop-arrow">→</span>
+                  <span class="stop-tag">E1 São Jorge</span>
+                  <span class="stop-arrow">→</span>
+                  <span class="stop-tag">Boulevard</span>
+                  <span class="stop-arrow">→</span>
+                  <span class="stop-tag">Praça da Saudade</span>
+                  <span class="stop-arrow">→</span>
+                  <span class="stop-tag highlight">Terminal 1 (T1)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Destination Arrival -->
+          <div class="itinerary-step">
+            <div class="timeline-gutter">
+              <span class="timeline-dot dot-dest"></span>
+            </div>
+            <div class="timeline-content">
+              <div class="step-meta">
+                <span class="step-badge badge-dest">DESEMBARQUE</span>
+                <span class="step-duration">Chegada às 14:46</span>
+              </div>
+              <h4 class="step-headline">Desembarque no Terminal 1 (T1) — Plataforma Central</h4>
+              <p class="step-subtext">Acesso direto ao Centro Histórico ou baldeação gratuita para qualquer linha alimentadora.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Right: Front View Display of Trip Planner UI -->
-      <div class="planner-screen-preview" aria-hidden="true">
-        <div class="planner-device-chassis">
-          <div class="planner-device-rim"></div>
-          <div class="planner-device-island"></div>
-          <img
-            src="/screens/planner.webp"
-            width="768"
-            height="1670"
-            alt="Interface do Planejador de Viagens do Manô"
-            class="planner-screen-img"
-            loading="lazy"
-            decoding="async"
-          />
+      <!-- Bottom Metrics & Live Navigation Bar -->
+      <div class="planner-card-bottom-bar">
+        <div class="metrics-cluster">
+          <div class="metric-item">
+            <span class="metric-val">18 min</span>
+            <span class="metric-label">Tempo total estimado</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-val">240 m</span>
+            <span class="metric-label">Percurso a pé</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-val">R$ 0,00</span>
+            <span class="metric-label">Integração temporal</span>
+          </div>
+        </div>
+
+        <div class="planner-action-buttons">
+          <a href="#instalar" class="planner-btn-primary">
+            <span>Usar no Aplicativo</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
     </div>

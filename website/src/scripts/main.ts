@@ -314,7 +314,7 @@ if (mapVideo) {
         track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
 
     const firstCard = track.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.clientWidth || 500;
+    const cardWidth = firstCard?.clientWidth || 400;
     const activeIndex = Math.round(track.scrollLeft / (cardWidth + 24));
     paginationDots.forEach((dot, idx) => {
       dot.classList.toggle("active", idx === activeIndex);
@@ -323,13 +323,13 @@ if (mapVideo) {
 
   prevBtn?.addEventListener("click", () => {
     const firstCard = track.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.clientWidth || 500;
+    const cardWidth = firstCard?.clientWidth || 400;
     track.scrollBy({ left: -(cardWidth + 24), behavior: "smooth" });
   });
 
   nextBtn?.addEventListener("click", () => {
     const firstCard = track.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.clientWidth || 500;
+    const cardWidth = firstCard?.clientWidth || 400;
     track.scrollBy({ left: cardWidth + 24, behavior: "smooth" });
   });
 
@@ -337,10 +337,24 @@ if (mapVideo) {
     dot.addEventListener("click", () => {
       const idx = Number(dot.dataset.index || 0);
       const firstCard = track.firstElementChild as HTMLElement | null;
-      const cardWidth = firstCard?.clientWidth || 500;
+      const cardWidth = firstCard?.clientWidth || 400;
       track.scrollTo({ left: idx * (cardWidth + 24), behavior: "smooth" });
     });
   });
+
+  // Touch Swipe Support
+  let startX = 0;
+  let scrollStart = 0;
+  track.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    scrollStart = track.scrollLeft;
+  }, { passive: true });
+
+  track.addEventListener("touchmove", (e) => {
+    const currentX = e.touches[0].clientX;
+    const diff = startX - currentX;
+    track.scrollLeft = scrollStart + diff;
+  }, { passive: true });
 
   track.addEventListener("scroll", updateButtons, { passive: true });
   updateButtons();
@@ -352,7 +366,6 @@ if (mapVideo) {
   const stageCol = document.getElementById("closerLookStageWrap");
   const singleStage = document.getElementById("closerSinglePhoneStage");
   const phoneFront = document.getElementById("closerPhoneFront");
-  const glare = document.getElementById("closerLookGlareFront");
   const badge = document.getElementById("closerSpatialBadge");
   const screenImg = document.getElementById("closerLookScreenImg") as HTMLImageElement | null;
   const detailTitle = document.getElementById("closerLookDetailTitle");
@@ -360,12 +373,6 @@ if (mapVideo) {
   const badgeNum = document.getElementById("closerBadgeNum");
   const badgeHeading = document.getElementById("closerBadgeHeading");
   const railItems = document.querySelectorAll<HTMLButtonElement>(".apple-rail-item");
-
-  // Ensure hero video autoplays smoothly
-  const heroVideo = document.getElementById("appleHeroVideo") as HTMLVideoElement | null;
-  if (heroVideo) {
-    heroVideo.play().catch(() => {});
-  }
 
   if (!section) return;
 
@@ -398,21 +405,16 @@ if (mapVideo) {
       currY = lerp(currY, targetY, 0.08);
 
       // Rotate single front phone stage
-      singleStage.style.transform = `scale(1) rotateX(${(-currY * 14).toFixed(2)}deg) rotateY(${(currX * 18).toFixed(2)}deg)`;
+      singleStage.style.transform = `scale(1) rotateX(${(-currY * 12).toFixed(2)}deg) rotateY(${(currX * 16).toFixed(2)}deg)`;
 
       // Front phone dynamic foreground parallax
       if (phoneFront) {
-        phoneFront.style.transform = `translate3d(${(currX * 16).toFixed(1)}px, ${(currY * 12).toFixed(1)}px, 30px)`;
-      }
-
-      // Interactive Glare on front phone
-      if (glare) {
-        glare.style.transform = `rotate(-25deg) translate(${(-currX * 22).toFixed(1)}px, ${(-currY * 22).toFixed(1)}px)`;
+        phoneFront.style.transform = `translate3d(${(currX * 14).toFixed(1)}px, ${(currY * 10).toFixed(1)}px, 20px)`;
       }
 
       // Spatial floating badge parallax
       if (badge) {
-        badge.style.transform = `translateZ(60px) translate3d(${(currX * 28).toFixed(1)}px, ${(currY * 22).toFixed(1)}px, 0)`;
+        badge.style.transform = `translateZ(40px) translate3d(${(currX * 24).toFixed(1)}px, ${(currY * 18).toFixed(1)}px, 0)`;
       }
 
       animId = requestAnimationFrame(loop);
@@ -435,7 +437,15 @@ if (mapVideo) {
     animId = requestAnimationFrame(loop);
   }
 
-  // Feature Hotspot Rail Interactive Switching
+  // Feature Hotspot Rail Interactive Switching with Authentic Mockup Images
+  const mockupMap: Record<string, string> = {
+    ida: "/images/mockups/iphone_mockup_640_ida.webp",
+    planner: "/images/mockups/iphone_mockup_planner.webp",
+    journey: "/images/mockups/iphone_mockup_stops.webp",
+    terminals: "/images/mockups/iphone_mockup_terminals.webp",
+    alerts: "/images/mockups/iphone_mockup_alerts.webp",
+  };
+
   railItems.forEach((btn) => {
     btn.addEventListener("click", () => {
       const screen = btn.dataset.screen;
@@ -453,13 +463,14 @@ if (mapVideo) {
         if (icon) icon.textContent = active ? "•" : "+";
       });
 
-      // Smooth cross-fade of active OLED screen
+      // Smooth cross-fade of active studio mockup
       screenImg.style.opacity = "0.2";
       if (detailTitle && title) detailTitle.style.opacity = "0.3";
       if (detailDesc && desc) detailDesc.style.opacity = "0.3";
 
+      const targetSrc = mockupMap[screen] || `/images/mockups/iphone_mockup_${screen}.webp`;
       const img = new Image();
-      img.src = `/screens/${screen}.webp`;
+      img.src = targetSrc;
       img.onload = () => {
         screenImg.src = img.src;
         screenImg.style.opacity = "1";
@@ -481,6 +492,18 @@ if (mapVideo) {
       };
     });
   });
+})();
+
+// Handler for appleInstallIphoneBtn (Sessão 8)
+(() => {
+  const btn = document.getElementById("appleInstallIphoneBtn");
+  const dialogEl = document.querySelector<HTMLDialogElement>("#install-dialog");
+  if (btn && dialogEl) {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      dialogEl.showModal();
+    });
+  }
 })();
 
 // Suporte a scroll instantâneo para inspeção e testes visuais de seções

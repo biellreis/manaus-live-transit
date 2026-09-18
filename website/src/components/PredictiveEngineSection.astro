@@ -14,87 +14,77 @@
       </p>
     </div>
 
-    <!-- Apple-style Bento Grid -->
+    <!-- Apple-style Bento Grid with App Images and Punchy Info -->
     <div class="apple-bento-grid">
-      <!-- Card 1: Large Featured Card (Live Telemetry Radar) -->
-      <div class="bento-card bento-card-span-2 bento-telemetry-card">
+      <!-- Card 1: Live Telemetry Radar & GPS Lock (Span 2) -->
+      <div class="bento-card bento-card-span-2 bento-image-card">
         <div class="bento-card-content">
           <span class="bento-badge">TELEMETRIA CONTÍNUA</span>
-          <h3 class="bento-title">&lt; 1 segundo de latência</h3>
-          <p class="bento-desc">
-            Cada veículo da frota de Manaus transmite sua coordenada geográfica, velocidade vetorial e sentido de deslocamento. O motor atualiza a posição no mapa sem atrasos.
-          </p>
+          <h3 class="bento-title">&lt; 1s de latência</h3>
+          <p class="bento-short-sub">Posição, velocidade vetorial e sentido da frota ao vivo.</p>
         </div>
-        <div class="bento-visual telemetry-visual" aria-hidden="true">
-          <div class="radar-circle radar-c1"></div>
-          <div class="radar-circle radar-c2"></div>
-          <div class="radar-circle radar-c3"></div>
-          <div class="radar-center-blip">
-            <span class="blip-pulse"></span>
-            <span class="blip-core"></span>
-          </div>
-          <div class="telemetry-stat-overlay">
-            <div class="telemetry-pill">
-              <span class="dot-green"></span>
-              <strong>Linha 640</strong>
-              <span>Vel: 42 km/h</span>
-            </div>
-            <div class="telemetry-pill pill-sub">
-              <strong>GPS Lock</strong>
-              <span>-3.0842, -60.0215</span>
-            </div>
-          </div>
+        <div class="bento-img-container">
+          <img
+            src="/images/bento/bento_telemetry_gps.webp"
+            alt="Telemetria e GPS da Linha 640"
+            class="bento-app-crop-img"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
 
       <!-- Card 2: Smart Next-Bus Succession -->
-      <div class="bento-card bento-succession-card">
+      <div class="bento-card bento-image-card">
         <div class="bento-card-content">
-          <span class="bento-badge">ALGORITMO INTELIGENTE</span>
-          <h3 class="bento-title">Sucessão Automática</h3>
-          <p class="bento-desc">
-            Assim que o ônibus ultrapassa a sua parada, o aplicativo atualiza instantaneamente a contagem regressiva para o próximo veículo que vem atrás na rota.
-          </p>
+          <span class="bento-badge">SUCESSÃO AUTOMÁTICA</span>
+          <h3 class="bento-title">Próximo Ônibus</h3>
+          <p class="bento-short-sub">Atualização instantânea após o veículo passar.</p>
         </div>
-        <div class="bento-visual succession-visual" aria-hidden="true">
-          <div class="succession-step past-step">
-            <span class="step-num">640</span>
-            <span class="step-status">Passou da parada</span>
-          </div>
-          <div class="succession-arrow">↓</div>
-          <div class="succession-step active-step">
-            <span class="step-num">640</span>
-            <span class="step-status text-blue">Próximo: 3 min</span>
-          </div>
+        <div class="bento-img-container">
+          <img
+            src="/images/bento/bento_succession.webp"
+            alt="Sucessão do próximo ônibus em tempo real"
+            class="bento-app-crop-img"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
 
       <!-- Card 3: 34 Georeferenced Stations -->
-      <div class="bento-card bento-corridors-card">
+      <div class="bento-card bento-image-card">
         <div class="bento-card-content">
           <span class="bento-badge">CORREDORES EXPRESSOS</span>
-          <h3 class="bento-title">34 Paradas Mapeadas</h3>
-          <p class="bento-desc">
-            Cobertura total da Constantino Nery, Djalma Batista e Torquato Tapajós com coordenadas georreferenciadas na malha viária de Manaus.
-          </p>
+          <h3 class="bento-title">34 Paradas</h3>
+          <p class="bento-short-sub">Corredores Constantino Nery e Djalma Batista.</p>
         </div>
-        <div class="bento-metric-large">100%</div>
+        <div class="bento-img-container">
+          <img
+            src="/images/bento/bento_stations_34.webp"
+            alt="34 paradas mapeadas nos corredores"
+            class="bento-app-crop-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
 
-      <!-- Card 4: Open Real-Time Data (Span 2) -->
-      <div class="bento-card bento-card-span-2 bento-engine-flow-card">
+      <!-- Card 4: Dynamic Real-Time ETA (Span 2) -->
+      <div class="bento-card bento-card-span-2 bento-image-card">
         <div class="bento-card-content">
           <span class="bento-badge">PRECISÃO DE CHEGADA</span>
-          <h3 class="bento-title">Estimativa Dinâmica, não teórica</h3>
-          <p class="bento-desc">
-            Ao contrário de tabelas de horários estáticas no papel, o Manô calcula o tempo estimado de chegada (ETA) cruzando o tráfego em tempo real, velocidade dos corredores e distância métrica até o ponto.
-          </p>
+          <h3 class="bento-title">ETA Dinâmico em Tempo Real</h3>
+          <p class="bento-short-sub">Tráfego ao vivo e contagem de minutos até a sua parada.</p>
         </div>
-        <div class="bento-chips-row" aria-hidden="true">
-          <span class="bento-spec-chip">Velocidade Vetorial</span>
-          <span class="bento-spec-chip">Desvio de Rota</span>
-          <span class="bento-spec-chip">Ponto de Parada Exato</span>
-          <span class="bento-spec-chip">Tempo Real</span>
+        <div class="bento-img-container">
+          <img
+            src="/images/bento/bento_eta_calc.webp"
+            alt="Cálculo de tempo de chegada dinâmico"
+            class="bento-app-crop-img"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
     </div>
