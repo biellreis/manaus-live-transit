@@ -26,11 +26,15 @@ window.addEventListener("load", () => {
   forceHeroTop();
   setTimeout(forceHeroTop, 50);
   setTimeout(forceHeroTop, 150);
-  setTimeout(forceHeroTop, 300);
-  // Ativa smooth scroll apenas após a página estar 100% montada no topo
   setTimeout(() => {
+    forceHeroTop();
+    // Ativa os IDs das sessões apenas após a página estar 100% estabilizada no topo
+    document.querySelectorAll<HTMLElement>("[data-section-id]").forEach((el) => {
+      const sid = el.getAttribute("data-section-id");
+      if (sid) el.id = sid;
+    });
     document.documentElement.classList.add("smooth-scroll");
-  }, 400);
+  }, 350);
 });
 
 // Intercepta cliques de links internos para rolar suavemente sem sujar a URL com hash
@@ -41,14 +45,15 @@ document.querySelectorAll<HTMLAnchorElement>("a[href^='#']").forEach((anchor) =>
     if (hash === "#inicio") {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      try { history.replaceState(null, "", window.location.pathname + window.location.search); } catch (_) {}
+      try { history.replaceState(null, "", window.location.pathname); } catch (_) {}
       return;
     }
-    const target = document.querySelector(hash);
+    const cleanId = hash.replace("#", "");
+    const target = document.getElementById(cleanId) || document.querySelector(`[data-section-id="${cleanId}"]`);
     if (target) {
       e.preventDefault();
       target.scrollIntoView({ behavior: "smooth" });
-      try { history.replaceState(null, "", window.location.pathname + window.location.search); } catch (_) {}
+      try { history.replaceState(null, "", window.location.pathname); } catch (_) {}
     }
   });
 });
