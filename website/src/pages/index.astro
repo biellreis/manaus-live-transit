@@ -74,6 +74,12 @@ const schemaApp = {
       }
     }
     window.addEventListener('scroll', __lockEarlyScroll, { passive: true });
+    window.addEventListener('hashchange', function() {
+      if (window.location.hash) {
+        try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch(_) {}
+      }
+      window.scrollTo(0, 0);
+    });
   </script>
 </head>
 <body>

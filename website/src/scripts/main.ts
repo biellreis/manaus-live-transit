@@ -22,6 +22,7 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", forceHeroTop);
 }
 window.addEventListener("pageshow", forceHeroTop);
+window.addEventListener("hashchange", forceHeroTop);
 window.addEventListener("load", () => {
   forceHeroTop();
   setTimeout(forceHeroTop, 50);
