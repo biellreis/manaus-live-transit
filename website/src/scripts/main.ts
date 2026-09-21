@@ -96,16 +96,19 @@ if (dialog) {
 
 // 2. SHOWCASE CENTRAL — ALTERNÂNCIA DE TELAS DO IPHONE 16 PRO (JOURNEY / HOME)
 (() => {
-  const toggleBtns = document.querySelectorAll<HTMLButtonElement>("[data-phone-screen]");
+  const tabCards = document.querySelectorAll<HTMLButtonElement>("[data-stage-tab], [data-phone-screen]");
   const phoneDisplay = document.querySelector<HTMLImageElement>("#showcasePhoneDisplay");
-  if (!toggleBtns.length || !phoneDisplay) return;
+  if (!tabCards.length || !phoneDisplay) return;
 
-  toggleBtns.forEach((btn) => {
+  tabCards.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const screen = btn.dataset.phoneScreen;
+      const screen = btn.dataset.stageTab || btn.dataset.phoneScreen;
       if (!screen) return;
-      toggleBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
+      tabCards.forEach((b) => {
+        const isCurrent = b === btn;
+        b.classList.toggle("active", isCurrent);
+        b.setAttribute("aria-selected", String(isCurrent));
+      });
       phoneDisplay.src = `/screens/${screen}.webp`;
     });
   });
