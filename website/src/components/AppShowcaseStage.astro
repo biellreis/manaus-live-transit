@@ -1,0 +1,229 @@
+---
+import Phone from './Phone.astro';
+---
+
+<section class="apple-showcase-section" id="aplicativo" aria-labelledby="aplicativo-heading">
+  <div class="apple-container showcase-wide-container">
+    <!-- Header Minimalista e Direto -->
+    <div class="apple-section-header showcase-header">
+      <h2 id="aplicativo-heading" class="apple-section-headline">
+        O Aplicativo
+      </h2>
+      <p class="apple-section-subhead">
+        O transporte de Manaus sincronizado segundo a segundo.
+      </p>
+    </div>
+
+    <!-- Composição Flagship: iPhone Realista Central + 4 Satélites de Telemetria e Trajeto -->
+    <div class="showcase-stage-layout">
+      <!-- Satélites da Esquerda: Telemetria & Radar -->
+      <div class="showcase-satellites-col left-col">
+        <!-- Satélite 1: Telemetria Veicular ao Vivo -->
+        <div class="showcase-satellite-card card-telemetry">
+          <div class="satellite-card-header">
+            <div class="satellite-tag-row">
+              <span class="live-pulse-badge">
+                <span class="pulse-dot"></span>
+                Ao Vivo
+              </span>
+              <span class="vehicle-code">Veículo #640-12</span>
+            </div>
+            <span class="latency-chip">SSE 1.000ms</span>
+          </div>
+
+          <div class="satellite-route-info">
+            <strong class="route-strong-title">Linha 640 Expresso</strong>
+            <span class="route-muted-detail">T4 Jorge Teixeira &rarr; T1 Constantino Nery</span>
+          </div>
+
+          <!-- Barra de Progresso Real (74%) -->
+          <div class="satellite-progress-box">
+            <div class="progress-legend">
+              <span>Partida (T4)</span>
+              <span class="progress-percent">74% concluído</span>
+              <span>Destino (T1)</span>
+            </div>
+            <div class="satellite-progress-bar">
+              <div class="progress-fill" style="width: 74%;"></div>
+              <div class="progress-bus-pointer" style="left: 74%;">640</div>
+            </div>
+          </div>
+
+          <!-- Métricas de Telemetria (4 Dials Compactos) -->
+          <div class="satellite-dials-row">
+            <div class="dial-chip">
+              <span class="dial-label">Velocidade</span>
+              <strong class="dial-value">44 <small>km/h</small></strong>
+            </div>
+            <div class="dial-chip">
+              <span class="dial-label">Sentido</span>
+              <strong class="dial-value">180° <small>Sul</small></strong>
+            </div>
+            <div class="dial-chip">
+              <span class="dial-label">Precisão</span>
+              <strong class="dial-value">~3 <small>metros</small></strong>
+            </div>
+            <div class="dial-chip">
+              <span class="dial-label">Latência</span>
+              <strong class="dial-value">&lt; 850 <small>ms</small></strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Satélite 2: Radar de Aproximação da Estação -->
+        <div class="showcase-satellite-card card-station-radar">
+          <div class="satellite-card-header">
+            <span class="station-eyebrow">CORREDOR BRS • ESTAÇÃO E2</span>
+            <span class="eta-live-pill">
+              <span class="pulse-dot"></span>
+              Chega em 3 min
+            </span>
+          </div>
+
+          <div class="radar-station-body">
+            <div class="radar-visual-wave" aria-hidden="true">
+              <span class="radar-core-dot"></span>
+              <span class="radar-wave-ring"></span>
+            </div>
+            <div class="radar-station-info">
+              <strong class="station-main-title">Arena da Amazônia</strong>
+              <span class="station-sub-status">Ônibus #640-12 a 450 metros • Desacelerando na plataforma</span>
+            </div>
+          </div>
+
+          <div class="station-foot-status">
+            <span class="status-chip blue">Plataforma B</span>
+            <span class="status-chip orange">Faixa Exclusiva</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Centro: iPhone 16 Pro Flagship Realista -->
+      <div class="showcase-center-phone">
+        <div class="phone-screen-toggle" role="tablist" aria-label="Alternar tela do aplicativo">
+          <button type="button" class="screen-toggle-pill active" data-phone-screen="journey">
+            Rastreamento Ao Vivo
+          </button>
+          <button type="button" class="screen-toggle-pill" data-phone-screen="home">
+            Visão Geral
+          </button>
+        </div>
+
+        <div class="phone-chassis-stage">
+          <!-- iPhone 16 Pro Mockup -->
+          <div class="phone-wrapper">
+            <Phone screen="journey" id="showcasePhoneDisplay" label="Tela do aplicativo Manô em execução no iPhone 16 Pro" eager={true} />
+          </div>
+          <!-- Ground Physical Contact Shadow (No Neon) -->
+          <div class="phone-ground-shadow" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- Satélites da Direita: Planejador & Trânsito -->
+      <div class="showcase-satellites-col right-col">
+        <!-- Satélite 3: Planejador Ponto a Ponto -->
+        <div class="showcase-satellite-card card-planner">
+          <div class="satellite-card-header">
+            <span class="planner-tag-badge">PLANEJADOR INTELIGENTE</span>
+            <span class="fare-pill">Integração R$ 0,00</span>
+          </div>
+
+          <!-- Trajeto Origem / Destino -->
+          <div class="planner-route-inputs">
+            <div class="planner-point-row">
+              <span class="point-dot blue"></span>
+              <div class="point-text">
+                <span class="point-label">ORIGEM</span>
+                <strong class="point-name">Rua Kobe — Parque 10</strong>
+              </div>
+            </div>
+            <div class="planner-point-connector"></div>
+            <div class="planner-point-row">
+              <span class="point-dot orange"></span>
+              <div class="point-text">
+                <span class="point-label">DESTINO</span>
+                <strong class="point-name">Terminal 1 (T1) — Centro</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumo da Rota Mais Rápida -->
+          <div class="planner-fast-summary">
+            <div class="fast-meta-left">
+              <span class="fast-badge">ROTA MAIS RÁPIDA</span>
+              <strong class="fast-time-val">18 min totais</strong>
+            </div>
+            <span class="fast-walk-tag">240m de caminhada</span>
+          </div>
+
+          <!-- Passos Concisos -->
+          <div class="planner-compact-steps">
+            <div class="compact-step-item">
+              <span class="step-badge">1</span>
+              <span>Caminhe 3 min até Estação E2 (Arena)</span>
+            </div>
+            <div class="compact-step-item highlight-blue">
+              <span class="step-badge">2</span>
+              <span>Embarque Linha 640 (Expresso BRS)</span>
+            </div>
+            <div class="compact-step-item">
+              <span class="step-badge">3</span>
+              <span>Desembarque direto no Terminal 1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Satélite 4: Central de Trânsito & Terminais -->
+        <div class="showcase-satellite-card card-terminals-traffic">
+          <div class="satellite-card-header">
+            <span class="traffic-tag-badge">MONITORAMENTO DA CIDADE</span>
+            <span class="status-live-chip">Operação Normal</span>
+          </div>
+
+          <!-- Terminais Integrados (Chips Compactos) -->
+          <div class="terminals-pills-row">
+            <div class="terminal-mini-chip"><strong>T1</strong> Constantino Nery</div>
+            <div class="terminal-mini-chip"><strong>T2</strong> Cachoeirinha</div>
+            <div class="terminal-mini-chip"><strong>T3</strong> Cidade Nova</div>
+            <div class="terminal-mini-chip"><strong>T4</strong> Jorge Teixeira</div>
+            <div class="terminal-mini-chip"><strong>T5</strong> São José</div>
+          </div>
+
+          <!-- Alerta de Tráfego Recente -->
+          <div class="traffic-alert-box">
+            <div class="traffic-alert-head">
+              <span class="alert-status-dot"></span>
+              <strong>Av. Djalma Batista &bull; Tráfego Lento</strong>
+            </div>
+            <p class="traffic-alert-desc">
+              Pista lateral com lentidão. Faixa exclusiva BRS da Constantino Nery fluindo normalmente com tempo estimado mantido.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Faixa de Métricas de Alta Conversão (Autoridade Sem Fricção) -->
+    <div class="showcase-metrics-bar">
+      <div class="metric-block">
+        <strong class="metric-number">240+</strong>
+        <span class="metric-label">Linhas Mapeadas</span>
+      </div>
+      <div class="metric-separator" aria-hidden="true"></div>
+      <div class="metric-block">
+        <strong class="metric-number">5</strong>
+        <span class="metric-label">Terminais Integrados</span>
+      </div>
+      <div class="metric-separator" aria-hidden="true"></div>
+      <div class="metric-block">
+        <strong class="metric-number">&lt; 850<small>ms</small></strong>
+        <span class="metric-label">Latência GPS</span>
+      </div>
+      <div class="metric-separator" aria-hidden="true"></div>
+      <div class="metric-block">
+        <strong class="metric-number">100%</strong>
+        <span class="metric-label">Gratuito e Sem Anúncios</span>
+      </div>
+    </div>
+  </div>
+</section>

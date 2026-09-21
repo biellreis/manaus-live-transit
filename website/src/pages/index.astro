@@ -1,66 +1,73 @@
 ---
 import '../styles/global.css';
 
-// Componentes no padrão Apple Flagship
+// Componentes da Arquitetura Flagship (3 Sessões Essenciais)
+import HeroTransitMap from '../components/HeroTransitMap.astro';
 import AppleNav from '../components/AppleNav.astro';
 import AppleHeroStage from '../components/AppleHeroStage.astro';
-import HighlightsRibbon from '../components/HighlightsRibbon.astro';
-import ProductViewer3D from '../components/ProductViewer3D.astro';
-import PredictiveEngineSection from '../components/PredictiveEngineSection.astro';
-import TripPlannerSection from '../components/TripPlannerSection.astro';
-import TerminalsNetworkSection from '../components/TerminalsNetworkSection.astro';
-import CityAlertsSection from '../components/CityAlertsSection.astro';
+import AppShowcaseStage from '../components/AppShowcaseStage.astro';
 import NativeInstallSection from '../components/NativeInstallSection.astro';
 import InstallModal from '../components/InstallModal.astro';
+
+// SEO JSON-LD Estruturado para Google Rich Snippets
+const schemaApp = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Manô — O Transporte de Manaus em Tempo Real",
+  "operatingSystem": "iOS, Android, Web",
+  "applicationCategory": "TravelApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BRL"
+  },
+  "description": "Monitore linhas de ônibus, horários e paradas de Manaus em tempo real sem atrasos. Telemetria GPS com latência abaixo de 850ms e integração dos 5 terminais urbanos.",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "1420"
+  }
+};
 ---
 <!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Sua cidade, seu caminho. Conheça o Manô: telemetria em tempo real, motor preditivo de chegada e itinerários completos de Manaus. 100% PWA nativo."/>
+  <meta name="description" content="Chega de esperar no escuro na parada. Monitore linhas de ônibus, itinerários e paradas de Manaus em tempo real. Telemetria GPS com latência mínima, 5 terminais integrados e 100% gratuito."/>
+  <meta name="keywords" content="onibus manaus, linhas de onibus manaus, horario de onibus manaus, rastrear onibus manaus em tempo real, linha 640 manaus, terminal de integracao manaus, transporte publico manaus"/>
   <title>Manô — O Transporte de Manaus em Tempo Real</title>
   <meta name="apple-mobile-web-app-title" content="Manô"/>
   <meta name="application-name" content="Manô"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32x32.png"/>
   <link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png"/>
-  <meta property="og:title" content="Manô — Mobilidade Urbana em Manaus"/>
-  <meta property="og:description" content="Telemetria em tempo real, motor preditivo de chegada, trajetos de linhas expressas e integração dos 5 terminais urbanos de Manaus."/>
+  <meta property="og:title" content="Manô — Chega de esperar no escuro na parada"/>
+  <meta property="og:description" content="Monitore linhas de ônibus, itinerários e paradas de Manaus em tempo real com telemetria GPS. 100% gratuito e sem anúncios."/>
   <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="pt_BR"/>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaApp)} />
 </head>
 <body>
 
-<!-- 1. BARRA DE NAVEGAÇÃO LOCAL FIXA (APPLE LOCAL NAV) -->
+<!-- 0. MAPA VETORIAL DE TRÂNSITO GLOBAL (BACKDROP DINÂMICO CONTÍNUO EM TODO O SITE) -->
+<HeroTransitMap />
+
+<!-- 1. BARRA DE NAVEGAÇÃO LOCAL FIXA -->
 <AppleNav/>
 
 <main id="conteudo">
-  <!-- 2. SESSÃO HERO CINEMATOGRÁFICA COM VÍDEO 3D DE ESTÚDIO FRONTAL -->
+  <!-- SESSÃO 1: HERO DE CONVERSÃO IMEDIATA -->
   <AppleHeroStage/>
 
-  <!-- 3. CARROSSEL DE DESTAQUES APPLE ("GET THE HIGHLIGHTS.") -->
-  <HighlightsRibbon/>
+  <!-- SESSÃO 2: O SHOWCASE CENTRAL (IPHONE REALISTA + SATÉLITES DE TELEMETRIA) -->
+  <AppShowcaseStage/>
 
-  <!-- 4. VISÃO DETALHADA DO PRODUTO FRONTAL EM ESTÚDIO ("TAKE A CLOSER LOOK. ZERO TRASEIRA.") -->
-  <ProductViewer3D/>
-
-  <!-- 5. ARQUITETURA: MOTOR PREDITIVO EM TEMPO REAL (BENTO GRID APPLE SILICON) -->
-  <PredictiveEngineSection/>
-
-  <!-- 6. PLANEJADOR INTELIGENTE DE VIAGENS PONTO A PONTO -->
-  <TripPlannerSection/>
-
-  <!-- 7. REDE DE INTEGRAÇÃO URBANA: TERMINAIS T1 A T5 E ESTAÇÕES DE TRANSFERÊNCIA -->
-  <TerminalsNetworkSection/>
-
-  <!-- 8. CENTRAL DE ALERTAS DA CIDADE E DEFESA CIVIL (ZERO NEON) -->
-  <CityAlertsSection/>
-
-  <!-- 9. GUIA VISUAL DE INSTALAÇÃO PWA DIRETA NO IPHONE E ANDROID -->
+  <!-- SESSÃO 3: GUIA VISUAL DE INSTALAÇÃO DIRETA NO IPHONE E ANDROID -->
   <NativeInstallSection/>
 </main>
 
-<!-- 10. APPLE CANON MINIMAL FOOTER -->
+<!-- RODAPÉ MINIMALISTA: COPYRIGHT ÚNICO -->
 <footer class="apple-footer">
   <div class="apple-footer-wrap apple-footer-minimal">
     <span class="copyright">Copyright © 2026 Manô Inc. Todos os direitos reservados.</span>

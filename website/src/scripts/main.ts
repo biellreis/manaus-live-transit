@@ -94,213 +94,24 @@ if (dialog) {
   dialog.addEventListener("close", () => activeOpener?.focus());
 }
 
-// 2. HIGHLIGHTS RIBBON CAROUSEL CONTROLS (MOUSE DRAG + TOUCH SWIPE FLUIDO)
+// 2. SHOWCASE CENTRAL — ALTERNÂNCIA DE TELAS DO IPHONE 16 PRO (JOURNEY / HOME)
 (() => {
-  const scroller = document.querySelector<HTMLElement>(".apple-highlights-track-wrapper");
-  const track = document.getElementById("highlightsTrack");
-  const prevBtn = document.getElementById("highlightsPrevBtn") as HTMLButtonElement | null;
-  const nextBtn = document.getElementById("highlightsNextBtn") as HTMLButtonElement | null;
-  const paginationDots = document.querySelectorAll<HTMLButtonElement>(".pagination-dot");
-  if (!scroller || !track) return;
+  const toggleBtns = document.querySelectorAll<HTMLButtonElement>("[data-phone-screen]");
+  const phoneDisplay = document.querySelector<HTMLImageElement>("#showcasePhoneDisplay");
+  if (!toggleBtns.length || !phoneDisplay) return;
 
-  const getStepWidth = () => {
-    const firstCard = track.firstElementChild as HTMLElement | null;
-    return (firstCard?.clientWidth || 380) + 24;
-  };
-
-  const updateButtons = () => {
-    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-    if (prevBtn) prevBtn.disabled = scroller.scrollLeft <= 10;
-    if (nextBtn) nextBtn.disabled = scroller.scrollLeft >= maxScroll - 10;
-
-    const stepWidth = getStepWidth();
-    const activeIndex = Math.min(
-      paginationDots.length - 1,
-      Math.max(0, Math.round(scroller.scrollLeft / stepWidth))
-    );
-    paginationDots.forEach((dot, idx) => {
-      dot.classList.toggle("active", idx === activeIndex);
-    });
-  };
-
-  scroller.addEventListener("scroll", updateButtons, { passive: true });
-
-  prevBtn?.addEventListener("click", () => {
-    scroller.scrollBy({ left: -getStepWidth(), behavior: "smooth" });
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    scroller.scrollBy({ left: getStepWidth(), behavior: "smooth" });
-  });
-
-  paginationDots.forEach((dot) => {
-    dot.addEventListener("click", () => {
-      const idx = Number(dot.dataset.index || 0);
-      scroller.scrollTo({ left: idx * getStepWidth(), behavior: "smooth" });
-    });
-  });
-
-  // Mouse Drag Support
-  let isDown = false;
-  let startX = 0;
-  let scrollStart = 0;
-
-  scroller.addEventListener("mousedown", (e) => {
-    isDown = true;
-    scroller.style.cursor = "grabbing";
-    scroller.style.userSelect = "none";
-    startX = e.pageX - scroller.offsetLeft;
-    scrollStart = scroller.scrollLeft;
-  });
-
-  window.addEventListener("mouseup", () => {
-    if (isDown) {
-      isDown = false;
-      if (scroller) {
-        scroller.style.cursor = "grab";
-        scroller.style.removeProperty("user-select");
-      }
-    }
-  });
-
-  scroller.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - scroller.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    scroller.scrollLeft = scrollStart - walk;
-  });
-
-  // Touch Swipe Support
-  scroller.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-    scrollStart = scroller.scrollLeft;
-  }, { passive: true });
-
-  scroller.addEventListener("touchmove", (e) => {
-    const currentX = e.touches[0].clientX;
-    const walk = (currentX - startX) * 1.3;
-    scroller.scrollLeft = scrollStart - walk;
-  }, { passive: true });
-
-  updateButtons();
-})();
-
-// 3. SISTEMA (SESSÃO 3) - CONTROLE DE ABAS DO APLICATIVO
-(() => {
-  const tabBtns = document.querySelectorAll<HTMLButtonElement>("[data-app-tab], [data-sys-tab]");
-  const screens = document.querySelectorAll<HTMLElement>(".app-screen-view, .system-screen-view");
-  if (!tabBtns.length) return;
-
-  tabBtns.forEach((btn) => {
+  toggleBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const targetId = btn.dataset.appTab || btn.dataset.sysTab;
-      tabBtns.forEach((b) => {
-        const active = b === btn;
-        b.classList.toggle("active", active);
-        b.setAttribute("aria-selected", String(active));
-      });
-      screens.forEach((sc) => {
-        const isTarget = sc.id === `appScreen-${targetId}` || sc.id === `sysView-${targetId}`;
-        sc.classList.toggle("active", isTarget);
-      });
-    });
-  });
-})();
-
-// 4. ALERTAS (SESSÃO 7) - FILTRO DE CATEGORIAS
-(() => {
-  const filterBtns = document.querySelectorAll<HTMLButtonElement>(".alert-filter-pill");
-  const alertCards = document.querySelectorAll<HTMLElement>(".native-alert-card");
-  if (!filterBtns.length) return;
-
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      filterBtns.forEach((b) => b.classList.remove("active"));
+      const screen = btn.dataset.phoneScreen;
+      if (!screen) return;
+      toggleBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-      const label = btn.textContent?.trim().toLowerCase();
-      alertCards.forEach((card) => {
-        if (!label || label === "todos") {
-          card.style.display = "block";
-        } else if (label === "acidentes" || label === "lentidão") {
-          card.style.display = card.classList.contains("card-orange") ? "block" : "none";
-        } else if (label === "fiscalização") {
-          card.style.display = card.classList.contains("card-blue") ? "block" : "none";
-        } else {
-          card.style.display = "block";
-        }
-      });
+      phoneDisplay.src = `/screens/${screen}.webp`;
     });
   });
 })();
 
-// 5. FILTROS INTERNOS DO SISTEMA (SESSÃO 3)
-(() => {
-  // Linhas Filter
-  const lineFilterBtns = document.querySelectorAll<HTMLButtonElement>("[data-line-filter]");
-  const lineCards = document.querySelectorAll<HTMLElement>(".lines-cards-grid .app-line-card");
-  if (lineFilterBtns.length && lineCards.length) {
-    lineFilterBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        lineFilterBtns.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const f = btn.dataset.lineFilter;
-        lineCards.forEach((card, idx) => {
-          if (f === "all") {
-            card.style.display = "flex";
-          } else if (f === "direto") {
-            card.style.display = idx === 0 || idx === 1 ? "flex" : "none";
-          } else if (f === "bairro") {
-            card.style.display = idx === 2 ? "flex" : "none";
-          } else if (f === "circular") {
-            card.style.display = idx === 3 ? "flex" : "none";
-          }
-        });
-      });
-    });
-  }
-
-  // Alertas Filter in Sessão 3
-  const alertFilterBtns = document.querySelectorAll<HTMLButtonElement>("[data-alert-filter]");
-  const alertCards = document.querySelectorAll<HTMLElement>(".alerts-feed-grid .app-alert-card");
-  if (alertFilterBtns.length && alertCards.length) {
-    alertFilterBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        alertFilterBtns.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const f = btn.dataset.alertFilter;
-        alertCards.forEach((card, idx) => {
-          if (f === "all") {
-            card.style.display = "flex";
-          } else if (f === "acidentes" || f === "lentidao") {
-            card.style.display = idx === 0 ? "flex" : "none";
-          } else if (f === "fiscalizacao") {
-            card.style.display = idx === 1 ? "flex" : "none";
-          }
-        });
-      });
-    });
-  }
-})();
-
-// 6. PLANEJADOR (SESSÃO 5) - SELEÇÃO DE ROTAS DINÂMICA
-(() => {
-  const optionCards = document.querySelectorAll<HTMLElement>(".planner-option-card");
-  const busBubble = document.querySelector<HTMLElement>(".bus-position-marker .bus-id-tag");
-  if (!optionCards.length) return;
-
-  optionCards.forEach((card, idx) => {
-    card.addEventListener("click", () => {
-      optionCards.forEach((c) => c.classList.remove("active"));
-      card.classList.add("active");
-      if (busBubble) {
-        busBubble.textContent = idx === 0 ? "Ônibus 640" : "Ônibus 350";
-      }
-    });
-  });
-})();
-
-// Suporte a scroll instantâneo para inspeção e testes visuais de seções
+// 3. Suporte a scroll instantâneo para inspeção e testes visuais de seções
 (() => {
   const params = new URLSearchParams(window.location.search);
   if (params.has("y")) {
@@ -308,3 +119,4 @@ if (dialog) {
     window.scrollTo({ top: y, behavior: "instant" });
   }
 })();
+
