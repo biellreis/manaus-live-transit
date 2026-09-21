@@ -2,367 +2,418 @@
 ---
 
 <section class="apple-closer-look-section" id="sistema" aria-labelledby="closer-look-heading">
-  <div class="closer-look-container">
+  <div class="apple-container closer-look-container">
     <!-- Header: Short title and subtitle -->
     <div class="closer-look-header">
       <h2 id="closer-look-heading" class="apple-section-headline">
         O Sistema
       </h2>
       <p class="apple-section-subhead">
-        Linhas, paradas e corredores ao vivo.
+        A interface real do aplicativo em 4 módulos.
       </p>
     </div>
 
-    <!-- Minimalist Clean Horizontal Tab Menu -->
-    <div class="system-nav-tabs" role="tablist" aria-label="Módulos do sistema Manô">
+    <!-- Official 4-Tab Navigation (Matching BottomNav.tsx from client/src) -->
+    <div class="app-nav-tabs-bar" role="tablist" aria-label="Navegação do aplicativo Manô">
       <button
-        class="system-tab-btn active"
+        class="app-nav-tab-btn active"
         role="tab"
         aria-selected="true"
-        data-sys-tab="ida"
+        data-app-tab="home"
+        id="tabBtn-home"
       >
-        <span>Linhas Expressas (640)</span>
+        <svg class="tab-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Início</span>
       </button>
 
       <button
-        class="system-tab-btn"
+        class="app-nav-tab-btn"
         role="tab"
         aria-selected="false"
-        data-sys-tab="planner"
+        data-app-tab="lines"
+        id="tabBtn-lines"
       >
-        <span>Planejador de Viagens</span>
+        <svg class="tab-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M8 6v6"/>
+          <path d="M15 6v6"/>
+          <path d="M2 12h19.6"/>
+          <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4C2.9 6 1.9 6.8 1.6 7.8l-1.4 5c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/>
+          <circle cx="7" cy="18" r="2"/>
+          <path d="M9 18h5"/>
+          <circle cx="16" cy="18" r="2"/>
+        </svg>
+        <span>Linhas</span>
       </button>
 
       <button
-        class="system-tab-btn"
+        class="app-nav-tab-btn"
         role="tab"
         aria-selected="false"
-        data-sys-tab="journey"
+        data-app-tab="stops"
+        id="tabBtn-stops"
       >
-        <span>Trajetos & Paradas</span>
+        <svg class="tab-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Terminais</span>
       </button>
 
       <button
-        class="system-tab-btn"
+        class="app-nav-tab-btn"
         role="tab"
         aria-selected="false"
-        data-sys-tab="terminals"
+        data-app-tab="alerts"
+        id="tabBtn-alerts"
       >
-        <span>Terminais Urbanos</span>
-      </button>
-
-      <button
-        class="system-tab-btn"
-        role="tab"
-        aria-selected="false"
-        data-sys-tab="alerts"
-      >
-        <span>Alertas da Cidade</span>
+        <svg class="tab-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+        </svg>
+        <span>Alertas</span>
       </button>
     </div>
 
-    <!-- Full-Extension System Display Stage (Zero Phone Mockup, 100% Real App System) -->
-    <div class="system-full-stage">
-      <!-- 1. ABA LINHAS EXPRESSAS (640) -->
-      <div class="system-screen-view active" id="sysView-ida">
-        <div class="system-stage-header">
-          <div class="stage-line-title">
-            <span class="sys-chip blue">640</span>
-            <div>
-              <h3>Expresso T4 / T3 / Centro</h3>
-              <p>Sentido Ida • Corredores Constantino Nery e Djalma Batista</p>
-            </div>
-          </div>
-          <div class="stage-live-tag">
-            <span class="pulse-dot"></span>
-            <span>TELEMETRIA ATIVA (SSE 4.5s)</span>
-          </div>
-        </div>
-
-        <div class="system-stage-grid">
-          <!-- Left: Live Telemetry Instrument -->
-          <div class="system-card telemetry-card">
-            <span class="card-kicker">TELEMETRIA DO VEÍCULO</span>
-            <div class="telemetry-big-stat">
-              <span class="stat-number">44</span>
-              <span class="stat-unit">km/h</span>
-            </div>
-            <div class="telemetry-meta-grid">
-              <div class="meta-item">
-                <span class="meta-label">PREFIXO / PLACA</span>
-                <span class="meta-value">OAA-4819</span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">INTERVALO</span>
-                <span class="meta-value">6 min</span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">PONTUALIDADE</span>
-                <span class="meta-value status-good">No Horário</span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">LOTAÇÃO</span>
-                <span class="meta-value">Moderada</span>
-              </div>
-            </div>
-            <div class="telemetry-next-box">
-              <span class="next-label">PRÓXIMA PARADA</span>
-              <strong class="next-station">Estação E2 — Arena da Amazônia</strong>
-              <span class="next-eta">Chegando em 3 min • 450m</span>
-            </div>
+    <!-- Live Screen View Container (Real App UI Screens) -->
+    <div class="app-screens-stage">
+      <!-- 1. TELA INÍCIO (HomeTab.tsx) -->
+      <div class="app-screen-view active" id="appScreen-home">
+        <div class="home-screen-shell">
+          <!-- Greeting Header -->
+          <div class="home-screen-header">
+            <h3 class="home-greeting">Olá, Passageiro!</h3>
+            <span class="home-badge-live">Manaus ao Vivo</span>
           </div>
 
-          <!-- Right: Visual Vector Route Map Display -->
-          <div class="system-card map-corridor-card">
-            <span class="card-kicker">CORREDOR EM TEMPO REAL</span>
-            <div class="corridor-map-visual">
-              <svg viewBox="0 0 600 240" fill="none" class="corridor-svg" preserveAspectRatio="xMidYMid meet">
-                <!-- Corridor line -->
-                <path d="M 40 120 L 160 120 L 300 120 L 440 120 L 560 120" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
-                <!-- Stations -->
-                <g transform="translate(40, 120)">
-                  <circle r="8" fill="#18181b" stroke="#ffffff" stroke-width="2.5"/>
-                  <text y="28" fill="#ffffff" font-size="11" text-anchor="middle" font-weight="600">T4 Jorge Teixeira</text>
-                  <text y="42" fill="#94a3b8" font-size="10" text-anchor="middle">Partiu 14:15</text>
-                </g>
-                <g transform="translate(160, 120)">
-                  <circle r="8" fill="#18181b" stroke="#ffffff" stroke-width="2.5"/>
-                  <text y="28" fill="#ffffff" font-size="11" text-anchor="middle" font-weight="600">E4 Flores</text>
-                  <text y="42" fill="#94a3b8" font-size="10" text-anchor="middle">Passou</text>
-                </g>
-                <g transform="translate(300, 120)">
-                  <circle r="8" fill="#18181b" stroke="#ffffff" stroke-width="2.5"/>
-                  <text y="28" fill="#ffffff" font-size="11" text-anchor="middle" font-weight="600">E3 Santos Dumont</text>
-                  <text y="42" fill="#94a3b8" font-size="10" text-anchor="middle">Passou</text>
-                </g>
-                <!-- Approaching Station with Bus -->
-                <g transform="translate(400, 120)">
-                  <circle r="12" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                  <path d="M -4 3 L 4 3 L 4 -3 C 4 -4 -4 -4 -4 -3 Z" stroke="#ffffff" stroke-width="1.2" fill="none"/>
-                  <rect x="-18" y="-32" width="36" height="18" rx="5" fill="#3b82f6"/>
-                  <text x="0" y="-20" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">640</text>
-                </g>
-                <g transform="translate(440, 120)">
-                  <circle r="11" fill="#3b82f6" stroke="#ffffff" stroke-width="3"/>
-                  <text y="28" fill="#3b82f6" font-size="12" text-anchor="middle" font-weight="800">E2 Arena</text>
-                  <text y="44" fill="#3b82f6" font-size="10" text-anchor="middle" font-weight="700">Chegando (3 min)</text>
-                </g>
-                <g transform="translate(560, 120)">
-                  <circle r="8" fill="#18181b" stroke="#ffffff" stroke-width="2.5"/>
-                  <text y="28" fill="#ffffff" font-size="11" text-anchor="middle" font-weight="600">T1 Centro</text>
-                  <text y="42" fill="#94a3b8" font-size="10" text-anchor="middle">Destino Final</text>
-                </g>
+          <!-- Search Trigger Pill (Uber/99 style from HomeTab.tsx) -->
+          <div class="home-search-pill">
+            <div class="search-pill-content">
+              <svg class="search-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
               </svg>
+              <span class="search-placeholder">Para onde vamos hoje?</span>
             </div>
-            <div class="corridor-notes">
-              <span>Faixa exclusiva BRS na Constantino Nery • Monitoramento contínuo da frota</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. ABA PLANEJADOR DE VIAGENS -->
-      <div class="system-screen-view" id="sysView-planner">
-        <div class="system-stage-header">
-          <div>
-            <h3>Planejador Inteligente Ponto a Ponto</h3>
-            <p>Menor caminhada a pé e conexões com tempo de espera mínimo</p>
-          </div>
-          <span class="stage-badge-pill">ROTA OTIMIZADA</span>
-        </div>
-
-        <div class="system-stage-grid">
-          <!-- Inputs & Options -->
-          <div class="system-card">
-            <span class="card-kicker">LOCALIZAÇÃO & DESTINO</span>
-            <div class="planner-form-mock">
-              <div class="planner-field">
-                <span class="dot blue-dot"></span>
-                <div class="field-texts">
-                  <span class="label">Origem</span>
-                  <strong>Rua Kobe — Parque 10 de Novembro</strong>
-                </div>
-              </div>
-              <div class="field-connector"></div>
-              <div class="planner-field">
-                <span class="dot orange-dot"></span>
-                <div class="field-texts">
-                  <span class="label">Destino</span>
-                  <strong>Terminal 1 (T1) — Constantino Nery • Centro</strong>
-                </div>
-              </div>
-            </div>
-            <div class="planner-criteria-row">
-              <span class="crit-pill active">Mais rápida (18 min)</span>
-              <span class="crit-pill">Menor caminhada (240m)</span>
-              <span class="crit-pill">Sem baldeação</span>
-            </div>
+            <span class="search-pill-cta">Buscar</span>
           </div>
 
-          <!-- Step Progression Result -->
-          <div class="system-card">
-            <span class="card-kicker">ITINERÁRIO DETALHADO</span>
-            <div class="itinerary-steps-list">
-              <div class="step-card-row">
-                <div class="step-bullet walk-bullet">1</div>
-                <div class="step-details">
-                  <strong>Caminhada até a Estação E2 — Arena da Amazônia</strong>
-                  <span>3 min • 240 metros pela Av. Pedro Teixeira</span>
-                </div>
+          <!-- Para Você: 4 Circular Shortcut Actions (HomeTab.tsx) -->
+          <div class="home-shortcuts-bar">
+            <div class="shortcut-item">
+              <div class="shortcut-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" aria-hidden="true">
+                  <path d="M8 6v6"/>
+                  <path d="M15 6v6"/>
+                  <path d="M2 12h19.6"/>
+                  <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4C2.9 6 1.9 6.8 1.6 7.8l-1.4 5c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/>
+                  <circle cx="7" cy="18" r="2"/>
+                  <path d="M9 18h5"/>
+                  <circle cx="16" cy="18" r="2"/>
+                </svg>
               </div>
-              <div class="step-card-row active-board">
-                <div class="step-bullet bus-bullet">2</div>
-                <div class="step-details">
-                  <div class="step-line-chip-row">
-                    <span class="sys-chip blue">640</span>
-                    <strong>Embarque na Estação E2 (Plataforma B)</strong>
-                    <span class="time-tag">3 min</span>
+              <span class="shortcut-label">Ônibus Direto</span>
+            </div>
+
+            <div class="shortcut-item">
+              <div class="shortcut-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2" aria-hidden="true">
+                  <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <span class="shortcut-label">Terminais</span>
+            </div>
+
+            <div class="shortcut-item">
+              <div class="shortcut-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+              </div>
+              <span class="shortcut-label">Bairros</span>
+            </div>
+
+            <div class="shortcut-item">
+              <div class="shortcut-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
+              <span class="shortcut-label">Trânsito</span>
+            </div>
+          </div>
+
+          <!-- Mini Map & Live Vehicle Stage (HomeMiniMap.tsx) -->
+          <div class="home-map-showcase">
+            <div class="mini-map-transit-layer" aria-hidden="true">
+              <svg class="mini-map-svg" viewBox="0 0 900 320" preserveAspectRatio="none">
+                <path d="M 60,260 Q 240,240 450,160 T 840,70" stroke="#27272A" stroke-width="6" fill="none" />
+                <path d="M 120,40 Q 300,120 450,160 T 780,280" stroke="#3B82F6" stroke-width="4" fill="none" />
+                <path d="M 80,180 Q 280,170 540,200 T 820,150" stroke="#F97316" stroke-width="3" fill="none" stroke-dasharray="8 6" />
+
+                <!-- Transit Hubs -->
+                <circle cx="120" cy="40" r="7" fill="#F97316" />
+                <circle cx="450" cy="160" r="8" fill="#3B82F6" />
+                <circle cx="780" cy="280" r="7" fill="#F97316" />
+              </svg>
+
+              <!-- Live Bus Markers on Map -->
+              <div class="mini-bus-marker bus-640" style="left: 45%; top: 46%;">
+                <span class="mini-bus-tag blue">640</span>
+              </div>
+              <div class="mini-bus-marker bus-300" style="left: 72%; top: 22%;">
+                <span class="mini-bus-tag orange">300</span>
+              </div>
+            </div>
+
+            <!-- Floating Telemetry Snapshot Card (BusTelemetryCard.tsx) -->
+            <div class="floating-telemetry-pill">
+              <div class="telemetry-pill-head">
+                <div class="telemetry-pill-bus">
+                  <span class="pill-bus-code">640</span>
+                  <div class="pill-bus-info">
+                    <strong>Veículo #640-12</strong>
+                    <span>Expresso T4 / Centro</span>
                   </div>
-                  <span>Expresso T4 / T3 / Centro • 6 paradas até o T1</span>
                 </div>
+                <span class="pill-status-ok">Conectado</span>
               </div>
-              <div class="step-card-row">
-                <div class="step-bullet dest-bullet">3</div>
-                <div class="step-details">
-                  <strong>Desembarque no Terminal 1 (T1)</strong>
-                  <span>Conexão livre para qualquer linha da Zona Sul ou Centro</span>
-                </div>
+              <div class="telemetry-pill-progress">
+                <div class="pill-progress-bar" style="width: 74%;"></div>
+              </div>
+              <div class="telemetry-pill-meta">
+                <span>Velocidade: <strong>44 km/h</strong></span>
+                <span>Próxima: <strong>Estação E2 Arena (3 min)</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Destination Chips -->
+          <div class="home-destinations-row">
+            <span class="dest-chip">Terminal 1 — Constantino Nery</span>
+            <span class="dest-chip">Arena da Amazônia</span>
+            <span class="dest-chip">Terminal 4 — Jorge Teixeira</span>
+            <span class="dest-chip">Estação Santos Dumont</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. TELA LINHAS (LinesTab.tsx) -->
+      <div class="app-screen-view" id="appScreen-lines">
+        <div class="lines-screen-shell">
+          <div class="lines-screen-header">
+            <div>
+              <h3 class="lines-title">Linhas de Ônibus</h3>
+              <p class="lines-sub">240+ linhas com telemetria ativa em Manaus</p>
+            </div>
+            <span class="lines-count-pill">Frota Monitorada</span>
+          </div>
+
+          <!-- Search Input (LinesTab.tsx) -->
+          <div class="lines-search-container">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lines-search-icon" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <span class="lines-search-mock">Buscar por número ou destino (ex: 640, Centro, T4)...</span>
+          </div>
+
+          <!-- Category Filter Chips -->
+          <div class="lines-filter-chips">
+            <span class="filter-pill active">Todas as Linhas</span>
+            <span class="filter-pill">Ônibus Direto</span>
+            <span class="filter-pill">Linhas de Bairro</span>
+            <span class="filter-pill">Circulares</span>
+          </div>
+
+          <!-- Lines Cards Grid -->
+          <div class="lines-cards-grid">
+            <div class="app-line-card">
+              <div class="line-card-code blue">640</div>
+              <div class="line-card-info">
+                <h4>Expresso T4 / T3 / Centro</h4>
+                <p>Via Constantino Nery e Djalma Batista</p>
+              </div>
+              <div class="line-card-eta">
+                <span class="eta-pill blue">4 min</span>
+                <span class="eta-label">No Horário</span>
+              </div>
+            </div>
+
+            <div class="app-line-card">
+              <div class="line-card-code blue">300</div>
+              <div class="line-card-info">
+                <h4>Expresso T3 / Centro</h4>
+                <p>Via Av. Torquato Tapajós</p>
+              </div>
+              <div class="line-card-eta">
+                <span class="eta-pill blue">7 min</span>
+                <span class="eta-label">No Horário</span>
+              </div>
+            </div>
+
+            <div class="app-line-card">
+              <div class="line-card-code orange">448</div>
+              <div class="line-card-info">
+                <h4>Cidade de Deus / T1 / Centro</h4>
+                <p>Via Max Teixeira e BRS</p>
+              </div>
+              <div class="line-card-eta">
+                <span class="eta-pill orange">12 min</span>
+                <span class="eta-label">Fluxo Normal</span>
+              </div>
+            </div>
+
+            <div class="app-line-card">
+              <div class="line-card-code orange">560</div>
+              <div class="line-card-info">
+                <h4>T4 / Cidade de Deus / Centro</h4>
+                <p>Via Autaz Mirim e Corredor Norte</p>
+              </div>
+              <div class="line-card-eta">
+                <span class="eta-pill orange">15 min</span>
+                <span class="eta-label">Fluxo Normal</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 3. ABA TRAJETOS & PARADAS -->
-      <div class="system-screen-view" id="sysView-journey">
-        <div class="system-stage-header">
-          <div>
-            <h3>Trajetos & Paradas Georreferenciadas</h3>
-            <p>Mais de 240 linhas catalogadas com paradas de ida e volta mapeadas</p>
+      <!-- 3. TELA TERMINAIS (StopsTab.tsx) -->
+      <div class="app-screen-view" id="appScreen-stops">
+        <div class="stops-screen-shell">
+          <div class="stops-screen-header">
+            <div>
+              <h3 class="stops-title">Terminais e Plataformas</h3>
+              <p class="stops-sub">Integração sem catraca e conexões municipais</p>
+            </div>
+            <span class="stops-tag-hub">5 Terminais (T1 a T5)</span>
           </div>
-          <span class="stage-badge-pill">MALHA COMPLETA</span>
-        </div>
 
-        <div class="system-stage-grid">
-          <div class="system-card full-width-card">
-            <div class="corridor-timeline-panoramic">
-              <div class="timeline-station-box">
-                <span class="station-code">T4</span>
-                <strong>Terminal 4</strong>
-                <span class="station-sub">Jorge Teixeira</span>
+          <!-- Segment Tabs Switcher -->
+          <div class="stops-segment-switcher">
+            <span class="segment-btn active">Terminais (T1 ao T5)</span>
+            <span class="segment-btn">Estações (E1 a E4)</span>
+          </div>
+
+          <!-- Terminais Cards Grid -->
+          <div class="terminals-cards-grid">
+            <div class="app-terminal-card">
+              <div class="terminal-badge-squircle orange">T1</div>
+              <div class="terminal-card-body">
+                <h4>Terminal 1 — Constantino Nery</h4>
+                <p>Centro • Conexão dos corredores Norte e Sul</p>
+                <div class="terminal-lines-row">
+                  <span class="line-mini-badge blue">640</span>
+                  <span class="line-mini-badge blue">300</span>
+                  <span class="line-mini-badge orange">448</span>
+                  <span class="line-mini-badge orange">560</span>
+                  <span class="line-mini-badge blue">120</span>
+                </div>
               </div>
-              <span class="timeline-arrow">&rarr;</span>
-              <div class="timeline-station-box">
-                <span class="station-code">E4</span>
-                <strong>Estação E4</strong>
-                <span class="station-sub">Flores</span>
+              <span class="terminal-free-pill">Integração R$ 0,00</span>
+            </div>
+
+            <div class="app-terminal-card">
+              <div class="terminal-badge-squircle orange">T2</div>
+              <div class="terminal-card-body">
+                <h4>Terminal 2 — Cachoeirinha</h4>
+                <p>Zona Sul • Conexão Polo Industrial e Centro</p>
+                <div class="terminal-lines-row">
+                  <span class="line-mini-badge blue">650</span>
+                  <span class="line-mini-badge blue">651</span>
+                  <span class="line-mini-badge orange">542</span>
+                  <span class="line-mini-badge orange">418</span>
+                </div>
               </div>
-              <span class="timeline-arrow">&rarr;</span>
-              <div class="timeline-station-box">
-                <span class="station-code">E3</span>
-                <strong>Estação E3</strong>
-                <span class="station-sub">Santos Dumont</span>
+              <span class="terminal-free-pill">Integração R$ 0,00</span>
+            </div>
+
+            <div class="app-terminal-card">
+              <div class="terminal-badge-squircle orange">T3</div>
+              <div class="terminal-card-body">
+                <h4>Terminal 3 — Cidade Nova</h4>
+                <p>Zona Norte • Conexão com bairros e Max Teixeira</p>
+                <div class="terminal-lines-row">
+                  <span class="line-mini-badge blue">640</span>
+                  <span class="line-mini-badge blue">350</span>
+                  <span class="line-mini-badge orange">450</span>
+                  <span class="line-mini-badge blue">300</span>
+                </div>
               </div>
-              <span class="timeline-arrow">&rarr;</span>
-              <div class="timeline-station-box active-station">
-                <span class="station-code">E2</span>
-                <strong>Estação E2</strong>
-                <span class="station-sub">Arena da Amazônia</span>
-                <span class="bus-now-badge">Ônibus 640 Aqui</span>
+              <span class="terminal-free-pill">Integração R$ 0,00</span>
+            </div>
+
+            <div class="app-terminal-card">
+              <div class="terminal-badge-squircle orange">T4</div>
+              <div class="terminal-card-body">
+                <h4>Terminal 4 — Jorge Teixeira</h4>
+                <p>Zona Leste • Ponto de partida do Expresso 640</p>
+                <div class="terminal-lines-row">
+                  <span class="line-mini-badge blue">640</span>
+                  <span class="line-mini-badge orange">560</span>
+                  <span class="line-mini-badge blue">652</span>
+                  <span class="line-mini-badge orange">678</span>
+                </div>
               </div>
-              <span class="timeline-arrow">&rarr;</span>
-              <div class="timeline-station-box">
-                <span class="station-code">E1</span>
-                <strong>Estação E1</strong>
-                <span class="station-sub">São Jorge</span>
-              </div>
-              <span class="timeline-arrow">&rarr;</span>
-              <div class="timeline-station-box">
-                <span class="station-code">T1</span>
-                <strong>Terminal 1</strong>
-                <span class="station-sub">Constantino Nery</span>
-              </div>
+              <span class="terminal-free-pill">Integração R$ 0,00</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 4. ABA TERMINAIS URBANOS -->
-      <div class="system-screen-view" id="sysView-terminals">
-        <div class="system-stage-header">
-          <div>
-            <h3>Rede de Terminais de Integração (T1 a T5)</h3>
-            <p>Grandes nós de transbordo e conexão de passageiros de Manaus</p>
+      <!-- 4. TELA ALERTAS (AlertsTab.tsx) -->
+      <div class="app-screen-view" id="appScreen-alerts">
+        <div class="alerts-screen-shell">
+          <div class="alerts-screen-header">
+            <div>
+              <h3 class="alerts-title">Central de Ocorrências</h3>
+              <p class="alerts-sub">Notificações operacionais e tráfego ao vivo</p>
+            </div>
+            <span class="alerts-live-status">SSE Conectado</span>
           </div>
-          <span class="stage-badge-pill">INTEGRAÇÃO R$ 0,00</span>
-        </div>
 
-        <div class="terminals-five-grid">
-          <div class="terminal-mini-card">
-            <div class="t-badge amber">T1</div>
-            <strong>Constantino Nery</strong>
-            <span>Centro Histórico</span>
-            <div class="t-lines">640, 300, 448, 560, 120</div>
+          <!-- Alert Filters -->
+          <div class="alerts-filter-chips">
+            <span class="filter-pill active">Todos</span>
+            <span class="filter-pill">Acidentes</span>
+            <span class="filter-pill">Lentidão</span>
+            <span class="filter-pill">Fiscalização</span>
           </div>
-          <div class="terminal-mini-card">
-            <div class="t-badge amber">T2</div>
-            <strong>Cachoeirinha</strong>
-            <span>Zona Sul & Polo Industrial</span>
-            <div class="t-lines">650, 651, 542, 418, 715</div>
-          </div>
-          <div class="terminal-mini-card">
-            <div class="t-badge amber">T3</div>
-            <strong>Cidade Nova</strong>
-            <span>Zona Norte</span>
-            <div class="t-lines">640, 350, 450, 300, A030</div>
-          </div>
-          <div class="terminal-mini-card">
-            <div class="t-badge amber">T4</div>
-            <strong>Jorge Teixeira</strong>
-            <span>Zona Leste</span>
-            <div class="t-lines">640, 560, 652, 678, 062</div>
-          </div>
-          <div class="terminal-mini-card">
-            <div class="t-badge amber">T5</div>
-            <strong>São José</strong>
-            <span>Alameda Cosme Ferreira</span>
-            <div class="t-lines">652, 600, 671, 008, 014</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- 5. ABA ALERTAS DA CIDADE -->
-      <div class="system-screen-view" id="sysView-alerts">
-        <div class="system-stage-header">
-          <div>
-            <h3>Alertas de Trânsito & Vias</h3>
-            <p>Ocorrências em tempo real, interdições e comunicados operacionais</p>
-          </div>
-          <span class="stage-badge-pill">TEMPO REAL</span>
-        </div>
-
-        <div class="system-stage-grid">
-          <div class="system-card alert-row-card">
-            <div class="alert-icon-box orange">!</div>
-            <div class="alert-info-box">
-              <div class="alert-top">
-                <span class="alert-type orange">LENTIDÃO POR CHUVA</span>
+          <!-- Alert Cards Grid -->
+          <div class="alerts-feed-grid">
+            <div class="app-alert-card border-orange">
+              <div class="alert-card-top">
+                <span class="alert-badge orange">LENTIDÃO</span>
                 <span class="alert-time">Há 8 min</span>
               </div>
-              <h4>Av. Djalma Batista — Próximo ao Amazonas Shopping</h4>
-              <p>Tráfego com retenção no sentido Centro devido ao acúmulo temporário de água na pista lateral. Corredor exclusivo de ônibus operando normalmente.</p>
-            </div>
-          </div>
-
-          <div class="system-card alert-row-card">
-            <div class="alert-icon-box blue">i</div>
-            <div class="alert-info-box">
-              <div class="alert-top">
-                <span class="alert-type blue">INFORMAÇÃO OPERACIONAL</span>
-                <span class="alert-time">Há 22 min</span>
+              <h4 class="alert-headline">Tráfego lento no sentido Centro após chuva na região</h4>
+              <p class="alert-text">Acúmulo parcial de água na pista lateral próximo ao Amazonas Shopping. Faixa exclusiva BRS operando normalmente.</p>
+              <div class="alert-lines-row">
+                <span class="alert-line-pill blue">640</span>
+                <span class="alert-line-pill blue">300</span>
+                <span class="alert-line-pill orange">448</span>
               </div>
-              <h4>Corredor da Constantino Nery — Estações E1 a E4</h4>
-              <p>Operação das estações de transferência fluindo com intervalos regulares de 4 a 6 minutos nas linhas troncais expressas.</p>
+            </div>
+
+            <div class="app-alert-card border-blue">
+              <div class="alert-card-top">
+                <span class="alert-badge blue">OPERAÇÃO REGULAR</span>
+                <span class="alert-time">Há 24 min</span>
+              </div>
+              <h4 class="alert-headline">Intervalos regulares e telemetria GPS 100% ativa</h4>
+              <p class="alert-text">Todas as plataformas de transferência nas estações São Jorge, Arena da Amazônia, Santos Dumont e Flores em operação plena.</p>
+              <div class="alert-lines-row">
+                <span class="alert-line-pill blue">640</span>
+                <span class="alert-line-pill blue">120</span>
+                <span class="alert-line-pill orange">560</span>
+              </div>
             </div>
           </div>
         </div>

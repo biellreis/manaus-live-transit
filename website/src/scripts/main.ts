@@ -186,22 +186,22 @@ if (dialog) {
   updateButtons();
 })();
 
-// 3. SISTEMA (SESSÃO 3) - CONTROLE DE ABAS MINIMALISTA
+// 3. SISTEMA (SESSÃO 3) - CONTROLE DE ABAS DO APLICATIVO
 (() => {
-  const tabBtns = document.querySelectorAll<HTMLButtonElement>("[data-sys-tab]");
-  const screens = document.querySelectorAll<HTMLElement>(".system-screen-view");
+  const tabBtns = document.querySelectorAll<HTMLButtonElement>("[data-app-tab], [data-sys-tab]");
+  const screens = document.querySelectorAll<HTMLElement>(".app-screen-view, .system-screen-view");
   if (!tabBtns.length) return;
 
   tabBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const targetId = btn.dataset.sysTab;
+      const targetId = btn.dataset.appTab || btn.dataset.sysTab;
       tabBtns.forEach((b) => {
         const active = b === btn;
         b.classList.toggle("active", active);
         b.setAttribute("aria-selected", String(active));
       });
       screens.forEach((sc) => {
-        const isTarget = sc.id === `sysView-${targetId}`;
+        const isTarget = sc.id === `appScreen-${targetId}` || sc.id === `sysView-${targetId}`;
         sc.classList.toggle("active", isTarget);
       });
     });

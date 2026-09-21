@@ -12,129 +12,173 @@
       </p>
     </div>
 
-    <!-- Apple-style Bento Grid with Real System Telemetry -->
-    <div class="apple-bento-grid">
-      <!-- Card 1: Live Telemetry Radar & GPS Lock (Span 2) -->
-      <div class="bento-card bento-card-span-2 bento-native-card">
-        <div class="bento-card-content">
-          <span class="bento-badge blue-badge">TELEMETRIA CONTÍNUA</span>
-          <h3 class="bento-title">&lt; 1s de latência</h3>
-          <p class="bento-short-sub">Posição, velocidade vetorial e sentido da frota ao vivo pelas avenidas.</p>
+    <!-- Telemetry Studio Stage: 2 High-Impact Living Visual Panels -->
+    <div class="telemetry-studio-grid">
+      <!-- Panel 1: Live Bus Telemetry Card (BusTelemetryCard.tsx) -->
+      <div class="telemetry-live-card">
+        <!-- Top Vehicle Head -->
+        <div class="telemetry-card-header">
+          <div class="telemetry-vehicle-badge">
+            <div class="vehicle-icon-squircle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" aria-hidden="true">
+                <path d="M8 6v6"/>
+                <path d="M15 6v6"/>
+                <path d="M2 12h19.6"/>
+                <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4C2.9 6 1.9 6.8 1.6 7.8l-1.4 5c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/>
+                <circle cx="7" cy="18" r="2"/>
+                <path d="M9 18h5"/>
+                <circle cx="16" cy="18" r="2"/>
+              </svg>
+            </div>
+            <div class="vehicle-meta">
+              <div class="vehicle-num-row">
+                <strong class="vehicle-id">Veículo #640-12</strong>
+                <span class="live-status-pill">
+                  <span class="pulse-dot"></span>
+                  Conectado
+                </span>
+              </div>
+              <span class="vehicle-route-name">Linha 640 • Expresso T4 / T3 / Centro</span>
+            </div>
+          </div>
+          <span class="telemetry-rate-pill">SSE 1.000ms</span>
         </div>
-        <div class="bento-telemetry-module">
-          <div class="bento-status-bar">
-            <span class="bento-sse-chip">
+
+        <!-- Real Route Progress Bar (originStop -> bus -> destStop) -->
+        <div class="telemetry-route-bar-box">
+          <div class="route-stops-legend">
+            <span class="stop-name origin">T4 — Jorge Teixeira</span>
+            <span class="progress-ratio-tag">74% do trajeto</span>
+            <span class="stop-name dest">T1 — Constantino Nery</span>
+          </div>
+          <div class="route-progress-track">
+            <div class="route-progress-fill" style="width: 74%;"></div>
+            <div class="route-progress-cursor" style="left: 74%;">
+              <span class="cursor-bus-bubble">640</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Visual Telemetry Dials & Gauges -->
+        <div class="telemetry-dials-grid">
+          <!-- 1. Speedometer -->
+          <div class="telemetry-dial-card">
+            <div class="dial-icon-wrap blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 12A10 10 0 1 0 2 12"/>
+                <path d="M12 12 16 8"/>
+                <path d="M12 2v2"/>
+                <path d="M12 20v2"/>
+              </svg>
+            </div>
+            <div class="dial-metric-val">44 <span class="unit">km/h</span></div>
+            <span class="dial-metric-label">Velocidade Vetorial</span>
+          </div>
+
+          <!-- 2. Compass Needle -->
+          <div class="telemetry-dial-card">
+            <div class="dial-icon-wrap blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+              </svg>
+            </div>
+            <div class="dial-metric-val">180° <span class="unit">Sul</span></div>
+            <span class="dial-metric-label">Sentido Rumo Centro</span>
+          </div>
+
+          <!-- 3. GPS Precision -->
+          <div class="telemetry-dial-card">
+            <div class="dial-icon-wrap orange">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+              </svg>
+            </div>
+            <div class="dial-metric-val">~3 <span class="unit">metros</span></div>
+            <span class="dial-metric-label">Precisão Espacial</span>
+          </div>
+
+          <!-- 4. Latency -->
+          <div class="telemetry-dial-card">
+            <div class="dial-icon-wrap blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+            </div>
+            <div class="dial-metric-val">&lt; 850 <span class="unit">ms</span></div>
+            <span class="dial-metric-label">Latência do GPS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Live Continuous Rail Timeline (MetroTimeline.tsx) -->
+      <div class="telemetry-timeline-card">
+        <div class="timeline-header-bar">
+          <div>
+            <span class="timeline-eyebrow">CORREDOR EXPRESSO BRS</span>
+            <h3 class="timeline-title">Aproximação em Tempo Real</h3>
+          </div>
+          <span class="timeline-live-chip">Ao Vivo</span>
+        </div>
+
+        <!-- Rail Track -->
+        <div class="metro-rail-timeline">
+          <!-- Rail Line -->
+          <div class="rail-track-line"></div>
+
+          <!-- Station 1 -->
+          <div class="rail-station-node passed">
+            <div class="station-marker"></div>
+            <div class="station-details">
+              <strong class="station-name">Terminal 4 — Jorge Teixeira</strong>
+              <span class="station-time">Partida às 14:15 • Concluída</span>
+            </div>
+            <span class="station-badge-passed">Partiu</span>
+          </div>
+
+          <!-- Station 2 -->
+          <div class="rail-station-node passed">
+            <div class="station-marker"></div>
+            <div class="station-details">
+              <strong class="station-name">Estação E4 — Flores</strong>
+              <span class="station-time">Passou às 14:28</span>
+            </div>
+            <span class="station-badge-passed">Passou</span>
+          </div>
+
+          <!-- Station 3: Approaching LIVE -->
+          <div class="rail-station-node active-target">
+            <div class="station-marker-active">
+              <span class="pulse-ring"></span>
+            </div>
+            <div class="station-details">
+              <strong class="station-name">Estação E2 — Arena da Amazônia</strong>
+              <span class="station-time highlight">Ônibus #640-12 a 450m • Desacelerando</span>
+            </div>
+            <div class="station-approaching-pill">
               <span class="pulse-dot"></span>
-              STREAM SSE ATIVO • 4.5s
-            </span>
-            <span class="bento-metric-text">240+ Linhas Sincronizadas</span>
-          </div>
-          <div class="bento-metrics-quad">
-            <div class="bento-metric-item">
-              <span class="bento-m-label">LATÊNCIA DO GPS</span>
-              <strong class="bento-m-val">&lt; 850 ms</strong>
-            </div>
-            <div class="bento-metric-item">
-              <span class="bento-m-label">PRECISÃO ESPACIAL</span>
-              <strong class="bento-m-val">~3 metros</strong>
-            </div>
-            <div class="bento-metric-item">
-              <span class="bento-m-label">VETOR DE ROTA</span>
-              <strong class="bento-m-val">44 km/h • Sul</strong>
-            </div>
-            <div class="bento-metric-item">
-              <span class="bento-m-label">FREQUÊNCIA DE AMOSTRA</span>
-              <strong class="bento-m-val">1.000 ms</strong>
+              Chega em 3 min
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Card 2: Smart Next-Bus Succession -->
-      <div class="bento-card bento-native-card">
-        <div class="bento-card-content">
-          <span class="bento-badge blue-badge">SUCESSÃO AUTOMÁTICA</span>
-          <h3 class="bento-title">Próximo Ônibus</h3>
-          <p class="bento-short-sub">Atualização instantânea após o veículo passar.</p>
-        </div>
-        <div class="bento-succession-list">
-          <div class="succession-item current">
-            <span class="succ-order">1º</span>
-            <div class="succ-info">
-              <strong>OAA-4819 (Linha 640)</strong>
-              <span>Passando na parada agora</span>
+          <!-- Station 4 -->
+          <div class="rail-station-node future">
+            <div class="station-marker"></div>
+            <div class="station-details">
+              <strong class="station-name">Estação E1 — São Jorge</strong>
+              <span class="station-time">Previsão: 14:44</span>
             </div>
-            <span class="succ-badge pass">Agora</span>
+            <span class="station-badge-eta">9 min</span>
           </div>
-          <div class="succession-item next">
-            <span class="succ-order">2º</span>
-            <div class="succ-info">
-              <strong>NAV-9102 (Linha 640)</strong>
-              <span>Aproximação em 5 min</span>
-            </div>
-            <span class="succ-badge eta">5 min</span>
-          </div>
-          <div class="succession-item queue">
-            <span class="succ-order">3º</span>
-            <div class="succ-info">
-              <strong>PHB-2201 (Linha 640)</strong>
-              <span>Em trânsito no T4</span>
-            </div>
-            <span class="succ-badge wait">12 min</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Card 3: 34 Georeferenced Stations -->
-      <div class="bento-card bento-native-card">
-        <div class="bento-card-content">
-          <span class="bento-badge orange-badge">CORREDORES EXPRESSOS</span>
-          <h3 class="bento-title">34 Paradas Mapeadas</h3>
-          <p class="bento-short-sub">Corredores Constantino Nery e Djalma Batista.</p>
-        </div>
-        <div class="bento-stations-chips-box">
-          <div class="corridor-flag">FAIXA BRS EXCLUSIVA</div>
-          <div class="stations-pills-flow">
-            <span class="station-chip-native">E1 São Jorge</span>
-            <span class="station-chip-native active">E2 Arena da Amazônia</span>
-            <span class="station-chip-native">E3 Santos Dumont</span>
-            <span class="station-chip-native">E4 Flores</span>
-            <span class="station-chip-native">Terminal 1 Centro</span>
-            <span class="station-chip-native">Terminal 4 Z. Leste</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4: Dynamic Real-Time ETA (Span 2) -->
-      <div class="bento-card bento-card-span-2 bento-native-card">
-        <div class="bento-card-content">
-          <span class="bento-badge blue-badge">PRECISÃO DE CHEGADA</span>
-          <h3 class="bento-title">Tempo Estimado (ETA)</h3>
-          <p class="bento-short-sub">Tráfego ao vivo e contagem de minutos até a sua parada.</p>
-        </div>
-        <div class="bento-eta-calculator-module">
-          <div class="eta-calc-display">
-            <div class="eta-clock-box">
-              <span class="eta-clock-val">3</span>
-              <span class="eta-clock-label">minutos</span>
+          <!-- Station 5 -->
+          <div class="rail-station-node future">
+            <div class="station-marker terminal"></div>
+            <div class="station-details">
+              <strong class="station-name">Terminal 1 — Constantino Nery</strong>
+              <span class="station-time">Destino final • Previsão: 14:52</span>
             </div>
-            <div class="eta-factors-col">
-              <div class="factor-row">
-                <span class="f-name">Distância até a parada:</span>
-                <span class="f-val">450 metros</span>
-              </div>
-              <div class="factor-row">
-                <span class="f-name">Fator de Tráfego:</span>
-                <span class="f-val status-good">Faixa Livre (1.0x)</span>
-              </div>
-              <div class="factor-row">
-                <span class="f-name">Velocidade Média do Corredor:</span>
-                <span class="f-val">42 km/h</span>
-              </div>
-            </div>
-          </div>
-          <div class="eta-progress-bar-wrap">
-            <div class="eta-progress-fill" style="width: 78%;"></div>
+            <span class="station-badge-eta">17 min</span>
           </div>
         </div>
       </div>

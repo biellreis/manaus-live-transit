@@ -12,9 +12,9 @@
       </p>
     </div>
 
-    <!-- Apple Interactive Planner: Full Extension Widescreen Dashboard (Zero Phone Mockup) -->
+    <!-- Apple Interactive Planner: Full Extension Widescreen Dashboard -->
     <div class="planner-widescreen-dashboard">
-      <!-- Left Panel: Search Inputs & Itinerary Timeline -->
+      <!-- Left Panel: Search Inputs & Itinerary Options (TripPlannerModal.tsx) -->
       <div class="planner-panel-controls">
         <!-- Search & Origin/Destination Bar -->
         <div class="planner-card-header-bar">
@@ -29,7 +29,7 @@
             <div class="planner-inputs-divider">
               <span class="divider-line"></span>
               <button type="button" class="planner-swap-btn" aria-label="Inverter origem e destino">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <line x1="7" y1="20" x2="7" y2="4"></line>
                   <polyline points="3 8 7 4 11 8"></polyline>
                   <line x1="17" y1="4" x2="17" y2="20"></line>
@@ -46,15 +46,64 @@
             </div>
           </div>
 
-          <!-- Filter Pills -->
-          <div class="planner-filter-pills">
-            <span class="filter-pill active">Rota mais rápida (18 min)</span>
-            <span class="filter-pill">Menor caminhada (240 m)</span>
-            <span class="filter-pill">Linha direta sem baldeação</span>
+          <!-- Transit Route Options (From TripPlannerModal.tsx) -->
+          <div class="planner-options-list">
+            <!-- Option 1: Selected / Fastest -->
+            <div class="planner-option-card active">
+              <div class="option-bus-icon blue">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" aria-hidden="true">
+                  <path d="M8 6v6"/>
+                  <path d="M15 6v6"/>
+                  <path d="M2 12h19.6"/>
+                  <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4C2.9 6 1.9 6.8 1.6 7.8l-1.4 5c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/>
+                  <circle cx="7" cy="18" r="2"/>
+                  <path d="M9 18h5"/>
+                  <circle cx="16" cy="18" r="2"/>
+                </svg>
+              </div>
+              <div class="option-details">
+                <div class="option-title-row">
+                  <strong class="option-line-title">Linha 640 Expresso</strong>
+                  <span class="option-time-pill">18 min</span>
+                </div>
+                <span class="option-subtitle">Via Corredor Constantino Nery (BRS Exclusivo)</span>
+                <div class="option-badges-row">
+                  <span class="option-badge-fast">Mais rápida</span>
+                  <span class="option-eta-tag">Chega às 14:52</span>
+                  <span class="option-fare-tag">R$ 4,50</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Option 2: Alternative -->
+            <div class="planner-option-card">
+              <div class="option-bus-icon orange">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" aria-hidden="true">
+                  <path d="M8 6v6"/>
+                  <path d="M15 6v6"/>
+                  <path d="M2 12h19.6"/>
+                  <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4C2.9 6 1.9 6.8 1.6 7.8l-1.4 5c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/>
+                  <circle cx="7" cy="18" r="2"/>
+                  <path d="M9 18h5"/>
+                  <circle cx="16" cy="18" r="2"/>
+                </svg>
+              </div>
+              <div class="option-details">
+                <div class="option-title-row">
+                  <strong class="option-line-title">Linha 350 Semi-Expresso</strong>
+                  <span class="option-time-pill">24 min</span>
+                </div>
+                <span class="option-subtitle">Via Av. Torquato Tapajós</span>
+                <div class="option-badges-row">
+                  <span class="option-badge-direct">Linha direta</span>
+                  <span class="option-eta-tag">Chega às 14:58</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Main Step-by-Step Itinerary Body -->
+        <!-- Main Step-by-Step Itinerary Steps -->
         <div class="planner-itinerary-body">
           <div class="itinerary-timeline">
             <!-- Step 1: Walking -->
@@ -69,7 +118,6 @@
                   <span class="step-duration">3 min • 240 metros</span>
                 </div>
                 <h4 class="step-headline">Caminhe até a Estação E2 — Arena da Amazônia</h4>
-                <p class="step-subtext">Siga pela calçada da Av. Pedro Teixeira em direção ao canteiro central da Constantino Nery.</p>
               </div>
             </div>
 
@@ -88,25 +136,7 @@
                     Chegando em 3 min
                   </span>
                 </div>
-                <h4 class="step-headline">Embarque na Estação E2 (Plataforma B - Sentido Centro)</h4>
-                <p class="step-subtext">Veículo equipado com ar-condicionado • Próximo ônibus previsto para as 14:38.</p>
-
-                <!-- Intermediate Stops Mini List -->
-                <div class="intermediate-stops-box">
-                  <div class="stops-summary">
-                    <span class="stops-count">6 paradas no corredor expresso (12 min)</span>
-                    <span class="stops-corridor">Faixa exclusiva sem semáforo</span>
-                  </div>
-                  <div class="stops-tags-list">
-                    <span class="stop-tag">E2 Arena</span>
-                    <span class="stop-arrow">&rarr;</span>
-                    <span class="stop-tag">E1 São Jorge</span>
-                    <span class="stop-arrow">&rarr;</span>
-                    <span class="stop-tag">Boulevard</span>
-                    <span class="stop-arrow">&rarr;</span>
-                    <span class="stop-tag">Praça da Saudade</span>
-                  </div>
-                </div>
+                <h4 class="step-headline">Embarque na Plataforma B (Sentido Centro)</h4>
               </div>
             </div>
 
@@ -120,15 +150,14 @@
                   <span class="step-badge badge-dest">DESEMBARQUE</span>
                   <span class="step-duration">Chegada às 14:52</span>
                 </div>
-                <h4 class="step-headline">Terminal de Integração 1 (T1) — Constantino Nery</h4>
-                <p class="step-subtext">Você chegou ao centro de Manaus. Conexão gratuita para 40+ linhas urbanas.</p>
+                <h4 class="step-headline">Terminal 1 (T1) — Constantino Nery • Centro</h4>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Panel: High-Fidelity Journey Vector Map Display -->
+      <!-- Right Panel: High-Fidelity Journey Vector Map Display (JourneyMap.tsx) -->
       <div class="planner-panel-map" aria-label="Mapa do itinerário planejado">
         <div class="planner-map-card">
           <div class="planner-map-bar">
@@ -140,59 +169,58 @@
             <svg viewBox="0 0 540 420" fill="none" class="journey-map-svg" preserveAspectRatio="xMidYMid meet">
               <defs>
                 <linearGradient id="journeyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#3b82f6"/>
-                  <stop offset="100%" stop-color="#1d4ed8"/>
+                  <stop offset="0%" stop-color="#3B82F6"/>
+                  <stop offset="100%" stop-color="#2563EB"/>
                 </linearGradient>
               </defs>
 
               <!-- Map grid background roads of Manaus -->
-              <path d="M 40 60 L 500 60" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
-              <path d="M 40 180 L 500 180" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
-              <path d="M 40 300 L 500 300" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
-              <path d="M 140 30 L 140 390" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
-              <path d="M 380 30 L 380 390" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 40 60 L 500 60" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 40 180 L 500 180" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 40 300 L 500 300" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 140 30 L 140 390" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 380 30 L 380 390" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2"/>
 
               <!-- Walking Path (Dotted White) -->
-              <path d="M 120 70 L 160 110 L 220 130" stroke="#ffffff" stroke-width="3" stroke-dasharray="5 5" stroke-linecap="round"/>
+              <path d="M 120 70 L 160 110 L 220 130" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="5 5" stroke-linecap="round"/>
 
               <!-- Transit Route Corridor (Constantino Nery Line) -->
               <path d="M 220 130 L 260 210 L 310 290 L 360 360" stroke="url(#journeyGradient)" stroke-width="6" stroke-linecap="round"/>
 
               <!-- Origin Marker: Parque 10 -->
               <g transform="translate(120, 70)">
-                <circle r="9" fill="#3b82f6" stroke="#ffffff" stroke-width="2.5"/>
-                <circle r="4" fill="#ffffff"/>
-                <rect x="14" y="-12" width="130" height="24" rx="6" fill="#18181b" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-                <text x="22" y="4" fill="#ffffff" font-size="11" font-weight="700">Origem: Parque 10</text>
+                <circle r="9" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2.5"/>
+                <circle r="4" fill="#FFFFFF"/>
+                <rect x="14" y="-12" width="130" height="24" rx="6" fill="#18181B" stroke="#27272A" stroke-width="1"/>
+                <text x="22" y="4" fill="#FFFFFF" font-size="11" font-weight="700">Origem: Parque 10</text>
               </g>
 
               <!-- Walking Annotation -->
               <g transform="translate(170, 105)">
-                <rect x="-8" y="-10" width="76" height="20" rx="5" fill="#27272a"/>
-                <text x="30" y="4" fill="#ffffff" font-size="10" font-weight="600" text-anchor="middle">240m a pé</text>
+                <rect x="-8" y="-10" width="76" height="20" rx="5" fill="#27272A"/>
+                <text x="30" y="4" fill="#FFFFFF" font-size="10" font-weight="600" text-anchor="middle">240m a pé</text>
               </g>
 
               <!-- Boarding Marker: Estação E2 Arena -->
               <g transform="translate(220, 130)">
-                <circle r="8" fill="#3b82f6" stroke="#ffffff" stroke-width="2.5"/>
-                <rect x="14" y="-12" width="160" height="24" rx="6" fill="#18181b" stroke="#3b82f6" stroke-width="1.2"/>
-                <text x="22" y="4" fill="#3b82f6" font-size="11" font-weight="800">Embarque: Estação E2</text>
+                <circle r="8" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2.5"/>
+                <rect x="14" y="-12" width="160" height="24" rx="6" fill="#18181B" stroke="#3B82F6" stroke-width="1.2"/>
+                <text x="22" y="4" fill="#3B82F6" font-size="11" font-weight="800">Embarque: Estação E2</text>
               </g>
 
               <!-- Bus in transit on the corridor -->
               <g transform="translate(260, 210)">
-                <circle r="11" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                <path d="M -4 3 L 4 3 L 4 -3 C 4 -4 -4 -4 -4 -3 Z" stroke="#ffffff" stroke-width="1" fill="none"/>
-                <rect x="16" y="-12" width="80" height="24" rx="6" fill="#3b82f6"/>
-                <text x="56" y="4" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">Ônibus 640</text>
+                <circle r="11" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2"/>
+                <rect x="16" y="-12" width="80" height="24" rx="6" fill="#3B82F6"/>
+                <text x="56" y="4" fill="#FFFFFF" font-size="11" font-weight="800" text-anchor="middle">Ônibus 640</text>
               </g>
 
               <!-- Destination Marker: Terminal 1 -->
               <g transform="translate(360, 360)">
-                <circle r="10" fill="#f97316" stroke="#ffffff" stroke-width="2.5"/>
-                <circle r="4" fill="#ffffff"/>
-                <rect x="-170" y="-12" width="156" height="24" rx="6" fill="#18181b" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-                <text x="-92" y="4" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Destino: Terminal 1 (T1)</text>
+                <circle r="10" fill="#F97316" stroke="#FFFFFF" stroke-width="2.5"/>
+                <circle r="4" fill="#FFFFFF"/>
+                <rect x="-170" y="-12" width="156" height="24" rx="6" fill="#18181B" stroke="#27272A" stroke-width="1"/>
+                <text x="-92" y="4" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Destino: Terminal 1 (T1)</text>
               </g>
             </svg>
           </div>
@@ -201,6 +229,7 @@
             <span class="route-stat-item">18 min totais</span>
             <span class="route-stat-item">3 min a pé</span>
             <span class="route-stat-item">15 min no ônibus</span>
+            <span class="route-stat-item">Integração R$ 0,00</span>
           </div>
         </div>
       </div>
