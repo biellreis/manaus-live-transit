@@ -5,44 +5,31 @@ import HeroTransitMap from './HeroTransitMap.astro';
 
 <section class="hero-99-stage" id="inicio" aria-label="Abertura Manô Transit">
   <div class="hero-99-banner">
-    <!-- LADO ESQUERDO: ANIMAÇÃO DO MAPA + ESTUDANTE INTEGRADA DIRETAMENTE NO ESPAÇO -->
+    <!-- LADO ESQUERDO: APENAS O MAPA ANIMADO 100% VISÍVEL (SEM PESSOA, SEM OPACIDADE, SEM DEGRADÊ) -->
     <div class="hero-99-subject-side">
       <!-- MAPA VETORIAL ANIMADO EM TEMPO REAL ESPECÍFICO DO LADO ESQUERDO -->
       <div class="hero-99-transit-map-wrap">
         <HeroTransitMap />
       </div>
-
-      <img 
-        src="/images/student_hero_cutout.jpg" 
-        alt="Estudante em Manaus acompanhando ônibus em tempo real pelo Manô" 
-        class="hero-99-subject-img" 
-        width="600" 
-        height="800" 
-        loading="eager"
-      />
-      <div class="hero-99-floating-tag">
-        <span class="pulse-dot"></span>
-        <span>Linha 125 &bull; Chegando na UFAM</span>
-      </div>
     </div>
 
-    <!-- LADO DIREITO: BLOCO GIGANTE DA 99 COM CURVA SUPERIOR ESQUERDA (EXATAMENTE IGUAL À IMAGEM) -->
+    <!-- LADO DIREITO: BLOCO GIGANTE DA 99 NA COR BRANCA COM BORDAS CURVADAS PERFEITAMENTE ALINHADAS -->
     <div class="hero-99-shape-block">
       <div class="hero-99-shape-inner">
         <h1 class="hero-99-title">
-          MAN<span class="hero-blue-letter">Ô</span>, BORA?
+          BAIXE AGORA O MAN<span class="hero-blue-letter">Ô</span>
         </h1>
 
         <p class="hero-99-subtitle">
-          Monitore ônibus, linhas e paradas de Manaus em tempo real com precisão de GPS.
+          Monitore ônibus, linhas e paradas de Manaus em tempo real.
         </p>
 
         <!-- BOTÕES ESTILO 99 BEM GRANDES COM ÍCONES RIGOROSAMENTE CENTRALIZADOS -->
         <div class="hero-99-btn-group">
           <a href={installUrl('ios')} class="hero-btn-large hero-btn-apple hero-btn-99" data-install="ios" aria-label="Instalar no iPhone">
             <span class="btn-icon-capsule btn-icon-capsule-apple">
-              <svg class="btn-icon btn-icon-apple" viewBox="0 0 170 170" fill="currentColor" aria-hidden="true">
-                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.59-7.71-11.66-14.01-6.19-9.5-11.03-20.2-14.52-32.08-3.48-11.89-5.23-23.08-5.23-33.59 0-14.22 3.58-26.04 10.74-35.46 7.16-9.42 16.14-14.28 26.94-14.58 4.89 0 10.42 1.34 16.59 4.02 6.17 2.68 10.15 4.07 11.94 4.07 1.48 0 5.69-1.48 12.63-4.44 6.94-2.96 12.69-4.26 17.26-3.9 12.87 1.05 23.01 5.92 30.43 14.62-11.16 6.77-16.63 16.27-16.42 28.51.22 9.68 3.86 17.77 10.92 24.28 7.06 6.51 15.42 10.05 25.07 10.63-2.12 6.34-4.82 12.98-8.1 19.92zm-35.14-106.82c0 6.66-2.4 12.96-7.2 17.9-4.8 4.94-10.74 8.04-17.82 9.31-.22-.85-.33-1.8-.33-2.85 0-6.45 2.59-12.8 7.77-18.06 5.18-5.26 11.23-8.29 18.15-9.09.22.85.33 1.8.33 2.79z"/>
+              <svg class="btn-icon btn-icon-apple" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.42c.67-.82 1.13-1.96.99-3.12-1 .04-2.17.67-2.85 1.48-.6.69-1.12 1.84-.98 2.97 1.11.09 2.19-.53 2.84-1.33z"/>
               </svg>
             </span>
             <div class="btn-text-block">

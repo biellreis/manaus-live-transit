@@ -6299,16 +6299,16 @@ main#conteudo {
   box-sizing: border-box;
 }
 
-/* LADO ESQUERDO: ANIMAÇÃO DO MAPA + ESTUDANTE INTEGRADA NO CONTEXTO */
+/* LADO ESQUERDO: APENAS O MAPA ANIMADO (SEM PESSOA, CORES 100% SÓLIDAS) */
 .hero-99-subject-side {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 620px;
+  min-height: 640px;
   overflow: hidden;
   background: #09090B;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 
@@ -6330,59 +6330,21 @@ main#conteudo {
   overflow: hidden !important;
 }
 
-.hero-99-subject-img {
-  position: relative;
-  z-index: 2;
-  height: 88%;
-  max-height: 620px;
-  width: auto;
-  object-fit: contain;
-  object-position: bottom center;
-  display: block;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-
-.hero-99-floating-tag {
-  position: absolute;
-  bottom: 32px;
-  left: 36px;
-  background: #09090B;
-  border: 1px solid #27272A;
-  border-radius: 999px;
-  padding: 9px 20px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #FFFFFF;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 5;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #3B82F6;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-/* LADO DIREITO: BLOCO GIGANTE DA 99 COM CURVA SUPERIOR ESQUERDA (EXATAMENTE IGUAL À IMAGEM) */
+/* LADO DIREITO: BLOCO GIGANTE DA 99 NA COR BRANCA COM BORDAS CURVADAS RIGOROSAMENTE ALINHADAS */
 .hero-99-shape-block {
   position: relative;
-  background: #18181B;
-  border-left: 2px solid #27272A;
-  border-top-left-radius: 160px;
-  border-bottom-left-radius: 60px;
+  background: #FFFFFF;
+  border: none;
+  border-top-left-radius: 80px;
+  border-bottom-left-radius: 80px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 80px 8% 60px 100px;
+  padding: 80px 8% 60px 90px;
   z-index: 2;
-  margin-left: -70px;
+  margin-left: -60px;
   box-sizing: border-box;
 }
 
@@ -6391,32 +6353,33 @@ main#conteudo {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  max-width: 560px;
+  max-width: 580px;
 }
 
 .hero-99-title {
   font-family: var(--apple-font-headline);
-  font-size: clamp(44px, 5.2vw, 70px);
+  font-size: clamp(46px, 5.6vw, 76px);
   font-weight: 800;
   line-height: 1.02;
   letter-spacing: -0.04em;
-  color: #FFFFFF;
-  margin: 0 0 18px;
+  color: #09090B;
+  margin: 0 0 20px;
   text-wrap: balance;
 }
 
 .hero-blue-letter {
-  color: #3B82F6 !important;
+  color: #2563EB !important;
 }
 
 .hero-99-subtitle {
   font-family: var(--apple-font-text);
-  font-size: clamp(16px, 1.8vw, 19px);
-  line-height: 1.5;
+  font-size: clamp(18px, 2.1vw, 22px);
+  line-height: 1.45;
   letter-spacing: -0.015em;
-  color: #A1A1AA;
-  margin: 0 0 36px;
+  color: #52525B;
+  margin: 0 0 40px;
   text-wrap: balance;
+  font-weight: 450;
 }
 
 .hero-99-btn-group {
@@ -6430,9 +6393,9 @@ main#conteudo {
 
 /* BOTÕES ESTILO 99APP BEM GRANDES COM ÍCONES RIGOROSAMENTE CENTRALIZADOS */
 .hero-btn-large {
-  min-width: 230px;
-  min-height: 64px;
-  padding: 8px 26px 8px 10px;
+  min-width: 260px;
+  min-height: 72px;
+  padding: 10px 30px 10px 12px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
@@ -6440,89 +6403,101 @@ main#conteudo {
   text-decoration: none;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
+  box-shadow: none !important;
 }
 
+/* Botão Apple em destaque no fundo branco */
 .hero-btn-apple {
-  background: #FFFFFF;
-  color: #09090B !important;
-  border: 2px solid #FFFFFF;
-  font-weight: 700;
+  background: #000000;
+  color: #FFFFFF !important;
+  border: 2px solid #000000;
 }
 
 .hero-btn-apple:hover {
   transform: translateY(-2px);
-  background: #F4F4F5;
+  background: #18181B;
+  border-color: #18181B;
 }
 
 .hero-btn-apple .btn-icon-capsule {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: #09090B;
-  display: grid;
-  place-items: center;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   margin: 0;
   padding: 0;
 }
 
 .hero-btn-apple .btn-icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   display: block;
   margin: auto;
-  fill: #FFFFFF !important;
-  color: #FFFFFF !important;
+  color: #000000 !important;
+  fill: #000000 !important;
 }
 
 .hero-btn-apple .btn-subtext {
-  color: #52525B !important;
+  color: #A1A1AA !important;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .hero-btn-apple .btn-maintext {
-  color: #09090B !important;
+  color: #FFFFFF !important;
+  font-size: 17px;
+  font-weight: 700;
 }
 
+/* Botão Android no fundo branco */
 .hero-btn-android {
-  background: #27272A;
+  background: #18181B;
   color: #FFFFFF !important;
-  border: 2px solid #3F3F46;
-  font-weight: 700;
+  border: 2px solid #27272A;
 }
 
 .hero-btn-android:hover {
   transform: translateY(-2px);
-  background: #3F3F46;
-  border-color: #52525B;
+  background: #27272A;
+  border-color: #3F3F46;
 }
 
 .hero-btn-android .btn-icon-capsule {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: #18181B;
-  display: grid;
-  place-items: center;
+  background: #27272A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   margin: 0;
   padding: 0;
 }
 
 .hero-btn-android .btn-icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   display: block;
   margin: auto;
-  fill: #FFFFFF !important;
   color: #FFFFFF !important;
+  fill: #FFFFFF !important;
 }
 
 .hero-btn-android .btn-subtext {
   color: #A1A1AA !important;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .hero-btn-android .btn-maintext {
   color: #FFFFFF !important;
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .btn-text-block {
@@ -6532,26 +6507,13 @@ main#conteudo {
   line-height: 1.25;
 }
 
-.btn-subtext {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-}
-
-.btn-maintext {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-}
-
-/* NOTA DE RODAPÉ ESTILO 99 (IDÊNTICO À REFERÊNCIA) */
 .hero-99-footnote {
   font-family: var(--apple-font-text);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #71717A;
   line-height: 1.4;
-  margin-top: 14px;
+  margin-top: 16px;
   letter-spacing: 0.1px;
 }
 
@@ -7075,72 +7037,185 @@ main#conteudo {
 }
 
 /* NAVEGAÇÃO RÁPIDA: PILLS E SETAS */
-.terminals-nav-bar {
+/* LINHA DE TRANSPORTE URBANO INTERATIVA (SISTEMA DE TERMINAIS 1 AO 6) */
+.transit-line-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   max-width: 1080px;
-  margin-bottom: 32px;
-  gap: 16px;
-  flex-wrap: wrap;
+  margin-bottom: 36px;
+  gap: 20px;
 }
 
-.terminal-tab-pills {
+.transit-line-track-wrapper {
+  position: relative;
+  flex: 1;
+  padding: 44px 16px 16px;
+  box-sizing: border-box;
+}
+
+/* Trilho Cinza Escuro de Fundo (Linha de uma ponta à outra) */
+.transit-line-rail-bg {
+  position: absolute;
+  top: 54px;
+  left: 20px;
+  right: 20px;
+  height: 5px;
+  background: #27272A;
+  border-radius: 999px;
+  z-index: 1;
+}
+
+/* Trilho Azul Ativo de Progresso */
+.transit-line-rail-active {
+  position: absolute;
+  top: 54px;
+  left: 20px;
+  width: 0px;
+  height: 5px;
+  background: #2563EB;
+  border-radius: 999px;
+  z-index: 2;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+
+/* ÔNIBUS DO MAPA QUE DESLIZA AO LONGO DA LINHA */
+.transit-gliding-bus {
+  position: absolute;
+  top: 26px;
+  left: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 10;
+  transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+
+.transit-bus-disc {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563EB;
+  border: 2.5px solid #FFFFFF;
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
   justify-content: center;
+  color: #FFFFFF;
 }
 
-.terminal-tab-btn {
-  padding: 8px 18px;
+.transit-bus-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: #FFFFFF;
+}
+
+.transit-bus-badge {
+  background: #09090B;
+  border: 1px solid #3B82F6;
+  color: #38BDF8;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
   border-radius: 999px;
-  background: #141418;
-  border: 1px solid #27272A;
-  color: #A1A1AA;
-  font-size: 13px;
-  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* FILEIRA DE ESTAÇÕES FIXADAS NA LINHA */
+.transit-station-stops {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.transit-station-node {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  transition: transform 0.2s ease;
 }
 
-.terminal-tab-btn .tab-badge {
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: #27272A;
+.transit-station-node:hover {
+  transform: translateY(-2px);
+}
+
+.station-node-marker {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #141418;
+  border: 3px solid #3F3F46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.station-node-core {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #71717A;
+  transition: background 0.3s ease;
+}
+
+.transit-station-node.active .station-node-marker {
+  border-color: #2563EB;
+  background: #FFFFFF;
+}
+
+.transit-station-node.active .station-node-core {
+  background: #2563EB;
+}
+
+.station-node-pill {
+  font-size: 13px;
+  font-weight: 700;
+  color: #A1A1AA;
+  transition: color 0.3s ease;
+}
+
+.transit-station-node.active .station-node-pill {
   color: #FFFFFF;
-  font-size: 11px;
   font-weight: 800;
 }
 
-.terminal-tab-btn:hover {
-  background: #1F1F24;
-  color: #FFFFFF;
-  border-color: #3F3F46;
+.station-node-caption {
+  font-size: 11px;
+  font-weight: 500;
+  color: #71717A;
+  max-width: 96px;
+  text-align: center;
+  line-height: 1.25;
+  transition: color 0.3s ease;
 }
 
-.terminal-tab-btn.active {
-  background: #2563EB;
-  border-color: #3B82F6;
-  color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+.transit-station-node.active .station-node-caption {
+  color: #38BDF8;
 }
 
-.terminal-tab-btn.active .tab-badge {
-  background: #FFFFFF;
-  color: #1D4ED8;
-}
-
-.terminals-arrow-nav {
+.transit-arrow-controls {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .terminals-arrow-btn {
@@ -7487,12 +7562,14 @@ main#conteudo {
   }
   .hero-99-shape-block {
     margin-left: 0;
+    background: #FFFFFF;
     border-left: none;
-    border-top: 2px solid #27272A;
-    border-top-left-radius: 60px;
-    border-top-right-radius: 60px;
+    border-top: none;
+    border-top-left-radius: 48px;
+    border-top-right-radius: 48px;
     border-bottom-left-radius: 0;
-    padding: 48px 36px 40px;
+    border-bottom-right-radius: 0;
+    padding: 48px 32px 40px;
   }
   .hero-99-shape-inner {
     align-items: center;
@@ -7564,8 +7641,9 @@ main#conteudo {
     min-height: 320px;
   }
   .hero-99-shape-block {
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
+    background: #FFFFFF;
+    border-top-left-radius: 36px;
+    border-top-right-radius: 36px;
     padding: 36px 20px 32px;
   }
   .hero-btn-large {
@@ -7605,11 +7683,28 @@ main#conteudo {
   .metric-label {
     font-size: 13px;
   }
-  .terminals-nav-bar {
-    justify-content: center;
+  .transit-line-nav {
+    flex-direction: column;
+    gap: 16px;
   }
-  .terminals-arrow-nav {
+  .transit-line-track-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 40px 12px 16px;
+  }
+  .transit-line-track-wrapper::-webkit-scrollbar {
     display: none;
+  }
+  .transit-station-stops {
+    min-width: 520px;
+  }
+  .transit-line-rail-bg {
+    min-width: 500px;
+  }
+  .transit-arrow-controls {
+    justify-content: center;
   }
   .terminal-card-slide {
     border-radius: 24px;
@@ -7628,5 +7723,13 @@ main#conteudo {
   .apple-localnav-menu {
     display: none;
   }
+}
+
+/* ==========================================================================
+   ELIMINAÇÃO TOTAL DE TODAS AS SOMBRAS DO SITE (CONFORME SOLICITADO PELO USUÁRIO)
+   ========================================================================== */
+*, *::before, *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
