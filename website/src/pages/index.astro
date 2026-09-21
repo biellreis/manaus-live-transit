@@ -2,12 +2,11 @@
 import '../styles/global.css';
 
 // Componentes da Arquitetura Flagship (Estrutura 99app + Apple)
-import HeroTransitMap from '../components/HeroTransitMap.astro';
 import AppleNav from '../components/AppleNav.astro';
 import AppleHeroStage from '../components/AppleHeroStage.astro';
 import RoutineBenefitsSection from '../components/RoutineBenefitsSection.astro';
 import AppShowcaseStage from '../components/AppShowcaseStage.astro';
-import LayeredShapesFeature from '../components/LayeredShapesFeature.astro';
+import TerminalsCarouselStage from '../components/TerminalsCarouselStage.astro';
 import NativeInstallSection from '../components/NativeInstallSection.astro';
 import InstallModal from '../components/InstallModal.astro';
 
@@ -52,24 +51,21 @@ const schemaApp = {
 </head>
 <body>
 
-<!-- 0. MAPA VETORIAL DE TRÂNSITO GLOBAL (BACKDROP DINÂMICO CONTÍNUO EM TODO O SITE) -->
-<HeroTransitMap />
-
 <!-- 1. BARRA DE NAVEGAÇÃO LOCAL FIXA -->
 <AppleNav/>
 
 <main id="conteudo">
-  <!-- SESSÃO 1: HERO SPLIT DA 99 COM FOTO REALISTA E CONVERSÃO IMEDIATA -->
+  <!-- SESSÃO 1: HERO SPLIT DA 99 EM EXTENSÃO TOTAL COM MAPA ANIMADO NO LADO ESQUERDO -->
   <AppleHeroStage/>
 
   <!-- SESSÃO 2: GRADE DE 4 VANTAGENS NA ROTINA COM FOTOS NO TOPO (ESTILO 99APP) -->
   <RoutineBenefitsSection/>
 
-  <!-- SESSÃO 3: O SHOWCASE CENTRAL (BANNER COLORIDO FLUTUANTE 99 + IPHONE 16 PRO) -->
+  <!-- SESSÃO 3: O SHOWCASE CENTRAL (CARROSSEL COM FOTO REALISTA + 4 MÉTRICAS ATRAENTES) -->
   <AppShowcaseStage/>
 
-  <!-- SESSÃO 4: SHAPES CONCÊNTRICOS EM CAMADAS (ESTILO 99PAY) -->
-  <LayeredShapesFeature/>
+  <!-- SESSÃO 4: NOVO CARROSSEL MODERNO DE TERMINAIS 1 AO 6 E ESTAÇÕES DE MANAUS -->
+  <TerminalsCarouselStage/>
 
   <!-- SESSÃO 5: GUIA VISUAL DE INSTALAÇÃO DIRETA NO IPHONE E ANDROID (MANTIDA) -->
   <NativeInstallSection/>

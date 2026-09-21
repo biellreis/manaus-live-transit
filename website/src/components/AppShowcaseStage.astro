@@ -1,5 +1,4 @@
 ---
-import Phone from './Phone.astro';
 ---
 
 <section class="showcase-carousel-section" id="aplicativo" aria-labelledby="aplicativo-heading">
@@ -37,30 +36,37 @@ import Phone from './Phone.astro';
 
         <div class="slide-media-col">
           <div class="media-shape-backdrop shape-blue">
-            <div class="phone-wrapper-carousel">
-              <Phone screen="journey" id="showcasePhoneJourney" label="Tela de rastreamento do Manô em tempo real" eager={true} />
-            </div>
-            <div class="media-floating-badge">
-              <span class="pulse-dot"></span>
-              <span>GPS SINETRAM &bull; Tempo Real</span>
+            <div class="slide-photo-frame">
+              <img 
+                src="/images/card_inside_bus.webp" 
+                alt="Passageiro acompanhando o itinerário com tranquilidade no ônibus climatizado em Manaus" 
+                class="slide-photo-img" 
+                width="540" 
+                height="400" 
+                loading="eager" 
+              />
+              <div class="media-floating-badge">
+                <span class="pulse-dot"></span>
+                <span>GPS Manaus &bull; Ônibus Climatizado</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SLIDE 2: TERMINAIS 1 AO 5 -->
+      <!-- SLIDE 2: TERMINAIS 1 AO 6 E ESTAÇÕES -->
       <div class="carousel-slide" data-slide="1" role="tabpanel" aria-label="Slide 2 de 3">
         <div class="slide-copy-col">
           <span class="slide-eyebrow">INTEGRAÇÃO METROPOLITANA</span>
           <h2 class="slide-headline">
-            Terminais 1 ao 5 totalmente integrados
+            Terminais 1 ao 6 e estações integradas
           </h2>
           <p class="slide-desc">
-            Planeje conexões e baldeações com segurança no <strong>T1, T2, T3, T4 e T5</strong>. Consulte horários atualizados e <strong>embarque sem perder tempo na plataforma</strong>.
+            Planeje conexões e baldeações com facilidade no <strong>T1, T2, T3, T4, T5, T6</strong> e nas Estações de Transferência. Consulte itinerários e <strong>embarque sem perder tempo</strong>.
           </p>
           <div class="slide-action-row">
-            <a href="#instalar" class="btn-99-dark-pill" aria-label="Consultar terminais de Manaus">
-              <span class="btn-99-label">Consultar terminais</span>
+            <a href="#terminais" class="btn-99-dark-pill" aria-label="Consultar terminais de Manaus">
+              <span class="btn-99-label">Ver todos os terminais</span>
               <span class="btn-99-arrow-circle">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" aria-hidden="true">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -84,7 +90,7 @@ import Phone from './Phone.astro';
               />
               <div class="media-floating-badge">
                 <span class="pulse-dot"></span>
-                <span>T1 a T5 &bull; Conexões Rápidas</span>
+                <span>T1 ao T6 &bull; Conexões Rápidas</span>
               </div>
             </div>
           </div>
@@ -138,27 +144,27 @@ import Phone from './Phone.astro';
     <!-- INDICADORES DE CARROSSEL 99 NA FAIXA AZUL -->
     <div class="carousel-nav-indicators" role="tablist" aria-label="Controle de slides do carrossel">
       <button type="button" class="carousel-dot active" data-slide-target="0" role="tab" aria-selected="true" aria-label="Slide 1: Telemetria GPS"></button>
-      <button type="button" class="carousel-dot" data-slide-target="1" role="tab" aria-selected="false" aria-label="Slide 2: Terminais 1 ao 5"></button>
+      <button type="button" class="carousel-dot" data-slide-target="1" role="tab" aria-selected="false" aria-label="Slide 2: Terminais 1 ao 6"></button>
       <button type="button" class="carousel-dot" data-slide-target="2" role="tab" aria-selected="false" aria-label="Slide 3: Previsão Exata"></button>
     </div>
 
-    <!-- BLOCO DE MÉTRICAS DE AUTORIDADE 100% SÓLIDO -->
+    <!-- BLOCO DE 4 INFORMAÇÕES CHAMATIVAS E VERDADEIRAS (TAMANHO EQUILIBRADO) -->
     <div class="carousel-metrics-bar">
       <div class="metric-item">
-        <strong class="metric-value">240+</strong>
-        <span class="metric-label">Linhas Mapeadas</span>
+        <strong class="metric-value">Zero Espera no Escuro</strong>
+        <span class="metric-label">Saiba o minuto exato de ir para a parada</span>
       </div>
       <div class="metric-item">
-        <strong class="metric-value">5</strong>
-        <span class="metric-label">Terminais Integrados</span>
+        <strong class="metric-value">100% Gratuito</strong>
+        <span class="metric-label">Sem cadastro, sem mensalidade e sem anúncios</span>
       </div>
       <div class="metric-item">
-        <strong class="metric-value">&lt; 850<small>ms</small></strong>
-        <span class="metric-label">Latência GPS</span>
+        <strong class="metric-value">Menos de 3MB</strong>
+        <span class="metric-label">Super leve: não trava nem consome seu 4G</span>
       </div>
       <div class="metric-item">
-        <strong class="metric-value">100%</strong>
-        <span class="metric-label">Gratuito e Sem Anúncios</span>
+        <strong class="metric-value">GPS em Tempo Real</strong>
+        <span class="metric-label">Localização exata de cada ônibus no mapa</span>
       </div>
     </div>
   </div>

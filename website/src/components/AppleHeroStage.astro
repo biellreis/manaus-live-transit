@@ -1,17 +1,23 @@
 ---
 import { installUrl } from '../config';
+import HeroTransitMap from './HeroTransitMap.astro';
 ---
 
 <section class="hero-99-stage" id="inicio" aria-label="Abertura Manô Transit">
   <div class="hero-99-banner">
-    <!-- LADO ESQUERDO: ESTUDANTE INTEGRADA DIRETAMENTE NO ESPAÇO COM MAPA -->
+    <!-- LADO ESQUERDO: ANIMAÇÃO DO MAPA + ESTUDANTE INTEGRADA DIRETAMENTE NO ESPAÇO -->
     <div class="hero-99-subject-side">
+      <!-- MAPA VETORIAL ANIMADO EM TEMPO REAL ESPECÍFICO DO LADO ESQUERDO -->
+      <div class="hero-99-transit-map-wrap">
+        <HeroTransitMap />
+      </div>
+
       <img 
-        src="/images/card_student.webp" 
+        src="/images/student_hero_cutout.jpg" 
         alt="Estudante em Manaus acompanhando ônibus em tempo real pelo Manô" 
         class="hero-99-subject-img" 
-        width="720" 
-        height="640" 
+        width="600" 
+        height="800" 
         loading="eager"
       />
       <div class="hero-99-floating-tag">

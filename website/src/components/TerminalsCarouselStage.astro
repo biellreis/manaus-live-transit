@@ -1,0 +1,273 @@
+---
+const terminals = [
+  {
+    id: 't1',
+    badge: 'T1',
+    name: 'Terminal 1 • Constantino Nery',
+    zone: 'Centro Histórico & Sul',
+    image: '/images/terminals/t1_constantino.webp',
+    desc: 'O hub central de integração urbana de Manaus. Conecta as grandes linhas troncais da capital com o Centro e a Matriz.',
+    routes: ['Linha 640', 'Linha 448', 'Linha 300', 'Linha 120'],
+    tag: 'Centro • Hub Troncal'
+  },
+  {
+    id: 't2',
+    badge: 'T2',
+    name: 'Terminal 2 • Cachoeirinha',
+    zone: 'Zona Sul & Centro-Sul',
+    image: '/images/terminals/t2_cachoeirinha.jpg',
+    desc: 'Ponto estratégico de baldeação da Zona Sul com o Polo Industrial de Manaus, Educandos, Morro da Liberdade e Centro.',
+    routes: ['Linha 016', 'Linha 450', 'Linha 612', 'Linha 619'],
+    tag: 'Zona Sul • Conexão Distrito'
+  },
+  {
+    id: 't3',
+    badge: 'T3',
+    name: 'Terminal 3 • Cidade Nova',
+    zone: 'Zona Norte',
+    image: '/images/terminals/t3_cidade_nova.jpg',
+    desc: 'O coração do transporte público na Zona Norte. Interliga Cidade Nova, Nova Cidade, Canaranas e linhas alimentadoras.',
+    routes: ['Linha 448', 'Linha 014', 'Linha 450', 'Linha 640'],
+    tag: 'Zona Norte • Cidade Nova'
+  },
+  {
+    id: 't4',
+    badge: 'T4',
+    name: 'Terminal 4 • Jorge Teixeira',
+    zone: 'Zona Leste',
+    image: '/images/terminals/t4_jorge_teixeira.jpg',
+    desc: 'Grande terminal integrado na Av. Camapuã, conectando os bairros mais populosos da Zona Leste com o Norte e Centro.',
+    routes: ['Linha 640', 'Linha 560', 'Linha 062', 'Linha 065'],
+    tag: 'Zona Leste • Av. Camapuã'
+  },
+  {
+    id: 't5',
+    badge: 'T5',
+    name: 'Terminal 5 • São José Operário',
+    zone: 'Zona Leste & Distrito',
+    image: '/images/terminals/t5_sao_jose.jpg',
+    desc: 'Ponto neurálgico na Alameda Cosme Ferreira com intenso fluxo de integração dos trabalhadores com o Polo Industrial.',
+    routes: ['Linha 650', 'Linha 652', 'Linha 678', 'Linha 619'],
+    tag: 'Zona Leste • Polo Industrial'
+  },
+  {
+    id: 't6',
+    badge: 'T6',
+    name: 'Terminal 6 • Lago Azul / Viver Melhor',
+    zone: 'Extremo Norte',
+    image: '/images/terminals/t6_lago_azul.jpg',
+    desc: 'Terminal multimodal moderno no entroncamento da Av. Turismo com a AM-010, atendendo o Viver Melhor e o norte da capital.',
+    routes: ['Linha 041', 'Linha 044', 'Linha 356', 'Linha 358'],
+    tag: 'Extremo Norte • AM-010'
+  },
+  {
+    id: 'estacoes',
+    badge: 'BRT',
+    name: 'Estações de Transferência',
+    zone: 'Av. Constantino Nery & Djalma Batista',
+    image: '/images/terminals/estacao_arena.jpg',
+    desc: 'Plataformas elevadas e fechadas com embarque rápido em nível sem catraca (Estação Arena, Santos Dumont e São Jorge).',
+    routes: ['Expresso 640', 'Expresso 300', 'Linha 500', 'Linha 652'],
+    tag: 'Corredores Expressos • Arena'
+  }
+];
+---
+
+<section class="terminals-carousel-section" id="terminais" aria-labelledby="terminais-heading">
+  <div class="apple-container terminals-container">
+    <!-- CABEÇALHO ELEGANTE DA SESSÃO -->
+    <div class="terminals-header">
+      <span class="terminals-eyebrow">SISTEMA INTEGRADO DE MANAUS</span>
+      <h2 id="terminais-heading" class="terminals-headline">
+        Terminais 1 ao 6 e Estações em Tempo Real
+      </h2>
+      <p class="terminals-subhead">
+        Planeje conexões e baldeações com total segurança. Consulte plataformas, itinerários e previsões de chegada sem perder tempo.
+      </p>
+    </div>
+
+    <!-- CONTROLES DO CARROSSEL (NAVEGAÇÃO RÁPIDA) -->
+    <div class="terminals-nav-bar">
+      <div class="terminal-tab-pills" role="tablist" aria-label="Lista de terminais e estações">
+        {terminals.map((item, idx) => (
+          <button 
+            type="button" 
+            class={`terminal-tab-btn ${idx === 0 ? 'active' : ''}`}
+            data-target-index={idx}
+            role="tab"
+            aria-selected={idx === 0 ? 'true' : 'false'}
+          >
+            <span class="tab-badge">{item.badge}</span>
+            <span class="tab-name">{item.id === 'estacoes' ? 'Estações' : `Terminal ${idx + 1}`}</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="terminals-arrow-nav">
+        <button type="button" class="terminals-arrow-btn prev-btn" id="terminalsPrevBtn" aria-label="Terminal anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="terminals-arrow-btn next-btn" id="terminalsNextBtn" aria-label="Próximo terminal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- CARROSSEL DE CARDS MODERNOS COM FOTOS REAIS -->
+    <div class="terminals-carousel-stage" id="terminalsCarouselStage">
+      {terminals.map((item, idx) => (
+        <article 
+          class={`terminal-card-slide ${idx === 0 ? 'active' : ''}`}
+          data-slide-index={idx}
+          role="tabpanel"
+          aria-label={item.name}
+        >
+          <!-- FOTO REALISTA DO TERMINAL / ESTAÇÃO -->
+          <div class="terminal-card-media">
+            <img 
+              src={item.image} 
+              alt={item.name} 
+              class="terminal-card-img" 
+              width="600" 
+              height="450" 
+              loading={idx === 0 ? "eager" : "lazy"}
+            />
+            <div class="terminal-card-tag">
+              <span class="pulse-dot"></span>
+              <span>{item.tag}</span>
+            </div>
+            <div class="terminal-card-badge-pill">
+              {item.badge}
+            </div>
+          </div>
+
+          <!-- DETALHES OPERACIONAIS DO TERMINAL -->
+          <div class="terminal-card-body">
+            <div class="terminal-zone-meta">
+              <span class="zone-label">{item.zone}</span>
+            </div>
+
+            <h3 class="terminal-card-title">{item.name}</h3>
+
+            <p class="terminal-card-desc">{item.desc}</p>
+
+            <div class="terminal-routes-list">
+              <span class="routes-label">Linhas monitoradas:</span>
+              <div class="routes-tags-row">
+                {item.routes.map(r => (
+                  <span class="route-tag-pill">{r}</span>
+                ))}
+              </div>
+            </div>
+
+            <div class="terminal-action-row">
+              <a href="#instalar" class="btn-99-dark-pill" aria-label={`Monitorar ${item.name} no Manô`}>
+                <span class="btn-99-label">Ver horários e linhas</span>
+                <span class="btn-99-arrow-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  function initTerminalsCarousel() {
+    const stage = document.getElementById('terminalsCarouselStage');
+    if (!stage) return;
+
+    const slides = stage.querySelectorAll<HTMLElement>('.terminal-card-slide');
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.terminal-tab-btn');
+    const prevBtn = document.getElementById('terminalsPrevBtn');
+    const nextBtn = document.getElementById('terminalsNextBtn');
+    let currentIndex = 0;
+    let autoInterval: number | null = null;
+
+    function goToIndex(idx: number) {
+      if (idx < 0) idx = slides.length - 1;
+      if (idx >= slides.length) idx = 0;
+      currentIndex = idx;
+
+      slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+          slide.classList.add('active');
+          slide.setAttribute('aria-hidden', 'false');
+        } else {
+          slide.classList.remove('active');
+          slide.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      tabs.forEach((tab, i) => {
+        if (i === currentIndex) {
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+          tab.classList.remove('active');
+          tab.setAttribute('aria-selected', 'false');
+        }
+      });
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = parseInt(tab.getAttribute('data-target-index') || '0', 10);
+        goToIndex(target);
+        resetAuto();
+      });
+    });
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        goToIndex(currentIndex - 1);
+        resetAuto();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        goToIndex(currentIndex + 1);
+        resetAuto();
+      });
+    }
+
+    function startAuto() {
+      if (autoInterval) clearInterval(autoInterval);
+      autoInterval = window.setInterval(() => {
+        goToIndex(currentIndex + 1);
+      }, 6000);
+    }
+
+    function resetAuto() {
+      startAuto();
+    }
+
+    stage.addEventListener('mouseenter', () => {
+      if (autoInterval) clearInterval(autoInterval);
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      startAuto();
+    });
+
+    startAuto();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTerminalsCarousel);
+  } else {
+    initTerminalsCarousel();
+  }
+</script>
