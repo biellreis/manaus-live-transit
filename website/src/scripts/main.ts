@@ -1,5 +1,32 @@
 export {};
 
+// 0. Previne restauração automática de scroll do navegador (especialmente no mobile)
+if (typeof history !== "undefined" && "scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
+function ensureHeroTop() {
+  if (!window.location.hash || window.location.hash === "#" || window.location.hash === "#inicio" || window.location.hash === "#rotina") {
+    if (window.location.hash === "#rotina") {
+      try {
+        history.replaceState(null, "", window.location.pathname);
+      } catch (_) {}
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }
+}
+
+ensureHeroTop();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", ensureHeroTop);
+}
+window.addEventListener("pageshow", ensureHeroTop);
+window.addEventListener("load", () => {
+  setTimeout(ensureHeroTop, 50);
+});
+
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");
 let activeOpener: HTMLElement | null = null;
 
@@ -112,14 +139,5 @@ if (dialog) {
       phoneDisplay.src = `/screens/${screen}.webp`;
     });
   });
-})();
-
-// 3. Suporte a scroll instantâneo para inspeção e testes visuais de seções
-(() => {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("y")) {
-    const y = Number(params.get("y"));
-    window.scrollTo({ top: y, behavior: "instant" });
-  }
 })();
 
