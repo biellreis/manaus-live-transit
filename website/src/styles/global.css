@@ -6270,43 +6270,97 @@ main#conteudo {
   z-index: 2;
 }
 
-/* SESSÃO 1: HERO DE CONVERSÃO IMEDIATA */
+/* ==========================================================================
+   SESSÃO 1: HERO SPLIT DA 99 COM FOTO CONTEXTUAL E AÇÕES APPLE
+   ========================================================================== */
 .hero-cover-section {
   position: relative;
-  min-height: 88vh;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 130px 24px 70px;
+  padding: 120px 0 60px;
 }
 
-.hero-cover-content {
-  width: 100%;
-  max-width: 920px;
+.hero-split-container {
+  width: min(1280px, calc(100% - 48px));
   margin: 0 auto;
-}
-
-.hero-cover-inner {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
   align-items: center;
-  text-align: center;
 }
 
-.hero-cover-badge {
+/* LADO ESQUERDO: FOTO DE DESTAQUE NO CONTEXTO DO APLICATIVO */
+.hero-media-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-photo-frame {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid #27272A;
+  background: #121214;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.hero-split-photo {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.hero-photo-frame:hover .hero-split-photo {
+  transform: scale(1.02);
+}
+
+.hero-photo-tag {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(9, 9, 11, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid #27272A;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FFFFFF;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
-  background: #121214;
-  border: 1px solid #27272A;
-  border-radius: 999px;
-  font-size: 11px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* LADO DIREITO: TEXTOS E BOTÕES DE CONVERSÃO */
+.hero-copy-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-copy-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero-eyebrow {
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   color: #3B82F6;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  display: inline-block;
 }
 
 .pulse-dot {
@@ -6318,12 +6372,13 @@ main#conteudo {
 }
 
 .hero-cover-title {
-  font-size: clamp(38px, 6.5vw, 76px);
-  font-weight: 900;
+  font-family: var(--apple-font-headline);
+  font-size: clamp(38px, 4.8vw, 64px);
+  font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.04em;
   color: #FFFFFF;
-  margin: 0 0 18px;
+  margin: 0 0 16px;
   text-wrap: balance;
 }
 
@@ -6332,27 +6387,28 @@ main#conteudo {
 }
 
 .hero-cover-subtitle {
-  font-size: clamp(16px, 2.1vw, 20px);
-  line-height: 1.5;
+  font-family: var(--apple-font-text);
+  font-size: clamp(16px, 1.8vw, 19px);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
   color: #A1A1AA;
-  max-width: 680px;
-  margin: 0 auto 36px;
+  max-width: 540px;
+  margin: 0 0 32px;
   text-wrap: balance;
 }
 
 .hero-cover-cta-group {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
 .hero-btn-large {
-  min-width: 240px;
-  min-height: 62px;
-  padding: 12px 28px;
+  min-width: 220px;
+  min-height: 60px;
+  padding: 12px 24px;
   border-radius: 16px;
   display: inline-flex;
   align-items: center;
@@ -6414,8 +6470,8 @@ main#conteudo {
 }
 
 .btn-icon {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
 }
 
@@ -6434,7 +6490,7 @@ main#conteudo {
 }
 
 .btn-maintext {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
@@ -6442,7 +6498,6 @@ main#conteudo {
 .hero-micro-proofs {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
   font-size: 13px;
@@ -6452,6 +6507,125 @@ main#conteudo {
 
 .micro-proof-dot {
   color: #3F3F46;
+}
+
+/* ==========================================================================
+   SESSÃO 2: GRADE DE 4 VANTAGENS NA ROTINA (ESTILO 99 COM FOTOS NO TOPO)
+   ========================================================================== */
+.routine-benefits-section {
+  position: relative;
+  padding: 80px 0 100px;
+}
+
+.routine-container {
+  width: min(1280px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.routine-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.routine-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #3B82F6;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.routine-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.routine-card {
+  background: #121214;
+  border: 1px solid #27272A;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.routine-card:hover {
+  transform: translateY(-4px);
+  border-color: #3F3F46;
+}
+
+.routine-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #18181B;
+}
+
+.routine-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.routine-card:hover .routine-card-img {
+  transform: scale(1.04);
+}
+
+.routine-card-chip {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(9, 9, 11, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid #27272A;
+}
+
+.routine-card-chip.blue {
+  color: #3B82F6;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.routine-card-chip.orange {
+  color: #F97316;
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.routine-card-body {
+  padding: 24px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.routine-card-title {
+  font-family: var(--apple-font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.routine-card-desc {
+  font-family: var(--apple-font-text);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #A1A1AA;
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
 /* ==========================================================================
@@ -6955,6 +7129,30 @@ main#conteudo {
 
 /* RESPONSIVIDADE ULTRA-ROBUSTA */
 @media (max-width: 1080px) {
+  .hero-split-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  .hero-media-col {
+    order: -1;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .hero-copy-inner {
+    align-items: center;
+    text-align: center;
+  }
+  .hero-cover-cta-group {
+    justify-content: center;
+  }
+  .hero-micro-proofs {
+    justify-content: center;
+  }
+  .routine-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
   .showcase-split-stage {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -6986,6 +7184,19 @@ main#conteudo {
   .hero-btn-large {
     width: 100%;
     max-width: 320px;
+  }
+  .hero-photo-frame {
+    border-radius: 20px;
+  }
+  .hero-photo-tag {
+    bottom: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+  .routine-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
   .showcase-split-stage {
     gap: 28px;

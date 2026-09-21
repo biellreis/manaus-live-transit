@@ -1,10 +1,11 @@
 ---
 import '../styles/global.css';
 
-// Componentes da Arquitetura Flagship (3 Sessões Essenciais)
+// Componentes da Arquitetura Flagship (Estrutura 99app + Apple)
 import HeroTransitMap from '../components/HeroTransitMap.astro';
 import AppleNav from '../components/AppleNav.astro';
 import AppleHeroStage from '../components/AppleHeroStage.astro';
+import RoutineBenefitsSection from '../components/RoutineBenefitsSection.astro';
 import AppShowcaseStage from '../components/AppShowcaseStage.astro';
 import NativeInstallSection from '../components/NativeInstallSection.astro';
 import InstallModal from '../components/InstallModal.astro';
@@ -57,13 +58,16 @@ const schemaApp = {
 <AppleNav/>
 
 <main id="conteudo">
-  <!-- SESSÃO 1: HERO DE CONVERSÃO IMEDIATA -->
+  <!-- SESSÃO 1: HERO SPLIT DA 99 COM FOTO REALISTA E CONVERSÃO IMEDIATA -->
   <AppleHeroStage/>
 
-  <!-- SESSÃO 2: O SHOWCASE CENTRAL (IPHONE REALISTA + SATÉLITES DE TELEMETRIA) -->
+  <!-- SESSÃO 2: GRADE DE 4 VANTAGENS NA ROTINA COM FOTOS NO TOPO (ESTILO 99APP) -->
+  <RoutineBenefitsSection/>
+
+  <!-- SESSÃO 3: O SHOWCASE CENTRAL (IPHONE REALISTA + TELAS INTERATIVAS) -->
   <AppShowcaseStage/>
 
-  <!-- SESSÃO 3: GUIA VISUAL DE INSTALAÇÃO DIRETA NO IPHONE E ANDROID -->
+  <!-- SESSÃO 4: GUIA VISUAL DE INSTALAÇÃO DIRETA NO IPHONE E ANDROID (MANTIDA) -->
   <NativeInstallSection/>
 </main>
 
