@@ -338,6 +338,10 @@ export function App() {
     }
   };
 
+  if (showIOSModal) {
+    return <IOSInstallModal isOpen={true} />;
+  }
+
   return (
     <div
       id="app-root-container"
@@ -482,20 +486,6 @@ export function App() {
         onSelectPlannedTrip={handleSelectPlannedTrip}
         onSelectLine={handleSelectLineAndOpenRoute}
         initialDestination={initialDestinationForPlanner}
-      />
-
-      {/* iOS App Installation Steps Modal (Triggered by ?install=ios) */}
-      <IOSInstallModal
-        isOpen={showIOSModal}
-        onClose={() => {
-          setShowIOSModal(false);
-          try {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('install');
-            url.searchParams.delete('platform');
-            window.history.replaceState(null, '', url.pathname + (url.search ? url.search : ''));
-          } catch (_) {}
-        }}
       />
     </div>
   );
