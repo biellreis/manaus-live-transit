@@ -2,39 +2,37 @@
 import { installUrl } from '../config';
 ---
 
-<section class="hero-cover-section hero-99-stage" id="inicio" aria-label="Abertura Manô Transit">
-  <div class="apple-container hero-split-container hero-99-container">
-    <!-- LADO ESQUERDO: ANIMAÇÃO DO MAPA + ESTUDANTE NO CONTEXTO DO TRANSPORTE -->
-    <div class="hero-media-col hero-99-left">
-      <div class="hero-photo-frame hero-99-photo-card">
-        <img 
-          src="/images/card_student.webp" 
-          alt="Estudante em Manaus acompanhando ônibus em tempo real pelo Manô" 
-          class="hero-split-photo" 
-          width="560" 
-          height="420" 
-          loading="eager"
-        />
-        <div class="hero-photo-tag">
-          <span class="pulse-dot"></span>
-          <span>Linha 125 &bull; Chegando na UFAM</span>
-        </div>
+<section class="hero-99-stage" id="inicio" aria-label="Abertura Manô Transit">
+  <div class="hero-99-banner">
+    <!-- LADO ESQUERDO: ESTUDANTE INTEGRADA DIRETAMENTE NO ESPAÇO COM MAPA -->
+    <div class="hero-99-subject-side">
+      <img 
+        src="/images/card_student.webp" 
+        alt="Estudante em Manaus acompanhando ônibus em tempo real pelo Manô" 
+        class="hero-99-subject-img" 
+        width="720" 
+        height="640" 
+        loading="eager"
+      />
+      <div class="hero-99-floating-tag">
+        <span class="pulse-dot"></span>
+        <span>Linha 125 &bull; Chegando na UFAM</span>
       </div>
     </div>
 
-    <!-- LADO DIREITO: FORMATO E ESTRUTURA 99 COM TÍTULO, SUBTÍTULO E BOTÕES BEM GRANDES -->
-    <div class="hero-copy-col hero-99-right-block">
-      <div class="hero-copy-inner hero-99-inner">
-        <h1 class="hero-cover-title hero-99-title">
+    <!-- LADO DIREITO: BLOCO GIGANTE DA 99 COM CURVA SUPERIOR ESQUERDA (EXATAMENTE IGUAL À IMAGEM) -->
+    <div class="hero-99-shape-block">
+      <div class="hero-99-shape-inner">
+        <h1 class="hero-99-title">
           MAN<span class="hero-blue-letter">Ô</span>, BORA?
         </h1>
 
-        <p class="hero-cover-subtitle hero-99-subtitle">
+        <p class="hero-99-subtitle">
           Monitore ônibus, linhas e paradas de Manaus em tempo real com precisão de GPS.
         </p>
 
-        <!-- BOTÕES ESTILO 99APP BEM GRANDES COM ÍCONES RIGOROSAMENTE CENTRALIZADOS -->
-        <div class="hero-cover-cta-group hero-99-btn-group">
+        <!-- BOTÕES ESTILO 99 BEM GRANDES COM ÍCONES RIGOROSAMENTE CENTRALIZADOS -->
+        <div class="hero-99-btn-group">
           <a href={installUrl('ios')} class="hero-btn-large hero-btn-apple hero-btn-99" data-install="ios" aria-label="Instalar no iPhone">
             <span class="btn-icon-capsule btn-icon-capsule-apple">
               <svg class="btn-icon btn-icon-apple" viewBox="0 0 170 170" fill="currentColor" aria-hidden="true">
@@ -60,16 +58,10 @@ import { installUrl } from '../config';
           </a>
         </div>
 
-        <!-- MICRO-PROVAS DE CONVERSÃO -->
-        <div class="hero-micro-proofs">
-          <span class="micro-proof-item">Pesa menos de 3MB</span>
-          <span class="micro-proof-dot">•</span>
-          <span class="micro-proof-item">Sem cadastro</span>
-          <span class="micro-proof-dot">•</span>
-          <span class="micro-proof-item">Zero anúncios</span>
-          <span class="micro-proof-dot">•</span>
-          <span class="micro-proof-item">100% Gratuito</span>
-        </div>
+        <!-- NOTA DE RODAPÉ ESTILO 99 (IDÊNTICO À REFERÊNCIA) -->
+        <p class="hero-99-footnote">
+          *Pesa menos de 3MB • Sem cadastro • Zero anúncios • 100% Gratuito
+        </p>
       </div>
     </div>
   </div>
