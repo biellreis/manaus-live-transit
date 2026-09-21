@@ -224,11 +224,11 @@
           </div>
 
           <!-- Category Filter Chips -->
-          <div class="lines-filter-chips">
-            <span class="filter-pill active">Todas as Linhas</span>
-            <span class="filter-pill">Ônibus Direto</span>
-            <span class="filter-pill">Linhas de Bairro</span>
-            <span class="filter-pill">Circulares</span>
+          <div class="lines-filter-chips" role="tablist" aria-label="Filtro de linhas">
+            <button type="button" class="filter-pill active" data-line-filter="all">Todas as Linhas</button>
+            <button type="button" class="filter-pill" data-line-filter="direto">Ônibus Direto</button>
+            <button type="button" class="filter-pill" data-line-filter="bairro">Linhas de Bairro</button>
+            <button type="button" class="filter-pill" data-line-filter="circular">Circulares</button>
           </div>
 
           <!-- Lines Cards Grid -->
@@ -379,11 +379,11 @@
           </div>
 
           <!-- Alert Filters -->
-          <div class="alerts-filter-chips">
-            <span class="filter-pill active">Todos</span>
-            <span class="filter-pill">Acidentes</span>
-            <span class="filter-pill">Lentidão</span>
-            <span class="filter-pill">Fiscalização</span>
+          <div class="alerts-filter-chips" role="tablist" aria-label="Filtro de alertas">
+            <button type="button" class="filter-pill active" data-alert-filter="all">Todos</button>
+            <button type="button" class="filter-pill" data-alert-filter="acidentes">Acidentes</button>
+            <button type="button" class="filter-pill" data-alert-filter="lentidao">Lentidão</button>
+            <button type="button" class="filter-pill" data-alert-filter="fiscalizacao">Fiscalização</button>
           </div>
 
           <!-- Alert Cards Grid -->

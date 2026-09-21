@@ -234,6 +234,72 @@ if (dialog) {
   });
 })();
 
+// 5. FILTROS INTERNOS DO SISTEMA (SESSÃO 3)
+(() => {
+  // Linhas Filter
+  const lineFilterBtns = document.querySelectorAll<HTMLButtonElement>("[data-line-filter]");
+  const lineCards = document.querySelectorAll<HTMLElement>(".lines-cards-grid .app-line-card");
+  if (lineFilterBtns.length && lineCards.length) {
+    lineFilterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        lineFilterBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const f = btn.dataset.lineFilter;
+        lineCards.forEach((card, idx) => {
+          if (f === "all") {
+            card.style.display = "flex";
+          } else if (f === "direto") {
+            card.style.display = idx === 0 || idx === 1 ? "flex" : "none";
+          } else if (f === "bairro") {
+            card.style.display = idx === 2 ? "flex" : "none";
+          } else if (f === "circular") {
+            card.style.display = idx === 3 ? "flex" : "none";
+          }
+        });
+      });
+    });
+  }
+
+  // Alertas Filter in Sessão 3
+  const alertFilterBtns = document.querySelectorAll<HTMLButtonElement>("[data-alert-filter]");
+  const alertCards = document.querySelectorAll<HTMLElement>(".alerts-feed-grid .app-alert-card");
+  if (alertFilterBtns.length && alertCards.length) {
+    alertFilterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        alertFilterBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const f = btn.dataset.alertFilter;
+        alertCards.forEach((card, idx) => {
+          if (f === "all") {
+            card.style.display = "flex";
+          } else if (f === "acidentes" || f === "lentidao") {
+            card.style.display = idx === 0 ? "flex" : "none";
+          } else if (f === "fiscalizacao") {
+            card.style.display = idx === 1 ? "flex" : "none";
+          }
+        });
+      });
+    });
+  }
+})();
+
+// 6. PLANEJADOR (SESSÃO 5) - SELEÇÃO DE ROTAS DINÂMICA
+(() => {
+  const optionCards = document.querySelectorAll<HTMLElement>(".planner-option-card");
+  const busBubble = document.querySelector<HTMLElement>(".bus-position-marker .bus-id-tag");
+  if (!optionCards.length) return;
+
+  optionCards.forEach((card, idx) => {
+    card.addEventListener("click", () => {
+      optionCards.forEach((c) => c.classList.remove("active"));
+      card.classList.add("active");
+      if (busBubble) {
+        busBubble.textContent = idx === 0 ? "Ônibus 640" : "Ônibus 350";
+      }
+    });
+  });
+})();
+
 // Suporte a scroll instantâneo para inspeção e testes visuais de seções
 (() => {
   const params = new URLSearchParams(window.location.search);

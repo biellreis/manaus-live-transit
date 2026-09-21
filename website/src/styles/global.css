@@ -970,31 +970,7 @@ h2 {
   padding-top: 120px;
   gap: 100px;
 }
-.alert-phone {
-  width: 285px;
-  transform: rotate(-8deg) rotateY(12deg);
-  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.8);
-  transition: transform 0.4s ease;
-}
-.orange-disc {
-  position: absolute;
-  width: 430px;
-  height: 430px;
-  border: 1px solid #f9731620;
-  border-radius: 50%;
-  background: radial-gradient(circle, #f9731612, transparent 70%);
-}
-.alert-badge {
-  position: absolute;
-  right: 35px;
-  top: 100px;
-  padding: 23px;
-  background: #24190f;
-  border: 1px solid #f9731640;
-  border-radius: 20px;
-  color: var(--orange);
-  transform: rotate(10deg);
-}
+/* Mockup styling removed — living app design in place */
 .install-section {
   padding: 110px 0 100px;
   text-align: center;
@@ -1588,17 +1564,7 @@ body:has(dialog[open]) {
   .alert-art {
     height: 570px;
   }
-  .alert-phone {
-    width: 245px;
-  }
-  .orange-disc {
-    width: 310px;
-    height: 310px;
-  }
-  .alert-badge {
-    right: 0;
-    top: 80px;
-  }
+  /* Mobile mockup legacy overrides removed */
   .install-section {
     padding: 55px 0 70px;
   }
@@ -3791,7 +3757,15 @@ body:has(dialog[open]) {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #2997ff;
+  background: #3B82F6;
+  animation: subtlePulseDot 2s infinite ease-in-out;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes subtlePulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
 }
 
 .card-title {
@@ -4592,22 +4566,32 @@ body:has(dialog[open]) {
   scrollbar-width: none;
 }
 
-.lines-filter-chips .filter-pill {
+.lines-filter-chips .filter-pill,
+.alerts-filter-chips .filter-pill {
   background: #18181B;
   border: 1px solid #27272A;
   color: #A1A1AA;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 999px;
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.2s ease;
 }
 
-.lines-filter-chips .filter-pill.active {
-  background: #3B82F6;
-  border-color: #3B82F6;
+.lines-filter-chips .filter-pill:hover,
+.alerts-filter-chips .filter-pill:hover {
+  border-color: #3F3F46;
   color: #FFFFFF;
+}
+
+.lines-filter-chips .filter-pill.active,
+.alerts-filter-chips .filter-pill.active {
+  background: #FFFFFF;
+  border-color: #FFFFFF;
+  color: #09090B;
 }
 
 .lines-cards-grid {
@@ -4881,15 +4865,26 @@ body:has(dialog[open]) {
   justify-content: space-between;
 }
 
+.app-alert-card .alert-badge,
 .alert-badge {
+  position: static;
+  transform: none;
+  display: inline-flex;
+  align-items: center;
   font-size: 10px;
   font-weight: 800;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 4px;
   color: #FFFFFF;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin: 0;
 }
 
+.app-alert-card .alert-badge.orange,
 .alert-badge.orange { background: #F97316; }
+
+.app-alert-card .alert-badge.blue,
 .alert-badge.blue { background: #3B82F6; }
 
 .alert-time {
@@ -5221,6 +5216,24 @@ body:has(dialog[open]) {
   background: #3B82F6;
   border: 2.5px solid #FFFFFF;
   z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #3B82F6;
+  animation: radarWave 2.4s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  pointer-events: none;
+}
+
+@keyframes radarWave {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.0); opacity: 0; }
 }
 
 .station-details {
