@@ -7224,4 +7224,8 @@ main#conteudo {
     width: 100%;
     max-width: 320px;
   }
+  .apple-localnav-menu {
+    display: none;
+  }
 }
+
