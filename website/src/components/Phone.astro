@@ -12,7 +12,7 @@ const { screen='home', class:className='', android=false, eager=false, id, label
         <span class="island-sensor"></span>
       </div>
     )}
-    {android && <div class="android-bar"><span>09:41</span><i></i><span>◔ ▰</span></div>}
+    {android && <div class="android-bar"><span>09:41</span><i></i><span>LTE</span></div>}
     <img id={id} src={`/screens/${screen}.webp`} width="768" height={android?1552:1670} alt={label || ""} loading={eager?'eager':'lazy'} decoding="async"/>
   </div>
   <div class="phone-button side-power"></div>

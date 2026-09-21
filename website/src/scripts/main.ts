@@ -11,7 +11,11 @@ function showDownloadToast() {
     toast.className = "download-toast";
     toast.innerHTML = `
       <div class="toast-content">
-        <span class="toast-icon">⬇</span>
+        <svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
         <div class="toast-text">
           <strong>Baixando Mano.apk...</strong>
           <span>Verifique a barra de notificações para instalar.</span>
@@ -92,44 +96,47 @@ if (dialog) {
 
 // 2. HIGHLIGHTS RIBBON CAROUSEL CONTROLS (MOUSE DRAG + TOUCH SWIPE FLUIDO)
 (() => {
+  const scroller = document.querySelector<HTMLElement>(".apple-highlights-track-wrapper");
   const track = document.getElementById("highlightsTrack");
   const prevBtn = document.getElementById("highlightsPrevBtn") as HTMLButtonElement | null;
   const nextBtn = document.getElementById("highlightsNextBtn") as HTMLButtonElement | null;
   const paginationDots = document.querySelectorAll<HTMLButtonElement>(".pagination-dot");
-  if (!track) return;
+  if (!scroller || !track) return;
+
+  const getStepWidth = () => {
+    const firstCard = track.firstElementChild as HTMLElement | null;
+    return (firstCard?.clientWidth || 380) + 24;
+  };
 
   const updateButtons = () => {
-    if (prevBtn) prevBtn.disabled = track.scrollLeft <= 10;
-    if (nextBtn)
-      nextBtn.disabled =
-        track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
+    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+    if (prevBtn) prevBtn.disabled = scroller.scrollLeft <= 10;
+    if (nextBtn) nextBtn.disabled = scroller.scrollLeft >= maxScroll - 10;
 
-    const firstCard = track.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.clientWidth || 400;
-    const activeIndex = Math.round(track.scrollLeft / (cardWidth + 24));
+    const stepWidth = getStepWidth();
+    const activeIndex = Math.min(
+      paginationDots.length - 1,
+      Math.max(0, Math.round(scroller.scrollLeft / stepWidth))
+    );
     paginationDots.forEach((dot, idx) => {
       dot.classList.toggle("active", idx === activeIndex);
     });
   };
 
+  scroller.addEventListener("scroll", updateButtons, { passive: true });
+
   prevBtn?.addEventListener("click", () => {
-    const firstCard = track.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.clientWidth || 400;
-    track.scrollBy({ left: -(cardWidth + 24), behavior: "smooth" });
+    scroller.scrollBy({ left: -getStepWidth(), behavior: "smooth" });
   });
 
   nextBtn?.addEventListener("click", () => {
-    const firstCard = track.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.clientWidth || 400;
-    track.scrollBy({ left: cardWidth + 24, behavior: "smooth" });
+    scroller.scrollBy({ left: getStepWidth(), behavior: "smooth" });
   });
 
   paginationDots.forEach((dot) => {
     dot.addEventListener("click", () => {
       const idx = Number(dot.dataset.index || 0);
-      const firstCard = track.firstElementChild as HTMLElement | null;
-      const cardWidth = firstCard?.clientWidth || 400;
-      track.scrollTo({ left: idx * (cardWidth + 24), behavior: "smooth" });
+      scroller.scrollTo({ left: idx * getStepWidth(), behavior: "smooth" });
     });
   });
 
@@ -138,41 +145,44 @@ if (dialog) {
   let startX = 0;
   let scrollStart = 0;
 
-  track.addEventListener("mousedown", (e) => {
+  scroller.addEventListener("mousedown", (e) => {
     isDown = true;
-    track.style.cursor = "grabbing";
-    startX = e.pageX - track.offsetLeft;
-    scrollStart = track.scrollLeft;
+    scroller.style.cursor = "grabbing";
+    scroller.style.userSelect = "none";
+    startX = e.pageX - scroller.offsetLeft;
+    scrollStart = scroller.scrollLeft;
   });
 
   window.addEventListener("mouseup", () => {
     if (isDown) {
       isDown = false;
-      if (track) track.style.cursor = "grab";
+      if (scroller) {
+        scroller.style.cursor = "grab";
+        scroller.style.removeProperty("user-select");
+      }
     }
   });
 
-  track.addEventListener("mousemove", (e) => {
+  scroller.addEventListener("mousemove", (e) => {
     if (!isDown) return;
     e.preventDefault();
-    const x = e.pageX - track.offsetLeft;
+    const x = e.pageX - scroller.offsetLeft;
     const walk = (x - startX) * 1.5;
-    track.scrollLeft = scrollStart - walk;
+    scroller.scrollLeft = scrollStart - walk;
   });
 
   // Touch Swipe Support
-  track.addEventListener("touchstart", (e) => {
+  scroller.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
-    scrollStart = track.scrollLeft;
+    scrollStart = scroller.scrollLeft;
   }, { passive: true });
 
-  track.addEventListener("touchmove", (e) => {
+  scroller.addEventListener("touchmove", (e) => {
     const currentX = e.touches[0].clientX;
-    const diff = startX - currentX;
-    track.scrollLeft = scrollStart + diff;
+    const walk = (currentX - startX) * 1.3;
+    scroller.scrollLeft = scrollStart - walk;
   }, { passive: true });
 
-  track.addEventListener("scroll", updateButtons, { passive: true });
   updateButtons();
 })();
 
