@@ -28,30 +28,26 @@ window.addEventListener("load", () => {
   setTimeout(forceHeroTop, 150);
   setTimeout(() => {
     forceHeroTop();
-    // Ativa os IDs das sessões apenas após a página estar 100% estabilizada no topo
-    document.querySelectorAll<HTMLElement>("[data-section-id]").forEach((el) => {
-      const sid = el.getAttribute("data-section-id");
-      if (sid) el.id = sid;
-    });
     document.documentElement.classList.add("smooth-scroll");
-  }, 350);
+  }, 450);
 });
 
 // Intercepta cliques de links internos para rolar suavemente sem sujar a URL com hash
-document.querySelectorAll<HTMLAnchorElement>("a[href^='#']").forEach((anchor) => {
-  anchor.addEventListener("click", (e) => {
-    const hash = anchor.getAttribute("href");
-    if (!hash || hash === "#") return;
-    if (hash === "#inicio") {
-      e.preventDefault();
+document.querySelectorAll<HTMLElement>("[data-scroll-to], a[href^='#']").forEach((el) => {
+  el.addEventListener("click", (e) => {
+    const rawTarget = el.getAttribute("data-scroll-to") || el.getAttribute("href") || "";
+    const cleanId = rawTarget.replace("#", "").trim();
+    if (!cleanId) return;
+
+    e.preventDefault();
+    if (cleanId === "inicio") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       try { history.replaceState(null, "", window.location.pathname); } catch (_) {}
       return;
     }
-    const cleanId = hash.replace("#", "");
-    const target = document.getElementById(cleanId) || document.querySelector(`[data-section-id="${cleanId}"]`);
+
+    const target = document.querySelector(`[data-section-id="${cleanId}"]`) || document.getElementById(cleanId);
     if (target) {
-      e.preventDefault();
       target.scrollIntoView({ behavior: "smooth" });
       try { history.replaceState(null, "", window.location.pathname); } catch (_) {}
     }

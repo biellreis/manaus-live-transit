@@ -61,6 +61,19 @@ const schemaApp = {
     window.scrollTo(0, 0);
     if (document.documentElement) document.documentElement.scrollTop = 0;
     if (document.body) document.body.scrollTop = 0;
+
+    // Garante que qualquer tentativa de rolagem automática pelo navegador nos primeiros 500ms seja neutralizada
+    var __scrollLockEnd = Date.now() + 500;
+    function __lockEarlyScroll() {
+      if (Date.now() < __scrollLockEnd) {
+        if (window.scrollY !== 0) {
+          window.scrollTo(0, 0);
+        }
+      } else {
+        window.removeEventListener('scroll', __lockEarlyScroll);
+      }
+    }
+    window.addEventListener('scroll', __lockEarlyScroll, { passive: true });
   </script>
 </head>
 <body>
