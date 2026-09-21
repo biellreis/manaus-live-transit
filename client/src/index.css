@@ -561,4 +561,28 @@ html, body {
   background-color: rgba(15, 23, 42, 0.2) !important;
 }
 
+/* iOS Install Modal Dark Theme Consistency */
+#ios-install-dialog-card,
+[data-theme="light"] #ios-install-dialog-card,
+[data-theme="dark"] #ios-install-dialog-card {
+  background-color: #141418 !important;
+  color: #FFFFFF !important;
+}
+
+#ios-install-dialog-card h2,
+[data-theme="light"] #ios-install-dialog-card h2,
+[data-theme="dark"] #ios-install-dialog-card h2 {
+  color: #FFFFFF !important;
+}
+
+#ios-install-dialog-card p,
+[data-theme="light"] #ios-install-dialog-card p {
+  color: #A1A1AA !important;
+}
+
+#ios-install-dialog-card strong,
+[data-theme="light"] #ios-install-dialog-card strong {
+  color: #FFFFFF !important;
+}
+
 

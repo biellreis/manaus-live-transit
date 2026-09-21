@@ -25,6 +25,7 @@ export function IOSInstallModal({ isOpen, onClose }: Props) {
       }}
     >
       <div
+        id="ios-install-dialog-card"
         style={{
           position: 'relative',
           backgroundColor: '#141418',
