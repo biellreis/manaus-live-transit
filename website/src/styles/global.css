@@ -1876,37 +1876,37 @@ body:has(dialog[open]) {
 
 /* 6 Live Bus Path Animations in Manaus (Strictly Upright & Horizontal) */
 .bus-unit-120 {
-  offset-path: path("M 80 -40 L 90 200 L 130 450 L 180 700 L 260 840");
+  offset-path: path("M 80 -40 L 90 200 L 130 450 L 180 700 L 260 840 L 280 940");
   offset-rotate: 0deg !important;
   animation: busMove120 18s linear infinite 3s;
 }
 
 .bus-unit-640 {
-  offset-path: path("M 360 -40 L 390 220 L 460 440 L 540 640 L 680 770");
+  offset-path: path("M 360 -40 L 390 220 L 460 440 L 540 640 L 680 770 L 700 850 L 710 940");
   offset-rotate: 0deg !important;
   animation: busMove640 14s linear infinite;
 }
 
 .bus-unit-300 {
-  offset-path: path("M 720 -40 L 750 240 L 800 480 L 860 660 L 920 780");
+  offset-path: path("M 720 -40 L 750 240 L 800 480 L 860 660 L 920 780 L 940 850 L 950 940");
   offset-rotate: 0deg !important;
   animation: busMove300 17s linear infinite 1.5s;
 }
 
 .bus-unit-448 {
-  offset-path: path("M 700 780 L 820 620 L 940 440 L 990 220 L 1020 -40");
+  offset-path: path("M 710 940 L 700 780 L 820 620 L 940 440 L 990 220 L 1020 -40");
   offset-rotate: 0deg !important;
   animation: busMove448 15s linear infinite 0.5s;
 }
 
 .bus-unit-652 {
-  offset-path: path("M 1320 -40 L 1340 240 L 1370 480 L 1400 700 L 1420 830");
+  offset-path: path("M 1320 -40 L 1340 240 L 1370 480 L 1400 700 L 1420 830 L 1430 940");
   offset-rotate: 0deg !important;
   animation: busMove652 19s linear infinite 4s;
 }
 
 .bus-unit-560 {
-  offset-path: path("M 1520 -40 L 1490 220 L 1460 460 L 1430 680 L 1390 840");
+  offset-path: path("M 1520 -40 L 1490 220 L 1460 460 L 1430 680 L 1390 840 L 1370 940");
   offset-rotate: 0deg !important;
   animation: busMove560 16s linear infinite 2s;
 }
@@ -6353,22 +6353,27 @@ main#conteudo {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  max-width: 580px;
+  max-width: 620px;
+  width: 100%;
 }
 
 .hero-99-title {
   font-family: var(--apple-font-headline);
-  font-size: clamp(44px, 5.4vw, 74px);
+  font-size: clamp(48px, 6vw, 82px);
   font-weight: 400;
-  line-height: 1.05;
+  line-height: 1.04;
   letter-spacing: -0.03em;
   color: #09090B;
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   text-wrap: balance;
 }
 
 .hero-title-bold {
   font-weight: 800;
+}
+
+.hero-title-regular {
+  font-weight: 400 !important;
 }
 
 .hero-blue-letter {
@@ -6377,13 +6382,14 @@ main#conteudo {
 
 .hero-99-subtitle {
   font-family: var(--apple-font-text);
-  font-size: clamp(18px, 2.1vw, 22px);
+  font-size: clamp(20px, 2.3vw, 24px);
   line-height: 1.45;
   letter-spacing: -0.015em;
   color: #52525B;
-  margin: 0 0 40px;
+  margin: 0 0 34px;
   text-wrap: balance;
   font-weight: 450;
+  max-width: 580px;
 }
 
 .hero-99-btn-group {
@@ -6391,15 +6397,15 @@ main#conteudo {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   width: 100%;
 }
 
 /* BOTÕES ESTILO 99APP BEM GRANDES COM ÍCONES RIGOROSAMENTE CENTRALIZADOS */
 .hero-btn-large {
-  min-width: 260px;
-  min-height: 72px;
-  padding: 10px 30px 10px 12px;
+  min-width: 270px;
+  min-height: 76px;
+  padding: 12px 32px 12px 14px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
@@ -6424,8 +6430,8 @@ main#conteudo {
 }
 
 .hero-btn-apple .btn-icon-capsule {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: #FFFFFF;
   display: flex;
@@ -6437,8 +6443,8 @@ main#conteudo {
 }
 
 .hero-btn-apple .btn-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   display: block;
   margin: auto;
   color: #000000 !important;
@@ -6447,13 +6453,13 @@ main#conteudo {
 
 .hero-btn-apple .btn-subtext {
   color: #A1A1AA !important;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
 }
 
 .hero-btn-apple .btn-maintext {
   color: #FFFFFF !important;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -6471,8 +6477,8 @@ main#conteudo {
 }
 
 .hero-btn-android .btn-icon-capsule {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: #27272A;
   display: flex;
@@ -6484,8 +6490,8 @@ main#conteudo {
 }
 
 .hero-btn-android .btn-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   display: block;
   margin: auto;
   color: #FFFFFF !important;
@@ -6494,13 +6500,13 @@ main#conteudo {
 
 .hero-btn-android .btn-subtext {
   color: #A1A1AA !important;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
 }
 
 .hero-btn-android .btn-maintext {
   color: #FFFFFF !important;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -6511,14 +6517,33 @@ main#conteudo {
   line-height: 1.25;
 }
 
-.hero-99-footnote {
+/* 4 CARACTERÍSTICAS DIAGRAMADAS E RIGOROSAMENTE ALINHADAS */
+.hero-99-features-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.hero-feature-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--apple-font-text);
-  font-size: 13px;
-  font-weight: 500;
-  color: #71717A;
-  line-height: 1.4;
-  margin-top: 16px;
-  letter-spacing: 0.1px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #3F3F46;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.feature-check-icon {
+  width: 18px;
+  height: 18px;
+  color: #2563EB;
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
@@ -7601,6 +7626,10 @@ main#conteudo {
   .hero-99-btn-group {
     justify-content: center;
   }
+  .hero-99-features-row {
+    justify-content: center;
+    gap: 12px 20px;
+  }
   .routine-cards-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
@@ -7659,18 +7688,31 @@ main#conteudo {
     padding-top: 0;
   }
   .hero-99-subject-side {
-    height: 320px;
-    min-height: 320px;
+    height: 260px;
+    min-height: 260px;
   }
   .hero-99-shape-block {
     background: #FFFFFF;
     border-top-left-radius: 36px;
     border-top-right-radius: 36px;
-    padding: 36px 20px 32px;
+    padding: 32px 20px 28px;
   }
   .hero-btn-large {
     width: 100%;
     max-width: 320px;
+  }
+  .hero-99-features-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 14px;
+    width: 100%;
+    max-width: 320px;
+    margin: 4px auto 0;
+    text-align: left;
+  }
+  .hero-feature-item {
+    font-size: 13.5px;
+    white-space: normal;
   }
   .routine-cards-grid {
     grid-template-columns: 1fr;
