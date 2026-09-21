@@ -5,26 +5,52 @@ if (typeof history !== "undefined" && "scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
 
-function ensureHeroTop() {
-  if (!window.location.hash || window.location.hash === "#" || window.location.hash === "#inicio" || window.location.hash === "#rotina") {
-    if (window.location.hash === "#rotina") {
-      try {
-        history.replaceState(null, "", window.location.pathname);
-      } catch (_) {}
-    }
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    if (document.documentElement) document.documentElement.scrollTop = 0;
-    if (document.body) document.body.scrollTop = 0;
+function forceHeroTop() {
+  if (window.location.hash) {
+    try {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    } catch (_) {}
   }
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  if (document.documentElement) document.documentElement.scrollTop = 0;
+  if (document.body) document.body.scrollTop = 0;
 }
 
-ensureHeroTop();
+// Executa em todas as etapas de carregamento e montagem
+forceHeroTop();
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", ensureHeroTop);
+  document.addEventListener("DOMContentLoaded", forceHeroTop);
 }
-window.addEventListener("pageshow", ensureHeroTop);
+window.addEventListener("pageshow", forceHeroTop);
 window.addEventListener("load", () => {
-  setTimeout(ensureHeroTop, 50);
+  forceHeroTop();
+  setTimeout(forceHeroTop, 50);
+  setTimeout(forceHeroTop, 150);
+  setTimeout(forceHeroTop, 300);
+  // Ativa smooth scroll apenas após a página estar 100% montada no topo
+  setTimeout(() => {
+    document.documentElement.classList.add("smooth-scroll");
+  }, 400);
+});
+
+// Intercepta cliques de links internos para rolar suavemente sem sujar a URL com hash
+document.querySelectorAll<HTMLAnchorElement>("a[href^='#']").forEach((anchor) => {
+  anchor.addEventListener("click", (e) => {
+    const hash = anchor.getAttribute("href");
+    if (!hash || hash === "#") return;
+    if (hash === "#inicio") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      try { history.replaceState(null, "", window.location.pathname + window.location.search); } catch (_) {}
+      return;
+    }
+    const target = document.querySelector(hash);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth" });
+      try { history.replaceState(null, "", window.location.pathname + window.location.search); } catch (_) {}
+    }
+  });
 });
 
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");

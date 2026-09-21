@@ -17,8 +17,10 @@
   box-sizing: border-box;
 }
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 100px;
+}
+html.smooth-scroll {
+  scroll-behavior: smooth;
 }
 body {
   margin: 0;

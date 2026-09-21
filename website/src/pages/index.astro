@@ -46,8 +46,22 @@ const schemaApp = {
   <meta property="og:title" content="Manô — Chega de esperar no escuro na parada"/>
   <meta property="og:description" content="Monitore linhas de ônibus, itinerários e paradas de Manaus em tempo real com telemetria GPS. 100% gratuito e sem anúncios."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:locale" content="pt_BR"/>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaApp)} />
+
+  <!-- Bloqueio estrito de restauração de scroll no mobile antes do primeiro render -->
+  <script is:inline>
+    if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    if (window.location.hash) {
+      try {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      } catch (_) {}
+    }
+    window.scrollTo(0, 0);
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  </script>
 </head>
 <body>
 
