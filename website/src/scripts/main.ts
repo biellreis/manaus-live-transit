@@ -28,7 +28,6 @@ window.addEventListener("load", () => {
 });
 
 const dialog = document.querySelector<HTMLDialogElement>("#install-dialog");
-let activeOpener: HTMLElement | null = null;
 
 function showDownloadToast() {
   let toast = document.querySelector<HTMLElement>("#download-toast");
@@ -74,32 +73,21 @@ document
     });
   });
 
-if (dialog) {
-  // Apenas links do iOS abrem o modal
-  document
-    .querySelectorAll<HTMLElement>("[data-install='ios'], #appleInstallIphoneBtn")
-    .forEach((link) => {
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        activeOpener = link;
+const APP_IOS_INSTALL_URL = "https://manaus-live-transit.vercel.app/?install=ios";
 
-        const titleEl = document.querySelector("#install-sheet-title");
-        const subTitleEl = document.querySelector("#install-sheet-subtitle");
-        const iosLink = document.querySelector<HTMLAnchorElement>("#sheet-app-link");
-        const androidFlow = document.querySelector<HTMLElement>("#modal-android-flow");
-
-        if (titleEl) titleEl.textContent = "Instalar no iPhone";
-        if (subTitleEl) subTitleEl.textContent = "4 passos simples no seu navegador:";
-        if (iosLink) {
-          iosLink.style.display = "block";
-          iosLink.href = "https://manaus-live-transit.vercel.app/";
-        }
-        if (androidFlow) androidFlow.style.display = "none";
-
-        dialog.showModal();
-      });
+// Apenas links do iOS: redireciona diretamente para o aplicativo oficial com o modal nativo
+document
+  .querySelectorAll<HTMLElement>("[data-install='ios'], #appleInstallIphoneBtn")
+  .forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const mouseEvent = event as MouseEvent;
+      if (mouseEvent.metaKey || mouseEvent.ctrlKey) return;
+      event.preventDefault();
+      window.location.href = APP_IOS_INSTALL_URL;
     });
+  });
 
+if (dialog) {
   const closeBtn = dialog.querySelector(".dialog-close");
   closeBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -118,7 +106,6 @@ if (dialog) {
         dialog.close();
     }
   });
-  dialog.addEventListener("close", () => activeOpener?.focus());
 }
 
 // 2. SHOWCASE CENTRAL — ALTERNÂNCIA DE TELAS DO IPHONE 16 PRO (JOURNEY / HOME)

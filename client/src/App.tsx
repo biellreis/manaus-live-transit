@@ -14,8 +14,20 @@ import { useUserLocation } from './hooks/useUserLocation.js';
 import { notifyManoReady } from './utils/notifyManoReady.js';
 import { WebLaunchOverlay } from './components/WebLaunchOverlay.js';
 import { saveRecentDestination, type RecentDestination } from './utils/recentDestinations.js';
+import { IOSInstallModal } from './components/IOSInstallModal.js';
 
 export function App() {
+  const [showIOSModal, setShowIOSModal] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('install') === 'ios' || params.get('platform') === 'ios';
+      } catch (_) {
+        return false;
+      }
+    }
+    return false;
+  });
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [isRouteMode, setIsRouteMode] = useState(false);
   const [lines, setLines] = useState<RouteSummary[]>([]);
@@ -61,6 +73,9 @@ export function App() {
           const allLoadedLines = linesData.lines || [];
           setLines(allLoadedLines);
           const params = new URLSearchParams(window.location.search);
+          if (params.get('install') === 'ios' || params.get('platform') === 'ios') {
+            setShowIOSModal(true);
+          }
           const tabParam = (params.get('tab') || '').toLowerCase().trim();
           if (tabParam === 'alerts' || tabParam === 'alertas') setActiveTab('alerts');
           else if (tabParam === 'lines' || tabParam === 'linhas') setActiveTab('lines');
@@ -467,6 +482,20 @@ export function App() {
         onSelectPlannedTrip={handleSelectPlannedTrip}
         onSelectLine={handleSelectLineAndOpenRoute}
         initialDestination={initialDestinationForPlanner}
+      />
+
+      {/* iOS App Installation Steps Modal (Triggered by ?install=ios) */}
+      <IOSInstallModal
+        isOpen={showIOSModal}
+        onClose={() => {
+          setShowIOSModal(false);
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('install');
+            url.searchParams.delete('platform');
+            window.history.replaceState(null, '', url.pathname + (url.search ? url.search : ''));
+          } catch (_) {}
+        }}
       />
     </div>
   );
