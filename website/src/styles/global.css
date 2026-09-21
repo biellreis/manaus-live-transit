@@ -605,7 +605,7 @@ h1 {
   opacity: 1;
 }
 
-/* Mapa ao vivo dentro do fundo Apple */
+/* Mapa em tempo real dentro do fundo Apple */
 .section-bg-blue .live-copy h2 .blue {
   color: #2997ff;
 }
@@ -3027,7 +3027,7 @@ body:has(dialog[open]) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* 2. APPLE HERO STAGE (SESSÃO 1: MAPA AO VIVO 100% COVER + MANÔ, BORA?) */
+/* 2. APPLE HERO STAGE (SESSÃO 1: MAPA EM TEMPO REAL 100% COVER + MANÔ, BORA?) */
 .hero-map-full-cover {
   position: relative;
   width: 100%;
@@ -6337,27 +6337,22 @@ main#conteudo {
   gap: 10px;
 }
 
-/* LADO DIREITO: TEXTOS E BOTÕES DE CONVERSÃO */
-.hero-copy-col {
+/* LADO DIREITO: ESTRUTURA E SHAPE DA 99 COM CANTOS ARREDONDADOS E CORES SÓLIDAS */
+.hero-99-right-block {
+  background: #121214;
+  border: 2px solid #27272A;
+  border-radius: 80px 32px 32px 32px;
+  padding: 56px 48px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
-.hero-copy-inner {
+.hero-99-inner {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-}
-
-.hero-eyebrow {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #3B82F6;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  display: inline-block;
 }
 
 .pulse-dot {
@@ -6369,14 +6364,14 @@ main#conteudo {
   flex-shrink: 0;
 }
 
-.hero-cover-title {
+.hero-99-title {
   font-family: var(--apple-font-headline);
-  font-size: clamp(38px, 4.8vw, 64px);
+  font-size: clamp(40px, 5.2vw, 68px);
   font-weight: 800;
-  line-height: 1.05;
+  line-height: 1.02;
   letter-spacing: -0.04em;
   color: #FFFFFF;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   text-wrap: balance;
 }
 
@@ -6384,34 +6379,35 @@ main#conteudo {
   color: #3B82F6 !important;
 }
 
-.hero-cover-subtitle {
+.hero-99-subtitle {
   font-family: var(--apple-font-text);
   font-size: clamp(16px, 1.8vw, 19px);
   line-height: 1.45;
   letter-spacing: -0.015em;
   color: #A1A1AA;
-  max-width: 540px;
-  margin: 0 0 32px;
+  max-width: 520px;
+  margin: 0 0 36px;
   text-wrap: balance;
 }
 
-.hero-cover-cta-group {
+.hero-99-btn-group {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  width: 100%;
 }
 
-/* BOTÕES ESTILO 99APP: PÍLULA COM CÁPSULA CIRCULAR DE ÍCONE */
+/* BOTÕES ESTILO 99APP BEM GRANDES COM ÍCONES RIGOROSAMENTE CENTRALIZADOS */
 .hero-btn-large {
-  min-width: 230px;
-  min-height: 60px;
-  padding: 8px 24px 8px 10px;
-  border-radius: 980px;
+  min-width: 240px;
+  min-height: 68px;
+  padding: 8px 28px 8px 10px;
+  border-radius: 9999px;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   text-decoration: none;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
@@ -6421,7 +6417,7 @@ main#conteudo {
   background: #FFFFFF;
   color: #09090B !important;
   border: 2px solid #FFFFFF;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .hero-btn-apple:hover {
@@ -6430,19 +6426,22 @@ main#conteudo {
 }
 
 .hero-btn-apple .btn-icon-capsule {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: #09090B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .hero-btn-apple .btn-icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  display: block;
+  margin: auto;
   fill: #FFFFFF !important;
   color: #FFFFFF !important;
 }
@@ -6456,31 +6455,35 @@ main#conteudo {
 }
 
 .hero-btn-android {
-  background: #121214;
+  background: #18181B;
   color: #FFFFFF !important;
   border: 2px solid #27272A;
+  font-weight: 700;
 }
 
 .hero-btn-android:hover {
   transform: translateY(-2px);
-  background: #18181B;
+  background: #27272A;
   border-color: #3F3F46;
 }
 
 .hero-btn-android .btn-icon-capsule {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: #27272A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .hero-btn-android .btn-icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  display: block;
+  margin: auto;
   fill: #FFFFFF !important;
   color: #FFFFFF !important;
 }
@@ -6497,7 +6500,7 @@ main#conteudo {
   display: flex;
   flex-direction: column;
   text-align: left;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .btn-subtext {
@@ -6508,7 +6511,7 @@ main#conteudo {
 }
 
 .btn-maintext {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
@@ -6655,379 +6658,259 @@ main#conteudo {
 }
 
 /* ==========================================================================
-   SESSÃO 3: O SHOWCASE CENTRAL (BANNER COLORIDO FLUTUANTE 99 + MEGA-CARD)
+   SESSÃO 3: O SHOWCASE CARROSSEL (ESTILO 99APP: FAIXA AZUL + CARD BRANCO)
    ========================================================================== */
-.apple-showcase-section {
+.showcase-carousel-section {
   position: relative;
-  padding: 0;
-}
-
-/* FAIXA COLORIDA VIBRANTE NO FUNDO (ESTILO CLASSIFICADOS 99APP) */
-.showcase-banner-band {
-  background: #1D4ED8;
-  padding: 64px 0 54px;
-  width: 100%;
-}
-
-/* MEGA-CARD FLUTUANTE COM CANTOS DE 4rem / 64px (SHAPE 99APP) */
-.showcase-floating-megacard {
-  max-width: 1240px;
-  margin: 0 auto;
+  padding: 80px 0 90px;
   background: #09090B;
-  border: 2px solid #2563EB;
-  border-radius: 56px;
-  padding: 60px 52px 48px;
-  width: calc(100% - 48px);
+  overflow: hidden;
 }
 
-.megacard-inner {
+/* FAIXA DE FUNDO: TOPO BRANCO COM FAIXA AZUL ROYAL NA PARTE INFERIOR */
+.carousel-split-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bg-upper-white {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 46%;
+  background: #FFFFFF;
+}
+
+.bg-lower-blue {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 54%;
+  background: #1D4ED8;
+}
+
+.carousel-stage-container {
+  position: relative;
+  z-index: 2;
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+/* MEGA-CARD FLUTUANTE BRANCO COM CANTOS CURVADOS (ESTILO 99APP EXATO) */
+.carousel-floating-card {
+  background: #FFFFFF;
+  border-radius: 48px;
+  border: 2px solid #E2E8F0;
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px #09090B;
+}
+
+.carousel-slide {
+  display: none;
+}
+
+.carousel-slide.active {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 56px;
+  grid-template-columns: 1.05fr 1fr;
   align-items: center;
+  min-height: 520px;
+  padding: 56px 64px;
+  gap: 48px;
 }
 
-.megacard-copy-col {
+/* COLUNA ESQUERDA: CÓPIA E BOTÃO 99 */
+.slide-copy-col {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
-.megacard-eyebrow {
+.slide-eyebrow {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 2px;
-  color: #3B82F6;
+  color: #1D4ED8;
   text-transform: uppercase;
   margin-bottom: 12px;
   display: inline-block;
 }
 
-.megacard-headline {
+.slide-headline {
   font-family: var(--apple-font-headline);
-  font-size: clamp(30px, 3.8vw, 46px);
+  font-size: clamp(30px, 3.6vw, 46px);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  color: #FFFFFF;
   line-height: 1.12;
-  margin: 0 0 14px;
+  letter-spacing: -0.03em;
+  color: #09090B;
+  margin: 0 0 16px;
 }
 
-.megacard-subhead {
+.slide-desc {
   font-family: var(--apple-font-text);
   font-size: 16px;
-  line-height: 1.5;
-  color: #A1A1AA;
-  margin: 0 0 28px;
+  line-height: 1.6;
+  color: #3F3F46;
+  margin: 0 0 32px;
+  max-width: 480px;
 }
 
-.showcase-tabs-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 24px;
+.slide-desc strong {
+  color: #09090B;
+  font-weight: 700;
 }
 
-.stage-tab-card {
-  background: #121214;
-  border: 1px solid #27272A;
-  border-radius: 20px;
-  padding: 20px 24px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.stage-tab-card:hover {
-  border-color: #3F3F46;
-  background: #18181B;
-  transform: translateX(4px);
-}
-
-.stage-tab-card.active {
-  background: #141824;
-  border: 2px solid #3B82F6;
-}
-
-.tab-card-top {
+.slide-action-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
 }
 
-.tab-index-badge {
-  font-size: 13px;
-  font-weight: 800;
-  color: #71717A;
-  letter-spacing: 1px;
-}
-
-.stage-tab-card.active .tab-index-badge {
-  color: #3B82F6;
-}
-
-.tab-status-chip {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-}
-
-.tab-status-chip.chip-blue {
-  background: #1E3A8A;
-  color: #FFFFFF;
-  border: 1px solid #3B82F6;
-}
-
-.tab-status-chip.chip-orange {
-  background: #9A3412;
-  color: #FFFFFF;
-  border: 1px solid #F97316;
-}
-
-.tab-card-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #FFFFFF;
-}
-
-.tab-card-desc {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #A1A1AA;
-  margin: 0;
-}
-
-.showcase-telemetry-pill {
+.btn-99-dark-pill {
+  background: #09090B;
+  color: #FFFFFF !important;
+  border-radius: 9999px;
+  padding: 8px 12px 8px 28px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #A1A1AA;
-  padding: 8px 16px;
-  background: #121214;
-  border: 1px solid #27272A;
-  border-radius: 999px;
-  width: fit-content;
-  margin-bottom: 24px;
-}
-
-/* BOTÃO PÍLULA ESTILO 99 (COM CÁPSULA CIRCULAR DE SETA) */
-.btn-99-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  background: #FFFFFF;
-  color: #09090B !important;
-  border: 2px solid #FFFFFF;
-  border-radius: 980px;
-  padding: 6px 24px 6px 8px;
+  gap: 16px;
   font-weight: 700;
   font-size: 15px;
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
-  width: fit-content;
 }
 
-.btn-99-pill:hover {
+.btn-99-dark-pill:hover {
   transform: translateY(-2px);
-  background: #F4F4F5;
+  background: #18181B;
 }
 
-.btn-99-arrow {
-  width: 40px;
-  height: 40px;
+.btn-99-arrow-circle {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: #09090B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #27272A;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
 }
 
-.btn-99-arrow .arrow-svg {
+.btn-99-arrow-circle .arrow-svg {
   width: 18px;
   height: 18px;
   stroke: #FFFFFF;
 }
 
-.btn-99-label {
-  color: #09090B;
-  font-weight: 700;
-}
-
-/* DISPOSITIVO IPHONE NA COLUNA DA DIREITA */
-.megacard-device-col {
+/* COLUNA DIREITA: ELEMENTOS VISUAIS E SHAPES */
+.slide-media-col {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.phone-chassis-stage {
+.media-shape-backdrop {
   position: relative;
-  width: 320px;
+  border-radius: 36px;
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
-.phone-chassis-stage .phone {
-  width: 320px;
+.media-shape-backdrop.shape-blue {
+  background: #EFF6FF;
+  border: 2px solid #BFDBFE;
 }
 
-.phone-ground-shadow {
-  width: 260px;
-  height: 26px;
-  background: #000000;
-  border-radius: 50%;
-  margin-top: 14px;
-  pointer-events: none;
+.media-shape-backdrop.shape-orange {
+  background: #FFF7ED;
+  border: 2px solid #FED7AA;
 }
 
-/* INDICADORES DE CARROSSEL DA 99 */
-.megacard-indicators {
+.phone-wrapper-carousel {
+  width: 270px;
+}
+
+.slide-photo-frame {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.slide-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.media-floating-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  background: #09090B;
+  color: #FFFFFF;
+  border: 1px solid #27272A;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+/* INDICADORES DE CARROSSEL 99 NA FAIXA AZUL */
+.carousel-nav-indicators {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 36px;
+  gap: 10px;
+  margin-top: 32px;
+  margin-bottom: 56px;
 }
 
-.indicator-pill {
-  width: 32px;
-  height: 8px;
-  border-radius: 999px;
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #93C5FD;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.carousel-dot.active {
+  width: 36px;
+  height: 10px;
+  border-radius: 9999px;
   background: #F97316;
 }
 
-.indicator-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #27272A;
-}
-
-/* BLOCO INFERIOR DO SHOWCASE: BENEFÍCIOS E MÉTRICAS */
-.showcase-bottom-container {
-  width: min(1280px, calc(100% - 48px));
-  margin: 64px auto 0;
-}
-
-.showcase-benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 48px;
-}
-
-.benefit-card {
-  background: #18181B;
-  border: 1px solid #27272A;
-  border-radius: 24px;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-}
-
-.benefit-card:hover {
-  border-color: #3F3F46;
-  transform: translateY(-2px);
-}
-
-.benefit-card-tag {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.benefit-card-tag.tag-blue {
-  color: #3B82F6;
-}
-
-.benefit-card-tag.tag-orange {
-  color: #F97316;
-}
-
-.benefit-card-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-.benefit-card-desc {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #A1A1AA;
-  margin: 0;
-  flex-grow: 1;
-}
-
-.benefit-card-foot {
+/* BARRA DE MÉTRICAS SÓLIDAS */
+.carousel-metrics-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 14px;
-  border-top: 1px solid #27272A;
-  font-size: 12px;
-}
-
-.benefit-chip {
-  font-weight: 700;
-  color: #FFFFFF;
-}
-
-.benefit-chip-sub {
-  color: #71717A;
-  font-weight: 500;
-}
-
-/* MÉTRICAS DE AUTORIDADE */
-.showcase-metrics-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #121214;
-  border: 1px solid #27272A;
-  border-radius: 24px;
-  padding: 28px 40px;
-  margin-bottom: 60px;
-}
-
-.metric-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 4px;
-  flex: 1;
-}
-
-.metric-value {
-  font-size: clamp(26px, 3.2vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #FFFFFF;
-}
-
-.metric-value small {
-  font-size: 16px;
-  font-weight: 600;
-  color: #A1A1AA;
-}
-
-.metric-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #71717A;
+  background: #09090B;
+  border: 2px solid #27272A;
+  border-radius: 28px;
+  padding: 30px 48px;
 }
 
 /* ==========================================================================
@@ -7260,20 +7143,12 @@ main#conteudo {
   margin-bottom: 64px;
 }
 
-/* SHAPE DE CÚPULA CURVA INFERIOR (ESTILO 99APP) */
-.section-bottom-curve {
-  width: 100%;
-  height: 48px;
-  overflow: hidden;
+/* TRANSIÇÃO ELEGANTE E SÓLIDA PARA O RODAPÉ */
+.apple-install-section {
   position: relative;
+  padding: 90px 0 80px;
   background: #0D0D10;
-}
-
-.bottom-dome-shape {
-  width: 100%;
-  height: 96px;
-  background: #09090B;
-  border-radius: 120px 120px 0 0;
+  border-top: 1px solid #1E1E22;
 }
 
 /* RODAPÉ MINIMALISTA: COPYRIGHT ÚNICO */
@@ -7281,7 +7156,7 @@ main#conteudo {
   position: relative;
   z-index: 2;
   border-top: 1px solid #1E1E22;
-  padding: 30px 24px 44px;
+  padding: 44px 24px;
   background: #09090B;
 }
 
@@ -7293,28 +7168,31 @@ main#conteudo {
 }
 
 .apple-footer .copyright {
-  font-size: 12px;
+  font-size: 13px;
   color: #71717A;
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 /* RESPONSIVIDADE */
 @media (max-width: 1080px) {
-  .hero-split-container {
+  .hero-99-container {
     grid-template-columns: 1fr;
     gap: 40px;
-    text-align: center;
   }
-  .hero-media-col {
-    order: -1;
-    max-width: 540px;
+  .hero-99-left {
+    max-width: 560px;
     margin: 0 auto;
   }
-  .hero-copy-inner {
+  .hero-99-right-block {
+    border-radius: 40px;
+    padding: 44px 32px;
+  }
+  .hero-99-inner {
     align-items: center;
     text-align: center;
   }
-  .hero-cover-cta-group {
+  .hero-99-btn-group {
     justify-content: center;
   }
   .hero-micro-proofs {
@@ -7324,13 +7202,23 @@ main#conteudo {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  .megacard-inner {
+  .carousel-floating-card .carousel-slide.active {
     grid-template-columns: 1fr;
-    gap: 40px;
+    padding: 48px 36px;
+    gap: 36px;
   }
-  .megacard-device-col {
-    order: -1;
-    margin-bottom: 8px;
+  .slide-copy-col {
+    align-items: center;
+    text-align: center;
+  }
+  .slide-action-row {
+    justify-content: center;
+  }
+  .carousel-metrics-bar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 24px;
   }
   .layered-shapes-container {
     grid-template-columns: 1fr;
@@ -7340,29 +7228,23 @@ main#conteudo {
     align-items: center;
     text-align: center;
   }
-  .showcase-benefits-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  .showcase-metrics-bar {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    padding: 24px;
-  }
 }
 
 @media (max-width: 768px) {
   .hero-cover-section {
-    padding-top: 110px;
+    padding-top: 100px;
     min-height: auto;
+  }
+  .hero-99-right-block {
+    border-radius: 32px;
+    padding: 36px 20px;
   }
   .hero-btn-large {
     width: 100%;
-    max-width: 320px;
+    max-width: 340px;
   }
   .hero-photo-frame {
-    border-radius: 24px;
+    border-radius: 28px;
   }
   .hero-photo-tag {
     bottom: 12px;
@@ -7374,13 +7256,20 @@ main#conteudo {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  .showcase-banner-band {
-    padding: 32px 0 24px;
-  }
-  .showcase-floating-megacard {
+  .carousel-floating-card {
     border-radius: 32px;
+  }
+  .carousel-floating-card .carousel-slide.active {
     padding: 32px 20px;
-    width: calc(100% - 24px);
+    gap: 28px;
+  }
+  .slide-photo-frame {
+    height: 260px;
+  }
+  .carousel-metrics-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 20px 16px;
   }
   .shapes-stack {
     width: 290px;
@@ -7402,15 +7291,6 @@ main#conteudo {
   }
   .shape-layer-front {
     border-radius: 28px;
-  }
-  .showcase-benefits-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .showcase-metrics-bar {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding: 20px 16px;
   }
   .install-steps-grid {
     grid-template-columns: 1fr;

@@ -2,132 +2,148 @@
 import Phone from './Phone.astro';
 ---
 
-<section class="apple-showcase-section" id="aplicativo" aria-labelledby="aplicativo-heading">
-  <!-- FAIXA DE DESTAQUE COLORIDA COM MEGA-CARD FLUTUANTE (ESTILO CLASSIFICADOS 99) -->
-  <div class="showcase-banner-band">
-    <div class="showcase-floating-megacard">
-      <div class="megacard-inner">
-        <!-- Coluna da Esquerda: Textos, Seletores e Botão 99 -->
-        <div class="megacard-copy-col">
-          <span class="megacard-eyebrow">O APLICATIVO</span>
-          <h2 id="aplicativo-heading" class="megacard-headline">
-            O transporte de Manaus na sua mão.
+<section class="showcase-carousel-section" id="aplicativo" aria-labelledby="aplicativo-heading">
+  <!-- FAIXA DE FUNDO: TOPO BRANCO / CLARO COM FAIXA AZUL ROYAL NA BASE (ESTILO 99 CARROSSEL) -->
+  <div class="carousel-split-bg">
+    <div class="bg-upper-white"></div>
+    <div class="bg-lower-blue"></div>
+  </div>
+
+  <div class="apple-container carousel-stage-container">
+    <!-- MEGA-CARD FLUTUANTE BRANCO COM CANTOS CURVADOS (ESTILO 99APP EXATO) -->
+    <div class="carousel-floating-card" id="showcaseCarousel">
+      <!-- SLIDE 1: TELEMETRIA GPS -->
+      <div class="carousel-slide active" data-slide="0" role="tabpanel" aria-label="Slide 1 de 3">
+        <div class="slide-copy-col">
+          <span class="slide-eyebrow">TECNOLOGIA VEICULAR</span>
+          <h2 id="aplicativo-heading" class="slide-headline">
+            Telemetria GPS em tempo real
           </h2>
-          <p class="megacard-subhead">
-            Acompanhe itinerários em tempo real com precisão de GPS e saiba o minuto exato de ir para a parada.
+          <p class="slide-desc">
+            Monitore a <strong>localização exata dos ônibus de Manaus</strong> direto no mapa. Veja paradas ativas, velocidade e previsão de chegada com <strong>precisão métrica de satélite</strong>.
           </p>
-
-          <!-- Abas de Navegação Interativa da Tela -->
-          <div class="showcase-tabs-menu" role="tablist" aria-label="Selecione o modo de visualização">
-            <!-- Tab 1: Rastreamento Ao Vivo -->
-            <button type="button" class="stage-tab-card active" data-stage-tab="journey" role="tab" aria-selected="true">
-              <div class="tab-card-top">
-                <span class="tab-index-badge">01</span>
-                <span class="tab-status-chip chip-blue">Ao Vivo</span>
-              </div>
-              <strong class="tab-card-title">Rastreamento GPS em Tempo Real</strong>
-              <p class="tab-card-desc">
-                Veja a linha 640 e outros ônibus se movimentando pelo mapa segundo a segundo com precisão métrica.
-              </p>
-            </button>
-
-            <!-- Tab 2: Visão Geral das Linhas -->
-            <button type="button" class="stage-tab-card" data-stage-tab="home" role="tab" aria-selected="false">
-              <div class="tab-card-top">
-                <span class="tab-index-badge">02</span>
-                <span class="tab-status-chip chip-orange">240+ Linhas</span>
-              </div>
-              <strong class="tab-card-title">Catálogo Completo da Cidade</strong>
-              <p class="tab-card-desc">
-                Busca instantânea por número de linha, itinerários, paradas próximas e terminais de integração.
-              </p>
-            </button>
-          </div>
-
-          <div class="showcase-telemetry-pill">
-            <span class="pulse-dot"></span>
-            <span>Telemetria ativa &bull; Latência &lt; 850ms via SSE</span>
-          </div>
-
-          <!-- Botão Estilo 99 com Seta Circular -->
-          <div class="megacard-action-row">
-            <a href="#instalar" class="btn-99-pill" aria-label="Instalar aplicativo agora">
-              <span class="btn-99-arrow">
+          <div class="slide-action-row">
+            <a href="#instalar" class="btn-99-dark-pill" aria-label="Ver linhas e itinerários">
+              <span class="btn-99-label">Ver linhas no mapa</span>
+              <span class="btn-99-arrow-circle">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" aria-hidden="true">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </span>
-              <span class="btn-99-label">Ver itinerários ao vivo</span>
             </a>
           </div>
         </div>
 
-        <!-- Coluna da Direita: iPhone 16 Pro Flagship -->
-        <div class="megacard-device-col">
-          <div class="phone-chassis-stage">
-            <div class="phone-wrapper">
-              <Phone screen="journey" id="showcasePhoneDisplay" label="Tela do aplicativo Manô em execução no iPhone 16 Pro" eager={true} />
+        <div class="slide-media-col">
+          <div class="media-shape-backdrop shape-blue">
+            <div class="phone-wrapper-carousel">
+              <Phone screen="journey" id="showcasePhoneJourney" label="Tela de rastreamento do Manô em tempo real" eager={true} />
             </div>
-            <div class="phone-ground-shadow" aria-hidden="true"></div>
+            <div class="media-floating-badge">
+              <span class="pulse-dot"></span>
+              <span>GPS SINETRAM &bull; Tempo Real</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Indicadores de Carrossel Estilo 99 na Base do Banner -->
-      <div class="megacard-indicators" aria-hidden="true">
-        <span class="indicator-pill active"></span>
-        <span class="indicator-dot"></span>
-        <span class="indicator-dot"></span>
+      <!-- SLIDE 2: TERMINAIS 1 AO 5 -->
+      <div class="carousel-slide" data-slide="1" role="tabpanel" aria-label="Slide 2 de 3">
+        <div class="slide-copy-col">
+          <span class="slide-eyebrow">INTEGRAÇÃO METROPOLITANA</span>
+          <h2 class="slide-headline">
+            Terminais 1 ao 5 totalmente integrados
+          </h2>
+          <p class="slide-desc">
+            Planeje conexões e baldeações com segurança no <strong>T1, T2, T3, T4 e T5</strong>. Consulte horários atualizados e <strong>embarque sem perder tempo na plataforma</strong>.
+          </p>
+          <div class="slide-action-row">
+            <a href="#instalar" class="btn-99-dark-pill" aria-label="Consultar terminais de Manaus">
+              <span class="btn-99-label">Consultar terminais</span>
+              <span class="btn-99-arrow-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="slide-media-col">
+          <div class="media-shape-backdrop shape-orange">
+            <div class="slide-photo-frame">
+              <img 
+                src="/images/card_terminal.webp" 
+                alt="Terminais de ônibus integrados de Manaus" 
+                class="slide-photo-img" 
+                width="540" 
+                height="400" 
+                loading="lazy" 
+              />
+              <div class="media-floating-badge">
+                <span class="pulse-dot"></span>
+                <span>T1 a T5 &bull; Conexões Rápidas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: PREVISÃO EXATA -->
+      <div class="carousel-slide" data-slide="2" role="tabpanel" aria-label="Slide 3 de 3">
+        <div class="slide-copy-col">
+          <span class="slide-eyebrow">TRANQUILIDADE E PREVISÃO</span>
+          <h2 class="slide-headline">
+            Chega de esperar no escuro na parada
+          </h2>
+          <p class="slide-desc">
+            Saiba o <strong>minuto exato de ir para o ponto</strong>. Alertas operacionais inteligentes e estimativa de chegada para você nunca mais <strong>ficar vulnerável na rua</strong>.
+          </p>
+          <div class="slide-action-row">
+            <a href="#instalar" class="btn-99-dark-pill" aria-label="Instalar aplicativo Manô agora">
+              <span class="btn-99-label">Instalar aplicativo</span>
+              <span class="btn-99-arrow-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="slide-media-col">
+          <div class="media-shape-backdrop shape-blue">
+            <div class="slide-photo-frame">
+              <img 
+                src="/images/card_bus_stop.webp" 
+                alt="Passageira aguardando com previsibilidade na parada" 
+                class="slide-photo-img" 
+                width="540" 
+                height="400" 
+                loading="lazy" 
+              />
+              <div class="media-floating-badge">
+                <span class="pulse-dot"></span>
+                <span>Linha 123 &bull; A caminho</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- BLOCO 2: GRADE MODULAR DE 3 BENEFÍCIOS (SUPERFÍCIES SÓLIDAS SEM OPACIDADE) -->
-  <div class="apple-container showcase-bottom-container">
-    <div class="showcase-benefits-grid">
-      <!-- Card 1: Telemetria Sub-segundo -->
-      <div class="benefit-card">
-        <div class="benefit-card-tag tag-blue">VELOCIDADE &bull; SENTIDO</div>
-        <h3 class="benefit-card-title">Precisão de 3 Metros</h3>
-        <p class="benefit-card-desc">
-          Telemetria direta sem estimativas genéricas. Acompanhe velocidade em km/h, sentido e distância da parada.
-        </p>
-        <div class="benefit-card-foot">
-          <span class="benefit-chip">Veículo #640-12</span>
-          <span class="benefit-chip-sub">44 km/h</span>
-        </div>
-      </div>
-
-      <!-- Card 2: Radar de Estação & Faixa BRS -->
-      <div class="benefit-card">
-        <div class="benefit-card-tag tag-orange">CORREDOR BRS &bull; ESTAÇÃO E2</div>
-        <h3 class="benefit-card-title">Previsão em 3 Minutos</h3>
-        <p class="benefit-card-desc">
-          Alertas de aproximação nas plataformas da Constantino Nery com faixa exclusiva monitorada em tempo real.
-        </p>
-        <div class="benefit-card-foot">
-          <span class="benefit-chip">Arena da Amazônia</span>
-          <span class="benefit-chip-sub">Faixa Exclusiva</span>
-        </div>
-      </div>
-
-      <!-- Card 3: 5 Terminais Integrados -->
-      <div class="benefit-card">
-        <div class="benefit-card-tag tag-blue">REDE MUNICIPAL</div>
-        <h3 class="benefit-card-title">T1 ao T5 Integrados</h3>
-        <p class="benefit-card-desc">
-          Partidas e chegadas dos 5 terminais urbanos integrados sem atrasos, com alertas de tráfego instantâneos.
-        </p>
-        <div class="benefit-card-foot">
-          <span class="benefit-chip">Terminais 1 a 5</span>
-          <span class="benefit-chip-sub">Operação Normal</span>
-        </div>
-      </div>
+    <!-- INDICADORES DE CARROSSEL 99 NA FAIXA AZUL -->
+    <div class="carousel-nav-indicators" role="tablist" aria-label="Controle de slides do carrossel">
+      <button type="button" class="carousel-dot active" data-slide-target="0" role="tab" aria-selected="true" aria-label="Slide 1: Telemetria GPS"></button>
+      <button type="button" class="carousel-dot" data-slide-target="1" role="tab" aria-selected="false" aria-label="Slide 2: Terminais 1 ao 5"></button>
+      <button type="button" class="carousel-dot" data-slide-target="2" role="tab" aria-selected="false" aria-label="Slide 3: Previsão Exata"></button>
     </div>
 
-    <!-- BLOCO 3: FAIXA DE MÉTRICAS DE AUTORIDADE -->
-    <div class="showcase-metrics-bar">
+    <!-- BLOCO DE MÉTRICAS DE AUTORIDADE 100% SÓLIDO -->
+    <div class="carousel-metrics-bar">
       <div class="metric-item">
         <strong class="metric-value">240+</strong>
         <span class="metric-label">Linhas Mapeadas</span>
@@ -147,3 +163,76 @@ import Phone from './Phone.astro';
     </div>
   </div>
 </section>
+
+<script>
+  function setupShowcaseCarousel() {
+    const carousel = document.getElementById('showcaseCarousel');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll<HTMLElement>('.carousel-slide');
+    const dots = document.querySelectorAll<HTMLButtonElement>('.carousel-nav-indicators .carousel-dot');
+    let currentIndex = 0;
+    let autoInterval: number | null = null;
+
+    function goToSlide(index: number) {
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+      currentIndex = index;
+
+      slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+          slide.classList.add('active');
+          slide.setAttribute('aria-hidden', 'false');
+        } else {
+          slide.classList.remove('active');
+          slide.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        if (i === currentIndex) {
+          dot.classList.add('active');
+          dot.setAttribute('aria-selected', 'true');
+        } else {
+          dot.classList.remove('active');
+          dot.setAttribute('aria-selected', 'false');
+        }
+      });
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const target = parseInt(dot.getAttribute('data-slide-target') || '0', 10);
+        goToSlide(target);
+        resetAutoTimer();
+      });
+    });
+
+    function startAutoTimer() {
+      if (autoInterval) clearInterval(autoInterval);
+      autoInterval = window.setInterval(() => {
+        goToSlide(currentIndex + 1);
+      }, 5500);
+    }
+
+    function resetAutoTimer() {
+      startAutoTimer();
+    }
+
+    carousel.addEventListener('mouseenter', () => {
+      if (autoInterval) clearInterval(autoInterval);
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      startAutoTimer();
+    });
+
+    startAutoTimer();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupShowcaseCarousel);
+  } else {
+    setupShowcaseCarousel();
+  }
+</script>
