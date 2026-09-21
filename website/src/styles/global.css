@@ -6287,7 +6287,7 @@ main#conteudo {
 .hero-99-banner {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 54px);
+  min-height: calc(100vh - 52px);
   border-radius: 0;
   overflow: hidden;
   display: grid;
@@ -6295,7 +6295,7 @@ main#conteudo {
   background: #09090B;
   border: none;
   box-shadow: none;
-  padding-top: 54px;
+  padding-top: 0;
   box-sizing: border-box;
 }
 
@@ -6358,13 +6358,17 @@ main#conteudo {
 
 .hero-99-title {
   font-family: var(--apple-font-headline);
-  font-size: clamp(46px, 5.6vw, 76px);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  font-size: clamp(44px, 5.4vw, 74px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   color: #09090B;
   margin: 0 0 20px;
   text-wrap: balance;
+}
+
+.hero-title-bold {
+  font-weight: 800;
 }
 
 .hero-blue-letter {
@@ -7084,13 +7088,12 @@ main#conteudo {
 /* ÔNIBUS DO MAPA QUE DESLIZA AO LONGO DA LINHA */
 .transit-gliding-bus {
   position: absolute;
-  top: 26px;
+  top: 38px;
   left: 20px;
   transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
   z-index: 10;
   transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   pointer-events: none;
@@ -7113,18 +7116,6 @@ main#conteudo {
   height: 18px;
   display: block;
   fill: #FFFFFF;
-}
-
-.transit-bus-badge {
-  background: #09090B;
-  border: 1px solid #3B82F6;
-  color: #38BDF8;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 1px 7px;
-  border-radius: 999px;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
 }
 
 /* FILEIRA DE ESTAÇÕES FIXADAS NA LINHA */
@@ -7521,6 +7512,37 @@ main#conteudo {
   border-top: 1px solid #1E1E22;
 }
 
+/* Botão Apple em Alto Contraste na Última Sessão */
+.apple-install-section .hero-btn-apple {
+  background: #FFFFFF !important;
+  color: #09090B !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+.apple-install-section .hero-btn-apple:hover {
+  background: #F4F4F5 !important;
+  border-color: #F4F4F5 !important;
+}
+
+.apple-install-section .hero-btn-apple .btn-icon-capsule {
+  background: #09090B !important;
+}
+
+.apple-install-section .hero-btn-apple .btn-icon {
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.apple-install-section .hero-btn-apple .btn-subtext {
+  color: #52525B !important;
+}
+
+.apple-install-section .hero-btn-apple .btn-maintext {
+  color: #09090B !important;
+}
+
 /* RODAPÉ MINIMALISTA: COPYRIGHT ÚNICO */
 .apple-footer {
   position: relative;
@@ -7554,7 +7576,7 @@ main#conteudo {
     grid-template-columns: 1fr;
     min-height: auto;
     border-radius: 0;
-    padding-top: 54px;
+    padding-top: 0;
   }
   .hero-99-subject-side {
     height: 380px;
@@ -7634,7 +7656,7 @@ main#conteudo {
   }
   .hero-99-banner {
     border-radius: 0;
-    padding-top: 54px;
+    padding-top: 0;
   }
   .hero-99-subject-side {
     height: 320px;
