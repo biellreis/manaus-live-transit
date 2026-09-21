@@ -6361,7 +6361,7 @@ main#conteudo {
 
 .hero-btn-apple {
   background: #FFFFFF;
-  color: #09090B;
+  color: #09090B !important;
   border: 1px solid #FFFFFF;
   font-weight: 600;
 }
@@ -6371,9 +6371,22 @@ main#conteudo {
   background: #F4F4F5;
 }
 
+.hero-btn-apple .btn-subtext {
+  color: rgba(9, 9, 11, 0.72) !important;
+}
+
+.hero-btn-apple .btn-maintext {
+  color: #09090B !important;
+}
+
+.hero-btn-apple .btn-icon {
+  color: #09090B !important;
+  fill: #09090B !important;
+}
+
 .hero-btn-android {
   background: #121214;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   border: 1px solid #27272A;
 }
 
@@ -6381,6 +6394,19 @@ main#conteudo {
   transform: translateY(-2px);
   background: #18181B;
   border-color: #3F3F46;
+}
+
+.hero-btn-android .btn-subtext {
+  color: #A1A1AA !important;
+}
+
+.hero-btn-android .btn-maintext {
+  color: #FFFFFF !important;
+}
+
+.hero-btn-android .btn-icon {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
 }
 
 .btn-icon {
@@ -7117,7 +7143,7 @@ main#conteudo {
   padding: 12px 28px;
   border-radius: 16px;
   background: #FFFFFF;
-  color: #09090B;
+  color: #09090B !important;
   border: 1px solid #FFFFFF;
   font-weight: 600;
   display: inline-flex;
@@ -7133,13 +7159,26 @@ main#conteudo {
   background: #F4F4F5;
 }
 
+.apple-primary-btn-large .install-btn-sub {
+  color: rgba(9, 9, 11, 0.72) !important;
+}
+
+.apple-primary-btn-large .install-btn-main {
+  color: #09090B !important;
+}
+
+.apple-primary-btn-large .btn-icon {
+  color: #09090B !important;
+  fill: #09090B !important;
+}
+
 .apple-secondary-btn-large {
   min-width: 240px;
   min-height: 60px;
   padding: 12px 28px;
   border-radius: 16px;
   background: #121214;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   border: 1px solid #27272A;
   font-weight: 600;
   display: inline-flex;
@@ -7155,6 +7194,19 @@ main#conteudo {
   transform: translateY(-2px);
   background: #18181B;
   border-color: #3F3F46;
+}
+
+.apple-secondary-btn-large .install-btn-sub {
+  color: #A1A1AA !important;
+}
+
+.apple-secondary-btn-large .install-btn-main {
+  color: #FFFFFF !important;
+}
+
+.apple-secondary-btn-large .btn-icon {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
 }
 
 .install-btn-text {
