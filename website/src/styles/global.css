@@ -6291,7 +6291,7 @@ main#conteudo {
   align-items: center;
 }
 
-/* LADO ESQUERDO: FOTO DE DESTAQUE NO CONTEXTO DO APLICATIVO */
+/* LADO ESQUERDO: FOTO DE DESTAQUE NO CONTEXTO DO APLICATIVO COM SHAPES 99 */
 .hero-media-col {
   display: flex;
   justify-content: center;
@@ -6302,11 +6302,10 @@ main#conteudo {
   position: relative;
   width: 100%;
   max-width: 580px;
-  border-radius: 28px;
+  border-radius: 36px;
   overflow: hidden;
-  border: 1px solid #27272A;
+  border: 2px solid #27272A;
   background: #121214;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
 .hero-split-photo {
@@ -6326,18 +6325,16 @@ main#conteudo {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  background: rgba(9, 9, 11, 0.88);
-  backdrop-filter: blur(12px);
+  background: #18181B;
   border: 1px solid #27272A;
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 8px 18px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: #FFFFFF;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  gap: 10px;
 }
 
 /* LADO DIREITO: TEXTOS E BOTÕES DE CONVERSÃO */
@@ -6364,11 +6361,12 @@ main#conteudo {
 }
 
 .pulse-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #3B82F6;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .hero-cover-title {
@@ -6405,14 +6403,14 @@ main#conteudo {
   margin-bottom: 24px;
 }
 
+/* BOTÕES ESTILO 99APP: PÍLULA COM CÁPSULA CIRCULAR DE ÍCONE */
 .hero-btn-large {
-  min-width: 220px;
+  min-width: 230px;
   min-height: 60px;
-  padding: 12px 24px;
-  border-radius: 16px;
+  padding: 8px 24px 8px 10px;
+  border-radius: 980px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 14px;
   text-decoration: none;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease;
@@ -6422,7 +6420,7 @@ main#conteudo {
 .hero-btn-apple {
   background: #FFFFFF;
   color: #09090B !important;
-  border: 1px solid #FFFFFF;
+  border: 2px solid #FFFFFF;
   font-weight: 600;
 }
 
@@ -6431,23 +6429,36 @@ main#conteudo {
   background: #F4F4F5;
 }
 
+.hero-btn-apple .btn-icon-capsule {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #09090B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hero-btn-apple .btn-icon {
+  width: 22px;
+  height: 22px;
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
 .hero-btn-apple .btn-subtext {
-  color: rgba(9, 9, 11, 0.72) !important;
+  color: #52525B !important;
 }
 
 .hero-btn-apple .btn-maintext {
   color: #09090B !important;
 }
 
-.hero-btn-apple .btn-icon {
-  color: #09090B !important;
-  fill: #09090B !important;
-}
-
 .hero-btn-android {
   background: #121214;
   color: #FFFFFF !important;
-  border: 1px solid #27272A;
+  border: 2px solid #27272A;
 }
 
 .hero-btn-android:hover {
@@ -6456,23 +6467,30 @@ main#conteudo {
   border-color: #3F3F46;
 }
 
+.hero-btn-android .btn-icon-capsule {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #27272A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hero-btn-android .btn-icon {
+  width: 22px;
+  height: 22px;
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
 .hero-btn-android .btn-subtext {
   color: #A1A1AA !important;
 }
 
 .hero-btn-android .btn-maintext {
   color: #FFFFFF !important;
-}
-
-.hero-btn-android .btn-icon {
-  color: #FFFFFF !important;
-  fill: #FFFFFF !important;
-}
-
-.btn-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
 }
 
 .btn-text-block {
@@ -6484,8 +6502,8 @@ main#conteudo {
 
 .btn-subtext {
   font-size: 11px;
-  font-weight: 500;
-  opacity: 0.7;
+  font-weight: 600;
+  color: #71717A;
   letter-spacing: 0.2px;
 }
 
@@ -6510,11 +6528,14 @@ main#conteudo {
 }
 
 /* ==========================================================================
-   SESSÃO 2: GRADE DE 4 VANTAGENS NA ROTINA (ESTILO 99 COM FOTOS NO TOPO)
+   SESSÃO 2: GRADE DE 4 VANTAGENS NA ROTINA (ESTILO 99APP)
    ========================================================================== */
 .routine-benefits-section {
   position: relative;
-  padding: 80px 0 100px;
+  padding: 90px 0 100px;
+  background: #0D0D10;
+  border-top: 1px solid #1E1E22;
+  border-bottom: 1px solid #1E1E22;
 }
 
 .routine-container {
@@ -6523,7 +6544,7 @@ main#conteudo {
 }
 
 .routine-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 48px;
 }
 
@@ -6544,9 +6565,9 @@ main#conteudo {
 }
 
 .routine-card {
-  background: #121214;
+  background: #18181B;
   border: 1px solid #27272A;
-  border-radius: 24px;
+  border-radius: 28px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -6563,7 +6584,8 @@ main#conteudo {
   width: 100%;
   aspect-ratio: 4/3;
   overflow: hidden;
-  background: #18181B;
+  background: #27272A;
+  border-radius: 26px 26px 0 0;
 }
 
 .routine-card-img {
@@ -6584,34 +6606,33 @@ main#conteudo {
   left: 12px;
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(9, 9, 11, 0.88);
-  backdrop-filter: blur(8px);
+  background: #09090B;
   border: 1px solid #27272A;
 }
 
-.routine-card-chip.blue {
+.routine-card-chip.chip-blue {
   color: #3B82F6;
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: #3B82F6;
 }
 
-.routine-card-chip.orange {
+.routine-card-chip.chip-orange {
   color: #F97316;
-  border-color: rgba(249, 115, 22, 0.4);
+  border-color: #F97316;
 }
 
 .routine-card-body {
-  padding: 24px 20px 28px;
+  padding: 24px 22px 28px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   flex-grow: 1;
 }
 
 .routine-card-title {
   font-family: var(--apple-font-headline);
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
   color: #FFFFFF;
   margin: 0;
@@ -6622,102 +6643,112 @@ main#conteudo {
 .routine-card-desc {
   font-family: var(--apple-font-text);
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: #A1A1AA;
   margin: 0;
   letter-spacing: -0.01em;
 }
 
+.routine-card-desc strong {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
 /* ==========================================================================
-   SESSÃO 2: O APLICATIVO (ESTRUTURA 99APP + SOFISTICAÇÃO APPLE)
+   SESSÃO 3: O SHOWCASE CENTRAL (BANNER COLORIDO FLUTUANTE 99 + MEGA-CARD)
    ========================================================================== */
 .apple-showcase-section {
   position: relative;
-  padding: 100px 0 110px;
+  padding: 0;
 }
 
-.showcase-wide-container {
-  width: min(1280px, calc(100% - 48px));
+/* FAIXA COLORIDA VIBRANTE NO FUNDO (ESTILO CLASSIFICADOS 99APP) */
+.showcase-banner-band {
+  background: #1D4ED8;
+  padding: 64px 0 54px;
+  width: 100%;
+}
+
+/* MEGA-CARD FLUTUANTE COM CANTOS DE 4rem / 64px (SHAPE 99APP) */
+.showcase-floating-megacard {
+  max-width: 1240px;
   margin: 0 auto;
+  background: #09090B;
+  border: 2px solid #2563EB;
+  border-radius: 56px;
+  padding: 60px 52px 48px;
+  width: calc(100% - 48px);
 }
 
-.showcase-header {
-  text-align: center;
-  margin-bottom: 56px;
+.megacard-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
 }
 
-.showcase-eyebrow {
-  display: inline-block;
+.megacard-copy-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.megacard-eyebrow {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
   color: #3B82F6;
   text-transform: uppercase;
   margin-bottom: 12px;
+  display: inline-block;
 }
 
-.apple-section-headline {
-  font-size: clamp(32px, 4.2vw, 48px);
+.megacard-headline {
+  font-family: var(--apple-font-headline);
+  font-size: clamp(30px, 3.8vw, 46px);
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #FFFFFF;
-  line-height: 1.15;
-  margin-bottom: 12px;
+  line-height: 1.12;
+  margin: 0 0 14px;
 }
 
-.apple-section-subhead {
-  font-size: clamp(16px, 1.8vw, 19px);
+.megacard-subhead {
+  font-family: var(--apple-font-text);
+  font-size: 16px;
   line-height: 1.5;
   color: #A1A1AA;
-  max-width: 620px;
-  margin: 0 auto;
-}
-
-/* BLOCO 1: PALCO PRINCIPAL SPLIT-STAGE */
-.showcase-split-stage {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 56px;
-  align-items: center;
-  margin-bottom: 64px;
-}
-
-.showcase-split-narrative {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  margin: 0 0 28px;
 }
 
 .showcase-tabs-menu {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
 .stage-tab-card {
   background: #121214;
   border: 1px solid #27272A;
   border-radius: 20px;
-  padding: 24px 28px;
+  padding: 20px 24px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  position: relative;
 }
 
 .stage-tab-card:hover {
   border-color: #3F3F46;
-  background: #161619;
+  background: #18181B;
   transform: translateX(4px);
 }
 
 .stage-tab-card.active {
-  background: #161820;
-  border-color: #3B82F6;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: #141824;
+  border: 2px solid #3B82F6;
 }
 
 .tab-card-top {
@@ -6745,26 +6776,26 @@ main#conteudo {
   border-radius: 6px;
 }
 
-.tab-status-chip.blue {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3B82F6;
-  border: 1px solid rgba(59, 130, 246, 0.4);
+.tab-status-chip.chip-blue {
+  background: #1E3A8A;
+  color: #FFFFFF;
+  border: 1px solid #3B82F6;
 }
 
-.tab-status-chip.orange {
-  background: rgba(249, 115, 22, 0.15);
-  color: #F97316;
-  border: 1px solid rgba(249, 115, 22, 0.4);
+.tab-status-chip.chip-orange {
+  background: #9A3412;
+  color: #FFFFFF;
+  border: 1px solid #F97316;
 }
 
 .tab-card-title {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
   color: #FFFFFF;
 }
 
 .tab-card-desc {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
   color: #A1A1AA;
   margin: 0;
@@ -6776,16 +6807,62 @@ main#conteudo {
   gap: 8px;
   font-size: 12px;
   font-weight: 600;
-  color: #71717A;
+  color: #A1A1AA;
   padding: 8px 16px;
   background: #121214;
   border: 1px solid #27272A;
   border-radius: 999px;
   width: fit-content;
+  margin-bottom: 24px;
 }
 
-/* Coluna da Direita: iPhone 16 Pro Flagship */
-.showcase-split-device {
+/* BOTÃO PÍLULA ESTILO 99 (COM CÁPSULA CIRCULAR DE SETA) */
+.btn-99-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: #FFFFFF;
+  color: #09090B !important;
+  border: 2px solid #FFFFFF;
+  border-radius: 980px;
+  padding: 6px 24px 6px 8px;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  width: fit-content;
+}
+
+.btn-99-pill:hover {
+  transform: translateY(-2px);
+  background: #F4F4F5;
+}
+
+.btn-99-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #09090B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-99-arrow .arrow-svg {
+  width: 18px;
+  height: 18px;
+  stroke: #FFFFFF;
+}
+
+.btn-99-label {
+  color: #09090B;
+  font-weight: 700;
+}
+
+/* DISPOSITIVO IPHONE NA COLUNA DA DIREITA */
+.megacard-device-col {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6806,23 +6883,52 @@ main#conteudo {
 .phone-ground-shadow {
   width: 260px;
   height: 26px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 70%);
+  background: #000000;
+  border-radius: 50%;
   margin-top: 14px;
   pointer-events: none;
 }
 
-/* BLOCO 2: GRADE MODULAR DE 3 BENEFÍCIOS (ESTILO 99APP) */
+/* INDICADORES DE CARROSSEL DA 99 */
+.megacard-indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 36px;
+}
+
+.indicator-pill {
+  width: 32px;
+  height: 8px;
+  border-radius: 999px;
+  background: #F97316;
+}
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #27272A;
+}
+
+/* BLOCO INFERIOR DO SHOWCASE: BENEFÍCIOS E MÉTRICAS */
+.showcase-bottom-container {
+  width: min(1280px, calc(100% - 48px));
+  margin: 64px auto 0;
+}
+
 .showcase-benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-bottom: 52px;
+  margin-bottom: 48px;
 }
 
 .benefit-card {
-  background: #121214;
+  background: #18181B;
   border: 1px solid #27272A;
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
@@ -6842,11 +6948,11 @@ main#conteudo {
   text-transform: uppercase;
 }
 
-.benefit-card-tag.blue {
+.benefit-card-tag.tag-blue {
   color: #3B82F6;
 }
 
-.benefit-card-tag.orange {
+.benefit-card-tag.tag-orange {
   color: #F97316;
 }
 
@@ -6884,18 +6990,19 @@ main#conteudo {
   font-weight: 500;
 }
 
-/* BLOCO 3: FAIXA DE MÉTRICAS DE AUTORIDADE */
+/* MÉTRICAS DE AUTORIDADE */
 .showcase-metrics-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #121214;
   border: 1px solid #27272A;
-  border-radius: 20px;
-  padding: 26px 36px;
+  border-radius: 24px;
+  padding: 28px 40px;
+  margin-bottom: 60px;
 }
 
-.metric-block {
+.metric-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6904,14 +7011,14 @@ main#conteudo {
   flex: 1;
 }
 
-.metric-number {
-  font-size: clamp(26px, 3.2vw, 36px);
+.metric-value {
+  font-size: clamp(26px, 3.2vw, 38px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #FFFFFF;
 }
 
-.metric-number small {
+.metric-value small {
   font-size: 16px;
   font-weight: 600;
   color: #A1A1AA;
@@ -6923,16 +7030,149 @@ main#conteudo {
   color: #71717A;
 }
 
-.metric-separator {
-  width: 1px;
-  height: 40px;
-  background: #27272A;
+/* ==========================================================================
+   SESSÃO 4: FORMAS GEOMÉTRICAS EM CAMADAS CONCÊNTRICAS (ESTILO 99PAY)
+   ========================================================================== */
+.layered-shapes-section {
+  position: relative;
+  padding: 90px 0 100px;
+  background: #09090B;
+  border-top: 1px solid #1E1E22;
 }
 
-/* SESSÃO 3: INSTALAÇÃO NATIVA */
+.layered-shapes-container {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* PILHA DE SHAPES EM CAMADAS CONCÊNTRICAS DA 99 */
+.layered-shapes-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px 20px 0;
+}
+
+.shapes-stack {
+  position: relative;
+  width: 400px;
+  height: 380px;
+}
+
+.shape-layer {
+  position: absolute;
+  border-radius: 36px;
+}
+
+.shape-layer-orange {
+  top: 24px;
+  left: 24px;
+  right: -24px;
+  bottom: -24px;
+  background: #F97316;
+  z-index: 1;
+}
+
+.shape-layer-blue {
+  top: 12px;
+  left: 12px;
+  right: -12px;
+  bottom: -12px;
+  background: #2563EB;
+  z-index: 2;
+}
+
+.shape-layer-front {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #18181B;
+  border: 2px solid #27272A;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.shape-front-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.shape-front-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: #09090B;
+  border: 1px solid #27272A;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layered-shapes-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.layered-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #F97316;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.layered-headline {
+  font-family: var(--apple-font-headline);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  line-height: 1.12;
+  margin: 0 0 16px;
+}
+
+.layered-desc {
+  font-family: var(--apple-font-text);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #A1A1AA;
+  margin: 0 0 32px;
+}
+
+.layered-desc strong {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.layered-action-row {
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   SESSÃO 5: INSTALAÇÃO NATIVA & CÚPULA INFERIOR 99
+   ========================================================================== */
 .apple-install-section {
   position: relative;
-  padding: 90px 0 80px;
+  padding: 90px 0 0;
+  background: #0D0D10;
+  border-top: 1px solid #1E1E22;
 }
 
 .install-wide-container {
@@ -6952,9 +7192,8 @@ main#conteudo {
 .app-icon-squircle {
   width: 76px;
   height: 76px;
-  border-radius: 18px;
+  border-radius: 20px;
   margin: 0 auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   display: block;
 }
 
@@ -6966,10 +7205,10 @@ main#conteudo {
 }
 
 .install-step-card {
-  background: #121214;
+  background: #18181B;
   border: 1px solid #27272A;
-  border-radius: 20px;
-  padding: 26px 22px;
+  border-radius: 24px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -6981,12 +7220,12 @@ main#conteudo {
 }
 
 .step-badge-circle {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #27272A;
   color: #FFFFFF;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -6994,7 +7233,7 @@ main#conteudo {
 }
 
 .step-card-title {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: #FFFFFF;
   margin-bottom: 6px;
@@ -7007,109 +7246,41 @@ main#conteudo {
   margin: 0;
 }
 
+.step-card-desc strong {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
 .install-actions-large {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
+  margin-bottom: 64px;
 }
 
-.apple-primary-btn-large {
-  min-width: 240px;
-  min-height: 60px;
-  padding: 12px 28px;
-  border-radius: 16px;
-  background: #FFFFFF;
-  color: #09090B !important;
-  border: 1px solid #FFFFFF;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+/* SHAPE DE CÚPULA CURVA INFERIOR (ESTILO 99APP) */
+.section-bottom-curve {
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  position: relative;
+  background: #0D0D10;
 }
 
-.apple-primary-btn-large:hover {
-  transform: translateY(-2px);
-  background: #F4F4F5;
-}
-
-.apple-primary-btn-large .install-btn-sub {
-  color: rgba(9, 9, 11, 0.72) !important;
-}
-
-.apple-primary-btn-large .install-btn-main {
-  color: #09090B !important;
-}
-
-.apple-primary-btn-large .btn-icon {
-  color: #09090B !important;
-  fill: #09090B !important;
-}
-
-.apple-secondary-btn-large {
-  min-width: 240px;
-  min-height: 60px;
-  padding: 12px 28px;
-  border-radius: 16px;
-  background: #121214;
-  color: #FFFFFF !important;
-  border: 1px solid #27272A;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-}
-
-.apple-secondary-btn-large:hover {
-  transform: translateY(-2px);
-  background: #18181B;
-  border-color: #3F3F46;
-}
-
-.apple-secondary-btn-large .install-btn-sub {
-  color: #A1A1AA !important;
-}
-
-.apple-secondary-btn-large .install-btn-main {
-  color: #FFFFFF !important;
-}
-
-.apple-secondary-btn-large .btn-icon {
-  color: #FFFFFF !important;
-  fill: #FFFFFF !important;
-}
-
-.install-btn-text {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  line-height: 1.2;
-}
-
-.install-btn-sub {
-  font-size: 11px;
-  opacity: 0.7;
-  font-weight: 500;
-}
-
-.install-btn-main {
-  font-size: 16px;
-  font-weight: 700;
+.bottom-dome-shape {
+  width: 100%;
+  height: 96px;
+  background: #09090B;
+  border-radius: 120px 120px 0 0;
 }
 
 /* RODAPÉ MINIMALISTA: COPYRIGHT ÚNICO */
 .apple-footer {
   position: relative;
   z-index: 2;
-  border-top: 1px solid #27272A;
+  border-top: 1px solid #1E1E22;
   padding: 30px 24px 44px;
   background: #09090B;
 }
@@ -7127,7 +7298,7 @@ main#conteudo {
   font-weight: 400;
 }
 
-/* RESPONSIVIDADE ULTRA-ROBUSTA */
+/* RESPONSIVIDADE */
 @media (max-width: 1080px) {
   .hero-split-container {
     grid-template-columns: 1fr;
@@ -7153,13 +7324,21 @@ main#conteudo {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  .showcase-split-stage {
+  .megacard-inner {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  .showcase-split-device {
+  .megacard-device-col {
     order: -1;
     margin-bottom: 8px;
+  }
+  .layered-shapes-container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .layered-shapes-content {
+    align-items: center;
+    text-align: center;
   }
   .showcase-benefits-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -7170,9 +7349,6 @@ main#conteudo {
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
     padding: 24px;
-  }
-  .metric-separator {
-    display: none;
   }
 }
 
@@ -7186,29 +7362,50 @@ main#conteudo {
     max-width: 320px;
   }
   .hero-photo-frame {
-    border-radius: 20px;
+    border-radius: 24px;
   }
   .hero-photo-tag {
     bottom: 12px;
     left: 12px;
-    padding: 6px 12px;
+    padding: 6px 14px;
     font-size: 11px;
   }
   .routine-cards-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  .showcase-split-stage {
-    gap: 28px;
-    margin-bottom: 40px;
+  .showcase-banner-band {
+    padding: 32px 0 24px;
   }
-  .stage-tab-card {
-    padding: 20px 18px;
+  .showcase-floating-megacard {
+    border-radius: 32px;
+    padding: 32px 20px;
+    width: calc(100% - 24px);
+  }
+  .shapes-stack {
+    width: 290px;
+    height: 280px;
+  }
+  .shape-layer-orange {
+    top: 16px;
+    left: 16px;
+    right: -16px;
+    bottom: -16px;
+    border-radius: 28px;
+  }
+  .shape-layer-blue {
+    top: 8px;
+    left: 8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 28px;
+  }
+  .shape-layer-front {
+    border-radius: 28px;
   }
   .showcase-benefits-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    margin-bottom: 36px;
   }
   .showcase-metrics-bar {
     grid-template-columns: repeat(2, 1fr);
@@ -7218,11 +7415,6 @@ main#conteudo {
   .install-steps-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-  }
-  .apple-primary-btn-large,
-  .apple-secondary-btn-large {
-    width: 100%;
-    max-width: 320px;
   }
   .apple-localnav-menu {
     display: none;

@@ -4,7 +4,7 @@ import { installUrl } from '../config';
 
 <section class="hero-cover-section" id="inicio" aria-label="Abertura Manô Transit">
   <div class="apple-container hero-split-container">
-    <!-- LADO ESQUERDO: FOTO REALISTA NO CONTEXTO DO TRANSPORTE (ESTILO 99APP) -->
+    <!-- LADO ESQUERDO: FOTO REALISTA NO CONTEXTO DO TRANSPORTE (SHAPE 99APP) -->
     <div class="hero-media-col">
       <div class="hero-photo-frame">
         <img 
@@ -12,7 +12,7 @@ import { installUrl } from '../config';
           alt="Passageiro em Manaus acompanhando ônibus em tempo real pelo Manô" 
           class="hero-split-photo" 
           width="560" 
-          height="420"
+          height="420" 
           loading="eager"
         />
         <div class="hero-photo-tag">
@@ -22,24 +22,26 @@ import { installUrl } from '../config';
       </div>
     </div>
 
-    <!-- LADO DIREITO: TÍTULO, SUBTÍTULO E AÇÕES DE CONVERSÃO (ESTILO 99APP + APPLE) -->
+    <!-- LADO DIREITO: TÍTULO COM VÍRGULA, SUBTÍTULO E AÇÕES DE CONVERSÃO 99 -->
     <div class="hero-copy-col">
       <div class="hero-copy-inner">
         <span class="hero-eyebrow">TRANSPORTE PÚBLICO DE MANAUS</span>
         <h1 class="hero-cover-title">
-          MAN<span class="hero-blue-letter">Ô</span> BORA?
+          MAN<span class="hero-blue-letter">Ô</span>, BORA?
         </h1>
 
         <p class="hero-cover-subtitle">
           Monitore ônibus, linhas e estações de Manaus em tempo real com precisão de GPS.
         </p>
 
-        <!-- 2 GRANDES BOTÕES DE CONVERSÃO (APPLE & ANDROID) -->
+        <!-- BOTÕES ESTILO 99APP (PÍLULA COM CÁPSULA CIRCULAR DE ÍCONE) -->
         <div class="hero-cover-cta-group">
           <a href={installUrl('ios')} class="hero-btn-large hero-btn-apple" data-install="ios" aria-label="Instalar no iPhone">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 7.03c.64-.78 1.08-1.86.96-2.95-1 .04-2.16.66-2.84 1.45-.59.68-1.12 1.77-.98 2.83 1.12.09 2.22-.55 2.86-1.33z"/>
-            </svg>
+            <span class="btn-icon-capsule">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 7.03c.64-.78 1.08-1.86.96-2.95-1 .04-2.16.66-2.84 1.45-.59.68-1.12 1.77-.98 2.83 1.12.09 2.22-.55 2.86-1.33z"/>
+              </svg>
+            </span>
             <div class="btn-text-block">
               <span class="btn-subtext">Disponível para iOS</span>
               <span class="btn-maintext">Instalar no iPhone</span>
@@ -47,9 +49,11 @@ import { installUrl } from '../config';
           </a>
 
           <a href="/downloads/Mano.apk" download="Mano.apk" class="hero-btn-large hero-btn-android install-android" data-install="android" aria-label="Baixar aplicativo Manô no Android">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M16.61 15.15c-.41 0-.75-.34-.75-.75 0-.41.34-.75.75-.75.41 0 .75.34.75.75 0 .41-.34.75-.75.75zm-9.22 0c-.41 0-.75-.34-.75-.75 0-.41.34-.75.75-.75.41 0 .75.34.75.75 0 .41-.34.75-.75.75zm9.52-5.02l1.67-2.89a.437.437 0 0 0-.16-.6.438.438 0 0 0-.6.16l-1.69 2.93c-1.28-.58-2.69-.9-4.13-.9-1.44 0-2.85.32-4.13.9L5.87 6.8a.438.438 0 0 0-.6-.16.437.437 0 0 0-.16.6l1.67 2.89C3.78 11.58 2 14.82 2 18.5h20c0-3.68-1.78-6.92-5.09-8.37z"/>
-            </svg>
+            <span class="btn-icon-capsule">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16.61 15.15c-.41 0-.75-.34-.75-.75 0-.41.34-.75.75-.75.41 0 .75.34.75.75 0 .41-.34.75-.75.75zm-9.22 0c-.41 0-.75-.34-.75-.75 0-.41.34-.75.75-.75.41 0 .75.34.75.75 0 .41-.34.75-.75.75zm9.52-5.02l1.67-2.89a.437.437 0 0 0-.16-.6.438.438 0 0 0-.6.16l-1.69 2.93c-1.28-.58-2.69-.9-4.13-.9-1.44 0-2.85.32-4.13.9L5.87 6.8a.438.438 0 0 0-.6-.16.437.437 0 0 0-.16.6l1.67 2.89C3.78 11.58 2 14.82 2 18.5h20c0-3.68-1.78-6.92-5.09-8.37z"/>
+              </svg>
+            </span>
             <div class="btn-text-block">
               <span class="btn-subtext">Disponível para Android</span>
               <span class="btn-maintext">Baixar Mano.apk</span>

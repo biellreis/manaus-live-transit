@@ -3,70 +3,92 @@ import Phone from './Phone.astro';
 ---
 
 <section class="apple-showcase-section" id="aplicativo" aria-labelledby="aplicativo-heading">
-  <div class="apple-container showcase-wide-container">
-    <!-- Header Minimalista e Direto (Inspirado no 99app.com) -->
-    <div class="apple-section-header showcase-header">
-      <span class="showcase-eyebrow">O APLICATIVO</span>
-      <h2 id="aplicativo-heading" class="apple-section-headline">
-        O transporte de Manaus na sua mão.
-      </h2>
-      <p class="apple-section-subhead">
-        Acompanhe itinerários em tempo real e saiba o minuto exato de ir para a parada.
-      </p>
-    </div>
+  <!-- FAIXA DE DESTAQUE COLORIDA COM MEGA-CARD FLUTUANTE (ESTILO CLASSIFICADOS 99) -->
+  <div class="showcase-banner-band">
+    <div class="showcase-floating-megacard">
+      <div class="megacard-inner">
+        <!-- Coluna da Esquerda: Textos, Seletores e Botão 99 -->
+        <div class="megacard-copy-col">
+          <span class="megacard-eyebrow">O APLICATIVO</span>
+          <h2 id="aplicativo-heading" class="megacard-headline">
+            O transporte de Manaus na sua mão.
+          </h2>
+          <p class="megacard-subhead">
+            Acompanhe itinerários em tempo real com precisão de GPS e saiba o minuto exato de ir para a parada.
+          </p>
 
-    <!-- BLOCO 1: PALCO PRINCIPAL SPLIT-STAGE (ESTILO 99 + APPLE) -->
-    <div class="showcase-split-stage">
-      <!-- Coluna da Esquerda: Narrativa e Seletores Interativos -->
-      <div class="showcase-split-narrative">
-        <div class="showcase-tabs-menu" role="tablist" aria-label="Selecione o modo de visualização">
-          <!-- Tab 1: Rastreamento Ao Vivo -->
-          <button type="button" class="stage-tab-card active" data-stage-tab="journey" role="tab" aria-selected="true">
-            <div class="tab-card-top">
-              <span class="tab-index-badge">01</span>
-              <span class="tab-status-chip blue">Ao Vivo</span>
-            </div>
-            <strong class="tab-card-title">Rastreamento GPS em Tempo Real</strong>
-            <p class="tab-card-desc">
-              Veja a linha 640 e outros ônibus se movimentando pelo mapa segundo a segundo com precisão métrica.
-            </p>
-          </button>
+          <!-- Abas de Navegação Interativa da Tela -->
+          <div class="showcase-tabs-menu" role="tablist" aria-label="Selecione o modo de visualização">
+            <!-- Tab 1: Rastreamento Ao Vivo -->
+            <button type="button" class="stage-tab-card active" data-stage-tab="journey" role="tab" aria-selected="true">
+              <div class="tab-card-top">
+                <span class="tab-index-badge">01</span>
+                <span class="tab-status-chip chip-blue">Ao Vivo</span>
+              </div>
+              <strong class="tab-card-title">Rastreamento GPS em Tempo Real</strong>
+              <p class="tab-card-desc">
+                Veja a linha 640 e outros ônibus se movimentando pelo mapa segundo a segundo com precisão métrica.
+              </p>
+            </button>
 
-          <!-- Tab 2: Visão Geral das Linhas -->
-          <button type="button" class="stage-tab-card" data-stage-tab="home" role="tab" aria-selected="false">
-            <div class="tab-card-top">
-              <span class="tab-index-badge">02</span>
-              <span class="tab-status-chip orange">240+ Linhas</span>
-            </div>
-            <strong class="tab-card-title">Catálogo Completo da Cidade</strong>
-            <p class="tab-card-desc">
-              Busca instantânea por número de linha, itinerários, paradas próximas e terminais de integração.
-            </p>
-          </button>
-        </div>
-
-        <div class="showcase-telemetry-pill">
-          <span class="pulse-dot"></span>
-          <span>Telemetria ativa &bull; Latência &lt; 850ms via SSE</span>
-        </div>
-      </div>
-
-      <!-- Coluna da Direita: iPhone 16 Pro Flagship em Destaque -->
-      <div class="showcase-split-device">
-        <div class="phone-chassis-stage">
-          <div class="phone-wrapper">
-            <Phone screen="journey" id="showcasePhoneDisplay" label="Tela do aplicativo Manô em execução no iPhone 16 Pro" eager={true} />
+            <!-- Tab 2: Visão Geral das Linhas -->
+            <button type="button" class="stage-tab-card" data-stage-tab="home" role="tab" aria-selected="false">
+              <div class="tab-card-top">
+                <span class="tab-index-badge">02</span>
+                <span class="tab-status-chip chip-orange">240+ Linhas</span>
+              </div>
+              <strong class="tab-card-title">Catálogo Completo da Cidade</strong>
+              <p class="tab-card-desc">
+                Busca instantânea por número de linha, itinerários, paradas próximas e terminais de integração.
+              </p>
+            </button>
           </div>
-          <div class="phone-ground-shadow" aria-hidden="true"></div>
+
+          <div class="showcase-telemetry-pill">
+            <span class="pulse-dot"></span>
+            <span>Telemetria ativa &bull; Latência &lt; 850ms via SSE</span>
+          </div>
+
+          <!-- Botão Estilo 99 com Seta Circular -->
+          <div class="megacard-action-row">
+            <a href="#instalar" class="btn-99-pill" aria-label="Instalar aplicativo agora">
+              <span class="btn-99-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+              <span class="btn-99-label">Ver itinerários ao vivo</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Coluna da Direita: iPhone 16 Pro Flagship -->
+        <div class="megacard-device-col">
+          <div class="phone-chassis-stage">
+            <div class="phone-wrapper">
+              <Phone screen="journey" id="showcasePhoneDisplay" label="Tela do aplicativo Manô em execução no iPhone 16 Pro" eager={true} />
+            </div>
+            <div class="phone-ground-shadow" aria-hidden="true"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- BLOCO 2: GRADE MODULAR DE 3 BENEFÍCIOS (ESTILO 99APP) -->
+      <!-- Indicadores de Carrossel Estilo 99 na Base do Banner -->
+      <div class="megacard-indicators" aria-hidden="true">
+        <span class="indicator-pill active"></span>
+        <span class="indicator-dot"></span>
+        <span class="indicator-dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCO 2: GRADE MODULAR DE 3 BENEFÍCIOS (SUPERFÍCIES SÓLIDAS SEM OPACIDADE) -->
+  <div class="apple-container showcase-bottom-container">
     <div class="showcase-benefits-grid">
       <!-- Card 1: Telemetria Sub-segundo -->
       <div class="benefit-card">
-        <div class="benefit-card-tag blue">VELOCIDADE &bull; SENTIDO</div>
+        <div class="benefit-card-tag tag-blue">VELOCIDADE &bull; SENTIDO</div>
         <h3 class="benefit-card-title">Precisão de 3 Metros</h3>
         <p class="benefit-card-desc">
           Telemetria direta sem estimativas genéricas. Acompanhe velocidade em km/h, sentido e distância da parada.
@@ -79,7 +101,7 @@ import Phone from './Phone.astro';
 
       <!-- Card 2: Radar de Estação & Faixa BRS -->
       <div class="benefit-card">
-        <div class="benefit-card-tag orange">CORREDOR BRS &bull; ESTAÇÃO E2</div>
+        <div class="benefit-card-tag tag-orange">CORREDOR BRS &bull; ESTAÇÃO E2</div>
         <h3 class="benefit-card-title">Previsão em 3 Minutos</h3>
         <p class="benefit-card-desc">
           Alertas de aproximação nas plataformas da Constantino Nery com faixa exclusiva monitorada em tempo real.
@@ -92,7 +114,7 @@ import Phone from './Phone.astro';
 
       <!-- Card 3: 5 Terminais Integrados -->
       <div class="benefit-card">
-        <div class="benefit-card-tag blue">REDE MUNICIPAL</div>
+        <div class="benefit-card-tag tag-blue">REDE MUNICIPAL</div>
         <h3 class="benefit-card-title">T1 ao T5 Integrados</h3>
         <p class="benefit-card-desc">
           Partidas e chegadas dos 5 terminais urbanos integrados sem atrasos, com alertas de tráfego instantâneos.
@@ -106,23 +128,20 @@ import Phone from './Phone.astro';
 
     <!-- BLOCO 3: FAIXA DE MÉTRICAS DE AUTORIDADE -->
     <div class="showcase-metrics-bar">
-      <div class="metric-block">
-        <strong class="metric-number">240+</strong>
+      <div class="metric-item">
+        <strong class="metric-value">240+</strong>
         <span class="metric-label">Linhas Mapeadas</span>
       </div>
-      <div class="metric-separator" aria-hidden="true"></div>
-      <div class="metric-block">
-        <strong class="metric-number">5</strong>
+      <div class="metric-item">
+        <strong class="metric-value">5</strong>
         <span class="metric-label">Terminais Integrados</span>
       </div>
-      <div class="metric-separator" aria-hidden="true"></div>
-      <div class="metric-block">
-        <strong class="metric-number">&lt; 850<small>ms</small></strong>
+      <div class="metric-item">
+        <strong class="metric-value">&lt; 850<small>ms</small></strong>
         <span class="metric-label">Latência GPS</span>
       </div>
-      <div class="metric-separator" aria-hidden="true"></div>
-      <div class="metric-block">
-        <strong class="metric-number">100%</strong>
+      <div class="metric-item">
+        <strong class="metric-value">100%</strong>
         <span class="metric-label">Gratuito e Sem Anúncios</span>
       </div>
     </div>
