@@ -5798,6 +5798,23 @@ body:has(dialog[open]) {
   transform: translateY(-2px);
 }
 
+.install-btn-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.install-btn-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+}
+
+.install-btn-main {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
 /* ==========================================================================
    RODAPÉ MINIMALISTA (APENAS COPYRIGHT CENTRALIZADO)
    ========================================================================== */
