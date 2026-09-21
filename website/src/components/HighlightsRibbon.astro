@@ -10,15 +10,15 @@
           Fique por dentro.
         </h2>
         <p class="apple-section-subhead">
-          Conheça os principais destaques do Manô para a sua rotina em Manaus.
+          Conheça os principais módulos do Manô para transformar sua rotina em Manaus.
         </p>
       </div>
 
-      <!-- Apple Action Link + Navigation Controls -->
+      <!-- Action Link + Navigation Controls -->
       <div class="apple-highlights-actions">
-        <a href="#closer-look" class="apple-highlights-film-link" aria-label="Ver demonstração interativa em 3D">
-          <span>Ver demonstração 3D</span>
-          <span class="film-play-circle" aria-hidden="true">▶</span>
+        <a href="#sistema" class="apple-highlights-film-link" aria-label="Explorar o sistema do aplicativo em detalhes">
+          <span>Explorar o sistema</span>
+          <span class="film-play-circle" aria-hidden="true">›</span>
         </a>
         <div class="apple-highlights-controls" aria-label="Navegação do carrossel">
           <button class="highlights-nav-btn prev" id="highlightsPrevBtn" aria-label="Destaque anterior" disabled>
@@ -31,10 +31,10 @@
       </div>
     </div>
 
-    <!-- Horizontal Cards Track -->
+    <!-- Horizontal Cards Track (Swipeable & Draggable) -->
     <div class="apple-highlights-track-wrapper">
       <div class="apple-highlights-track" id="highlightsTrack">
-        <!-- Card 1: Ônibus em Tempo Real -->
+        <!-- Card 1: Ônibus em Tempo Real (Módulo Real do App) -->
         <article class="highlight-card card-cinema">
           <div class="card-glass-panel">
             <div class="card-badge">
@@ -49,20 +49,56 @@
               Telemetria contínua com a posição dos veículos pelas avenidas de Manaus. Decida com exatidão o momento de sair de casa.
             </p>
           </div>
-          <div class="card-media-wrap">
-            <img
-              src="/images/mockups/iphone_mockup_640_ida.webp"
-              width="500"
-              height="1000"
-              alt="Linha 640 e visualização de percurso em tempo real no iPhone"
-              class="card-device-preview"
-              loading="lazy"
-              decoding="async"
-            />
+          <div class="card-app-system-frame" aria-hidden="true">
+            <div class="system-app-bar">
+              <div class="app-bar-chip blue-chip">640</div>
+              <div class="app-bar-info">
+                <span class="app-bar-title">Expresso T4 / T3 / Centro</span>
+                <span class="app-bar-sub">Via Constantino Nery • Frota Ativa</span>
+              </div>
+              <span class="live-pill"><span class="pulse-dot"></span> Ao Vivo</span>
+            </div>
+            <div class="system-telemetry-row">
+              <div class="system-metric-box">
+                <span class="metric-label">VELOCIDADE</span>
+                <span class="metric-value">44 km/h</span>
+              </div>
+              <div class="system-metric-box">
+                <span class="metric-label">VEÍCULO</span>
+                <span class="metric-value">OAA-4819</span>
+              </div>
+              <div class="system-metric-box">
+                <span class="metric-label">STATUS</span>
+                <span class="metric-value status-ok">No Horário</span>
+              </div>
+            </div>
+            <div class="system-stops-track">
+              <div class="track-step passed">
+                <span class="track-dot"></span>
+                <div class="track-info">
+                  <strong>Estação E3 — Santos Dumont</strong>
+                  <span>Partiu há 2 min</span>
+                </div>
+              </div>
+              <div class="track-step current">
+                <span class="track-dot active-bus-dot"></span>
+                <div class="track-info">
+                  <strong>Estação E2 — Arena da Amazônia</strong>
+                  <span class="bus-approaching-text">Ônibus se aproximando • 3 min</span>
+                </div>
+              </div>
+              <div class="track-step next">
+                <span class="track-dot"></span>
+                <div class="track-info">
+                  <strong>Estação E1 — São Jorge</strong>
+                  <span>Previsão 14:42</span>
+                </div>
+              </div>
+            </div>
           </div>
         </article>
 
-        <!-- Card 2: Planejador Inteligente -->
+        <!-- Card 2: Planejador Preciso (Módulo Real do App) -->
         <article class="highlight-card card-cinema">
           <div class="card-glass-panel">
             <div class="card-badge">PLANEJADOR PRECISO</div>
@@ -74,20 +110,47 @@
               Desembarque sempre na parada mais próxima do seu destino em ruas e avenidas, com contagem de minutos e distâncias realistas.
             </p>
           </div>
-          <div class="card-media-wrap">
-            <img
-              src="/images/mockups/iphone_mockup_planner.webp"
-              width="500"
-              height="1000"
-              alt="Planejador de viagens no Manô no iPhone"
-              class="card-device-preview"
-              loading="lazy"
-              decoding="async"
-            />
+          <div class="card-app-system-frame" aria-hidden="true">
+            <div class="system-search-inputs">
+              <div class="system-input-item">
+                <span class="input-indicator origin"></span>
+                <div>
+                  <span class="input-tiny-label">ORIGEM</span>
+                  <strong class="input-strong-text">Rua Kobe — Parque 10</strong>
+                </div>
+              </div>
+              <div class="system-input-divider"></div>
+              <div class="system-input-item">
+                <span class="input-indicator dest"></span>
+                <div>
+                  <span class="input-tiny-label">DESTINO</span>
+                  <strong class="input-strong-text">Terminal 1 (T1) — Constantino Nery</strong>
+                </div>
+              </div>
+            </div>
+            <div class="system-route-summary-pill">
+              <span class="route-tag-flash">⚡ ROTA MAIS RÁPIDA</span>
+              <span class="route-time-val">18 min</span>
+              <span class="route-walk-val">240m a pé</span>
+            </div>
+            <div class="system-planner-steps-mini">
+              <div class="planner-step-row">
+                <span class="step-num">1</span>
+                <span>Caminhe 3 min até Estação E2 (Arena)</span>
+              </div>
+              <div class="planner-step-row highlight">
+                <span class="step-num">2</span>
+                <span>Embarque Linha 640 (Expresso)</span>
+              </div>
+              <div class="planner-step-row">
+                <span class="step-num">3</span>
+                <span>Desembarque no Terminal 1 (T1)</span>
+              </div>
+            </div>
           </div>
         </article>
 
-        <!-- Card 3: Sentidos Ida e Volta -->
+        <!-- Card 3: Sentidos Ida e Volta (Módulo Real do App) -->
         <article class="highlight-card card-cinema">
           <div class="card-glass-panel">
             <div class="card-badge">ITINERÁRIO COMPLETO</div>
@@ -99,41 +162,93 @@
               Alterne o sentido com um toque e confira toda a sequência de estações e paradas da linha em uma linha do tempo ampla.
             </p>
           </div>
-          <div class="card-media-wrap">
-            <img
-              src="/images/mockups/iphone_mockup_stops.webp"
-              width="500"
-              height="1000"
-              alt="Sentido volta da linha com itinerário e paradas no iPhone"
-              class="card-device-preview"
-              loading="lazy"
-              decoding="async"
-            />
+          <div class="card-app-system-frame" aria-hidden="true">
+            <div class="system-toggle-group">
+              <button type="button" class="toggle-pill active">Sentido Ida • Centro</button>
+              <button type="button" class="toggle-pill">Sentido Volta • T4</button>
+            </div>
+            <div class="system-timeline-scroll">
+              <div class="timeline-row">
+                <span class="stop-order-num">01</span>
+                <div class="stop-data">
+                  <strong>Terminal 4 (T4) — Jorge Teixeira</strong>
+                  <span>Terminal de Origem • Partida 14:15</span>
+                </div>
+                <span class="timeline-tag">Partiu</span>
+              </div>
+              <div class="timeline-row">
+                <span class="stop-order-num">14</span>
+                <div class="stop-data">
+                  <strong>Estação E4 — Flores</strong>
+                  <span>Corredor Expresso • Plataforma B</span>
+                </div>
+                <span class="timeline-tag">Passou</span>
+              </div>
+              <div class="timeline-row active-now">
+                <span class="stop-order-num">22</span>
+                <div class="stop-data">
+                  <strong>Estação E2 — Arena da Amazônia</strong>
+                  <span class="highlight-blue">Ônibus 640 a 450 metros</span>
+                </div>
+                <span class="timeline-tag pulse-tag">3 min</span>
+              </div>
+              <div class="timeline-row">
+                <span class="stop-order-num">34</span>
+                <div class="stop-data">
+                  <strong>Terminal 1 (T1) — Centro</strong>
+                  <span>Ponto Final e Conexões</span>
+                </div>
+                <span class="timeline-tag next-tag">14:52</span>
+              </div>
+            </div>
           </div>
         </article>
 
-        <!-- Card 4: Alertas & Terminais -->
+        <!-- Card 4: Alertas & Terminais (Módulo Real do App) -->
         <article class="highlight-card card-cinema">
           <div class="card-glass-panel">
-            <div class="card-badge">NO RITMO DA CIDADE</div>
+            <div class="card-badge">5 TERMINAIS CONECTADOS</div>
             <h3 class="card-title">
-              Conexões e alertas.<br/>
+              Conexões e terminais.<br/>
               <span class="card-title-accent">Sua rotina sem surpresas.</span>
             </h3>
             <p class="card-desc">
               Acompanhe avisos de trânsito, reformas viárias e saiba exatamente onde fazer baldeações nos terminais de integração T1 a T5.
             </p>
           </div>
-          <div class="card-media-wrap">
-            <img
-              src="/images/mockups/iphone_mockup_alerts.webp"
-              width="500"
-              height="1000"
-              alt="Aba de alertas e avisos da cidade no Manô no iPhone"
-              class="card-device-preview"
-              loading="lazy"
-              decoding="async"
-            />
+          <div class="card-app-system-frame" aria-hidden="true">
+            <div class="system-terminal-item">
+              <div class="terminal-badge-amber">T1</div>
+              <div class="terminal-info-col">
+                <strong>Terminal 1 — Constantino Nery</strong>
+                <span>Linhas: 640, 300, 448, 560, 120</span>
+              </div>
+              <span class="terminal-status-ok">Operando</span>
+            </div>
+            <div class="system-terminal-item">
+              <div class="terminal-badge-amber">T2</div>
+              <div class="terminal-info-col">
+                <strong>Terminal 2 — Cachoeirinha</strong>
+                <span>Linhas: 650, 651, 542, 418</span>
+              </div>
+              <span class="terminal-status-ok">Operando</span>
+            </div>
+            <div class="system-terminal-item">
+              <div class="terminal-badge-amber">T3</div>
+              <div class="terminal-info-col">
+                <strong>Terminal 3 — Cidade Nova</strong>
+                <span>Linhas: 640, 350, 450, 300</span>
+              </div>
+              <span class="terminal-status-ok">Operando</span>
+            </div>
+            <div class="system-terminal-item">
+              <div class="terminal-badge-amber">T4</div>
+              <div class="terminal-info-col">
+                <strong>Terminal 4 — Jorge Teixeira</strong>
+                <span>Linhas: 640, 560, 652, 678</span>
+              </div>
+              <span class="terminal-status-ok">Operando</span>
+            </div>
           </div>
         </article>
       </div>

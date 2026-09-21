@@ -14,77 +14,130 @@
       </p>
     </div>
 
-    <!-- Apple-style Bento Grid with App Images and Punchy Info -->
+    <!-- Apple-style Bento Grid with Real System Telemetry (Zero Images, Zero Mockups) -->
     <div class="apple-bento-grid">
       <!-- Card 1: Live Telemetry Radar & GPS Lock (Span 2) -->
-      <div class="bento-card bento-card-span-2 bento-image-card">
+      <div class="bento-card bento-card-span-2 bento-native-card">
         <div class="bento-card-content">
           <span class="bento-badge">TELEMETRIA CONTÍNUA</span>
           <h3 class="bento-title">&lt; 1s de latência</h3>
-          <p class="bento-short-sub">Posição, velocidade vetorial e sentido da frota ao vivo.</p>
+          <p class="bento-short-sub">Posição, velocidade vetorial e sentido da frota ao vivo pelas avenidas.</p>
         </div>
-        <div class="bento-img-container">
-          <img
-            src="/images/bento/bento_telemetry_gps.webp"
-            alt="Telemetria e GPS da Linha 640"
-            class="bento-app-crop-img"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="bento-telemetry-module">
+          <div class="bento-status-bar">
+            <span class="bento-sse-chip">
+              <span class="pulse-dot"></span>
+              STREAM SSE ATIVO • 4.5s
+            </span>
+            <span class="bento-metric-text">240+ Linhas Sincronizadas</span>
+          </div>
+          <div class="bento-metrics-quad">
+            <div class="bento-metric-item">
+              <span class="bento-m-label">LATÊNCIA DO GPS</span>
+              <strong class="bento-m-val">&lt; 850 ms</strong>
+            </div>
+            <div class="bento-metric-item">
+              <span class="bento-m-label">PRECISÃO ESPACIAL</span>
+              <strong class="bento-m-val">~3 metros</strong>
+            </div>
+            <div class="bento-metric-item">
+              <span class="bento-m-label">VETOR DE ROTA</span>
+              <strong class="bento-m-val">44 km/h • Sul</strong>
+            </div>
+            <div class="bento-metric-item">
+              <span class="bento-m-label">FREQUÊNCIA DE AMOSTRA</span>
+              <strong class="bento-m-val">1.000 ms</strong>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Card 2: Smart Next-Bus Succession -->
-      <div class="bento-card bento-image-card">
+      <div class="bento-card bento-native-card">
         <div class="bento-card-content">
           <span class="bento-badge">SUCESSÃO AUTOMÁTICA</span>
           <h3 class="bento-title">Próximo Ônibus</h3>
           <p class="bento-short-sub">Atualização instantânea após o veículo passar.</p>
         </div>
-        <div class="bento-img-container">
-          <img
-            src="/images/bento/bento_succession.webp"
-            alt="Sucessão do próximo ônibus em tempo real"
-            class="bento-app-crop-img"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="bento-succession-list">
+          <div class="succession-item current">
+            <span class="succ-order">1º</span>
+            <div class="succ-info">
+              <strong>OAA-4819 (Linha 640)</strong>
+              <span>Passando na parada agora</span>
+            </div>
+            <span class="succ-badge pass">Agora</span>
+          </div>
+          <div class="succession-item next">
+            <span class="succ-order">2º</span>
+            <div class="succ-info">
+              <strong>NAV-9102 (Linha 640)</strong>
+              <span>Aproximação em 5 min</span>
+            </div>
+            <span class="succ-badge eta">5 min</span>
+          </div>
+          <div class="succession-item queue">
+            <span class="succ-order">3º</span>
+            <div class="succ-info">
+              <strong>PHB-2201 (Linha 640)</strong>
+              <span>Em trânsito no T4</span>
+            </div>
+            <span class="succ-badge wait">12 min</span>
+          </div>
         </div>
       </div>
 
       <!-- Card 3: 34 Georeferenced Stations -->
-      <div class="bento-card bento-image-card">
+      <div class="bento-card bento-native-card">
         <div class="bento-card-content">
           <span class="bento-badge">CORREDORES EXPRESSOS</span>
-          <h3 class="bento-title">34 Paradas</h3>
+          <h3 class="bento-title">34 Paradas Mapeadas</h3>
           <p class="bento-short-sub">Corredores Constantino Nery e Djalma Batista.</p>
         </div>
-        <div class="bento-img-container">
-          <img
-            src="/images/bento/bento_stations_34.webp"
-            alt="34 paradas mapeadas nos corredores"
-            class="bento-app-crop-img"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="bento-stations-chips-box">
+          <div class="corridor-flag">FAIXA BRS EXCLUSIVA</div>
+          <div class="stations-pills-flow">
+            <span class="station-chip-native">E1 São Jorge</span>
+            <span class="station-chip-native active">E2 Arena da Amazônia</span>
+            <span class="station-chip-native">E3 Santos Dumont</span>
+            <span class="station-chip-native">E4 Flores</span>
+            <span class="station-chip-native">Terminal 1 Centro</span>
+            <span class="station-chip-native">Terminal 4 Z. Leste</span>
+          </div>
         </div>
       </div>
 
       <!-- Card 4: Dynamic Real-Time ETA (Span 2) -->
-      <div class="bento-card bento-card-span-2 bento-image-card">
+      <div class="bento-card bento-card-span-2 bento-native-card">
         <div class="bento-card-content">
           <span class="bento-badge">PRECISÃO DE CHEGADA</span>
           <h3 class="bento-title">ETA Dinâmico em Tempo Real</h3>
           <p class="bento-short-sub">Tráfego ao vivo e contagem de minutos até a sua parada.</p>
         </div>
-        <div class="bento-img-container">
-          <img
-            src="/images/bento/bento_eta_calc.webp"
-            alt="Cálculo de tempo de chegada dinâmico"
-            class="bento-app-crop-img"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="bento-eta-calculator-module">
+          <div class="eta-calc-display">
+            <div class="eta-clock-box">
+              <span class="eta-clock-val">3</span>
+              <span class="eta-clock-label">minutos</span>
+            </div>
+            <div class="eta-factors-col">
+              <div class="factor-row">
+                <span class="f-name">Distância até a parada:</span>
+                <span class="f-val">450 metros</span>
+              </div>
+              <div class="factor-row">
+                <span class="f-name">Fator de Tráfego:</span>
+                <span class="f-val status-good">Faixa Livre (1.0x)</span>
+              </div>
+              <div class="factor-row">
+                <span class="f-name">Velocidade Média do Corredor:</span>
+                <span class="f-val">42 km/h</span>
+              </div>
+            </div>
+          </div>
+          <div class="eta-progress-bar-wrap">
+            <div class="eta-progress-fill" style="width: 78%;"></div>
+          </div>
         </div>
       </div>
     </div>

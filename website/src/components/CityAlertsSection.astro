@@ -4,75 +4,83 @@
 <section class="apple-alerts-section" id="alertas" aria-labelledby="alertas-heading">
   <div class="apple-container">
     <div class="apple-section-header">
-      <p class="apple-eyebrow-accent" style="color: #2997ff;">NO RITMO DA CIDADE</p>
+      <p class="apple-eyebrow-accent">MONITORAMENTO URBANO</p>
       <h2 id="alertas-heading" class="apple-section-headline">
-        Alertas em tempo real.<br/>
-        <span class="apple-headline-gradient">Saiba antes. Vá melhor.</span>
+        Alertas do Trânsito em Tempo Real.<br/>
+        <span class="apple-headline-gradient">Zero surpresas no seu itinerário.</span>
       </h2>
       <p class="apple-section-subhead">
-        Informações oficiais de trânsito, interdições de pistas, desvios operacionais de linhas e comunicados da Defesa Civil de Manaus em tempo real. Sem ruído, com clareza total.
+        Ocorrências nas vias, retenções no tráfego e comunicados oficiais da Defesa Civil de Manaus integrados diretamente ao cálculo de rota.
       </p>
     </div>
 
-    <!-- Apple Clean Alerts Feed (100% Zero Neon, Strict Apple Palette) -->
-    <div class="alerts-feed-grid">
-      <!-- Alert 1: Traffic Detour -->
-      <div class="alert-system-card">
-        <div class="alert-card-header">
-          <div class="alert-type-pill pill-orange">
-            <span class="alert-dot-orange"></span>
-            <strong>INTERDIÇÃO PARCIAL</strong>
-          </div>
-          <span class="alert-time">Há 12 min</span>
-        </div>
-        <h3 class="alert-card-title">Av. Constantino Nery — Sentido Bairro/Centro</h3>
-        <p class="alert-card-body">
-          Faixa expressa liberada apenas para transporte coletivo próximo à Estação E2. Veículos particulares desviados para a via lateral.
-        </p>
-        <div class="alert-affected-lines">
-          <span class="affected-tag">Linhas afetadas:</span>
-          <span class="line-badge-sm">640</span>
-          <span class="line-badge-sm">300</span>
-          <span class="line-badge-sm">448</span>
-        </div>
+    <!-- Filtros de Categorias (Cores canônicas: Branco, Azul e Laranja - Zero Degradê Amarelo) -->
+    <div class="native-alerts-container">
+      <div class="alerts-category-filters" role="tablist" aria-label="Filtro de alertas">
+        <button type="button" class="alert-filter-pill active">Todos</button>
+        <button type="button" class="alert-filter-pill">Acidentes</button>
+        <button type="button" class="alert-filter-pill">Lentidão</button>
+        <button type="button" class="alert-filter-pill">Fiscalização</button>
       </div>
 
-      <!-- Alert 2: Weather Alert Defesa Civil -->
-      <div class="alert-system-card">
-        <div class="alert-card-header">
-          <div class="alert-type-pill pill-blue">
-            <span class="alert-dot-blue"></span>
-            <strong>DEFESA CIVIL MANAUS</strong>
+      <!-- Live Traffic Alerts Stream (Padrão AlertsTab do Aplicativo) -->
+      <div class="native-alerts-list">
+        <!-- Alerta 1: Laranja (Lentidão / Alagamento) -->
+        <article class="native-alert-card card-orange">
+          <div class="alert-card-header">
+            <div class="alert-badge-group">
+              <span class="alert-severity-badge badge-orange">LENTIDÃO</span>
+              <span class="alert-corridor-name">Av. Djalma Batista • Chapada</span>
+            </div>
+            <span class="alert-timestamp">Há 8 min</span>
           </div>
-          <span class="alert-time">Há 28 min</span>
-        </div>
-        <h3 class="alert-card-title">Alerta Meteorológico — Zona Norte e Leste</h3>
-        <p class="alert-card-body">
-          Pancadas de chuva na Torquato Tapajós e Grande Circular. Tempo de percurso ajustado automaticamente no motor preditivo de todas as linhas da região.
-        </p>
-        <div class="alert-affected-lines">
-          <span class="affected-tag">Impacto:</span>
-          <span class="status-neutral-pill">+4 a 6 min no tempo de viagem</span>
-        </div>
-      </div>
+          <h3 class="alert-headline">Tráfego lento no sentido Centro após chuva na região</h3>
+          <p class="alert-body">
+            Acúmulo parcial de água na pista lateral próximo ao Amazonas Shopping. A faixa exclusiva BRS da Constantino Nery permanece fluindo normalmente com tempo estimado mantido.
+          </p>
+          <div class="alert-affected-lines">
+            <span class="affected-label">Linhas monitoradas:</span>
+            <span class="line-badge blue">640</span>
+            <span class="line-badge blue">300</span>
+            <span class="line-badge orange">448</span>
+          </div>
+        </article>
 
-      <!-- Alert 3: Regular Operations -->
-      <div class="alert-system-card">
-        <div class="alert-card-header">
-          <div class="alert-type-pill pill-green">
-            <span class="alert-dot-green"></span>
-            <strong>OPERAÇÃO NORMAL</strong>
+        <!-- Alerta 2: Azul (Operação / Obras Programadas) -->
+        <article class="native-alert-card card-blue">
+          <div class="alert-card-header">
+            <div class="alert-badge-group">
+              <span class="alert-severity-badge badge-blue">OPERAÇÃO REGULAR</span>
+              <span class="alert-corridor-name">Corredor Constantino Nery • Estações E1 a E4</span>
+            </div>
+            <span class="alert-timestamp">Há 24 min</span>
           </div>
-          <span class="alert-time">Atualizado agora</span>
-        </div>
-        <h3 class="alert-card-title">Terminais T1, T2, T3, T4 e T5</h3>
-        <p class="alert-card-body">
-          Todas as plataformas de integração com embarque e desembarque operando sem bloqueios em toda a malha urbana.
-        </p>
-        <div class="alert-affected-lines">
-          <span class="affected-tag">Frota monitorada:</span>
-          <span class="status-neutral-pill">100% dos corredores operacionais</span>
-        </div>
+          <h3 class="alert-headline">Intervalos regulares e telemetria GPS 100% ativa</h3>
+          <p class="alert-body">
+            Todas as plataformas de transferência nas estações São Jorge, Arena da Amazônia, Santos Dumont e Flores operando em sincronia direta com a frota expressa.
+          </p>
+          <div class="alert-affected-lines">
+            <span class="affected-label">Linhas monitoradas:</span>
+            <span class="line-badge blue">640</span>
+            <span class="line-badge blue">120</span>
+            <span class="line-badge orange">560</span>
+          </div>
+        </article>
+
+        <!-- Alerta 3: Branco / Neutro (Defesa Civil / Meteorologia) -->
+        <article class="native-alert-card card-white">
+          <div class="alert-card-header">
+            <div class="alert-badge-group">
+              <span class="alert-severity-badge badge-white">DEFESA CIVIL</span>
+              <span class="alert-corridor-name">Região Metropolitana de Manaus</span>
+            </div>
+            <span class="alert-timestamp">Há 45 min</span>
+          </div>
+          <h3 class="alert-headline">Boletim meteorológico: pancadas de chuva isoladas</h3>
+          <p class="alert-body">
+            Previsão de precipitação moderada na Zona Norte e Leste durante o final da tarde. Motoristas e usuários devem planejar saídas com 10 minutos de antecedência.
+          </p>
+        </article>
       </div>
     </div>
   </div>

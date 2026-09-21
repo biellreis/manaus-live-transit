@@ -14,136 +14,191 @@
       </p>
     </div>
 
-    <!-- Apple Interactive Planner: Large Detailed App Box (Zero Phone Mockup) -->
-    <div class="planner-showcase-large-card">
-      <!-- Search & Origin/Destination Bar -->
-      <div class="planner-card-header-bar">
-        <div class="planner-inputs-container">
-          <div class="planner-input-row">
-            <span class="planner-pin origin-pin"></span>
-            <div class="planner-field-info">
-              <span class="planner-field-label">ORIGEM</span>
-              <span class="planner-field-value">Rua Kobe — Parque 10 de Novembro</span>
+    <!-- Apple Interactive Planner: Full Extension Widescreen Dashboard (Zero Phone Mockup) -->
+    <div class="planner-widescreen-dashboard">
+      <!-- Left Panel: Search Inputs & Itinerary Timeline -->
+      <div class="planner-panel-controls">
+        <!-- Search & Origin/Destination Bar -->
+        <div class="planner-card-header-bar">
+          <div class="planner-inputs-container">
+            <div class="planner-input-row">
+              <span class="planner-pin origin-pin"></span>
+              <div class="planner-field-info">
+                <span class="planner-field-label">ORIGEM</span>
+                <span class="planner-field-value">Rua Kobe — Parque 10 de Novembro</span>
+              </div>
+            </div>
+            <div class="planner-inputs-divider">
+              <span class="divider-line"></span>
+              <button type="button" class="planner-swap-btn" aria-label="Inverter origem e destino">⇅</button>
+            </div>
+            <div class="planner-input-row">
+              <span class="planner-pin dest-pin"></span>
+              <div class="planner-field-info">
+                <span class="planner-field-label">DESTINO</span>
+                <span class="planner-field-value">Terminal 1 (T1) — Constantino Nery • Centro</span>
+              </div>
             </div>
           </div>
-          <div class="planner-inputs-divider">
-            <span class="divider-line"></span>
-            <button class="planner-swap-btn" aria-label="Inverter origem e destino">⇅</button>
-          </div>
-          <div class="planner-input-row">
-            <span class="planner-pin dest-pin"></span>
-            <div class="planner-field-info">
-              <span class="planner-field-label">DESTINO</span>
-              <span class="planner-field-value">Terminal 1 (T1) — Constantino Nery • Centro</span>
-            </div>
+
+          <!-- Filter Pills -->
+          <div class="planner-filter-pills">
+            <span class="filter-pill active">⚡ Rota mais rápida (18 min)</span>
+            <span class="filter-pill">🚶 Menor caminhada (240 m)</span>
+            <span class="filter-pill">🔄 Linha direta sem baldeação</span>
           </div>
         </div>
 
-        <!-- Filter Pills -->
-        <div class="planner-filter-pills">
-          <span class="filter-pill active">⚡ Rota mais rápida (18 min)</span>
-          <span class="filter-pill">🚶 Menor caminhada (240 m)</span>
-          <span class="filter-pill">🔄 Linha direta sem baldeação</span>
+        <!-- Main Step-by-Step Itinerary Body -->
+        <div class="planner-itinerary-body">
+          <div class="itinerary-timeline">
+            <!-- Step 1: Walking -->
+            <div class="itinerary-step">
+              <div class="timeline-gutter">
+                <span class="timeline-dot dot-walk"></span>
+                <span class="timeline-line walk-line"></span>
+              </div>
+              <div class="timeline-content">
+                <div class="step-meta">
+                  <span class="step-badge badge-walk">CAMINHADA</span>
+                  <span class="step-duration">3 min • 240 metros</span>
+                </div>
+                <h4 class="step-headline">Caminhe até a Estação E2 — Arena da Amazônia</h4>
+                <p class="step-subtext">Siga pela calçada da Av. Pedro Teixeira em direção ao canteiro central da Constantino Nery.</p>
+              </div>
+            </div>
+
+            <!-- Step 2: Board Bus -->
+            <div class="itinerary-step step-highlighted">
+              <div class="timeline-gutter">
+                <span class="timeline-dot dot-bus-board"></span>
+                <span class="timeline-line bus-line"></span>
+              </div>
+              <div class="timeline-content">
+                <div class="step-meta">
+                  <span class="bus-number-badge">640</span>
+                  <span class="bus-name-badge">Expresso T4 / T3 / Centro</span>
+                  <span class="live-pill">
+                    <span class="pulse-dot"></span>
+                    Chegando em 3 min
+                  </span>
+                </div>
+                <h4 class="step-headline">Embarque na Estação E2 (Plataforma B - Sentido Centro)</h4>
+                <p class="step-subtext">Veículo equipado com ar-condicionado • Próximo ônibus previsto para as 14:38.</p>
+
+                <!-- Intermediate Stops Mini List -->
+                <div class="intermediate-stops-box">
+                  <div class="stops-summary">
+                    <span class="stops-count">6 paradas no corredor expresso (12 min)</span>
+                    <span class="stops-corridor">Faixa exclusiva sem semáforo</span>
+                  </div>
+                  <div class="stops-tags-list">
+                    <span class="stop-tag">E2 Arena</span>
+                    <span class="stop-arrow">→</span>
+                    <span class="stop-tag">E1 São Jorge</span>
+                    <span class="stop-arrow">→</span>
+                    <span class="stop-tag">Boulevard</span>
+                    <span class="stop-arrow">→</span>
+                    <span class="stop-tag">Praça da Saudade</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Arrive at T1 -->
+            <div class="itinerary-step step-arrival">
+              <div class="timeline-gutter">
+                <span class="timeline-dot dot-dest"></span>
+              </div>
+              <div class="timeline-content">
+                <div class="step-meta">
+                  <span class="step-badge badge-dest">DESEMBARQUE</span>
+                  <span class="step-duration">Chegada às 14:52</span>
+                </div>
+                <h4 class="step-headline">Terminal de Integração 1 (T1) — Constantino Nery</h4>
+                <p class="step-subtext">Você chegou ao centro de Manaus. Conexão gratuita para 40+ linhas urbanas.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Main Step-by-Step Itinerary Body -->
-      <div class="planner-itinerary-body">
-        <div class="itinerary-timeline">
-          <!-- Step 1: Walking -->
-          <div class="itinerary-step">
-            <div class="timeline-gutter">
-              <span class="timeline-dot dot-walk"></span>
-              <span class="timeline-line walk-line"></span>
-            </div>
-            <div class="timeline-content">
-              <div class="step-meta">
-                <span class="step-badge badge-walk">CAMINHADA</span>
-                <span class="step-duration">3 min • 240 metros</span>
-              </div>
-              <h4 class="step-headline">Caminhe até a Estação E2 — Arena da Amazônia</h4>
-              <p class="step-subtext">Siga pela calçada da Av. Pedro Teixeira em direção ao canteiro central da Constantino Nery.</p>
-            </div>
+      <!-- Right Panel: High-Fidelity Journey Vector Map Display -->
+      <div class="planner-panel-map" aria-label="Mapa do itinerário planejado">
+        <div class="planner-map-card">
+          <div class="planner-map-bar">
+            <span class="map-badge-live"><span class="pulse-dot"></span> TRAJETO AO VIVO</span>
+            <span class="map-distance-note">Distância Total: 4.8 km</span>
           </div>
 
-          <!-- Step 2: Board Bus -->
-          <div class="itinerary-step step-highlighted">
-            <div class="timeline-gutter">
-              <span class="timeline-dot dot-bus-board"></span>
-              <span class="timeline-line bus-line"></span>
-            </div>
-            <div class="timeline-content">
-              <div class="step-meta">
-                <span class="bus-number-badge">640</span>
-                <span class="bus-name-badge">Expresso T4 / T3 / Centro</span>
-                <span class="live-pill">
-                  <span class="pulse-dot"></span>
-                  Chegando em 3 min
-                </span>
-              </div>
-              <h4 class="step-headline">Embarque na Estação E2 (Plataforma B - Sentido Centro)</h4>
-              <p class="step-subtext">Veículo equipado com ar-condicionado • Próximo ônibus previsto para as 14:38.</p>
+          <div class="planner-map-canvas-wrap">
+            <svg viewBox="0 0 540 420" fill="none" class="journey-map-svg" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="journeyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3b82f6"/>
+                  <stop offset="100%" stop-color="#1d4ed8"/>
+                </linearGradient>
+              </defs>
 
-              <!-- Intermediate Stops Mini List -->
-              <div class="intermediate-stops-box">
-                <div class="stops-summary">
-                  <span class="stops-count">6 paradas no corredor expresso (12 min)</span>
-                  <span class="stops-corridor">Faixa exclusiva sem semáforo</span>
-                </div>
-                <div class="stops-tags-list">
-                  <span class="stop-tag">E2 Arena</span>
-                  <span class="stop-arrow">→</span>
-                  <span class="stop-tag">E1 São Jorge</span>
-                  <span class="stop-arrow">→</span>
-                  <span class="stop-tag">Boulevard</span>
-                  <span class="stop-arrow">→</span>
-                  <span class="stop-tag">Praça da Saudade</span>
-                  <span class="stop-arrow">→</span>
-                  <span class="stop-tag highlight">Terminal 1 (T1)</span>
-                </div>
-              </div>
-            </div>
+              <!-- Map grid background roads of Manaus -->
+              <path d="M 40 60 L 500 60" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 40 180 L 500 180" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 40 300 L 500 300" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 140 30 L 140 390" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+              <path d="M 380 30 L 380 390" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+
+              <!-- Walking Path (Dotted White) -->
+              <path d="M 120 70 L 160 110 L 220 130" stroke="#ffffff" stroke-width="3" stroke-dasharray="5 5" stroke-linecap="round"/>
+
+              <!-- Transit Route Corridor (Constantino Nery Line) -->
+              <path d="M 220 130 L 260 210 L 310 290 L 360 360" stroke="url(#journeyGradient)" stroke-width="6" stroke-linecap="round"/>
+
+              <!-- Origin Marker: Parque 10 -->
+              <g transform="translate(120, 70)">
+                <circle r="9" fill="#10b981" stroke="#ffffff" stroke-width="2.5"/>
+                <circle r="4" fill="#ffffff"/>
+                <rect x="14" y="-12" width="130" height="24" rx="6" fill="#18181b" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <text x="22" y="4" fill="#ffffff" font-size="11" font-weight="700">Origem: Parque 10</text>
+              </g>
+
+              <!-- Walking Annotation -->
+              <g transform="translate(170, 105)">
+                <rect x="-8" y="-10" width="76" height="20" rx="5" fill="#27272a"/>
+                <text x="30" y="4" fill="#cbd5e1" font-size="10" font-weight="600" text-anchor="middle">240m a pé</text>
+              </g>
+
+              <!-- Boarding Marker: Estação E2 Arena -->
+              <g transform="translate(220, 130)">
+                <circle r="14" fill="#3b82f6" fill-opacity="0.25" class="bus-pulse"/>
+                <circle r="8" fill="#3b82f6" stroke="#ffffff" stroke-width="2.5"/>
+                <rect x="14" y="-12" width="160" height="24" rx="6" fill="#18181b" stroke="#3b82f6" stroke-width="1.2"/>
+                <text x="22" y="4" fill="#3b82f6" font-size="11" font-weight="800">Embarque: Estação E2</text>
+              </g>
+
+              <!-- Bus in transit on the corridor -->
+              <g transform="translate(260, 210)">
+                <circle r="16" fill="#3b82f6" fill-opacity="0.3" class="bus-pulse"/>
+                <circle r="11" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                <path d="M -4 3 L 4 3 L 4 -3 C 4 -4 -4 -4 -4 -3 Z" stroke="#ffffff" stroke-width="1" fill="none"/>
+                <rect x="16" y="-12" width="80" height="24" rx="6" fill="#3b82f6"/>
+                <text x="56" y="4" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">Ônibus 640</text>
+              </g>
+
+              <!-- Destination Marker: Terminal 1 -->
+              <g transform="translate(360, 360)">
+                <circle r="10" fill="#ea580c" stroke="#ffffff" stroke-width="2.5"/>
+                <circle r="4" fill="#ffffff"/>
+                <rect x="-170" y="-12" width="156" height="24" rx="6" fill="#18181b" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <text x="-92" y="4" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Destino: Terminal 1 (T1)</text>
+              </g>
+            </svg>
           </div>
 
-          <!-- Step 3: Destination Arrival -->
-          <div class="itinerary-step">
-            <div class="timeline-gutter">
-              <span class="timeline-dot dot-dest"></span>
-            </div>
-            <div class="timeline-content">
-              <div class="step-meta">
-                <span class="step-badge badge-dest">DESEMBARQUE</span>
-                <span class="step-duration">Chegada às 14:46</span>
-              </div>
-              <h4 class="step-headline">Desembarque no Terminal 1 (T1) — Plataforma Central</h4>
-              <p class="step-subtext">Acesso direto ao Centro Histórico ou baldeação gratuita para qualquer linha alimentadora.</p>
-            </div>
+          <div class="planner-map-footer">
+            <span class="route-stat-item">⏱ 18 min totais</span>
+            <span class="route-stat-item">🚶 3 min a pé</span>
+            <span class="route-stat-item">🚌 15 min no ônibus</span>
           </div>
-        </div>
-      </div>
-
-      <!-- Bottom Metrics & Live Navigation Bar -->
-      <div class="planner-card-bottom-bar">
-        <div class="metrics-cluster">
-          <div class="metric-item">
-            <span class="metric-val">18 min</span>
-            <span class="metric-label">Tempo total estimado</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-val">240 m</span>
-            <span class="metric-label">Percurso a pé</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-val">R$ 0,00</span>
-            <span class="metric-label">Integração temporal</span>
-          </div>
-        </div>
-
-        <div class="planner-action-buttons">
-          <a href="#instalar" class="planner-btn-primary">
-            <span>Usar no Aplicativo</span>
-            <span class="btn-arrow">→</span>
-          </a>
         </div>
       </div>
     </div>
