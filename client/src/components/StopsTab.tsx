@@ -45,7 +45,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
 
     if (distKm < 1) {
       const meters = Math.round(distKm * 1000);
-      const walkingMin = Math.max(1, Math.round(meters / 80)); // ~80m per min
+      const walkingMin = Math.max(1, Math.round(meters / 83)); // ~83m per min
       return {
         distText: `${meters} m`,
         walkText: `${walkingMin} min a pé`,
@@ -53,7 +53,7 @@ export const StopsTab: React.FC<StopsTabProps> = ({
       };
     }
 
-    const walkingMin = Math.round(distKm * 12);
+    const walkingMin = Math.round((distKm * 1000) / 83);
     return {
       distText: `${distKm.toFixed(1)} km`,
       walkText: `${walkingMin} min a pé`,

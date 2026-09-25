@@ -32,10 +32,11 @@ export async function resolveStreetWalkingPath(
         const candidate = data?.routes?.[0];
         const coords = candidate?.geometry?.coordinates;
         if (Array.isArray(coords) && coords.length >= 2) {
+          const distanceMeters = Math.round(candidate.distance || 0);
           const result: WalkingGeometryResult = {
             coordinates: coords,
-            distanceMeters: Math.round(candidate.distance || 0),
-            durationMinutes: Math.max(1, Math.ceil((candidate.duration || 60) / 60))
+            distanceMeters,
+            durationMinutes: distanceMeters <= 20 ? 0 : Math.max(1, Math.round(distanceMeters / 83))
           };
           memoryCache.set(points, { data: result, expiresAt: Date.now() + 600000 });
           return result;

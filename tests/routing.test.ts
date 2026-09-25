@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { sliceTripCoordinates } from '../server/src/services/routeGeometry.js';
-import { findCandidates, validPoint } from '../server/src/services/routePlannerService.js';
+import { findCandidates, validPoint, WALKING_SPEED_METERS_PER_MINUTE, calculateWalkingMinutes, planTransitJourney } from '../server/src/services/routePlannerService.js';
 import { getStreetWalkingPolyline } from '../server/src/services/walkingRouter.js';
 import { sinetram, type TripDetail, type StopInfo, type RouteSummary } from '../server/src/services/sinetramClient.js';
 import { googleDirectionsUrl, providerLineUrl } from '../client/src/utils/mapLinks.js';
@@ -85,5 +85,41 @@ test('street/avenue destination alights at the physically closest stop to the de
   const candidates = findCandidates(routes, origin, streetDest);
   assert.ok(candidates.length > 0);
   assert.equal(candidates[0][0].destStop.stopId, 3);
+});
+
+test('walking speed is configured to 83 meters per minute and calculates correctly', () => {
+  assert.equal(WALKING_SPEED_METERS_PER_MINUTE, 83);
+  assert.equal(calculateWalkingMinutes(0), 0);
+  assert.equal(calculateWalkingMinutes(15), 0);
+  assert.equal(calculateWalkingMinutes(20), 0);
+  assert.equal(calculateWalkingMinutes(50), 1);
+  assert.equal(calculateWalkingMinutes(83), 1);
+  assert.equal(calculateWalkingMinutes(166), 2);
+  assert.equal(calculateWalkingMinutes(250), 3);
+  assert.equal(calculateWalkingMinutes(500), 6);
+  assert.equal(calculateWalkingMinutes(830), 10);
+});
+
+test('journey plan calculates origin and destination walking legs at 83m per minute', async () => {
+  // Origin and destination points with street locations
+  const origin = { name: 'Ponto de Partida', lat: -3.0850, lng: -60.0300 };
+  const destination = { name: 'Ponto de Chegada', lat: -3.1300, lng: -60.0200 };
+  const result = await planTransitJourney(origin, destination);
+
+  assert.ok(result.options.length > 0);
+  for (const opt of result.options) {
+    for (const leg of opt.legs) {
+      if (leg.type === 'walk_origin' || leg.type === 'walk_dest') {
+        if (leg.distanceMeters && leg.distanceMeters > 20) {
+          const expectedMinutes = Math.max(1, Math.round(leg.distanceMeters / 83));
+          assert.equal(
+            leg.durationMinutes,
+            expectedMinutes,
+            `Expected ${expectedMinutes} mins for ${leg.distanceMeters}m walk, got ${leg.durationMinutes}`
+          );
+        }
+      }
+    }
+  }
 });
 

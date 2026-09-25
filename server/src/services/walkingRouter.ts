@@ -41,10 +41,11 @@ export async function getStreetWalkingPolyline(fromLng: number, fromLat: number,
           Number.isFinite(candidate.distance) &&
           Number.isFinite(candidate.duration)
         ) {
+          const distanceMeters = Math.round(candidate.distance);
           route = {
             coordinates,
-            distanceMeters: Math.round(candidate.distance),
-            durationMinutes: Math.max(1, Math.ceil(candidate.duration / 60))
+            distanceMeters,
+            durationMinutes: distanceMeters <= 20 ? 0 : Math.max(1, Math.round(distanceMeters / 83))
           };
           break;
         }

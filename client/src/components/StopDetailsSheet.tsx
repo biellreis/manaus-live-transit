@@ -38,7 +38,7 @@ export const StopDetailsSheet: React.FC<StopDetailsSheetProps> = ({
   if (!stop) return null;
 
   const distanceMeters = getHaversineDistanceMeters(userLocation.lat, userLocation.lng, stop.lat, stop.lng);
-  const walkMinutes = Math.max(1, Math.round(distanceMeters / 80));
+  const walkMinutes = Math.max(1, Math.round(distanceMeters / 83));
 
   const targetLineCodes = stop.lines || [];
   const passingLines = lines.filter(line => targetLineCodes.includes(line.code));

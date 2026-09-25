@@ -88,6 +88,13 @@ export interface CachedLineEntry {
   trips: TripDetail[];
 }
 
+export const WALKING_SPEED_METERS_PER_MINUTE = 83;
+
+export function calculateWalkingMinutes(distanceMeters: number): number {
+  if (distanceMeters <= 20) return 0;
+  return Math.max(1, Math.round(distanceMeters / WALKING_SPEED_METERS_PER_MINUTE));
+}
+
 export function validPoint(value: unknown): value is Point {
   const p = value as Point | undefined;
   return (
@@ -158,7 +165,7 @@ export function getNearestStops(point: Point, network: CachedLineEntry[], limit 
     }
 
     if (dist <= 2500) {
-      const walkMins = Math.max(0, Math.round(dist / 80));
+      const walkMins = Math.max(0, Math.round(dist / WALKING_SPEED_METERS_PER_MINUTE));
       resultList.push({
         ...stop,
         distanceMeters: Math.round(dist),
@@ -437,7 +444,7 @@ function walkingLeg(type: 'walk_origin' | 'walk_dest', route: WalkingRoute | nul
     : [[stop.lng, stop.lat], [point.lng, point.lat]];
 
   const rawDist = route?.distanceMeters ?? Math.round(distanceMeters(point, stop) * 1.25);
-  const rawMins = route?.durationMinutes ?? Math.max(1, Math.round(rawDist / 80));
+  const rawMins = calculateWalkingMinutes(rawDist);
   const distFormatted = formatDistanceLabel(rawDist);
 
   return {
@@ -536,7 +543,7 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
       }
 
       const totalDist = Math.round(rawDist * 1.25);
-      const totalMins = Math.max(1, Math.round(totalDist / 80));
+      const totalMins = calculateWalkingMinutes(totalDist);
 
       return { coords, dist: totalDist, mins: totalMins };
     };
@@ -880,7 +887,8 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
             if (r?.coordinates && r.coordinates.length >= 2) {
               leg.coordinates = r.coordinates;
               leg.distanceMeters = r.distanceMeters;
-              leg.durationMinutes = r.durationMinutes;
+              leg.durationMinutes = calculateWalkingMinutes(r.distanceMeters);
+              leg.description = `${formatDistanceLabel(leg.distanceMeters)} • cerca de ${leg.durationMinutes} min a pé`;
               opt.walkOriginCoords = r.coordinates;
             }
           })
@@ -891,7 +899,8 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
             if (r?.coordinates && r.coordinates.length >= 2) {
               leg.coordinates = r.coordinates;
               leg.distanceMeters = r.distanceMeters;
-              leg.durationMinutes = r.durationMinutes;
+              leg.durationMinutes = calculateWalkingMinutes(r.distanceMeters);
+              leg.description = `${formatDistanceLabel(leg.distanceMeters)} • cerca de ${leg.durationMinutes} min a pé`;
               opt.walkDestCoords = r.coordinates;
             }
           })
@@ -905,7 +914,12 @@ export async function planTransitJourney(origin: Point, destination: Point): Pro
               if (r?.coordinates && r.coordinates.length >= 2) {
                 leg.coordinates = r.coordinates;
                 leg.distanceMeters = r.distanceMeters;
-                leg.durationMinutes = r.durationMinutes;
+                leg.durationMinutes = calculateWalkingMinutes(r.distanceMeters);
+                const transferDistFormatted = formatDistanceLabel(leg.distanceMeters);
+                const nextLineCode = opt.verifiedLegs[1]?.line.code;
+                leg.description = leg.distanceMeters > 15
+                  ? `Caminhe ${transferDistFormatted} (${leg.durationMinutes} min) até a plataforma da Linha ${nextLineCode}`
+                  : `Desembarque e embarque direto no ${fromStop.stopName}`;
               }
             })
           );
