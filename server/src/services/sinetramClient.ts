@@ -48,6 +48,26 @@ function isAuxiliaryTrip(tripName: string): boolean {
   );
 }
 
+function tripNameEndpoints(tripName: string): { first: string; last: string } {
+  const parts = tripName
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .replace(/\([^)]*\)/g, '')
+    .split('→')
+    .map(part => part.replace(/[^A-Z0-9]+/g, ' ').trim());
+  return { first: parts[0] || '', last: parts[parts.length - 1] || '' };
+}
+
+function explicitTripDirection(tripName: string): 'ida' | 'volta' | null {
+  const { first, last } = tripNameEndpoints(tripName);
+  if (!tripName.includes('→')) return null;
+  const isCenter = (value: string) =>
+    /\b(CENTRO|MATRIZ|P DA SAUDADE|PRACA DA SAUDADE)\b/.test(value);
+  if (isCenter(last) && !isCenter(first)) return 'ida';
+  if (isCenter(first) && !isCenter(last)) return 'volta';
+  return null;
+}
+
 function classifyAndSortTrips(routeCode: string, routeName: string, trips: TripDetail[]): TripDetail[] {
   if (!trips || trips.length === 0) return [];
   if (trips.length === 1) {
@@ -104,6 +124,11 @@ function classifyAndSortTrips(routeCode: string, routeName: string, trips: TripD
     // Direction indicators in trip name
     if (name.includes('→ CENTRO') || name.includes('→ SAUDADE') || name.includes('→ T2') || name.includes('→ T1')) idaScore += 5;
     if (name.startsWith('CENTRO') || name.startsWith('SAUDADE') || name.startsWith('T2 →') || name.startsWith('T1 →')) voltaScore += 5;
+    // The provider's arrow gives the travel direction more reliably than
+    // stop labels such as "Sentido Bairro" or a longer reverse trip.
+    const explicit = explicitTripDirection(t.tripName);
+    if (explicit === 'ida') idaScore += 100;
+    if (explicit === 'volta') voltaScore += 100;
 
     // Prefer full trips (higher stop counts) over short turns
     idaScore += (t.stops?.length || 0) * 0.5;
@@ -128,18 +153,52 @@ function classifyAndSortTrips(routeCode: string, routeName: string, trips: TripD
     .sort((a, b) => b.voltaScore - a.voltaScore);
   const bestVolta = sortedForVolta[0]?.trip;
 
+  const idaEndpoints = tripNameEndpoints(bestIda.tripName);
+  const voltaEndpoints = bestVolta ? tripNameEndpoints(bestVolta.tripName) : null;
+  const endpointDistance = (trip: TripDetail, reference: TripDetail | undefined): number => {
+    if (!reference || trip.stops.length === 0 || reference.stops.length === 0) return Infinity;
+    const first = trip.stops[0];
+    const last = trip.stops[trip.stops.length - 1];
+    const referenceFirst = reference.stops[0];
+    const referenceLast = reference.stops[reference.stops.length - 1];
+    const start = first.stopId > 0 && first.stopId === referenceFirst.stopId ? 0 :
+      haversineMeters(first.lat, first.lng, referenceFirst.lat, referenceFirst.lng);
+    const end = last.stopId > 0 && last.stopId === referenceLast.stopId ? 0 :
+      haversineMeters(last.lat, last.lng, referenceLast.lat, referenceLast.lng);
+    return Math.max(start, end);
+  };
   const classified = trips.map(t => {
     if (t.tripId === bestIda.tripId) return { ...t, directionType: 'ida' as const };
     if (bestVolta && t.tripId === bestVolta.tripId) return { ...t, directionType: 'volta' as const };
+    const explicit = explicitTripDirection(t.tripName);
+    if (explicit) return { ...t, directionType: explicit };
+    // Variant names are often abbreviated (for example, "T7"), while their
+    // actual first and last stops still identify the travel direction.
+    const idaDistance = endpointDistance(t, bestIda);
+    const voltaDistance = endpointDistance(t, bestVolta);
+    const matchesIda = idaDistance <= 120 && voltaDistance - idaDistance > 75;
+    const matchesVolta = voltaDistance <= 120 && idaDistance - voltaDistance > 75;
+    if (matchesIda) return { ...t, directionType: 'ida' as const };
+    if (matchesVolta) return { ...t, directionType: 'volta' as const };
+    const endpoints = tripNameEndpoints(t.tripName);
+    const idaMatches = Number(!!endpoints.first && endpoints.first === idaEndpoints.first) +
+      Number(!!endpoints.last && endpoints.last === idaEndpoints.last);
+    const voltaMatches = voltaEndpoints
+      ? Number(!!endpoints.first && endpoints.first === voltaEndpoints.first) +
+        Number(!!endpoints.last && endpoints.last === voltaEndpoints.last)
+      : 0;
+    if (idaMatches > voltaMatches) return { ...t, directionType: 'ida' as const };
+    if (voltaMatches > idaMatches) return { ...t, directionType: 'volta' as const };
     return { ...t, directionType: 'auxiliar' as const };
   });
 
-  // Always return sorted so IDA is at index 0, VOLTA is at index 1
+  // Keep the representative paths first; variant trips may share a direction.
   return classified.sort((a, b) => {
-    const order: Record<string, number> = { ida: 0, volta: 1, circular: 0, auxiliar: 2 };
-    const oA = order[a.directionType] ?? 2;
-    const oB = order[b.directionType] ?? 2;
-    return oA - oB;
+    const rank = (trip: TripDetail) =>
+      trip.tripId === bestIda.tripId ? 0 :
+      trip.tripId === bestVolta?.tripId ? 1 :
+      trip.directionType === 'auxiliar' ? 3 : 2;
+    return rank(a) - rank(b);
   });
 }
 
@@ -252,11 +311,32 @@ function haversineMeters(lat1: number, lon1: number, lat2: number, lon2: number)
   return R * c;
 }
 
+function distanceToTripMeters(lat: number, lng: number, trip: TripDetail): number {
+  const coordinates = trip.coordinates;
+  if (coordinates.length < 2) return Infinity;
+  const metersPerDegreeLng = 111195 * Math.cos(lat * Math.PI / 180);
+  let nearest = Infinity;
+  for (let i = 1; i < coordinates.length; i++) {
+    const [previousLng, previousLat] = coordinates[i - 1];
+    const [nextLng, nextLat] = coordinates[i];
+    const ax = (previousLng - lng) * metersPerDegreeLng;
+    const ay = (previousLat - lat) * 111195;
+    const dx = (nextLng - previousLng) * metersPerDegreeLng;
+    const dy = (nextLat - previousLat) * 111195;
+    const segmentLengthSquared = dx * dx + dy * dy;
+    const progress = segmentLengthSquared > 0
+      ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / segmentLengthSquared))
+      : 0;
+    nearest = Math.min(nearest, Math.hypot(ax + progress * dx, ay + progress * dy));
+  }
+  return nearest;
+}
+
 class SinetramClient {
   private project = '4pc1e';
   private baseUrl = 'https://editor.mobilibus.com';
   private cache = new Map<string, CacheEntry<unknown>>();
-  private vehicleHistory = new Map<string, { lat: number; lng: number; timestamp: number; speedKmh: number }>();
+  private vehicleHistory = new Map<string, { lat: number; lng: number; timestamp: number; speedKmh?: number }>();
 
   private getCached<T>(key: string): T | null {
     const entry = this.cache.get(key) as CacheEntry<T> | undefined;
@@ -575,6 +655,9 @@ class SinetramClient {
         return Number.isFinite(lat) && Number.isFinite(lon) && lat >= -3.3 && lat <= -2.7 && lon >= -60.3 && lon <= -59.7;
       });
 
+      // Use the same classified itinerary sent to the Linhas tab, including
+      // direction variants, instead of resolving it separately per vehicle.
+      const trips = await this.getRouteItinerary(routeId);
       const vehicles: LiveBus[] = validVehicles.map((v: any) => {
         const id = String(v.id || 'ONIBUS');
         const lat = Number(v.lat);
@@ -583,29 +666,27 @@ class SinetramClient {
         const heading = Number(v.dir || 0);
 
         // Calculate REAL GPS speed (km/h) via Haversine delta tracking
-        let calculatedSpeedKmh: number | undefined = typeof v.sp === 'number' ? v.sp : typeof v.speed === 'number' ? v.speed : undefined;
+        let calculatedSpeedKmh: number | undefined =
+          typeof v.sp === 'number' ? v.sp : typeof v.speed === 'number' ? v.speed : undefined;
         const prev = this.vehicleHistory.get(id);
         if (prev) {
           const deltaSec = (pt - prev.timestamp) / 1000;
-          if (deltaSec >= 1 && deltaSec <= 300) {
+          if (calculatedSpeedKmh === undefined && deltaSec >= 1 && deltaSec <= 300) {
             const distM = haversineMeters(prev.lat, prev.lng, lat, lng);
             const rawSpeed = Math.round((distM / deltaSec) * 3.6);
             if (rawSpeed >= 0 && rawSpeed <= 90) {
               calculatedSpeedKmh = rawSpeed;
-            } else if (typeof prev.speedKmh === 'number') {
-              calculatedSpeedKmh = prev.speedKmh;
             }
-          } else if (typeof prev.speedKmh === 'number' && prev.speedKmh > 0) {
-            calculatedSpeedKmh = prev.speedKmh;
           }
         }
-        if (typeof calculatedSpeedKmh === 'number') {
+        // The first fix must be retained even when the provider omits speed.
+        // Repeated/out-of-order timestamps must not reset the movement baseline.
+        if (!prev || pt > prev.timestamp) {
           this.vehicleHistory.set(id, { lat, lng, timestamp: pt, speedKmh: calculatedSpeedKmh });
         }
 
         // Trip IDs describe the actual itinerary. Destination names alone do
         // not establish ida/volta consistently across different lines.
-        const trips = getOfflineTrips(routeId);
         const sourceTrip = trips.find(trip => trip.tripId === Number(v.tid));
         const label = String(v.lb || '').toUpperCase();
         let direction: 'ida' | 'volta' | 'desconhecido' = 'desconhecido';
@@ -615,6 +696,22 @@ class SinetramClient {
           direction = 'ida';
         } else if (/\bVOLTA\b/.test(label)) {
           direction = 'volta';
+        }
+
+        // At a clearly separated branch, GPS on the opposite official shape
+        // is stronger evidence than a stale trip assignment. Near shared
+        // streets and terminals, keep the provider trip ID.
+        if (sourceTrip && (direction === 'ida' || direction === 'volta')) {
+          const assignedDistance = distanceToTripMeters(lat, lng, sourceTrip);
+          if (assignedDistance > 250) {
+            const opposite = direction === 'ida' ? 'volta' : 'ida';
+            const oppositeDistance = Math.min(...trips
+              .filter(trip => trip.directionType === opposite)
+              .map(trip => distanceToTripMeters(lat, lng, trip)));
+            if (oppositeDistance < 80 && assignedDistance - oppositeDistance > 200) {
+              direction = opposite;
+            }
+          }
         }
 
         return {

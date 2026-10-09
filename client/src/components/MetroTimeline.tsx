@@ -52,8 +52,11 @@ export const MetroTimeline: React.FC<MetroTimelineProps> = ({
   // Match live vehicles to stops along this trip
   const getVehicleNearStop = (stop: StopInfo): LiveBus | undefined => {
     return vehicles.find(v => {
-      // Must match direction tripId if available
-      if (v.tripId && v.tripId !== trip.tripId) return false;
+      // Direction variants and corrected stale trip IDs still share stops
+      // with the representative path; never place an unknown bus on it.
+      if ((trip.directionType === 'ida' || trip.directionType === 'volta') &&
+          v.direction !== trip.directionType) return false;
+      if (trip.directionType === 'auxiliar' && v.tripId !== trip.tripId) return false;
       const latDiff = Math.abs(v.lat - stop.lat);
       const lngDiff = Math.abs(v.lng - stop.lng);
       return latDiff < 0.0035 && lngDiff < 0.0035;
@@ -202,16 +205,15 @@ export const MetroTimeline: React.FC<MetroTimelineProps> = ({
                     haptic.mediumTap();
                     onSelectBus(nearbyBus);
                   }}
-                  className="interactive-tap"
+                  className="interactive-tap bus-direction-badge"
+                  data-direction={nearbyBus.direction === 'ida' || nearbyBus.direction === 'volta' ? nearbyBus.direction : 'desconhecido'}
+                  aria-label={`Ônibus ${nearbyBus.id}, sentido ${nearbyBus.direction === 'ida' || nearbyBus.direction === 'volta' ? nearbyBus.direction : 'não confirmado'}`}
                   style={{
-                    background: '#1E293B',
-                    border: '1px solid var(--border-medium)',
                     borderRadius: '8px',
                     padding: '4px 8px',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '5px',
-                    color: '#60A5FA',
                     fontSize: '11px',
                     fontWeight: 700,
                     boxShadow: 'var(--shadow-subtle)'

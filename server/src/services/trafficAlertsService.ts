@@ -252,6 +252,15 @@ export async function getLiveTrafficAlerts(forceRefresh = false): Promise<Traffi
 
       if (w.city && !w.city.toLowerCase().includes('manaus')) return;
       if (!['ACCIDENT','ROAD_CLOSED','HAZARD','JAM','POLICE','CONSTRUCTION'].includes(type)) return;
+      // A fresh scraper run can still contain old reports. Only publish
+      // time, not scrape time, can establish whether an incident is recent.
+      const publishedAt = w.publishDatetimeUtc || w.publish_datetime_utc;
+      const publishedMs = publishedAt ? Date.parse(publishedAt) : NaN;
+      const maxAgeMs = type === 'ROAD_CLOSED' || type === 'CONSTRUCTION'
+        ? 24 * 60 * 60 * 1000
+        : 6 * 60 * 60 * 1000;
+      if (!Number.isFinite(publishedMs) || publishedMs > now.getTime() + 2 * 60 * 1000 ||
+          now.getTime() - publishedMs > maxAgeMs) return;
       const location = { street: w.street?.trim() || 'Via não informada', neighborhood: w.city || 'Manaus' };
       const category = type === 'ACCIDENT' || type === 'ROAD_CLOSED' || type === 'CONSTRUCTION' || subtype.includes('CONSTRUCTION') ? 'accidents' : type === 'JAM' ? 'jams' : type === 'POLICE' ? 'police' : 'hazards';
 
@@ -280,8 +289,7 @@ export async function getLiveTrafficAlerts(forceRefresh = false): Promise<Traffi
         severity = 'info';
       }
 
-      const dt = w.publishDatetimeUtc || w.publish_datetime_utc || w._fetchedAt || wazeSnapshot.source.updatedAt;
-      const parsed = dt ? new Date(dt) : now;
+      const parsed = new Date(publishedMs);
       const timeText = Number.isFinite(parsed.getTime()) ? parsed.toLocaleString('pt-BR', { timeZone:'America/Manaus', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : 'Horário não informado';
 
       alerts.push({
@@ -291,7 +299,7 @@ export async function getLiveTrafficAlerts(forceRefresh = false): Promise<Traffi
         corridorName: location.street,
         neighborhood: location.neighborhood,
         title,
-        description: w.alertDescription || `${title} em ${location.street}, ${location.neighborhood}. Monitoramento em tempo real.`,
+        description: w.alertDescription || `${title} em ${location.street}, ${location.neighborhood}. Relato coletado do Waze.`,
         timestamp: timeText
       });
     });

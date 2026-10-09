@@ -5,6 +5,7 @@ import type { UserLocation } from '../hooks/useUserLocation.js';
 import type { LiveBus, StopInfo } from '../types/transit.js';
 import { Navigation, Maximize2 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
+import { VehicleMarkerMotion } from '../utils/vehicleMarkerMotion.js';
 
 interface HomeMiniMapProps {
   userLocation: UserLocation;
@@ -25,6 +26,7 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
   const map = useRef<maplibregl.Map | null>(null);
   const userMarker = useRef<maplibregl.Marker | null>(null);
   const busMarkers = useRef<Map<string, maplibregl.Marker>>(new Map());
+  const busMotion = useRef(new VehicleMarkerMotion());
   const stopMarkers = useRef<maplibregl.Marker[]>([]);
   const haptic = useHaptic();
 
@@ -87,6 +89,7 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
       .addTo(instance);
 
     return () => {
+      busMotion.current.clear();
       instance.remove();
       map.current = null;
     };
@@ -140,23 +143,15 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
     vehicles.forEach(bus => {
       activeIds.add(bus.id);
       let marker = busMarkers.current.get(bus.id);
-      const isVolta = bus.direction === 'volta';
-      const color = isVolta ? '#F97316' : '#2563EB';
+      const markerDirection = bus.direction === 'ida' || bus.direction === 'volta'
+        ? bus.direction
+        : 'desconhecido';
 
       if (!marker) {
         const el = document.createElement('div');
-        el.style.width = '24px';
-        el.style.height = '24px';
-        el.style.borderRadius = '50%';
-        el.style.backgroundColor = color;
-        el.style.border = '2px solid #FFFFFF';
-        el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.7)';
-        el.style.display = 'flex';
-        el.style.alignItems = 'center';
-        el.style.justifyContent = 'center';
-        el.style.cursor = 'pointer';
+        el.className = 'home-bus-marker';
         el.innerHTML = `
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M8 6v6"/>
             <path d="M15 6v6"/>
             <path d="M2 12h19.6"/>
@@ -174,15 +169,22 @@ export const HomeMiniMap: React.FC<HomeMiniMapProps> = ({
           .addTo(currentMap);
 
         busMarkers.current.set(bus.id, marker);
-      } else {
-        marker.setLngLat([bus.lng, bus.lat]);
       }
+
+      busMotion.current.update(bus, marker);
+
+      const markerElement = marker.getElement();
+      markerElement.dataset.direction = markerDirection;
+      markerElement.setAttribute('role', 'img');
+      markerElement.setAttribute('aria-label', `Ônibus ${bus.routeCode || ''}, sentido ${markerDirection === 'desconhecido' ? 'não confirmado' : markerDirection}`);
+      markerElement.title = `Ônibus ${bus.routeCode || ''} · ${markerDirection === 'desconhecido' ? 'sentido não confirmado' : markerDirection === 'ida' ? 'Ida' : 'Volta'}`;
     });
 
     for (const [id, marker] of busMarkers.current.entries()) {
       if (!activeIds.has(id)) {
         marker.remove();
         busMarkers.current.delete(id);
+        busMotion.current.remove(id);
       }
     }
   }, [vehicles]);

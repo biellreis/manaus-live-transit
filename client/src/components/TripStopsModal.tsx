@@ -50,7 +50,7 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
 
   // Filter vehicles on this trip's direction
   const activeVehicles = useMemo(() => {
-    return vehicles.filter(v => (!v.direction || v.direction === 'desconhecido' ? true : v.direction === activeDirection));
+    return vehicles.filter(v => v.direction === activeDirection);
   }, [vehicles, activeDirection]);
 
   // Real-time mapping of buses to stops
@@ -230,15 +230,15 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div
+                className="bus-direction-box"
+                data-direction={activeDirection}
                 style={{
                   width: '38px',
                   height: '38px',
                   borderRadius: '10px',
-                  backgroundColor: isVolta ? '#EA580C' : '#2563EB',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#FFFFFF'
+                  justifyContent: 'center'
                 }}
               >
                 <Bus size={20} />
@@ -278,6 +278,9 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
             const busesHere = busesPerStop.get(index) || [];
             const hasBus = busesHere.length > 0;
             const hasLeadBus = busesHere.some(b => b.isLead);
+            const busMarkerDirection = busesHere.some(({ bus }) => bus.direction === activeDirection)
+              ? activeDirection
+              : 'desconhecido';
             const isPassed = index < leadStopIndex;
 
             const upperName = stop.stopName.toUpperCase();
@@ -333,17 +336,17 @@ export const TripStopsModal: React.FC<TripStopsModalProps> = ({
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '22px', flexShrink: 0, marginTop: '2px' }}>
                   {hasBus ? (
                     <div
+                      className="bus-direction-box"
+                      data-direction={busMarkerDirection}
+                      aria-label={`Ônibus no sentido ${busMarkerDirection === 'desconhecido' ? 'não confirmado' : busMarkerDirection}`}
                       style={{
                         width: '22px',
                         height: '22px',
                         borderRadius: '6px',
-                        backgroundColor: hasLeadBus ? '#2563EB' : '#EA580C',
-                        border: '2px solid var(--bg-card, #FFFFFF)',
                         boxShadow: '0 2px 10px rgba(0, 0, 0, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#FFFFFF'
+                        justifyContent: 'center'
                       }}
                     >
                       <Bus size={12} strokeWidth={2.6} />

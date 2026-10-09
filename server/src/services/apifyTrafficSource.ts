@@ -29,7 +29,7 @@ export async function fetchWazeLiveItems(): Promise<Snapshot> {
 }
 async function loadSnapshot(): Promise<Snapshot> {
   const token = process.env.APIFY_API_TOKEN;
-  const source: TrafficSource = { name: 'Monitoramento em Tempo Real', status: 'not_configured', updatedAt: null, message: 'Fonte de ocorrências não configurada.' };
+  const source: TrafficSource = { name: 'Ocorrências do Waze', status: 'not_configured', updatedAt: null, message: 'Fonte de ocorrências não configurada.' };
   if (!token) return {items: [], source};
   const request = async (path: string, init: RequestInit = {}) => {
     const response = await fetch(`https://api.apify.com/v2/${path}`, {
@@ -63,7 +63,7 @@ async function loadSnapshot(): Promise<Snapshot> {
     }
     const items = await request(`datasets/${run.defaultDatasetId}/items?clean=true&limit=200`) as WazeScraperItem[];
     if (!Array.isArray(items)) throw new Error('Invalid dataset');
-    return {items, source: {...source, updatedAt, status: source.status === 'updating' ? 'updating' : 'connected', message: source.status === 'updating' ? 'Atualizando ocorrências; exibindo a última coleta.' : 'Ocorrências recebidas em tempo real.'}};
+    return {items, source: {...source, updatedAt, status: source.status === 'updating' ? 'updating' : 'connected', message: source.status === 'updating' ? 'Atualizando ocorrências; exibindo a última coleta.' : 'Coleta recente de ocorrências do Waze.'}};
   } catch (error) {
     console.warn('[Traffic] Apify unavailable:', error instanceof Error ? error.message : 'Request failed');
     return {items: [], source: {...source, status:'unavailable', message:'Não foi possível consultar as ocorrências agora. Toque em atualizar para tentar novamente.'}};

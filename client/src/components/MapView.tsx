@@ -5,8 +5,8 @@ import type { RouteSummary, TripDetail, LiveBus, TransitHub, StopInfo, PlannedTr
 import type { UserLocation } from '../hooks/useUserLocation.js';
 import { ArrowLeft, Navigation, Compass, Sun, Moon } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
-import { getBusLineColor } from '../utils/transitColors.js';
 import { resolveStreetWalkingPath } from '../utils/walkingRoute.js';
+import { VehicleMarkerMotion } from '../utils/vehicleMarkerMotion.js';
 
 interface MapViewProps {
   selectedLine?: RouteSummary | null;
@@ -44,6 +44,7 @@ export const MapView: React.FC<MapViewProps> = ({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const busMarkers = useRef<Map<string, maplibregl.Marker>>(new Map());
+  const busMotion = useRef(new VehicleMarkerMotion());
   const stopMarkers = useRef<maplibregl.Marker[]>([]);
   const terminalMarkers = useRef<maplibregl.Marker[]>([]);
   const userMarker = useRef<maplibregl.Marker | null>(null);
@@ -213,6 +214,7 @@ export const MapView: React.FC<MapViewProps> = ({
 
     return () => {
       resizeObserver.disconnect();
+      busMotion.current.clear();
       setIsMapLoaded(false);
       instance.remove();
       map.current = null;
@@ -701,6 +703,7 @@ export const MapView: React.FC<MapViewProps> = ({
         marker.remove();
       }
       busMarkers.current.clear();
+      busMotion.current.clear();
       return;
     }
 
@@ -710,10 +713,10 @@ export const MapView: React.FC<MapViewProps> = ({
     const isVolta = activeTrip?.directionType === 'volta';
     const activeDirection = isVolta ? 'volta' : 'ida';
 
-    // The feed is already scoped to the selected line. Do not discard
-    // valid buses on detours or outside the displayed journey segment.
+    // The line feed is shared by both tabs. An unconfirmed direction must
+    // remain on Início, never be presented as both IDA and VOLTA.
     const filteredVehicles = activeTrip
-      ? vehicles.filter(v => !v.direction || v.direction === 'desconhecido' || v.direction === activeDirection)
+      ? vehicles.filter(v => v.direction === activeDirection)
       : vehicles;
 
     filteredVehicles.forEach(bus => {
@@ -721,8 +724,9 @@ export const MapView: React.FC<MapViewProps> = ({
       let marker = busMarkers.current.get(bus.id);
       const isSelected = selectedBus?.id === bus.id;
       const busCode = bus.routeCode || selectedLine?.code || '640';
-      const lineColorInfo = getBusLineColor(busCode);
-      const color = isVolta ? '#F97316' : lineColorInfo.bg;
+      const markerDirection = bus.direction === 'ida' || bus.direction === 'volta'
+        ? bus.direction
+        : 'desconhecido';
 
       // Normalized heading in [0, 360)
       const headingDeg = (Math.round(bus.heading) % 360 + 360) % 360;
@@ -731,23 +735,22 @@ export const MapView: React.FC<MapViewProps> = ({
         const el = document.createElement('div');
         el.className = 'modern-bus-marker';
         el.id = `bus-${bus.id}`;
+        el.setAttribute('role', 'button');
+        el.tabIndex = 0;
 
         // Top line code badge
         const badge = document.createElement('div');
         badge.className = 'bus-line-badge';
         badge.innerText = busCode;
-        badge.style.backgroundColor = lineColorInfo.bg;
         el.appendChild(badge);
 
         // Circular vehicle disc
         const disc = document.createElement('div');
         disc.className = 'bus-disc';
-        disc.style.borderColor = color;
 
         // Direction pointer arrow (rotates around disc center based on travel heading)
         const pointer = document.createElement('div');
         pointer.className = 'bus-direction-pointer';
-        pointer.style.borderBottomColor = color;
         pointer.style.transform = `rotate(${headingDeg}deg) translateY(-17px)`;
         disc.appendChild(pointer);
 
@@ -755,7 +758,7 @@ export const MapView: React.FC<MapViewProps> = ({
         const iconContainer = document.createElement('div');
         iconContainer.className = 'bus-icon-upright';
         iconContainer.innerHTML = `
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4c-1.1 0-2.1.8-2.4 1.8l-1.4 5c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/><circle cx="7" cy="18" r="2"/><circle cx="15" cy="18" r="2"/>
           </svg>
         `;
@@ -775,6 +778,12 @@ export const MapView: React.FC<MapViewProps> = ({
             duration: 600
           });
         });
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        });
 
         marker = new maplibregl.Marker({ element: el })
           .setLngLat([bus.lng, bus.lat])
@@ -782,31 +791,35 @@ export const MapView: React.FC<MapViewProps> = ({
 
         busMarkers.current.set(bus.id, marker);
       } else {
-        marker.setLngLat([bus.lng, bus.lat]);
-
         // Update direction pointer rotation without rotating the bus icon
         const disc = marker.getElement().querySelector('.bus-disc') as HTMLElement | null;
         if (disc) {
-          disc.style.borderColor = isSelected ? '#FFFFFF' : color;
           const pointer = disc.querySelector('.bus-direction-pointer') as HTMLElement;
           if (pointer) {
             pointer.style.transform = `rotate(${headingDeg}deg) translateY(-17px)`;
-            pointer.style.borderBottomColor = color;
           }
         }
 
         const badge = marker.getElement().querySelector('.bus-line-badge') as HTMLElement | null;
         if (badge) {
           badge.innerText = busCode;
-          badge.style.backgroundColor = lineColorInfo.bg;
         }
       }
+
+      busMotion.current.update(bus, marker);
+
+      const markerElement = marker.getElement();
+      markerElement.dataset.direction = markerDirection;
+      markerElement.dataset.selected = String(isSelected);
+      markerElement.setAttribute('aria-label', `Ônibus ${busCode}, sentido ${markerDirection === 'desconhecido' ? 'não confirmado' : markerDirection}`);
+      markerElement.title = `Ônibus ${busCode} · ${markerDirection === 'desconhecido' ? 'sentido não confirmado' : markerDirection === 'ida' ? 'Ida' : 'Volta'}`;
     });
 
     for (const [id, marker] of busMarkers.current.entries()) {
       if (!activeIds.has(id)) {
         marker.remove();
         busMarkers.current.delete(id);
+        busMotion.current.remove(id);
       }
     }
   }, [vehicles, activeTrip, selectedBus, selectedLine, isRouteView]);

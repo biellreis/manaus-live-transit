@@ -54,13 +54,14 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   const activeDirection = isVolta ? 'volta' : 'ida';
   const themeColor = isVolta ? '#F97316' : '#3B82F6';
 
-  // Strict Direction Filter: Show vehicles matching active direction, preserving unknown direction so buses are never lost
+  // Only confirmed vehicles count for the selected direction.
   const activeVehicles = useMemo(() => {
-    return vehicles.filter(v => (!v.direction || v.direction === 'desconhecido' ? true : v.direction === activeDirection));
+    return vehicles.filter(v => v.direction === activeDirection);
   }, [vehicles, activeDirection]);
 
 
   const isWithinOperationalHours = activeVehicles.length > 0;
+  const hasUnknownDirectionVehicles = vehicles.some(v => !v.direction || v.direction === 'desconhecido');
 
   if (!selectedLine || !activeTrip) return null;
 
@@ -240,15 +241,15 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div
+                className="bus-direction-box"
+                data-direction={activeDirection}
                 style={{
                   width: '40px',
                   height: '40px',
                   borderRadius: '12px',
-                  backgroundColor: isVolta ? '#EA580C' : '#2563EB',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#FFFFFF'
+                  justifyContent: 'center'
                 }}
               >
                 <Bus size={22} />
@@ -280,7 +281,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   lineHeight: 1
                 }}
               >
-                {isWithinOperationalHours ? 'EM OPERAÇÃO' : 'FORA DE PICO'}
+                {isWithinOperationalHours ? 'EM OPERAÇÃO' : hasUnknownDirectionVehicles ? 'SENTIDO NÃO CONFIRMADO' : 'SEM ÔNIBUS NESTE SENTIDO'}
               </span>
             </div>
           </div>

@@ -43,6 +43,62 @@ test('live direction follows trip IDs and preserves northern Manaus vehicles', a
   } finally { globalThis.fetch=original; }
 });
 
+test('route directions keep the 409 paths and correct reversed/variant itineraries', async () => {
+  const route409 = await sinetram.getRouteItinerary('409');
+  assert.deepEqual(route409.slice(0, 2).map(t => [t.tripId, t.directionType]),
+    [[5027640, 'ida'], [5027641, 'volta']]);
+
+  const route616 = await sinetram.getRouteItinerary('616');
+  assert.deepEqual(route616.slice(0, 2).map(t => [t.tripId, t.directionType]),
+    [[5033888, 'ida'], [5033889, 'volta']]);
+  assert.equal(route616.find(t => t.tripId === 193253)?.directionType, 'ida');
+  assert.equal(route616.find(t => t.tripId === 200675)?.directionType, 'volta');
+
+  const route448 = await sinetram.getRouteItinerary('448');
+  assert.equal(route448.find(t => t.tripId === 5039848)?.directionType, 'ida');
+  assert.equal(route448.find(t => t.tripId === 5039849)?.directionType, 'volta');
+
+  const route005 = await sinetram.getRouteItinerary('005');
+  assert.equal(route005.find(t => t.tripId === 4965008)?.directionType, 'ida');
+  assert.equal(route005.find(t => t.tripId === 4965009)?.directionType, 'volta');
+  assert.equal(route005.find(t => t.tripId === 7812189)?.directionType, 'volta');
+  assert.equal(route005.find(t => t.tripId === 7812190)?.directionType, 'ida');
+
+  // Garage trips do not share both endpoints with either main direction.
+  const route678 = await sinetram.getRouteItinerary('678');
+  assert.equal(route678.find(t => t.tripId === 5027628)?.directionType, 'auxiliar');
+});
+
+test('409 corrects a stale return trip only when GPS is clearly on the outbound shape', async () => {
+  const originalFetch = globalThis.fetch;
+  const originalNow = Date.now;
+  let now = 1_000_000;
+  let sourceTime = 1_791_529_161_000;
+  Date.now = () => now;
+  globalThis.fetch = async () => Response.json({ vehicles: [{
+    id: '409-direction-probe', lat: -3.09988, lon: -60.01356,
+    pt: sourceTime, tid: 5027641, lb: 'T2 → Pq. 10'
+  }] });
+  try {
+    const first = await sinetram.getRealtimeVehicles('213t', '409');
+    assert.equal(first[0]?.direction, 'ida');
+    assert.equal(first[0]?.speedKmh, undefined);
+
+    now += 6000;
+    sourceTime += 6000;
+    globalThis.fetch = async () => Response.json({ vehicles: [{
+      id: '409-direction-probe', lat: -3.10010, lon: -60.01357,
+      pt: sourceTime, tid: 5027640, lb: 'Pq. 10 → T2'
+    }] });
+    const second = await sinetram.getRealtimeVehicles('213t', '409');
+    assert.equal(second[0]?.direction, 'ida');
+    assert.ok((second[0]?.speedKmh || 0) > 0);
+  } finally {
+    globalThis.fetch = originalFetch;
+    Date.now = originalNow;
+  }
+});
+
 test('recent destinations logic deduplicates, infers line codes, and prepends newly chosen destinations', async () => {
   const { guessLineCode } = await import('../client/src/utils/recentDestinations.js');
   assert.equal(guessLineCode('Terminal 1 - Constantino Nery'), '640');
@@ -76,6 +132,7 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
     heading: 0,
     headsign: 'T3',
     timestamp: now,
+    direction: 'ida',
     speedKmh: 20
   };
 
@@ -84,6 +141,11 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
   assert.ok(typeof res1.etaMinutes === 'number' && res1.etaMinutes > 0);
   assert.equal(res1.primaryBus?.id, 'bus-lead');
   assert.equal(res1.passedBusesCount, 0);
+  const unknownDirection = calculateLiveTripEta(
+    mockStops as any, boardStop as any,
+    [{ ...approachingBus, direction: 'desconhecido' } as any], now, 24, 'ida'
+  );
+  assert.equal(unknownDirection.status, 'no_buses');
 
   // Test Case 2: Bus 1 has PASSED the stop (now at Parada 4, north of AV JOSÉ LINDOSO 15)
   const passedBus = {
@@ -93,6 +155,7 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
     heading: 0,
     headsign: 'T3',
     timestamp: now,
+    direction: 'ida',
     speedKmh: 25
   };
 
@@ -111,6 +174,7 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
     heading: 0,
     headsign: 'T3',
     timestamp: now,
+    direction: 'ida',
     speedKmh: 20
   };
 
@@ -129,6 +193,7 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
     heading: 0,
     headsign: 'T3',
     timestamp: now,
+    direction: 'ida',
     speedKmh: 10
   };
   const res3 = calculateLiveTripEta(mockStops as any, boardStop as any, [atStopBus as any], now, 24, 'ida');
@@ -154,6 +219,7 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
     heading: 180,
     headsign: 'Centro',
     timestamp: now,
+    direction: 'ida',
     speedKmh: 22
   };
 
@@ -170,5 +236,3 @@ test('calculateLiveTripEta accurately detects approaching buses, passed buses, a
   assert.equal(resCloser.status, 'approaching');
   assert.ok(typeof resCloser.etaMinutes === 'number' && resCloser.etaMinutes < (resFull.etaMinutes || 10));
 });
-
-

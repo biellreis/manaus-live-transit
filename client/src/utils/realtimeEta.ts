@@ -133,11 +133,12 @@ export function calculateLiveTripEta(
     }
   }
 
-  // Filter vehicles by direction if available
+  // An ETA needs a confirmed direction; otherwise the bus may already be
+  // traveling away from the boarding stop.
   const activeDirection = directionType === 'volta' ? 'volta' : 'ida';
   const relevantVehicles = vehicles.filter(v => {
     if (!v.lat || !v.lng || v.lat === 0 || v.lng === 0) return false;
-    if (v.direction && v.direction !== 'desconhecido' && directionType && directionType !== 'circular') {
+    if (directionType === 'ida' || directionType === 'volta') {
       return v.direction === activeDirection;
     }
     return true;

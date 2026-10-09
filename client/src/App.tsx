@@ -166,7 +166,15 @@ export function App() {
             const trips = data.trips || [];
             setAllTrips(trips);
             const dirParam = new URLSearchParams(window.location.search).get('dir')?.toLowerCase();
-            const preferred = dirParam ? (trips.find(t => t.directionType === dirParam) || trips[0]) : trips[0];
+            const selectedBusDirection = selectedBus?.routeCode === selectedLine.code
+              ? selectedBus.direction
+              : null;
+            const requestedDirection = selectedBusDirection === 'ida' || selectedBusDirection === 'volta'
+              ? selectedBusDirection
+              : dirParam;
+            const preferred = requestedDirection
+              ? (trips.find(t => t.directionType === requestedDirection) || trips[0])
+              : trips[0];
             setActiveTrip(preferred || null);
           } else {
             setSchedule(data.services || []);

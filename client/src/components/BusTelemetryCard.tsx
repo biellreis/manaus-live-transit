@@ -92,19 +92,18 @@ export const BusTelemetryCard: React.FC<BusTelemetryCardProps> = ({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div
+            className="bus-direction-box"
+            data-direction={bus.direction === 'ida' || bus.direction === 'volta' ? bus.direction : 'desconhecido'}
             style={{
               width: '38px',
               height: '38px',
               borderRadius: '10px',
-              background: '#1E293B',
-              border: '1.5px solid var(--border-medium)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              color: '#F8FAFC'
+              justifyContent: 'center'
             }}
           >
-            <Bus size={20} color="#3B82F6" />
+            <Bus size={20} />
           </div>
 
           <div>
@@ -227,14 +226,18 @@ export const BusTelemetryCard: React.FC<BusTelemetryCardProps> = ({
         </div>
 
         {/* Direction */}
-        <div style={{ background: 'rgba(30, 41, 59, 0.5)', padding: '8px 4px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ color: '#3B82F6', marginBottom: '3px', display: 'flex', justifyContent: 'center' }}>
+        <div
+          className="bus-direction-box"
+          data-direction={bus.direction === 'ida' || bus.direction === 'volta' ? bus.direction : 'desconhecido'}
+          style={{ padding: '8px 4px', borderRadius: '10px' }}
+        >
+          <div style={{ marginBottom: '3px', display: 'flex', justifyContent: 'center' }}>
             <Bus size={13} />
           </div>
-          <div style={{ fontWeight: 700, color: bus.direction === 'volta' ? '#F97316' : '#60A5FA', fontSize: '11px' }}>
-            {bus.direction === 'volta' ? 'Volta' : 'Ida'}
+          <div style={{ fontWeight: 700, fontSize: '11px' }}>
+            {bus.direction === 'volta' ? 'Volta' : bus.direction === 'ida' ? 'Ida' : 'Não confirmado'}
           </div>
-          <div style={{ fontSize: '9px', color: 'var(--text-muted)', marginTop: '1px' }}>Sentido</div>
+          <div style={{ fontSize: '9px', opacity: 0.8, marginTop: '1px' }}>Sentido</div>
         </div>
 
         {/* Signal freshness */}

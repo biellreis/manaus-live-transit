@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { RotateCw, CheckCircle2, Navigation, AlertOctagon, AlertTriangle, ShieldAlert, Info } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import type { RouteSummary } from '../types/transit.js';
+import { hasFreshAlertSource } from '../utils/trafficAlertFreshness.js';
 
 interface TrafficAlertItem {
   id: string;
@@ -34,12 +35,12 @@ const LOCAL_STORAGE_KEY = 'mano_alerts_cache';
 let memoryAlertsCache: TrafficApiResponse | null = null;
 
 function getInitialTrafficData(): TrafficApiResponse | null {
-  if (memoryAlertsCache) return memoryAlertsCache;
+  if (memoryAlertsCache && hasFreshAlertSource(memoryAlertsCache.source)) return memoryAlertsCache;
   try {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed && Array.isArray(parsed.alerts)) {
+      if (parsed && Array.isArray(parsed.alerts) && hasFreshAlertSource(parsed.source)) {
         memoryAlertsCache = parsed;
         return parsed;
       }
@@ -82,9 +83,8 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       }
     } catch (err) {
       console.warn('[AlertsTab] Erro ao carregar alertas de trânsito:', err);
-      if (!trafficData && !memoryAlertsCache) {
-        setLoadError('Não foi possível atualizar os alertas. Tente novamente.');
-      }
+      setLoadError('Não foi possível atualizar a lista de ocorrências.');
+      setTrafficData(previous => hasFreshAlertSource(previous?.source) ? previous : null);
     } finally {
       setIsLoading(false);
     }
@@ -105,7 +105,16 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
     }, 400);
   };
 
-  const rawAlerts = trafficData?.alerts || [];
+  const feedAvailable = hasFreshAlertSource(trafficData?.source);
+  const rawAlerts = feedAvailable ? trafficData?.alerts || [] : [];
+  const sourceUpdatedAt = feedAvailable ? trafficData?.source?.updatedAt : null;
+  const sourceStatusText = isLoading && !trafficData
+    ? 'Consultando a lista de ocorrências…'
+    : loadError
+    ? `${loadError}${feedAvailable ? ' Exibindo a última coleta recente.' : ''}`
+    : sourceUpdatedAt
+    ? `${trafficData?.source?.status === 'updating' ? 'Última coleta' : 'Coleta Waze'}: ${new Date(sourceUpdatedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Manaus' })} às ${new Date(sourceUpdatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Manaus' })}`
+    : trafficData?.source?.message || 'Lista de ocorrências indisponível.';
 
   // Filter alerts based on active category
   const filteredAlerts = useMemo(() => {
@@ -243,7 +252,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               fontWeight: 500
             }}
           >
-            Ocorrências e trânsito em tempo real em Manaus
+            Condições das vias e ocorrências em Manaus
           </p>
         </div>
 
@@ -300,18 +309,12 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: isRefreshing ? '#F59E0B' : (trafficData ? '#10B981' : '#71717A'),
+              backgroundColor: isRefreshing || trafficData?.source?.status === 'updating' || (loadError && feedAvailable) ? '#F59E0B' : (feedAvailable ? '#10B981' : '#71717A'),
               display: 'inline-block'
             }}
           />
           <span style={{ fontWeight: 600, color: 'var(--text-primary, #E4E4E7)' }}>
-            {isLoading && !trafficData
-              ? 'Consultando dados de trânsito…'
-              : loadError && !trafficData
-              ? loadError
-              : trafficData?.source?.updatedAt
-              ? `Atualização: ${new Date(trafficData.source.updatedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Manaus' })} às ${new Date(trafficData.source.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Manaus' })}`
-              : 'Atualização: Em tempo real'}
+            {sourceStatusText}
           </span>
         </div>
         {isRefreshing && (
@@ -320,8 +323,16 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
           </span>
         )}
       </div>
+      {!isLoading && !feedAvailable && (
+        <div role="status" style={{ margin: '0 20px 16px', padding: '20px', borderRadius: 16, background: 'var(--bg-card, #18181B)', border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))' }}>
+          <strong style={{ color: 'var(--text-primary, #FFFFFF)', fontSize: 15 }}>Ocorrências indisponíveis no momento</strong>
+          <p style={{ color: 'var(--text-muted, #A1A1AA)', fontSize: 13, lineHeight: 1.5, margin: '6px 0 0' }}>
+            Não há uma coleta recente do Waze para mostrar. Isso não significa que o trânsito esteja livre.
+          </p>
+        </div>
+      )}
       {/* Category Filter Chips */}
-      <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px', overflowX: 'auto', scrollbarWidth: 'none' }}>
+      {feedAvailable && <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px', overflowX: 'auto', scrollbarWidth: 'none' }}>
         {[
           { id: 'all', label: 'Todos os Alertas', activeColor: '#2563EB' },
           { id: 'accidents', label: 'Acidentes e Bloqueios', activeColor: '#DC2626' },
@@ -355,7 +366,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
             </button>
           );
         })}
-      </div>
+      </div>}
 
       {/* Alerts Feed */}
       <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -461,7 +472,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         })}
 
         {/* Empty State when no alerts match (Solid 100% Blue Card, organized & diagrammed, title only) */}
-        {!isLoading && !loadError && filteredAlerts.length === 0 && (
+        {!isLoading && feedAvailable && filteredAlerts.length === 0 && (
           <div
             style={{
               backgroundColor: '#2563EB',
@@ -518,7 +529,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               }}
             >
               <Navigation size={13} strokeWidth={2.5} />
-              <span>Monitoramento em Tempo Real</span>
+              <span>Última coleta recente</span>
             </div>
           </div>
         )}
