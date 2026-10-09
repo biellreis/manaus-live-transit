@@ -1,30 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { RotateCw, CheckCircle2, Navigation, AlertOctagon, AlertTriangle, ShieldAlert, Info } from 'lucide-react';
+import { RotateCw, AlertOctagon, AlertTriangle, ShieldAlert, Info } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import type { RouteSummary } from '../types/transit.js';
-import { hasFreshAlertSource } from '../utils/trafficAlertFreshness.js';
-
-interface TrafficAlertItem {
-  id: string;
-  severity: 'info' | 'warning' | 'critical';
-  category?: 'accidents' | 'jams' | 'police' | 'hazards';
-  corridorName: string;
-  neighborhood?: string;
-  title: string;
-  description: string;
-  timestamp: string;
-}
-
-interface TrafficApiResponse {
-  source?: {status: 'connected' | 'updating' | 'unavailable' | 'not_configured'; name: string; updatedAt: string | null; message: string};
-  timestamp: string;
-  summary: {
-    overallStatus: 'normal' | 'lento' | 'atencao' | 'fora_horario';
-    totalTrackedBuses: number;
-    activeCorridorsCount: number;
-  };
-  alerts: TrafficAlertItem[];
-}
+import type { TrafficApiResponse } from '../types/trafficAlerts.js';
+import { hasActiveAlertEndTime, hasFreshAlertSource } from '../utils/trafficAlertFreshness.js';
+import { getTrafficAlertBadge, getTrafficAlertSourceText, type TrafficAlertBadgeKind } from '../utils/trafficAlertPresentation.js';
 
 interface AlertsTabProps {
   lines?: RouteSummary[];
@@ -33,6 +13,13 @@ interface AlertsTabProps {
 
 const LOCAL_STORAGE_KEY = 'mano_alerts_cache';
 let memoryAlertsCache: TrafficApiResponse | null = null;
+const BADGE_STYLE: Record<TrafficAlertBadgeKind, { bg: string; icon: typeof Info }> = {
+  accidents: { bg: '#DC2626', icon: AlertOctagon },
+  jams: { bg: '#D97706', icon: AlertTriangle },
+  police: { bg: '#2563EB', icon: ShieldAlert },
+  hazards: { bg: '#EA580C', icon: AlertTriangle },
+  other: { bg: '#71717A', icon: Info }
+};
 
 function getInitialTrafficData(): TrafficApiResponse | null {
   if (memoryAlertsCache && hasFreshAlertSource(memoryAlertsCache.source)) return memoryAlertsCache;
@@ -55,7 +42,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
   lines: _lines,
   onSelectLine: _onSelectLine
 }) => {
-  const [loadError, setLoadError] = useState('');
+  const [loadError, setLoadError] = useState(false);
   const initialData = useMemo(() => getInitialTrafficData(), []);
   const [trafficData, setTrafficData] = useState<TrafficApiResponse | null>(initialData);
   const [isLoading, setIsLoading] = useState(() => !initialData);
@@ -72,6 +59,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       if (!resp.ok) throw new Error('Serviço indisponível');
       if (resp.ok) {
         const data: TrafficApiResponse = await resp.json();
+        if (!Array.isArray(data.alerts)) throw new Error('Resposta de ocorrências inválida');
         setTrafficData(data);
         memoryAlertsCache = data;
         try {
@@ -79,11 +67,11 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         } catch {
           // ignore storage quota
         }
-        setLoadError('');
+        setLoadError(false);
       }
     } catch (err) {
       console.warn('[AlertsTab] Erro ao carregar alertas de trânsito:', err);
-      setLoadError('Não foi possível atualizar a lista de ocorrências.');
+      setLoadError(true);
       setTrafficData(previous => hasFreshAlertSource(previous?.source) ? previous : null);
     } finally {
       setIsLoading(false);
@@ -106,15 +94,14 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
   };
 
   const feedAvailable = hasFreshAlertSource(trafficData?.source);
-  const rawAlerts = feedAvailable ? trafficData?.alerts || [] : [];
-  const sourceUpdatedAt = feedAvailable ? trafficData?.source?.updatedAt : null;
-  const sourceStatusText = isLoading && !trafficData
-    ? 'Consultando a lista de ocorrências…'
-    : loadError
-    ? `${loadError}${feedAvailable ? ' Exibindo a última coleta recente.' : ''}`
-    : sourceUpdatedAt
-    ? `${trafficData?.source?.status === 'updating' ? 'Última coleta' : 'Coleta Waze'}: ${new Date(sourceUpdatedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Manaus' })} às ${new Date(sourceUpdatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Manaus' })}`
-    : trafficData?.source?.message || 'Lista de ocorrências indisponível.';
+  const rawAlerts = feedAvailable
+    ? (trafficData?.alerts || []).filter(alert => hasActiveAlertEndTime(alert.endTime))
+    : [];
+  const sourceStatusText = getTrafficAlertSourceText(trafficData?.source, {
+    isLoading,
+    hasData: Boolean(trafficData),
+    loadError
+  });
 
   // Filter alerts based on active category
   const filteredAlerts = useMemo(() => {
@@ -131,80 +118,6 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       return true; // 'all'
     });
   }, [rawAlerts, selectedFilter]);
-
-  // Determine pill badge metadata and icon based on alert properties and severity level
-  const getBadgeConfig = (alert: TrafficAlertItem) => {
-    const t = (alert.title || '').toLowerCase();
-    const d = (alert.description || '').toLowerCase();
-    const isCritical = alert.severity === 'critical';
-    const isWarning = alert.severity === 'warning';
-
-    // 1. Nível Crítico (Acidentes, Vias Interditadas, Bloqueios) -> Vermelho Sólido (#DC2626)
-    if (t.includes('acidente') || d.includes('acidente') || (alert.category === 'accidents' && !t.includes('obras'))) {
-      return {
-        label: 'ACIDENTE REPORTADO',
-        bg: '#DC2626',
-        color: '#FFFFFF',
-        icon: AlertOctagon
-      };
-    }
-    if (t.includes('interditada') || t.includes('bloqueio') || d.includes('interditada') || d.includes('bloqueio') || isCritical) {
-      return {
-        label: 'VIA INTERDITADA',
-        bg: '#DC2626',
-        color: '#FFFFFF',
-        icon: AlertOctagon
-      };
-    }
-
-    // 2. Nível Alto / Obras na via -> Laranja Sólido (#EA580C)
-    if (t.includes('obras') || d.includes('obras') || t.includes('manutenção') || d.includes('manutenção')) {
-      return {
-        label: 'OBRAS NA VIA',
-        bg: '#EA580C',
-        color: '#FFFFFF',
-        icon: AlertTriangle
-      };
-    }
-
-    // 3. Nível Alerta / Perigo -> Laranja Sólido (#EA580C)
-    if (alert.category === 'hazards' || t.includes('perigo') || d.includes('perigo')) {
-      return {
-        label: 'PERIGO NA VIA',
-        bg: '#EA580C',
-        color: '#FFFFFF',
-        icon: AlertTriangle
-      };
-    }
-
-    // 4. Nível Moderado / Retenção / Lentidão -> Âmbar Sólido (#D97706)
-    if (t.includes('lentidão') || t.includes('engarrafamento') || t.includes('retenção') || d.includes('lentidão') || alert.category === 'jams' || isWarning) {
-      return {
-        label: 'RETENÇÃO INTENSA',
-        bg: '#D97706',
-        color: '#FFFFFF',
-        icon: AlertTriangle
-      };
-    }
-
-    // 5. Nível Fiscalização / IMMU / Blitz -> Azul Sólido (#2563EB)
-    if (t.includes('fiscalização') || t.includes('blitz') || t.includes('immu') || alert.category === 'police') {
-      return {
-        label: 'FISCALIZAÇÃO',
-        bg: '#2563EB',
-        color: '#FFFFFF',
-        icon: ShieldAlert
-      };
-    }
-
-    // 6. Nível Normalidade / Sistema Transurbano -> Verde Esmeralda (#059669)
-    return {
-      label: 'SISTEMA TRANSURBANO',
-      bg: '#059669',
-      color: '#FFFFFF',
-      icon: Info
-    };
-  };
 
   return (
     <div
@@ -252,7 +165,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
               fontWeight: 500
             }}
           >
-            Condições das vias e ocorrências em Manaus
+            Ocorrências reportadas em Manaus
           </p>
         </div>
 
@@ -327,7 +240,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         <div role="status" style={{ margin: '0 20px 16px', padding: '20px', borderRadius: 16, background: 'var(--bg-card, #18181B)', border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))' }}>
           <strong style={{ color: 'var(--text-primary, #FFFFFF)', fontSize: 15 }}>Ocorrências indisponíveis no momento</strong>
           <p style={{ color: 'var(--text-muted, #A1A1AA)', fontSize: 13, lineHeight: 1.5, margin: '6px 0 0' }}>
-            Não há uma coleta recente do Waze para mostrar. Isso não significa que o trânsito esteja livre.
+            Não há dados recentes de ocorrências para mostrar. A ausência de dados não indica trânsito livre.
           </p>
         </div>
       )}
@@ -335,9 +248,9 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       {feedAvailable && <div style={{ padding: '0 20px 16px 20px', display: 'flex', gap: '8px', overflowX: 'auto', scrollbarWidth: 'none' }}>
         {[
           { id: 'all', label: 'Todos os Alertas', activeColor: '#2563EB' },
-          { id: 'accidents', label: 'Acidentes e Bloqueios', activeColor: '#DC2626' },
+          { id: 'accidents', label: 'Acidentes, obras e bloqueios', activeColor: '#DC2626' },
           { id: 'jams', label: 'Lentidão no Trânsito', activeColor: '#D97706' },
-          { id: 'police', label: 'Fiscalização', activeColor: '#2563EB' },
+          { id: 'police', label: 'Polícia', activeColor: '#2563EB' },
         ].map((tab) => {
           const isActive = selectedFilter === tab.id;
           return (
@@ -371,7 +284,8 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       {/* Alerts Feed */}
       <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {filteredAlerts.map((n) => {
-          const badge = getBadgeConfig(n);
+          const badgeInfo = getTrafficAlertBadge(n.category);
+          const badge = { ...badgeInfo, ...BADGE_STYLE[badgeInfo.kind] };
           const corridorUpper = n.corridorName.toUpperCase();
           const subtitleText = n.neighborhood || 'Manaus - AM';
 
@@ -394,7 +308,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 <span
                   style={{
                     backgroundColor: badge.bg,
-                    color: badge.color,
+                    color: '#FFFFFF',
                     fontSize: '11px',
                     fontWeight: 800,
                     padding: '4px 10px',
@@ -412,7 +326,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 </span>
 
                 <span style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)', fontWeight: 600 }}>
-                  {n.timestamp}
+                  Início: {n.timestamp}
                 </span>
               </div>
 
@@ -475,10 +389,11 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
         {!isLoading && feedAvailable && filteredAlerts.length === 0 && (
           <div
             style={{
-              backgroundColor: '#2563EB',
+              backgroundColor: 'var(--bg-card, #18181B)',
               borderRadius: '20px',
               padding: '26px 20px',
               textAlign: 'center',
+              border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.12))',
               boxShadow: 'none',
               marginTop: '10px',
               display: 'flex',
@@ -493,34 +408,34 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 width: '46px',
                 height: '46px',
                 borderRadius: '50%',
-                backgroundColor: '#FFFFFF',
+                backgroundColor: '#2563EB',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#2563EB',
+                color: '#FFFFFF',
                 boxShadow: 'none'
               }}
             >
-              <CheckCircle2 size={26} strokeWidth={2.5} />
+              <Info size={26} strokeWidth={2.5} />
             </div>
             <div
               style={{
                 fontSize: '18px',
                 fontWeight: 800,
-                color: '#FFFFFF',
+                color: 'var(--text-primary, #FFFFFF)',
                 letterSpacing: '-0.02em',
                 lineHeight: '1.3'
               }}
             >
-              Nenhuma ocorrência nesta categoria
+              Nenhuma ocorrência listada nesta categoria
             </div>
             <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                backgroundColor: '#FFFFFF',
-                color: '#2563EB',
+                backgroundColor: 'var(--bg-canvas, #09090B)',
+                color: 'var(--text-muted, #A1A1AA)',
                 padding: '6px 16px',
                 borderRadius: '999px',
                 fontSize: '12px',
@@ -528,8 +443,7 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
                 boxShadow: 'none'
               }}
             >
-              <Navigation size={13} strokeWidth={2.5} />
-              <span>Última coleta recente</span>
+              <span>Coleta recente</span>
             </div>
           </div>
         )}

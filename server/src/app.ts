@@ -117,8 +117,12 @@ app.get('/api/stops/citywide', async (_req: Request, res: Response) => {
  */
 app.get('/api/traffic/alerts', async (_req: Request, res: Response) => {
   try {
-    res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=30, stale-while-revalidate=120');
     const alertsData = await getLiveTrafficAlerts();
+    // One shared CDN response limits requests to the incident provider across visitors.
+    // Never cache an unavailable feed as if it were a successful snapshot.
+    res.setHeader('Cache-Control', alertsData.source.status === 'connected'
+      ? 'public, max-age=30, s-maxage=1200, stale-while-revalidate=60'
+      : 'no-store');
     res.json(alertsData);
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to fetch traffic alerts', details: err.message });
