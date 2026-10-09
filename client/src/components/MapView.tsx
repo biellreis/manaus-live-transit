@@ -713,10 +713,11 @@ export const MapView: React.FC<MapViewProps> = ({
     const isVolta = activeTrip?.directionType === 'volta';
     const activeDirection = isVolta ? 'volta' : 'ida';
 
-    // The line feed is shared by both tabs. An unconfirmed direction must
-    // remain on Início, never be presented as both IDA and VOLTA.
+    // Keep confirmed buses in their own direction. A bus whose itinerary
+    // cannot be classified stays visible in neutral gray, without claiming
+    // that it belongs to either direction.
     const filteredVehicles = activeTrip
-      ? vehicles.filter(v => v.direction === activeDirection)
+      ? vehicles.filter(v => v.direction === activeDirection || !v.direction || v.direction === 'desconhecido')
       : vehicles;
 
     filteredVehicles.forEach(bus => {

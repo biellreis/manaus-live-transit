@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { findCandidates } from '../server/src/services/routePlannerService.js';
 import network from '../server/src/services/manausAllRoutesCache.json';
-import { sinetram } from '../server/src/services/sinetramClient.js';
+import { normalizeMobilibusGpsTimestamp, sinetram } from '../server/src/services/sinetramClient.js';
+import { mergeCitywideVehicleSnapshot, retainRecentCitywideVehicles } from '../client/src/utils/citywideVehicleSnapshot.js';
+import type { LiveBus } from '../client/src/types/transit.js';
 
 test('production emits a bundled MapLibre worker referenced by the application', () => {
   const dir = new URL('../client/dist/assets/', import.meta.url);
@@ -64,9 +66,82 @@ test('route directions keep the 409 paths and correct reversed/variant itinerari
   assert.equal(route005.find(t => t.tripId === 7812189)?.directionType, 'volta');
   assert.equal(route005.find(t => t.tripId === 7812190)?.directionType, 'ida');
 
-  // Garage trips do not share both endpoints with either main direction.
+  // Garage and short-turn trips retain the direction of their shared official
+  // stop sequence, even though their first/last stops differ from the main trip.
   const route678 = await sinetram.getRouteItinerary('678');
-  assert.equal(route678.find(t => t.tripId === 5027628)?.directionType, 'auxiliar');
+  assert.equal(route678.find(t => t.tripId === 5027628)?.directionType, 'volta');
+  assert.equal(route678.find(t => t.tripId === 5027629)?.directionType, 'ida');
+  assert.equal(route678.find(t => t.tripId === 5342859)?.directionType, 'volta');
+  assert.equal(route678.find(t => t.tripId === 5342860)?.directionType, 'ida');
+  const route006 = await sinetram.getRouteItinerary('006');
+  assert.equal(route006.find(t => t.tripId === 2939586)?.directionType, 'ida');
+  assert.equal(route006.find(t => t.tripId === 3430797)?.directionType, 'ida');
+  assert.equal(route006.find(t => t.tripId === 5039850)?.directionType, 'ida');
+  const route007 = await sinetram.getRouteItinerary('007');
+  assert.equal(route007.find(t => t.tripId === 4999690)?.directionType, 'volta');
+  const route011 = await sinetram.getRouteItinerary('011');
+  assert.equal(route011.find(t => t.tripId === 6446787)?.directionType, 'ida');
+  assert.equal(route011.find(t => t.tripId === 6446788)?.directionType, 'volta');
+  const route302 = await sinetram.getRouteItinerary('302');
+  assert.equal(route302.find(t => t.tripId === 5033778)?.directionType, 'ida');
+  assert.equal(route302.find(t => t.tripId === 5033779)?.directionType, 'volta');
+  const route444 = await sinetram.getRouteItinerary('444');
+  assert.equal(route444.find(t => t.tripId === 5022957)?.directionType, 'ida');
+  const route642 = await sinetram.getRouteItinerary('642');
+  assert.equal(route642.find(t => t.tripId === 2179940)?.directionType, 'ida');
+  const route017 = await sinetram.getRouteItinerary('017');
+  assert.equal(route017.find(t => t.tripId === 5531749)?.directionType, 'auxiliar');
+  const route009 = await sinetram.getRouteItinerary('009');
+  assert.equal(route009.find(t => t.tripId === 4999705)?.directionType, 'auxiliar');
+});
+
+test('Mobilibus GPS wall time is corrected only when it is plausibly recent', () => {
+  const now = Date.UTC(2026, 9, 9, 11, 34, 0);
+  assert.equal(normalizeMobilibusGpsTimestamp(now - 4 * 60 * 60 * 1000 - 15_000, now), now - 15_000);
+  assert.equal(normalizeMobilibusGpsTimestamp(now - 4 * 60 * 60 * 1000 - 50 * 60_000, now), now - 50 * 60_000);
+  assert.equal(normalizeMobilibusGpsTimestamp(now - 15_000, now), now - 15_000);
+  assert.equal(normalizeMobilibusGpsTimestamp(now - 7 * 60 * 60 * 1000, now), now - 7 * 60 * 60 * 1000);
+});
+
+test('citywide map retains recent buses only for routes whose live request failed', () => {
+  const now = Date.UTC(2026, 9, 9, 11, 34, 0);
+  const bus = (id: string, routeId: string, timestamp: number): LiveBus => ({
+    id, routeId, timestamp, lat: -3.1, lng: -60.02, heading: 0, headsign: ''
+  });
+  const previous = [
+    bus('409-recent', '213t', now - 20_000),
+    bus('409-old', '213t', now - 90_000),
+    bus('640-previous', '215q', now - 20_000)
+  ];
+  const updated = bus('640-current', '215q', now - 5_000);
+  const merged = mergeCitywideVehicleSnapshot(previous, {
+    vehicles: [updated], failedRouteIds: ['213t']
+  }, now);
+  assert.deepEqual(merged.map(vehicle => vehicle.id), ['640-current', '409-recent']);
+  assert.deepEqual(mergeCitywideVehicleSnapshot(previous, {
+    vehicles: [], failedRouteIds: []
+  }, now), []);
+  assert.deepEqual(retainRecentCitywideVehicles(previous, now + 61_000), []);
+});
+
+test('live garage variant keeps its official direction and recent GPS age', async () => {
+  const originalFetch = globalThis.fetch;
+  const originalNow = Date.now;
+  const now = Date.UTC(2026, 9, 9, 11, 34, 0);
+  Date.now = () => now;
+  globalThis.fetch = async () => Response.json({ vehicles: [{
+    id: '678-garage-probe', lat: -3.07616, lon: -60.08177,
+    pt: now - 4 * 60 * 60 * 1000 - 20_000,
+    tid: 5027628, lb: 'G. Eucatur → T5 → P. Negra (1)'
+  }] });
+  try {
+    const [bus] = await sinetram.getRealtimeVehicles('aal5', '678', true);
+    assert.equal(bus.direction, 'volta');
+    assert.equal(bus.timestamp, now - 20_000);
+  } finally {
+    globalThis.fetch = originalFetch;
+    Date.now = originalNow;
+  }
 });
 
 test('409 corrects a stale return trip only when GPS is clearly on the outbound shape', async () => {

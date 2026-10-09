@@ -54,6 +54,9 @@ test('feed failure, empty feed, and unknown telemetry never create buses',async(
     assert.deepEqual(await sinetram.getRealtimeVehicles('test-empty','test'),[]);
     globalThis.fetch=async()=>{throw new Error('test offline');};
     assert.deepEqual(await sinetram.getRealtimeVehicles('test-failed','test'),[]);
+    await assert.rejects(sinetram.getRealtimeVehicles('test-failed-strict','test',true), /test offline/);
+    globalThis.fetch=async()=>Response.json({error:'upstream error'});
+    await assert.rejects(sinetram.getRealtimeVehicles('test-invalid-shape','test',true), /Invalid vehicles feed/);
     assert.deepEqual(await sinetram.getRouteItinerary('test-no-itinerary'),[]);
     globalThis.fetch=async()=>new Response(JSON.stringify({vehicles:[{id:'test',lat:-3.1,lon:-60.02,pt:123}]}),{status:200});
     const [vehicle]=await sinetram.getRealtimeVehicles('test-live','test');
@@ -122,4 +125,3 @@ test('journey plan calculates origin and destination walking legs at 83m per min
     }
   }
 });
-

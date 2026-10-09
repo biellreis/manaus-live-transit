@@ -4,6 +4,7 @@ import { Bus, Check, X, MapPin, Clock, ArrowRightLeft } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic.js';
 import { TripStopsModal } from './TripStopsModal.js';
 import { useRealtimeTripEta } from '../utils/realtimeEta.js';
+import type { LiveSignalStatus } from '../hooks/useLiveVehicles.js';
 
 function formatDistance(meters: number | null | undefined): string {
   if (!meters) return '0 m';
@@ -18,6 +19,7 @@ interface BottomSheetProps {
   activeTrip: TripDetail | null;
   allTrips: TripDetail[];
   vehicles: LiveBus[];
+  signalStatus: LiveSignalStatus;
   schedule: TimetableService[];
   plannedTrip?: PlannedTrip | null;
   onSelectTrip: (trip: TripDetail) => void;
@@ -31,6 +33,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   activeTrip,
   allTrips,
   vehicles,
+  signalStatus,
   schedule: _schedule,
   plannedTrip = null,
   onSelectTrip,
@@ -54,14 +57,14 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   const activeDirection = isVolta ? 'volta' : 'ida';
   const themeColor = isVolta ? '#F97316' : '#3B82F6';
 
-  // Only confirmed vehicles count for the selected direction.
-  const activeVehicles = useMemo(() => {
-    return vehicles.filter(v => v.direction === activeDirection);
-  }, [vehicles, activeDirection]);
-
-
-  const isWithinOperationalHours = activeVehicles.length > 0;
-  const hasUnknownDirectionVehicles = vehicles.some(v => !v.direction || v.direction === 'desconhecido');
+  const idaVehicles = useMemo(() => vehicles.filter(v => v.direction === 'ida'), [vehicles]);
+  const voltaVehicles = useMemo(() => vehicles.filter(v => v.direction === 'volta'), [vehicles]);
+  const activeVehicles = isVolta ? voltaVehicles : idaVehicles;
+  const oppositeVehicles = isVolta ? idaVehicles : voltaVehicles;
+  const oppositeDirection = isVolta ? 'ida' : 'volta';
+  const oppositeTrip = allTrips.find(trip => trip.directionType === oppositeDirection);
+  const isWithinOperationalHours = signalStatus === 'current' && activeVehicles.length > 0;
+  const unknownDirectionCount = vehicles.filter(v => !v.direction || v.direction === 'desconhecido').length;
 
   if (!selectedLine || !activeTrip) return null;
 
@@ -131,7 +134,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                 <span style={{ fontSize: '12px', color: isVolta ? '#F97316' : '#3B82F6', fontWeight: 700 }}>
-                  {activeVehicles.length} {activeVehicles.length === 1 ? 'ônibus ativo na rota' : 'ônibus ativos na rota'}
+                  {signalStatus === 'interrupted' ? 'Última leitura · ' : ''}IDA: {idaVehicles.length} · VOLTA: {voltaVehicles.length}
                 </span>
               </div>
             </div>
@@ -184,6 +187,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             {allTrips.slice(0, 2).map((trip, tIdx) => {
               const isSelected = activeTrip?.tripId === trip.tripId;
               const isFirst = tIdx === 0;
+              const count = isFirst ? idaVehicles.length : voltaVehicles.length;
               const label = isFirst
                 ? `IDA • ${trip.tripShortName || 'Sentido 1'}`
                 : `VOLTA • ${trip.tripShortName || 'Sentido 2'}`;
@@ -219,10 +223,31 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                 >
                   {isSelected && <Check size={14} style={{ flexShrink: 0 }} />}
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>
+                  <span style={{ flexShrink: 0, borderRadius: '999px', padding: '1px 5px', background: isSelected ? 'rgba(255,255,255,0.22)' : 'var(--bg-pill, #27272A)' }} aria-label={`${count} ônibus neste sentido`}>
+                    {count}
+                  </span>
                 </button>
               );
             })}
           </div>
+        )}
+
+        {!plannedTrip && activeVehicles.length === 0 && oppositeVehicles.length > 0 && oppositeTrip && (
+          <button
+            type="button"
+            onClick={() => onSelectTrip(oppositeTrip)}
+            style={{ width: '100%', padding: '10px 12px', marginBottom: '12px', borderRadius: '10px', border: '1px solid var(--border-medium, #52525B)', background: 'var(--bg-card, #18181B)', color: 'var(--text-primary, #FFFFFF)', fontSize: '12px', fontWeight: 700, textAlign: 'left', cursor: 'pointer' }}
+          >
+            {signalStatus === 'interrupted'
+              ? `Último sinal: ${oppositeVehicles.length} ônibus na ${oppositeDirection.toUpperCase()}. Toque para ver esse trajeto.`
+              : `${oppositeVehicles.length} ${oppositeVehicles.length === 1 ? 'ônibus está' : 'ônibus estão'} na ${oppositeDirection.toUpperCase()}. Toque para ver esse trajeto.`}
+          </button>
+        )}
+
+        {!plannedTrip && unknownDirectionCount > 0 && (
+          <p style={{ margin: '0 0 12px', color: 'var(--text-muted, #A1A1AA)', fontSize: '12px' }}>
+            {unknownDirectionCount} {unknownDirectionCount === 1 ? 'ônibus aparece' : 'ônibus aparecem'} em cinza no mapa, com sentido ainda não confirmado pelo sinal.
+          </p>
         )}
 
         {/* Real Vehicle Telemetry Status Card (Apenas para navegação de linha avulsa) */}
@@ -281,7 +306,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                   lineHeight: 1
                 }}
               >
-                {isWithinOperationalHours ? 'EM OPERAÇÃO' : hasUnknownDirectionVehicles ? 'SENTIDO NÃO CONFIRMADO' : 'SEM ÔNIBUS NESTE SENTIDO'}
+                {signalStatus === 'loading' ? 'CONSULTANDO SINAL' : signalStatus === 'interrupted' ? 'SINAL INDISPONÍVEL' : isWithinOperationalHours ? 'EM OPERAÇÃO' : 'SEM ÔNIBUS NESTE SENTIDO'}
               </span>
             </div>
           </div>

@@ -68,6 +68,42 @@ function explicitTripDirection(tripName: string): 'ida' | 'volta' | null {
   return null;
 }
 
+// Variants can begin at a garage or end before the usual terminal. Match the
+// order of their official stop IDs against each primary trip to identify the
+// direction of the shared service segment.
+function orderedStopOverlap(candidate: StopInfo[], reference: StopInfo[]): number {
+  const candidateIds = candidate.map(stop => stop.stopId).filter(id => id > 0);
+  const referenceIds = reference.map(stop => stop.stopId).filter(id => id > 0);
+  const lengths = new Uint16Array(referenceIds.length + 1);
+  for (const id of candidateIds) {
+    let diagonal = 0;
+    for (let index = 1; index <= referenceIds.length; index++) {
+      const previous = lengths[index];
+      lengths[index] = id === referenceIds[index - 1]
+        ? diagonal + 1
+        : Math.max(lengths[index], lengths[index - 1]);
+      diagonal = previous;
+    }
+  }
+  return lengths[referenceIds.length];
+}
+
+function directionFromSharedStops(
+  trip: TripDetail,
+  ida: TripDetail,
+  volta: TripDetail | undefined
+): 'ida' | 'volta' | null {
+  if (!volta) return null;
+  const validStops = trip.stops.filter(stop => stop.stopId > 0);
+  if (validStops.length < 5) return null;
+  const idaOverlap = orderedStopOverlap(validStops, ida.stops);
+  const voltaOverlap = orderedStopOverlap(validStops, volta.stops);
+  const best = Math.max(idaOverlap, voltaOverlap);
+  const other = Math.min(idaOverlap, voltaOverlap);
+  if (best < 5 || best < validStops.length * 0.6 || best - other < 4) return null;
+  return idaOverlap > voltaOverlap ? 'ida' : 'volta';
+}
+
 function classifyAndSortTrips(routeCode: string, routeName: string, trips: TripDetail[]): TripDetail[] {
   if (!trips || trips.length === 0) return [];
   if (trips.length === 1) {
@@ -180,6 +216,8 @@ function classifyAndSortTrips(routeCode: string, routeName: string, trips: TripD
     const matchesVolta = voltaDistance <= 120 && idaDistance - voltaDistance > 75;
     if (matchesIda) return { ...t, directionType: 'ida' as const };
     if (matchesVolta) return { ...t, directionType: 'volta' as const };
+    const sharedDirection = directionFromSharedStops(t, bestIda, bestVolta);
+    if (sharedDirection) return { ...t, directionType: sharedDirection };
     const endpoints = tripNameEndpoints(t.tripName);
     const idaMatches = Number(!!endpoints.first && endpoints.first === idaEndpoints.first) +
       Number(!!endpoints.last && endpoints.last === idaEndpoints.last);
@@ -276,6 +314,11 @@ export interface LiveBus {
   crowding?: 'baixa' | 'moderada' | 'alta';
 }
 
+export interface CitywideVehicleSnapshot {
+  vehicles: LiveBus[];
+  failedRouteIds: string[];
+}
+
 export interface TimetableDeparture {
   time: string;
   accessible: boolean;
@@ -330,6 +373,22 @@ function distanceToTripMeters(lat: number, lng: number, trip: TripDetail): numbe
     nearest = Math.min(nearest, Math.hypot(ax + progress * dx, ay + progress * dy));
   }
   return nearest;
+}
+
+// Mobilibus currently encodes Manaus wall time (UTC-4) as if it were UTC.
+// Prefer a normal UTC timestamp if the provider switches formats. Apply the
+// offset only when it turns an otherwise four-hour-old fix into a plausible
+// recent GPS observation; preserve genuinely old/invalid timestamps.
+export function normalizeMobilibusGpsTimestamp(raw: number, now = Date.now()): number {
+  if (!Number.isFinite(raw) || raw <= 0) return now;
+  const offset = 4 * 60 * 60 * 1000;
+  const adjusted = raw + offset;
+  const adjustedAge = now - adjusted;
+  if (now - raw > 2 * 60 * 60 * 1000 &&
+      adjustedAge >= -2 * 60 * 1000 && adjustedAge <= 2 * 60 * 60 * 1000) {
+    return adjusted;
+  }
+  return raw;
 }
 
 class SinetramClient {
@@ -620,7 +679,7 @@ class SinetramClient {
   /**
    * Fetch real-time bus telemetry for a route
    */
-  async getRealtimeVehicles(routeId: string, routeCode: string = ''): Promise<LiveBus[]> {
+  async getRealtimeVehicles(routeId: string, routeCode: string = '', throwOnError = false): Promise<LiveBus[]> {
     const cacheKey = `realtime:${routeId}`;
     const cached = this.getCached<LiveBus[]>(cacheKey);
     if (cached) return cached;
@@ -644,7 +703,7 @@ class SinetramClient {
 
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json() as any;
-      const rawVehicles = data.vehicles || [];
+      const rawVehicles = data?.vehicles;
 
       if (!Array.isArray(rawVehicles)) throw new Error('Invalid vehicles feed');
 
@@ -662,7 +721,7 @@ class SinetramClient {
         const id = String(v.id || 'ONIBUS');
         const lat = Number(v.lat);
         const lng = Number(v.lon);
-        const pt = Number(v.pt || Date.now());
+        const pt = normalizeMobilibusGpsTimestamp(Number(v.pt || Date.now()));
         const heading = Number(v.dir || 0);
 
         // Calculate REAL GPS speed (km/h) via Haversine delta tracking
@@ -733,6 +792,7 @@ class SinetramClient {
       return vehicles;
     } catch (err: any) {
       console.warn(`[SinetramClient] Telemetry unavailable for ${routeId}: ${err?.message || err}`);
+      if (throwOnError) throw err;
       return [];
     }
   }
@@ -740,9 +800,9 @@ class SinetramClient {
   /**
    * Fetch circulating vehicles across all major Manaus transit corridors (Uber/99 map view)
    */
-  async getCitywideVehicles(): Promise<LiveBus[]> {
+  async getCitywideVehicleSnapshot(): Promise<CitywideVehicleSnapshot> {
     const cacheKey = 'vehicles:citywide';
-    const cached = this.getCached<LiveBus[]>(cacheKey);
+    const cached = this.getCached<CitywideVehicleSnapshot>(cacheKey);
     if (cached) return cached;
 
     const keyRoutes = [
@@ -771,14 +831,19 @@ class SinetramClient {
 
     try {
       const results = await Promise.allSettled(
-        keyRoutes.map(r => this.getRealtimeVehicles(r.id, r.code))
+        keyRoutes.map(r => this.getRealtimeVehicles(r.id, r.code, true))
       );
 
       const allVehicles: LiveBus[] = [];
+      const failedRouteIds: string[] = [];
       const seenIds = new Set<string>();
 
       for (let i = 0; i < results.length; i++) {
         const res = results[i];
+        if (res.status === 'rejected') {
+          failedRouteIds.push(keyRoutes[i].id);
+          continue;
+        }
         if (res.status === 'fulfilled' && Array.isArray(res.value)) {
           const rCode = keyRoutes[i].code;
           const rId = keyRoutes[i].id;
@@ -795,12 +860,17 @@ class SinetramClient {
         }
       }
 
-      this.setCache(cacheKey, allVehicles, 4000);
-      return allVehicles;
+      const snapshot = { vehicles: allVehicles, failedRouteIds };
+      this.setCache(cacheKey, snapshot, 4000);
+      return snapshot;
     } catch (err) {
       console.error('[SinetramClient] Error fetching citywide vehicles:', err);
-      return this.getRealtimeVehicles('215q', '640');
+      return { vehicles: [], failedRouteIds: keyRoutes.map(route => route.id) };
     }
+  }
+
+  async getCitywideVehicles(): Promise<LiveBus[]> {
+    return (await this.getCitywideVehicleSnapshot()).vehicles;
   }
 
   /**

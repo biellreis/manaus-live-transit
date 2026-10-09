@@ -14,6 +14,7 @@ import { useUserLocation } from './hooks/useUserLocation.js';
 import { notifyManoReady } from './utils/notifyManoReady.js';
 import { WebLaunchOverlay } from './components/WebLaunchOverlay.js';
 import { saveRecentDestination, type RecentDestination } from './utils/recentDestinations.js';
+import { mergeCitywideVehicleSnapshot, retainRecentCitywideVehicles } from './utils/citywideVehicleSnapshot.js';
 import { IOSInstallModal } from './components/IOSInstallModal.js';
 
 export function App() {
@@ -48,7 +49,7 @@ export function App() {
   const { location: userLocation, requestLocation } = useUserLocation();
 
   // Real-time SSE vehicle stream for selected line
-  const { vehicles } = useLiveVehicles(
+  const { vehicles, signalStatus } = useLiveVehicles(
     selectedLine?.id || '215q',
     selectedLine?.code || '640'
   );
@@ -123,17 +124,21 @@ export function App() {
   // Live vehicles across Manaus for home mini-map & citywide exploration mode (Uber/99 view)
   useEffect(() => {
     let isMounted = true;
+    let polling = false;
     async function loadCitywideVehicles() {
+      if (polling) return;
+      polling = true;
       try {
-        const res = await fetch('/api/live/citywide');
-        if (res.ok) {
-          const data = await res.json();
-          if (isMounted && data.vehicles) {
-            setCitywideVehicles(data.vehicles);
-          }
-        }
+        const res = await fetch('/api/live/citywide', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data.vehicles)) throw new Error('Invalid citywide vehicle response');
+        if (isMounted) setCitywideVehicles(previous => mergeCitywideVehicleSnapshot(previous, data));
       } catch (err) {
         console.error('Failed to load citywide vehicles', err);
+        if (isMounted) setCitywideVehicles(previous => retainRecentCitywideVehicles(previous));
+      } finally {
+        polling = false;
       }
     }
 
@@ -399,7 +404,7 @@ export function App() {
             <HomeTab
               lines={lines}
               terminals={terminals}
-              vehicles={citywideVehicles.length > 0 ? citywideVehicles : vehicles}
+              vehicles={citywideVehicles}
               stops={citywideStops}
               userLocation={userLocation}
               onSelectLine={handleSelectLineAndOpenRoute}
@@ -454,6 +459,7 @@ export function App() {
           activeTrip={activeTrip}
           allTrips={allTrips}
           vehicles={vehicles}
+          signalStatus={signalStatus}
           schedule={schedule}
           plannedTrip={plannedTrip}
           onSelectTrip={(trip) => {

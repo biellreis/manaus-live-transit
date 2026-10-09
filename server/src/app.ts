@@ -81,7 +81,7 @@ app.get('/api/lines/:routeId/realtime', async (req: Request, res: Response) => {
   try {
     const routeId = String(req.params.routeId);
     const routeCode = (req.query.code as string) || '';
-    const vehicles = await sinetram.getRealtimeVehicles(routeId, routeCode);
+    const vehicles = await sinetram.getRealtimeVehicles(routeId, routeCode, true);
     res.json({ routeId, count: vehicles.length, vehicles });
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to fetch real-time vehicles', details: err.message });
@@ -93,8 +93,8 @@ app.get('/api/lines/:routeId/realtime', async (req: Request, res: Response) => {
  */
 app.get('/api/live/citywide', async (_req: Request, res: Response) => {
   try {
-    const vehicles = await sinetram.getCitywideVehicles();
-    res.json({ count: vehicles.length, vehicles });
+    const { vehicles, failedRouteIds } = await sinetram.getCitywideVehicleSnapshot();
+    res.json({ count: vehicles.length, vehicles, failedRouteIds });
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to fetch citywide vehicles', details: err.message });
   }
@@ -209,18 +209,25 @@ app.get('/api/live/stream', async (req: Request, res: Response) => {
   const routeId = (req.query.routeId as string) || '215q';
   const routeCode = (req.query.routeCode as string) || '640';
 
+  let initialVehicles;
+  try {
+    initialVehicles = await sinetram.getRealtimeVehicles(routeId, routeCode, true);
+  } catch {
+    res.status(503).json({ error: 'Sinal dos ônibus indisponível no momento' });
+    return;
+  }
+
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
   res.flushHeaders?.();
 
-  const initialVehicles = await sinetram.getRealtimeVehicles(routeId, routeCode);
   res.write(`data: ${JSON.stringify({ type: 'snapshot', routeId, timestamp: Date.now(), vehicles: initialVehicles })}\n\n`);
 
   const interval = setInterval(async () => {
     try {
-      const vehicles = await sinetram.getRealtimeVehicles(routeId, routeCode);
+      const vehicles = await sinetram.getRealtimeVehicles(routeId, routeCode, true);
       res.write(`data: ${JSON.stringify({ type: 'delta', routeId, timestamp: Date.now(), vehicles })}\n\n`);
     } catch (err) {
       console.error('[SSE Error]', err);
