@@ -47,9 +47,9 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
   const [trafficData, setTrafficData] = useState<TrafficApiResponse | null>(initialData);
   const [isLoading, setIsLoading] = useState(() => !initialData);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'accidents' | 'jams' | 'police'>(() => {
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'accidents' | 'jams'>(() => {
     const f = new URLSearchParams(window.location.search).get('filter');
-    return (f === 'accidents' || f === 'jams' || f === 'police') ? f : 'all';
+    return (f === 'accidents' || f === 'jams') ? f : 'all';
   });
   const haptic = useHaptic();
 
@@ -111,9 +111,6 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
       }
       if (selectedFilter === 'jams') {
         return a.category === 'jams';
-      }
-      if (selectedFilter === 'police') {
-        return a.category === 'police';
       }
       return true; // 'all'
     });
@@ -250,7 +247,6 @@ export const AlertsTab: React.FC<AlertsTabProps> = ({
           { id: 'all', label: 'Todos os Alertas', activeColor: '#2563EB' },
           { id: 'accidents', label: 'Acidentes, obras e bloqueios', activeColor: '#DC2626' },
           { id: 'jams', label: 'Lentidão no Trânsito', activeColor: '#D97706' },
-          { id: 'police', label: 'Polícia', activeColor: '#2563EB' },
         ].map((tab) => {
           const isActive = selectedFilter === tab.id;
           return (
